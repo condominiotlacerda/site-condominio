@@ -1,2 +1,2 @@
-# site-condominio
-Site de um condomínio que tem como objetivo o uso massivo de TI para facilitar suas tarefas.
+# Condomínio Edifício T. Lacerda
+Site de um pequeno condomínio que tem como objetivo o uso massivo de TI para facilitar suas tarefas e interação com os condôminos.
