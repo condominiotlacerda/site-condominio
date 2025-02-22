@@ -42,7 +42,7 @@
 
     <h1>Condomínio T Lacerda</h1>
     <p>Insira o código de acesso:</p>
-    <input type="text" id="accessCode">
+    <input type="password" id="accessCode">
     <button onclick="enableApartment()">Acessar</button>
 
     <div class="apartment-section">
@@ -58,8 +58,7 @@
 
     <div id="file-container" style="display: none;">
         <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
-        <ul class="file-list" id="file-list">
-            </ul>
+        <ul class="file-list" id="file-list"></ul>
     </div>
 
     <script>
@@ -74,12 +73,24 @@
             'LmN3[oPq]8': 'apto401'
         };
 
+        let activeApartmentButtonId = null; // Armazena o ID do botão ativo
+
         function enableApartment() {
             const code = document.getElementById('accessCode').value;
             const apartmentButtonId = accessCodes[code];
 
             if (apartmentButtonId) {
+                // Desabilita o botão ativo anterior, se houver
+                if (activeApartmentButtonId) {
+                    document.getElementById(activeApartmentButtonId).disabled = true;
+                }
+
+                // Habilita o novo botão
                 document.getElementById(apartmentButtonId).disabled = false;
+                activeApartmentButtonId = apartmentButtonId; // Atualiza o botão ativo
+
+                // Limpa o campo de código e oculta o código inserido
+                document.getElementById('accessCode').value = '';
             } else {
                 alert('Código de acesso inválido.');
             }
@@ -128,6 +139,3 @@
             }
         }
     </script>
-
-</body>
-</html>
