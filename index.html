@@ -41,71 +41,62 @@
 <body>
 
     <h1>Condomínio T Lacerda</h1>
-    <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
+    <p>Insira o código de acesso:</p>
     <input type="password" id="accessCode">
     <button onclick="enableApartment()">Acessar</button>
 
     <div class="apartment-section">
-        <button class="apartment-button" id="apto1" disabled onclick="handleApartmentClick('apto1')">Apartamento 1</button>
-        <button class="apartment-button" id="apto101" disabled onclick="handleApartmentClick('apto101')">Apartamento 101</button>
-        <button class="apartment-button" id="apto102" disabled onclick="handleApartmentClick('apto102')">Apartamento 102</button>
-        <button class="apartment-button" id="apto201" disabled onclick="handleApartmentClick('apto201')">Apartamento 201</button>
-        <button class="apartment-button" id="apto202" disabled onclick="handleApartmentClick('apto202')">Apartamento 202</button>
-        <button class="apartment-button" id="apto301" disabled onclick="handleApartmentClick('apto301')">Apartamento 301</button>
-        <button class="apartment-button" id="apto302" disabled onclick="handleApartmentClick('apto302')">Apartamento 302</button>
-        <button class="apartment-button" id="apto401" disabled onclick="handleApartmentClick('apto401')">Apartamento 401</button>
+        <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
+        <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
+        <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
+        <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
+        <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
+        <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
+        <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
+        <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
     </div>
 
     <div id="file-container" style="display: none;">
-        <h2 id="welcome-user"></h2>
+        <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
         <ul class="file-list" id="file-list"></ul>
     </div>
 
     <script>
         const accessCodes = {
-            'aB9x-Yz!2W': { apto: 'apto1', name: 'João Paulo' },
-            'cDe5_Fg#H7': { apto: 'apto101', name: 'Lizandro' },
-            'iJk1$Lm%N3': { apto: 'apto102', name: 'Felipe Granja' },
-            'oPq8^Rs&T4': { apto: 'apto201', name: 'Jorge' },
-            'xY7z!aB2-cD': { apto: 'apto201', name: 'Ângela' },
-            'uVw2*Xy(Z6': { apto: 'apto202', name: 'Inquilino' },
-            '1aB3)cDe-5': { apto: 'apto301', name: 'João Marcelo' },
-            'FgH7+iJk=1': { apto: 'apto302', name: 'Suzane' },
-            'LmN3[oPq]8': { apto: 'apto401', name: 'Célia' }
+            'aB9x-Yz!2W': 'apto1',
+            'cDe5_Fg#H7': 'apto101',
+            'iJk1$Lm%N3': 'apto102',
+            'oPq8^Rs&T4': 'apto201',
+            'uVw2*Xy(Z6': 'apto202',
+            '1aB3)cDe-5': 'apto301',
+            'FgH7+iJk=1': 'apto302',
+            'LmN3[oPq]8': 'apto401'
         };
 
         let activeApartmentButtonId = null; // Armazena o ID do botão ativo
-        let currentApartment = null; // Armazena o apartamento atualmente ativo
 
         function enableApartment() {
             const code = document.getElementById('accessCode').value;
-            const apartmentInfo = accessCodes[code];
+            const apartmentButtonId = accessCodes[code];
 
-            if (apartmentInfo) {
+            if (apartmentButtonId) {
                 // Desabilita o botão ativo anterior, se houver
                 if (activeApartmentButtonId) {
                     document.getElementById(activeApartmentButtonId).disabled = true;
                 }
 
-                // Habilita o novo botão
-                document.getElementById(apartmentInfo.apto).disabled = false;
-                activeApartmentButtonId = apartmentInfo.apto; // Atualiza o botão ativo
-                currentApartment = apartmentInfo.apto; // Armazena o número do apartamento
+                // Limpa a lista de arquivos exibida anteriormente
+                document.getElementById('file-list').innerHTML = '';
+                document.getElementById('file-container').style.display = 'none';
 
-                // Atualiza a mensagem de boas-vindas
-                document.getElementById('welcome-user').textContent = `Seja bem-vindo(a), ${apartmentInfo.name}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
-                document.getElementById('welcome-message').style.display = 'none'; // Oculta a mensagem inicial
+                // Habilita o novo botão
+                document.getElementById(apartmentButtonId).disabled = false;
+                activeApartmentButtonId = apartmentButtonId; // Atualiza o botão ativo
 
                 // Limpa o campo de código e oculta o código inserido
                 document.getElementById('accessCode').value = '';
             } else {
                 alert('Código de acesso inválido.');
-            }
-        }
-
-        function handleApartmentClick(apartment) {
-            if (currentApartment === apartment) {
-                showFiles(apartment.replace('apto', ''));
             }
         }
 
@@ -146,7 +137,7 @@
                 return [
                     { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
                     { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-                    { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
+                    { name: 'Boleeto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
                     { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
                 ];
             }
