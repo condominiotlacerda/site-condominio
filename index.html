@@ -85,6 +85,10 @@
                     document.getElementById(activeApartmentButtonId).disabled = true;
                 }
 
+                // Limpa a lista de arquivos exibida anteriormente
+                document.getElementById('file-list').innerHTML = '';
+                document.getElementById('file-container').style.display = 'none';
+
                 // Habilita o novo botão
                 document.getElementById(apartmentButtonId).disabled = false;
                 activeApartmentButtonId = apartmentButtonId; // Atualiza o botão ativo
