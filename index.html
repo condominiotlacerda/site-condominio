@@ -50,8 +50,8 @@
         <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
         <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
         <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
-        <button class="apartment-button" id="apto202" style="display: none;" disabled onclick="showFiles('202')">Apartamento 202</button>
-        <button class="apartment-button" id="apto301" style="display: none;" disabled onclick="showFiles('301')">Apartamento 301</button>
+        <button class="apartment-button" id="apto202" disabled style="cursor: not-allowed;">Apartamento 202</button>
+        <button class="apartment-button" id="apto301" disabled style="cursor: not-allowed;">Apartamento 301</button>
         <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
         <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
     </div>
@@ -77,9 +77,15 @@
             'apto101': 'Lizandro',
             'apto102': 'Felipe Granja',
             'apto201': 'Jorge',
+            'apto201': 'Angela',
             'apto302': 'Suzane',
             'apto401': 'Célia'
         };
+
+        function getWelcomeMessage(name) {
+            const maleNames = ['João Paulo', 'Lizandro', 'Felipe Granja', 'Jorge'];
+            return maleNames.includes(name) ? `Seja bem-vindo, ${name}` : `Seja bem-vinda, ${name}`;
+        }
 
         let activeApartmentButtonId = null; // Armazena o ID do botão ativo
 
@@ -102,7 +108,8 @@
                 activeApartmentButtonId = apartmentButtonId; // Atualiza o botão ativo
 
                 // Atualiza a mensagem de boas-vindas
-                document.getElementById('welcome-message').innerHTML = `Seja bem-vindo, ${apartmentNames[apartmentButtonId]}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
+                const name = apartmentNames[apartmentButtonId];
+                document.getElementById('welcome-message').innerHTML = `${getWelcomeMessage(name)}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
 
                 // Limpa o campo de código e oculta o código inserido
                 document.getElementById('accessCode').value = '';
