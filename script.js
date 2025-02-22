@@ -13,6 +13,7 @@ const apartmentNames = {
     'apto101': 'Lizandro',
     'apto102': 'Felipe Granja',
     'apto201': 'Jorge',
+    'apto201': 'Ângela',
     'apto302': 'Suzane',
     'apto401': 'Célia'
 };
