@@ -41,17 +41,19 @@
 <body>
 
     <h1>Condomínio T Lacerda</h1>
-    <p>Selecione seu apartamento para acessar boletos e prestação de contas:</p>
+    <p>Insira o código de acesso:</p>
+    <input type="text" id="accessCode">
+    <button onclick="enableApartment()">Acessar</button>
 
     <div class="apartment-section">
-        <button class="apartment-button" onclick="showFiles('1')">Apartamento 1</button>
-        <button class="apartment-button" onclick="showFiles('101')">Apartamento 101</button>
-        <button class="apartment-button" onclick="showFiles('102')">Apartamento 102</button>
-        <button class="apartment-button" onclick="showFiles('201')">Apartamento 201</button>
-        <button class="apartment-button" onclick="showFiles('202')">Apartamento 202</button>
-        <button class="apartment-button" onclick="showFiles('301')">Apartamento 301</button>
-        <button class="apartment-button" onclick="showFiles('302')">Apartamento 302</button>
-        <button class="apartment-button" onclick="showFiles('401')">Apartamento 401</button>
+        <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
+        <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
+        <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
+        <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
+        <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
+        <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
+        <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
+        <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
     </div>
 
     <div id="file-container" style="display: none;">
@@ -61,6 +63,28 @@
     </div>
 
     <script>
+        const accessCodes = {
+            'aB9x-Yz!2W': 'apto1',
+            'cDe5_Fg#H7': 'apto101',
+            'iJk1$Lm%N3': 'apto102',
+            'oPq8^Rs&T4': 'apto201',
+            'uVw2*Xy(Z6': 'apto202',
+            '1aB3)cDe-5': 'apto301',
+            'FgH7+iJk=1': 'apto302',
+            'LmN3[oPq]8': 'apto401'
+        };
+
+        function enableApartment() {
+            const code = document.getElementById('accessCode').value;
+            const apartmentButtonId = accessCodes[code];
+
+            if (apartmentButtonId) {
+                document.getElementById(apartmentButtonId).disabled = false;
+            } else {
+                alert('Código de acesso inválido.');
+            }
+        }
+
         function showFiles(apartment) {
             document.getElementById('apartment-number').textContent = apartment;
             document.getElementById('file-container').style.display = 'block';
