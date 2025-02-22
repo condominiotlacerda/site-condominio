@@ -107,6 +107,7 @@
             fileList.innerHTML = ''; // Limpa a lista anterior
 
             const files = getFilesForApartment(apartment);
+            console.log(files); // Verifique se os arquivos estão sendo recuperados corretamente
             files.forEach(file => {
                 const listItem = document.createElement('li');
                 const link = document.createElement('a');
