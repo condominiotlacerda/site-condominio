@@ -66,8 +66,8 @@
             'aB9x-Yz!2W': 'apto1',
             'cDe5_Fg#H7': 'apto101',
             'iJk1$Lm%N3': 'apto102',
-            'oPq8^Rs&T4': 'apto201',
-            'xY7z!aB-cD': 'apto201', // Novo código de acesso
+            'oPq8^Rs&T4': 'apto201a',
+            'xY7z!aB-cD': 'apto201b',
             'FgH7+iJk=1': 'apto302',
             'LmN3[oPq]8': 'apto401'
         };
@@ -76,8 +76,8 @@
             'apto1': 'João Paulo',
             'apto101': 'Lizandro',
             'apto102': 'Felipe Granja',
-            'apto201': 'Jorge',
-            'apto201': 'Angela',
+            'apto201a': 'Jorge',
+            'apto201b': 'Angela',
             'apto302': 'Suzane',
             'apto401': 'Célia'
         };
@@ -104,8 +104,8 @@
                 document.getElementById('file-container').style.display = 'none';
 
                 // Habilita o novo botão
-                document.getElementById(apartmentButtonId).disabled = false;
-                activeApartmentButtonId = apartmentButtonId; // Atualiza o botão ativo
+                document.getElementById(apartmentButtonId.slice(0, 6)).disabled = false;
+                activeApartmentButtonId = apartmentButtonId.slice(0, 6); // Atualiza o botão ativo
 
                 // Atualiza a mensagem de boas-vindas
                 const name = apartmentNames[apartmentButtonId];
@@ -115,6 +115,7 @@
                 document.getElementById('accessCode').value = '';
             } else {
                 alert('Código de acesso inválido.');
+                document.getElementById('accessCode').value = ''; // Limpa o campo de código
             }
         }
 
