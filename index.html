@@ -3,60 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Condomínio Exemplo</title>
+    <title>Condomínio T Lacerda - Boletos e Contas</title>
     <style>
-        /* Estilos básicos para o corpo da página */
         body {
             font-family: sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
+            text-align: center;
         }
-
-        /* Estilos para o cabeçalho */
-        header {
+        h1 {
+            color: #333;
+        }
+        .apartment-section {
+            margin-top: 30px;
+        }
+        .apartment-button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: 1px solid #ccc;
             background-color: #f0f0f0;
-            padding: 20px;
-            text-align: center;
+            cursor: pointer;
         }
-
-        /* Estilos para o conteúdo principal */
-        main {
-            padding: 20px;
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
         }
-
-        /* Estilos para o rodapé */
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
+        .file-list li {
+            margin: 5px 0;
+        }
+        .file-list a {
+            text-decoration: none;
+            color: #007bff;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Condomínio Exemplo</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Página Inicial</a></li>
-                <li><a href="#">Notícias</a></li>
-                <li><a href="#">Área do Condômino</a></li>
-                <li><a href="#">Contato</a></li>
+    <h1>Condomínio T Lacerda</h1>
+    <p>Selecione seu apartamento para acessar boletos e prestação de contas:</p>
+
+    <div class="apartment-section">
+        <button class="apartment-button" onclick="showFiles('1')">Apartamento 1</button>
+        <button class="apartment-button" onclick="showFiles('101')">Apartamento 101</button>
+        <button class="apartment-button" onclick="showFiles('102')">Apartamento 102</button>
+        <button class="apartment-button" onclick="showFiles('201')">Apartamento 201</button>
+        <button class="apartment-button" onclick="showFiles('202')">Apartamento 202</button>
+        <button class="apartment-button" onclick="showFiles('301')">Apartamento 301</button>
+        <button class="apartment-button" onclick="showFiles('302')">Apartamento 302</button>
+        <button class="apartment-button" onclick="showFiles('401')">Apartamento 401</button>
+    </div>
+
+    <div id="file-container" style="display: none;">
+        <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
+        <ul class="file-list" id="file-list">
             </ul>
-        </nav>
-    </header>
+    </div>
 
-    <main>
-        <h2>Bem-vindo ao Condomínio Exemplo</h2>
-        <p>Este é um exemplo de página principal para um site de condomínio.
-        Você pode adicionar mais conteúdo, como fotos, informações sobre o condomínio,
-        avisos e muito mais.</p>
-    </main>
+    <script>
+        function showFiles(apartment) {
+            document.getElementById('apartment-number').textContent = apartment;
+            document.getElementById('file-container').style.display = 'block';
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = ''; // Limpa a lista anterior
 
-    <footer>
-        <p>&copy; 2021 a 2025 Condomínio Exemplo. Todos os direitos reservados.</p>
-    </footer>
+            const files = getFilesForApartment(apartment);
+            files.forEach(file => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = file.path;
+                link.textContent = file.name;
+                listItem.appendChild(link);
+                fileList.appendChild(listItem);
+            });
+        }
+
+        function getFilesForApartment(apartment) {
+            const baseUrl = 'pdfs/'; // Caminho base para os arquivos
+
+            if (apartment === '1') {
+                return [
+                    { name: 'Boleto Condomínio', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1.pdf' },
+                    { name: 'Boleto Acordo M2D', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1.pdf' },
+                    { name: 'Boleto Hidro/Eletr', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1.pdf' },
+                    { name: 'Boleto Condomínio (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
+                    { name: 'Boleto Acordo M2D (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
+                    { name: 'Boleto Hidro/Eletr (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
+                    { name: 'Boleto Condomínio (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
+                    { name: 'Boleto Acordo M2D (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
+                    { name: 'Boleto Hidro/Eletr (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' },
+                    { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
+                ];
+            } else {
+                return [
+                    { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
+                    { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
+                    { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
+                    { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
+                ];
+            }
+        }
+    </script>
 
 </body>
 </html>
