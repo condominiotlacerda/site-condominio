@@ -41,7 +41,7 @@
 <body>
 
     <h1>Condomínio T Lacerda</h1>
-    <p>Insira o código de acesso:</p>
+    <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
     <input type="password" id="accessCode">
     <button onclick="enableApartment()">Acessar</button>
 
@@ -50,8 +50,8 @@
         <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
         <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
         <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
-        <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
-        <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
+        <button class="apartment-button" id="apto202" style="display: none;" disabled onclick="showFiles('202')">Apartamento 202</button>
+        <button class="apartment-button" id="apto301" style="display: none;" disabled onclick="showFiles('301')">Apartamento 301</button>
         <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
         <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
     </div>
@@ -67,11 +67,18 @@
             'cDe5_Fg#H7': 'apto101',
             'iJk1$Lm%N3': 'apto102',
             'oPq8^Rs&T4': 'apto201',
-            'uVw2*Xy(Z6': 'apto202',
-            '1aB3)cDe-5': 'apto301',
+            'xY7z!aB-cD': 'apto201', // Novo código de acesso
             'FgH7+iJk=1': 'apto302',
-            'LmN3[oPq]8': 'apto401',
-            'xY7z!aB-cD': 'apto201' // Novo código de acesso
+            'LmN3[oPq]8': 'apto401'
+        };
+
+        const apartmentNames = {
+            'apto1': 'João Paulo',
+            'apto101': 'Lizandro',
+            'apto102': 'Felipe Granja',
+            'apto201': 'Jorge',
+            'apto302': 'Suzane',
+            'apto401': 'Célia'
         };
 
         let activeApartmentButtonId = null; // Armazena o ID do botão ativo
@@ -93,6 +100,9 @@
                 // Habilita o novo botão
                 document.getElementById(apartmentButtonId).disabled = false;
                 activeApartmentButtonId = apartmentButtonId; // Atualiza o botão ativo
+
+                // Atualiza a mensagem de boas-vindas
+                document.getElementById('welcome-message').innerHTML = `Seja bem-vindo, ${apartmentNames[apartmentButtonId]}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
 
                 // Limpa o campo de código e oculta o código inserido
                 document.getElementById('accessCode').value = '';
