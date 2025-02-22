@@ -46,14 +46,14 @@
     <button onclick="enableApartment()">Acessar</button>
 
     <div class="apartment-section">
-        <button class="apartment-button" id="apto1" disabled onclick="handleApartmentClick('1')">Apartamento 1</button>
-        <button class="apartment-button" id="apto101" disabled onclick="handleApartmentClick('101')">Apartamento 101</button>
-        <button class="apartment-button" id="apto102" disabled onclick="handleApartmentClick('102')">Apartamento 102</button>
-        <button class="apartment-button" id="apto201" disabled onclick="handleApartmentClick('201')">Apartamento 201</button>
-        <button class="apartment-button" id="apto202" disabled onclick="handleApartmentClick('202')">Apartamento 202</button>
-        <button class="apartment-button" id="apto301" disabled onclick="handleApartmentClick('301')">Apartamento 301</button>
-        <button class="apartment-button" id="apto302" disabled onclick="handleApartmentClick('302')">Apartamento 302</button>
-        <button class="apartment-button" id="apto401" disabled onclick="handleApartmentClick('401')">Apartamento 401</button>
+        <button class="apartment-button" id="apto1" disabled onclick="handleApartmentClick('apto1')">Apartamento 1</button>
+        <button class="apartment-button" id="apto101" disabled onclick="handleApartmentClick('apto101')">Apartamento 101</button>
+        <button class="apartment-button" id="apto102" disabled onclick="handleApartmentClick('apto102')">Apartamento 102</button>
+        <button class="apartment-button" id="apto201" disabled onclick="handleApartmentClick('apto201')">Apartamento 201</button>
+        <button class="apartment-button" id="apto202" disabled onclick="handleApartmentClick('apto202')">Apartamento 202</button>
+        <button class="apartment-button" id="apto301" disabled onclick="handleApartmentClick('apto301')">Apartamento 301</button>
+        <button class="apartment-button" id="apto302" disabled onclick="handleApartmentClick('apto302')">Apartamento 302</button>
+        <button class="apartment-button" id="apto401" disabled onclick="handleApartmentClick('apto401')">Apartamento 401</button>
     </div>
 
     <div id="file-container" style="display: none;">
@@ -90,7 +90,7 @@
                 // Habilita o novo botão
                 document.getElementById(apartmentInfo.apto).disabled = false;
                 activeApartmentButtonId = apartmentInfo.apto; // Atualiza o botão ativo
-                currentApartment = apartmentInfo.apto.replace('apto', ''); // Armazena o número do apartamento
+                currentApartment = apartmentInfo.apto; // Armazena o número do apartamento
 
                 // Atualiza a mensagem de boas-vindas
                 document.getElementById('welcome-user').textContent = `Seja bem-vindo(a), ${apartmentInfo.name}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
@@ -105,7 +105,7 @@
 
         function handleApartmentClick(apartment) {
             if (currentApartment === apartment) {
-                showFiles(apartment);
+                showFiles(apartment.replace('apto', ''));
             }
         }
 
@@ -136,7 +136,7 @@
                     { name: 'Boleto Hidro/Eletr', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1.pdf' },
                     { name: 'Boleto Condomínio (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
                     { name: 'Boleto Acordo M2D (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
-                    { name: 'Boleto Hidro/Eletr (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
+                    { name: 'BoletoHidro/Eletr (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
                     { name: 'Boleto Condomínio (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
                     { name: 'Boleto Acordo M2D (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
                     { name: 'Boleto Hidro/Eletr (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' },
