@@ -39,7 +39,6 @@
     </style>
 </head>
 <body>
-
     <h1>Condomínio T Lacerda</h1>
     <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
     <input type="password" id="accessCode">
@@ -82,41 +81,38 @@
             'apto401': 'Célia'
         };
 
+        let activeApartmentButtonId = null; // Armazena o ID do botão ativo
+
         function getWelcomeMessage(name) {
             const maleNames = ['João Paulo', 'Lizandro', 'Felipe Granja', 'Jorge'];
             return maleNames.includes(name) ? `Seja bem-vindo, ${name}` : `Seja bem-vinda, ${name}`;
         }
-
-        let activeApartmentButtonId = null; // Armazena o ID do botão ativo
 
         function enableApartment() {
             const code = document.getElementById('accessCode').value;
             const apartmentButtonId = accessCodes[code];
 
             if (apartmentButtonId) {
-                // Desabilita o botão ativo anterior, se houver
-                if (activeApartmentButtonId) {
-                    document.getElementById(activeApartmentButtonId).disabled = true;
-                }
-
-                // Limpa a lista de arquivos exibida anteriormente
-                document.getElementById('file-list').innerHTML = '';
-                document.getElementById('file-container').style.display = 'none';
-
-                // Habilita o novo botão
-                document.getElementById(apartmentButtonId.slice(0, 6)).disabled = false;
-                activeApartmentButtonId = apartmentButtonId.slice(0, 6); // Atualiza o botão ativo
-
-                // Atualiza a mensagem de boas-vindas
-                const name = apartmentNames[apartmentButtonId];
-                document.getElementById('welcome-message').innerHTML = `${getWelcomeMessage(name)}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
-
-                // Limpa o campo de código e oculta o código inserido
+                updateActiveButton(apartmentButtonId.slice(0, 6));
+                updateWelcomeMessage(apartmentButtonId);
                 document.getElementById('accessCode').value = '';
             } else {
                 alert('Código de acesso inválido.');
                 document.getElementById('accessCode').value = ''; // Limpa o campo de código
             }
+        }
+
+        function updateActiveButton(newActiveButtonId) {
+            if (activeApartmentButtonId) {
+                document.getElementById(activeApartmentButtonId).disabled = true;
+            }
+            document.getElementById(newActiveButtonId).disabled = false;
+            activeApartmentButtonId = newActiveButtonId;
+        }
+
+        function updateWelcomeMessage(apartmentButtonId) {
+            const name = apartmentNames[apartmentButtonId];
+            document.getElementById('welcome-message').innerHTML = `${getWelcomeMessage(name)}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
         }
 
         function showFiles(apartment) {
@@ -161,7 +157,3 @@
                 ];
             }
         }
-    </script>
-
-</body>
-</html>
