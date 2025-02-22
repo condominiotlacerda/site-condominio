@@ -14,15 +14,25 @@
         h1 {
             color: #333;
         }
-        .apartment-section {
+        /* Estilos para as abas */
+        .tabs {
+            display: flex;
+            justify-content: center;
             margin-top: 30px;
         }
-        .apartment-button {
+        .tab-button {
             padding: 10px 20px;
             margin: 5px;
             border: 1px solid #ccc;
             background-color: #f0f0f0;
             cursor: pointer;
+        }
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+        }
+        .tab-content.active {
+            display: block;
         }
         .file-list {
             list-style: none;
@@ -45,50 +55,87 @@
     <input type="text" id="accessCode">
     <button onclick="enableApartment()">Acessar</button>
 
-    <div class="apartment-section">
-        <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
-        <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
-        <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
-        <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
-        <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
-        <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
-        <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
-        <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
+    <div class="tabs">
+        <button class="tab-button" id="tab1" disabled onclick="openTab('1')">Apartamento 1</button>
+        <button class="tab-button" id="tab101" disabled onclick="openTab('101')">Apartamento 101</button>
+        <button class="tab-button" id="tab102" disabled onclick="openTab('102')">Apartamento 102</button>
+        <button class="tab-button" id="tab201" disabled onclick="openTab('201')">Apartamento 201</button>
+        <button class="tab-button" id="tab202" disabled onclick="openTab('202')">Apartamento 202</button>
+        <button class="tab-button" id="tab301" disabled onclick="openTab('301')">Apartamento 301</button>
+        <button class="tab-button" id="tab302" disabled onclick="openTab('302')">Apartamento 302</button>
+        <button class="tab-button" id="tab401" disabled onclick="openTab('401')">Apartamento 401</button>
     </div>
 
-    <div id="file-container" style="display: none;">
-        <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
-        <ul class="file-list" id="file-list">
+    <div id="tab-content-1" class="tab-content">
+        <h2>Arquivos do Apartamento 1</h2>
+        <ul class="file-list" id="file-list-1">
+            </ul>
+    </div>
+    <div id="tab-content-101" class="tab-content">
+        <h2>Arquivos do Apartamento 101</h2>
+        <ul class="file-list" id="file-list-101">
+            </ul>
+    </div>
+    <div id="tab-content-102" class="tab-content">
+        <h2>Arquivos do Apartamento 102</h2>
+        <ul class="file-list" id="file-list-102">
+            </ul>
+    </div>
+    <div id="tab-content-201" class="tab-content">
+        <h2>Arquivos do Apartamento 201</h2>
+        <ul class="file-list" id="file-list-201">
+            </ul>
+    </div>
+    <div id="tab-content-202" class="tab-content">
+        <h2>Arquivos do Apartamento 202</h2>
+        <ul class="file-list" id="file-list-202">
+            </ul>
+    </div>
+    <div id="tab-content-301" class="tab-content">
+        <h2>Arquivos do Apartamento 301</h2>
+        <ul class="file-list" id="file-list-301">
+            </ul>
+    </div>
+    <div id="tab-content-302" class="tab-content">
+        <h2>Arquivos do Apartamento 302</h2>
+        <ul class="file-list" id="file-list-302">
+            </ul>
+    </div>
+    <div id="tab-content-401" class="tab-content">
+        <h2>Arquivos do Apartamento 401</h2>
+        <ul class="file-list" id="file-list-401">
             </ul>
     </div>
 
     <script>
         const accessCodes = {
-            'aB9x-Yz!2W': 'apto1',
-            'cDe5_Fg#H7': 'apto101',
-            'iJk1$Lm%N3': 'apto102',
-            'oPq8^Rs&T4': 'apto201',
-            'uVw2*Xy(Z6': 'apto202',
-            '1aB3)cDe-5': 'apto301',
-            'FgH7+iJk=1': 'apto302',
-            'LmN3[oPq]8': 'apto401'
+            'aB9x-Yz!2W': 'tab1',
+            'cDe5_Fg#H7': 'tab101',
+            'iJk1$Lm%N3': 'tab102',
+            'oPq8^Rs&T4': 'tab201',
+            'uVw2*Xy(Z6': 'tab202',
+            '1aB3)cDe-5': 'tab301',
+            'FgH7+iJk=1': 'tab302',
+            'LmN3[oPq]8': 'tab401'
         };
 
         function enableApartment() {
             const code = document.getElementById('accessCode').value;
-            const apartmentButtonId = accessCodes[code];
+            const apartmentTabId = accessCodes[code];
 
-            if (apartmentButtonId) {
-                document.getElementById(apartmentButtonId).disabled = false;
+            if (apartmentTabId) {
+                document.getElementById(apartmentTabId).disabled = false;
             } else {
                 alert('Código de acesso inválido.');
             }
         }
 
-        function showFiles(apartment) {
-            document.getElementById('apartment-number').textContent = apartment;
-            document.getElementById('file-container').style.display = 'block';
-            const fileList = document.getElementById('file-list');
+        function openTab(apartment) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(`tab-content-${apartment}`).classList.add('active');
+
+            const fileList = document.getElementById(`file-list-${apartment}`);
             fileList.innerHTML = ''; // Limpa a lista anterior
 
             const files = getFilesForApartment(apartment);
@@ -110,24 +157,4 @@
                     { name: 'Boleto Condomínio', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1.pdf' },
                     { name: 'Boleto Acordo M2D', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1.pdf' },
                     { name: 'Boleto Hidro/Eletr', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1.pdf' },
-                    { name: 'Boleto Condomínio (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
-                    { name: 'Boleto Acordo M2D (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
-                    { name: 'Boleto Hidro/Eletr (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
-                    { name: 'Boleto Condomínio (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
-                    { name: 'Boleto Acordo M2D (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
-                    { name: 'Boleto Hidro/Eletr (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' },
-                    { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
-                ];
-            } else {
-                return [
-                    { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
-                    { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-                    { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
-                    { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
-                ];
-            }
-        }
-    </script>
-
-</body>
-</html>
+                    { name: 'Boleto Condomínio (A)', path: baseUrl + 'boletos/2025
