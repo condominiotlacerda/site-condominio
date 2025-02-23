@@ -53,8 +53,8 @@ h1 {
 
 .file-box {
     position: absolute; /* Mantém a posição fixa na tela */
-    top: 180px; /* 🔹 Alinha com os botões dos apartamentos */
-    left: 30px; /* 🔹 Mantém no lado esquerdo */
+    top: 250px; /* 🔹 Alinha com os botões dos apartamentos */
+    left: 15px; /* 🔹 Mantém no lado esquerdo */
     width: 250px; /* 🔹 Define um tamanho adequado */
     background-color: #fff; /* 🔹 Fundo branco para melhor visualização */
     padding: 10px;
