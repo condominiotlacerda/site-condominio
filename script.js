@@ -20,7 +20,7 @@ function enableApartment() {
         // Desativa todos os botões antes de ativar o correto
         document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
 
-        // 🔹 Limpa a lista de arquivos exibida anteriormente e esconde o container de arquivos
+        // Limpa a lista de arquivos exibida anteriormente e esconde o container de arquivos
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
 
@@ -63,19 +63,24 @@ function showFiles(apartment) {
 function getFilesForApartment(apartment) {
     const baseUrl = 'pdfs/'; // Caminho base para os arquivos
 
+    let files = [
+        { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
+        { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
+        { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
+        { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
+    ];
+
+    // 🔹 Se for o apartamento 1, adicionar os arquivos adicionais (1a e 1b)
     if (apartment === '1') {
-        return [
-            { name: 'Boleto Condomínio', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1.pdf' },
-            { name: 'Boleto Acordo M2D', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1.pdf' },
-            { name: 'Boleto Hidro/Eletr', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1.pdf' },
-            { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
-        ];
-    } else {
-        return [
-            { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
-            { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-            { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
-            { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
-        ];
+        files = files.concat([
+            { name: 'Boleto Condomínio (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
+            { name: 'Boleto Acordo M2D (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
+            { name: 'Boleto Hidro/Eletr (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
+            { name: 'Boleto Condomínio (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
+            { name: 'Boleto Acordo M2D (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
+            { name: 'Boleto Hidro/Eletr (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' }
+        ]);
     }
+
+    return files;
 }
