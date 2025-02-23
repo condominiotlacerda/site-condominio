@@ -49,18 +49,27 @@ function showFiles(apartment) {
     document.getElementById('apartment-number').textContent = apartment;
     fileContainer.style.display = 'block'; // Exibe o container novamente
 
-    const files = getFilesForApartment(apartment);
+    let files = getFilesForApartment(apartment);
 
     // 🔹 Garantindo que os arquivos 1a e 1b apareçam quando for o apto 1
     if (apartment === '1') {
-        files.push(
+        files = [
+            ...files,
             { name: 'Boleto Condomínio (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
             { name: 'Boleto Acordo M2D (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
             { name: 'Boleto Hidro/Eletr (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
             { name: 'Boleto Condomínio (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
             { name: 'Boleto Acordo M2D (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
             { name: 'Boleto Hidro/Eletr (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' }
-        );
+        ];
+    }
+
+    // 🔹 Move a Prestação de Contas para o final da lista
+    const prestacaoDeContas = files.find(file => file.name === 'Prestação de Contas');
+    files = files.filter(file => file.name !== 'Prestação de Contas');
+
+    if (prestacaoDeContas) {
+        files.push(prestacaoDeContas);
     }
 
     files.forEach(file => {
@@ -80,7 +89,7 @@ function getFilesForApartment(apartment) {
         { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
         { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
         { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
-        { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
+        { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' } // 🔹 Arquivo agora será movido para o final
     ];
 
     return files;
