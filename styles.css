@@ -37,15 +37,16 @@ h1 {
 }
 
 .logo {
-    display: block; /* Garante que a imagem siga apenas as regras CSS */
-    width: 200px !important; /* Define um tamanho fixo */
-    height: 200px !important; /* Mantém a proporção */
-    border-radius: 50%; /* Mantém a imagem circular */
-    object-fit: cover; /* Evita distorção da imagem */
-    position: absolute; /* Mantém fixo no canto superior esquerdo */
-    top: 30px; /* Ajuste da posição vertical */
-    left: 30px; /* Ajuste da posição horizontal */
-    max-width: 200px !important; /* Evita que o navegador expanda a imagem */
-    max-height: 200px !important; /* Evita que o navegador expanda a imagem */
+    display: block;
+    width: 200px !important;
+    height: 200px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    max-width: 200px !important;
+    max-height: 200px !important;
+    border: 2px solid red; /* 🔹 Adiciona um contorno vermelho */
 }
 
