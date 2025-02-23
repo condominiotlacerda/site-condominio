@@ -18,76 +18,78 @@ const apartmentNames = {
     'apto401': 'Célia'
 };
 
-let activeApartmentButtonId = null; // Armazena o ID do botão ativo
+const accessCodeOwners = {
+    'aB9x-Yz!2W': 'João Paulo',
+    'cDe5_Fg#H7': 'Lizandro',
+    'iJk1$Lm%N3': 'Felipe Granja',
+    'oPq8^Rs&T4': 'Jorge',
+    'xY7z!aB-cD': 'Ângela',
+    'FgH7+iJk=1': 'Suzane',
+    'LmN3[oPq]8': 'Célia'
+};
+
+let activeApartmentButtonId = null;
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value;
     const apartmentButtonId = accessCodes[code];
+    const ownerName = accessCodeOwners[code];
 
     if (apartmentButtonId) {
-        // Desabilita o botão ativo anterior, se houver
         if (activeApartmentButtonId) {
             document.getElementById(activeApartmentButtonId).disabled = true;
         }
 
-        // Limpa a lista de arquivos exibida anteriormente
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
 
-        // Habilita o novo botão
         document.getElementById(apartmentButtonId).disabled = false;
-        activeApartmentButtonId = apartmentButtonId; // Atualiza o botão ativo
+        activeApartmentButtonId = apartmentButtonId;
 
-        // Atualiza a mensagem de boas-vindas
-        document.getElementById('welcome-message').innerHTML = `Seja bem-vindo, ${apartmentNames[apartmentButtonId]}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
+        document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${ownerName}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
 
-        // Limpa o campo de código e oculta o código inserido
         document.getElementById('accessCode').value = '';
     } else {
         alert('Código de acesso inválido.');
     }
 }
 
-function showFiles(apartment) {
-    document.getElementById('apartment-number').textContent = apartment;
-    document.getElementById('file-container').style.display = 'block';
-    const fileList = document.getElementById('file-list');
-    fileList.innerHTML = ''; // Limpa a lista anterior
+function getFilesForApartment(apartmentId) {
+    const apartmentName = apartmentNames[apartmentId];
+    let files = [];
 
-    const files = getFilesForApartment(apartment);
-    files.forEach(file => {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = file.path;
-        link.textContent = file.name;
-        listItem.appendChild(link);
-        fileList.appendChild(listItem);
-    });
-}
+    if (apartmentName) {
+        if (apartmentName === 'João Paulo') {
+            files = ['boleto_joao_1.pdf', 'boleto_joao_2.pdf'];
+        } else if (apartmentName === 'Lizandro') {
+            files = ['boleto_lizandro_1.pdf', 'boleto_lizandro_2.pdf'];
+        } else if (apartmentName === 'Felipe Granja') {
+            files = ['boleto_felipe_1.pdf', 'boleto_felipe_2.pdf'];
+        } else if (apartmentName === 'Jorge') {
+            files = ['boleto_jorge_1.pdf', 'boleto_jorge_2.pdf'];
+        } else if (apartmentName === 'Ângela') {
+            files = ['boleto_angela_1.pdf', 'boleto_angela_2.pdf'];
+        } else if (apartmentName === 'Suzane') {
+            files = ['boleto_suzane_1.pdf', 'boleto_suzane_2.pdf'];
+        } else if (apartmentName === 'Célia') {
+            files = ['boleto_celia_1.pdf', 'boleto_celia_2.pdf'];
+        }
 
-function getFilesForApartment(apartment) {
-    const baseUrl = 'pdfs/'; // Caminho base para os arquivos
+        const fileList = document.getElementById('file-list');
+        fileList.innerHTML = '';
 
-    if (apartment === '1') {
-        return [
-            { name: 'Boleto Condomínio', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1.pdf' },
-            { name: 'Boleto Acordo M2D', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1.pdf' },
-            { name: 'Boleto Hidro/Eletr', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1.pdf' },
-            { name: 'Boleto Condomínio (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
-            { name: 'Boleto Acordo M2D (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
-            { name: 'Boleto Hidro/Eletr (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
-            { name: 'Boleto Condomínio (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
-            { name: 'Boleto Acordo M2D (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
-            { name: 'Boleto Hidro/Eletr (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' },
-            { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
-        ];
+        files.forEach(file => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = file;
+            link.textContent = file;
+            link.download = file;
+            listItem.appendChild(link);
+            fileList.appendChild(listItem);
+        });
+
+        document.getElementById('file-container').style.display = 'block';
     } else {
-        return [
-            { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
-            { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-            { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
-            { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
-        ];
+        alert('Apartamento não encontrado.');
     }
 }
-
