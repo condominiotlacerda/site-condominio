@@ -39,17 +39,26 @@ function enableApartment() {
 }
 
 function showFiles(apartment) {
-    // 🔹 Antes de exibir os novos arquivos, limpa completamente os anteriores
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
 
-    fileContainer.style.display = 'none'; // Esconde a área de arquivos temporariamente
-    fileList.innerHTML = ''; // 🔹 Remove arquivos anteriores
+    fileContainer.style.display = 'none'; // Esconde temporariamente
+    fileList.innerHTML = ''; // Remove arquivos anteriores
 
     document.getElementById('apartment-number').textContent = apartment;
-    fileContainer.style.display = 'block'; // Exibe o container novamente
+    fileContainer.style.display = 'block'; // 🔹 Agora só aparece ao clicar no botão
 
-    let files = getFilesForApartment(apartment);
+    const files = getFilesForApartment(apartment);
+    files.forEach(file => {
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = file.path;
+        link.textContent = file.name;
+        listItem.appendChild(link);
+        fileList.appendChild(listItem);
+    });
+}
+
 
     // 🔹 Garantindo que os arquivos 1a e 1b apareçam quando for o apto 1
     if (apartment === '1') {
