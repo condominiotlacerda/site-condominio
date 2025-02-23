@@ -48,17 +48,7 @@ function showFiles(apartment) {
     document.getElementById('apartment-number').textContent = apartment;
     fileContainer.style.display = 'block'; // 🔹 Agora só aparece ao clicar no botão
 
-    const files = getFilesForApartment(apartment);
-    files.forEach(file => {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = file.path;
-        link.textContent = file.name;
-        listItem.appendChild(link);
-        fileList.appendChild(listItem);
-    });
-}
-
+    let files = getFilesForApartment(apartment);
 
     // 🔹 Garantindo que os arquivos 1a e 1b apareçam quando for o apto 1
     if (apartment === '1') {
@@ -106,8 +96,8 @@ function getFilesForApartment(apartment) {
     return files;
 }
 
+// 🔹 Desativa os botões 202 e 301 ao carregar a página
     document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("apto202").disabled = true;
     document.getElementById("apto301").disabled = true;
 });
-
