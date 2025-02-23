@@ -15,7 +15,7 @@
 
     <h1>Condomínio T Lacerda</h1>
     <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
-    <input type="password" id="accessCode">
+    <input type="password" id="accessCode" placeholder="Digite seu código">
     <button onclick="enableApartment()">Acessar</button>
 
     <div class="apartment-section">
@@ -29,11 +29,11 @@
         <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
     </div>
 
-    <div id="file-container" class="file-box">
+    <div id="file-container" class="file-box" style="display: none;">
         <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
         <ul class="file-list" id="file-list"></ul>
     </div>
 
-
 </body>
 </html>
+
