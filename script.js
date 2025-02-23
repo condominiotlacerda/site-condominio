@@ -8,7 +8,7 @@ const accessCodes = {
     'LmN3[oPq]8': { id: 'apto401', name: 'Célia' }
 };
 
-let activeApartmentButtonId = null; // Armazena o ID do botão ativo
+let activeApartmentButtonId = null; // Armazena o botão do apartamento ativo
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value;
@@ -43,11 +43,11 @@ function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
 
-    fileContainer.style.display = 'none'; // Esconde temporariamente
-    fileList.innerHTML = ''; // Remove arquivos anteriores
+    // 🔹 Garante que o container esteja visível
+    fileContainer.style.display = 'block';
+    fileList.innerHTML = ''; // Limpa a lista de arquivos anteriores
 
     document.getElementById('apartment-number').textContent = apartment;
-    fileContainer.style.display = 'block'; // 🔹 Exibe o container corretamente
 
     let files = getFilesForApartment(apartment);
 
