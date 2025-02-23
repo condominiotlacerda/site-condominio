@@ -53,12 +53,11 @@ h1 {
 
 .file-box {
     position: absolute; /* Mantém a posição fixa na tela */
-    top: 200px; /* 🔹 Ajusta para ficar alinhado com o logo */
-    left: 15px; /* 🔹 Mantém alinhado no lado esquerdo */
+    top: 180px; /* 🔹 Alinha com os botões dos apartamentos */
+    left: 30px; /* 🔹 Mantém no lado esquerdo */
     width: 250px; /* 🔹 Define um tamanho adequado */
-    background-color: #fff; /* 🔹 Mantém um fundo visível */
+    background-color: #fff; /* 🔹 Fundo branco para melhor visualização */
     padding: 10px;
     border-radius: 5px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
-
