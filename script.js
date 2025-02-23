@@ -69,9 +69,6 @@ function showFiles(apartment) {
         );
     }
 
-    // 🔹 Adicionando a Prestação de Contas no final da lista
-    files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
-
     files.forEach(file => {
         const listItem = document.createElement('li');
         const link = document.createElement('a');
@@ -112,8 +109,10 @@ function getFilesForApartment(apartment) {
         { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
 
-    // 🔹 Adiciona a Prestação de Contas para todos os apartamentos
-    files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
+    // 🔹 Adiciona a Prestação de Contas apenas se ainda não estiver na lista
+    if (!files.some(file => file.name === 'Prestação de Contas')) {
+        files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
+    }
 
     return files;
 }
