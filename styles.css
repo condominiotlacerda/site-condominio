@@ -37,8 +37,8 @@ h1 {
 }
 
 .logo {
-    width: 400px !important;
-    height: 400px !important;
+    width: 200px !important;
+    height: 200px !important;
     border-radius: 50%; /* Mantém a imagem circular */
     object-fit: cover; /* Garante que a imagem preencha o círculo sem distorcer */
     position: absolute; /* Mantém fixo no canto superior esquerdo */
