@@ -42,25 +42,27 @@ function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
 
-    fileContainer.style.display = 'none'; // Esconde temporariamente
-    fileList.innerHTML = ''; // Remove arquivos anteriores
+    fileContainer.style.display = 'none';
+    fileList.innerHTML = '';
 
     document.getElementById('apartment-number').textContent = apartment;
-    fileContainer.style.display = 'block'; // 🔹 Agora só aparece ao clicar no botão
+    fileContainer.style.display = 'block';
+
+    // 🔹 Remove e adiciona a classe para realçar suavemente
+    fileContainer.classList.remove('active');
+    setTimeout(() => fileContainer.classList.add('active'), 50);
 
     let files = getFilesForApartment(apartment);
 
-    // 🔹 Garantindo que os arquivos 1a e 1b apareçam quando for o apto 1
     if (apartment === '1') {
-        files = [
-            ...files,
+        files.push(
             { name: 'Boleto Condomínio (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
             { name: 'Boleto Acordo M2D (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
             { name: 'Boleto Hidro/Eletr (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
             { name: 'Boleto Condomínio (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
             { name: 'Boleto Acordo M2D (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
             { name: 'Boleto Hidro/Eletr (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' }
-        ];
+        );
     }
 
     // 🔹 Move a Prestação de Contas para a 10ª posição
