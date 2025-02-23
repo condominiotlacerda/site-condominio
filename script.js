@@ -47,7 +47,7 @@ function showFiles(apartment) {
     fileList.innerHTML = ''; // Remove arquivos anteriores
 
     document.getElementById('apartment-number').textContent = apartment;
-    fileContainer.style.display = 'block'; // 🔹 Agora só aparece ao clicar no botão
+    fileContainer.style.display = 'block'; // 🔹 Exibe o container corretamente
 
     let files = getFilesForApartment(apartment);
 
@@ -63,10 +63,10 @@ function showFiles(apartment) {
         );
     }
 
-    // 🔹 Move a "Prestação de Contas" para a última posição, garantindo que só seja adicionada uma vez
+    // 🔹 Remove duplicatas e garante que a "Prestação de Contas" só apareça uma vez no final da lista
     const prestacaoDeContas = { name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' };
-    files = files.filter(file => file.name !== 'Prestação de Contas'); // Remove caso já exista
-    files.push(prestacaoDeContas); // Adiciona apenas uma vez no final
+    files = files.filter(file => file.name !== 'Prestação de Contas'); // Remove duplicatas
+    files.push(prestacaoDeContas); // Adiciona ao final
 
     // 🔹 Exibe os arquivos na tela
     files.forEach(file => {
@@ -109,8 +109,14 @@ function openFileViewer(filePath) {
     viewerContainer.style.display = 'block'; // 🔹 Exibe a visualização do arquivo
 }
 
-// 🔹 Esconde a caixa de visualização do arquivo ao inserir um novo código
-    document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("apto202").disabled = true;
-    document.getElementById("apto301").disabled = true;
+// 🔹 Garante que os botões dos apartamentos chamem `showFiles()`
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.apartment-button').forEach(button => {
+        button.addEventListener('click', function () {
+            if (!this.disabled) {
+                const apartment = this.id.replace('apto', ''); // Obtém o número do apartamento
+                showFiles(apartment);
+            }
+        });
+    });
 });
