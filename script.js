@@ -61,15 +61,8 @@ function showFiles(apartment) {
         ]);
     }
 
-    // Remove duplicatas antes de adicionar "Prestação de Contas"
-    files = files.filter((file, index, self) =>
-        index === self.findIndex(f => f.name === file.name)
-    );
-
     // Adiciona "Prestação de Contas" apenas uma vez no final
-    if (!files.some(file => file.name === 'Prestação de Contas')) {
-        files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
-    }
+    files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
 
     // Exibe os arquivos na tela
     files.forEach(file => {
