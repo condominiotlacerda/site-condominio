@@ -1,95 +1,78 @@
 const accessCodes = {
-    'aB9x-Yz!2W': 'apto1',
-    'cDe5_Fg#H7': 'apto101',
-    'iJk1$Lm%N3': 'apto102',
-    'oPq8^Rs&T4': 'apto201',
-    'xY7z!aB-cD': 'apto201',
-    'FgH7+iJk=1': 'apto302',
-    'LmN3[oPq]8': 'apto401'
+    'aB9x-Yz!2W': { id: 'apto1', name: 'João Paulo' },
+    'cDe5_Fg#H7': { id: 'apto101', name: 'Lizandro' },
+    'iJk1$Lm%N3': { id: 'apto102', name: 'Felipe Granja' },
+    'oPq8^Rs&T4': { id: 'apto201', name: 'Jorge' },
+    'xY7z!aB-cD': { id: 'apto201', name: 'Ângela' },
+    'FgH7+iJk=1': { id: 'apto302', name: 'Suzane' },
+    'LmN3[oPq]8': { id: 'apto401', name: 'Célia' }
 };
 
-const apartmentNames = {
-    'apto1': 'João Paulo',
-    'apto101': 'Lizandro',
-    'apto102': 'Felipe Granja',
-    'apto201': 'Jorge',
-    'apto201': 'Ângela',
-    'apto302': 'Suzane',
-    'apto401': 'Célia'
-};
-
-const accessCodeOwners = {
-    'aB9x-Yz!2W': 'João Paulo',
-    'cDe5_Fg#H7': 'Lizandro',
-    'iJk1$Lm%N3': 'Felipe Granja',
-    'oPq8^Rs&T4': 'Jorge',
-    'xY7z!aB-cD': 'Ângela',
-    'FgH7+iJk=1': 'Suzane',
-    'LmN3[oPq]8': 'Célia'
-};
-
-let activeApartmentButtonId = null;
+let activeApartmentButtonId = null; // Armazena o ID do botão ativo
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value;
-    const apartmentButtonId = accessCodes[code];
-    const ownerName = accessCodeOwners[code];
+    const userData = accessCodes[code];
 
-    if (apartmentButtonId) {
-        if (activeApartmentButtonId) {
-            document.getElementById(activeApartmentButtonId).disabled = true;
-        }
+    if (userData) {
+        const { id, name } = userData;
 
-        document.getElementById('file-list').innerHTML = '';
-        document.getElementById('file-container').style.display = 'none';
+        // Desativa todos os botões antes de ativar o correto
+        document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
 
-        document.getElementById(apartmentButtonId).disabled = false;
-        activeApartmentButtonId = apartmentButtonId;
+        // Habilita o botão do apartamento correspondente
+        document.getElementById(id).disabled = false;
+        activeApartmentButtonId = id; // Atualiza o botão ativo
 
-        document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${ownerName}. Abaixo estão os seus boletos. Clique sobre eles para baixá-los:`;
+        // Atualiza mensagem de boas-vindas com o nome correto do usuário
+        document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
 
+        // Limpa o campo de código
         document.getElementById('accessCode').value = '';
     } else {
         alert('Código de acesso inválido.');
     }
 }
 
-function showFiles(apartmentId) {
-    const apartmentName = apartmentNames[apartmentId];
-    let files = [];
+function showFiles(apartment) {
+    document.getElementById('apartment-number').textContent = apartment;
+    document.getElementById('file-container').style.display = 'block';
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = ''; // Limpa a lista anterior
 
-    if (apartmentName) {
-        if (apartmentId === 'apto1') {
-            files = ['boleto_joao_1.pdf', 'boleto_joao_2.pdf'];
-        } else if (apartmentId === 'apto101') {
-            files = ['boleto_lizandro_1.pdf', 'boleto_lizandro_2.pdf'];
-        } else if (apartmentId === 'apto102') {
-            files = ['boleto_felipe_1.pdf', 'boleto_felipe_2.pdf'];
-        } else if (apartmentId === 'apto201' && apartmentName === 'Jorge') {
-            files = ['boleto_jorge_1.pdf', 'boleto_jorge_2.pdf'];
-        } else if (apartmentId === 'apto201' && apartmentName === 'Ângela') {
-            files = ['boleto_angela_1.pdf', 'boleto_angela_2.pdf'];
-        } else if (apartmentId === 'apto302') {
-            files = ['boleto_suzane_1.pdf', 'boleto_suzane_2.pdf'];
-        } else if (apartmentId === 'apto401') {
-            files = ['boleto_celia_1.pdf', 'boleto_celia_2.pdf'];
-        }
+    const files = getFilesForApartment(apartment);
+    files.forEach(file => {
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = file.path;
+        link.textContent = file.name;
+        listItem.appendChild(link);
+        fileList.appendChild(listItem);
+    });
+}
 
-        const fileList = document.getElementById('file-list');
-        fileList.innerHTML = '';
+function getFilesForApartment(apartment) {
+    const baseUrl = 'pdfs/'; // Caminho base para os arquivos
 
-        files.forEach(file => {
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = file;
-            link.textContent = file;
-            link.download = file;
-            listItem.appendChild(link);
-            fileList.appendChild(listItem);
-        });
-
-        document.getElementById('file-container').style.display = 'block';
+    if (apartment === '1') {
+        return [
+            { name: 'Boleto Condomínio', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1.pdf' },
+            { name: 'Boleto Acordo M2D', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1.pdf' },
+            { name: 'Boleto Hidro/Eletr', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1.pdf' },
+            { name: 'Boleto Condomínio (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
+            { name: 'Boleto Acordo M2D (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
+            { name: 'Boleto Hidro/Eletr (A)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
+            { name: 'Boleto Condomínio (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
+            { name: 'Boleto Acordo M2D (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
+            { name: 'Boleto Hidro/Eletr (B)', path: baseUrl + 'boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' },
+            { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
+        ];
     } else {
-        alert('Apartamento não encontrado.');
+        return [
+            { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
+            { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
+            { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
+            { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' }
+        ];
     }
 }
