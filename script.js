@@ -24,6 +24,9 @@ function enableApartment() {
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
 
+        // 🔹 Esconde também o visualizador ao mudar de código
+        document.getElementById('viewer-container').style.display = 'none';
+
         // Habilita o botão do apartamento correspondente
         document.getElementById(id).disabled = false;
         activeApartmentButtonId = id; // Atualiza o botão ativo
@@ -66,6 +69,9 @@ function showFiles(apartment) {
         );
     }
 
+    // 🔹 Adicionando a Prestação de Contas no final da lista
+    files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
+
     files.forEach(file => {
         const listItem = document.createElement('li');
         const link = document.createElement('a');
@@ -105,6 +111,9 @@ function getFilesForApartment(apartment) {
         { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
         { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
+
+    // 🔹 Adiciona a Prestação de Contas para todos os apartamentos
+    files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
 
     return files;
 }
