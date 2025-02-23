@@ -41,6 +41,7 @@ function enableApartment() {
 function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
+    const viewerContainer = document.getElementById('viewer-container');
 
     fileContainer.style.display = 'none';
     fileList.innerHTML = '';
@@ -65,25 +66,35 @@ function showFiles(apartment) {
         );
     }
 
-    // 🔹 Move a Prestação de Contas para a 10ª posição
-    const prestacaoDeContas = { name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' };
-
-    while (files.length < 9) {
-        files.push({ name: '', path: '' }); // Preenchendo até 9 posições se necessário
-    }
-    files.push(prestacaoDeContas); // 🔹 Adiciona a Prestação de Contas na 10ª posição
-
-    // 🔹 Exibe os arquivos na tela
     files.forEach(file => {
-        if (file.name) { // Evita exibir espaços vazios
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = file.path;
-            link.textContent = file.name;
-            listItem.appendChild(link);
-            fileList.appendChild(listItem);
-        }
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = "#";
+        link.textContent = file.name;
+        link.onclick = function (event) {
+            event.preventDefault();
+            openFileViewer(file.path);
+        };
+        listItem.appendChild(link);
+        fileList.appendChild(listItem);
     });
+
+    // 🔹 Esconde o visualizador ao mudar de apartamento
+    viewerContainer.style.display = 'none';
+}
+
+function openFileViewer(filePath) {
+    const viewerContainer = document.getElementById('viewer-container');
+    const fileViewer = document.getElementById('file-viewer');
+    const downloadButton = document.getElementById('download-button');
+
+    fileViewer.src = filePath; // Exibe o arquivo no iframe
+    downloadButton.href = filePath; // Atualiza o link de download
+    viewerContainer.style.display = 'block'; // Exibe o visualizador
+
+    // 🔹 Adiciona classe para efeito suave
+    viewerContainer.classList.remove('active');
+    setTimeout(() => viewerContainer.classList.add('active'), 50);
 }
 
 function getFilesForApartment(apartment) {
