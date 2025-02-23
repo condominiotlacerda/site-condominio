@@ -43,8 +43,8 @@ h1 {
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    top: 30px;
-    left: 30px;
+    top: 15px;
+    left: 15px;
     max-width: 200px !important;
     max-height: 200px !important;
     border: 2px solid red; /* 🔹 Adiciona um contorno vermelho */
