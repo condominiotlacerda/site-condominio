@@ -64,21 +64,24 @@ function showFiles(apartment) {
         ];
     }
 
-    // 🔹 Move a Prestação de Contas para o final da lista
-    const prestacaoDeContas = files.find(file => file.name === 'Prestação de Contas');
-    files = files.filter(file => file.name !== 'Prestação de Contas');
+    // 🔹 Move a Prestação de Contas para a 10ª posição
+    const prestacaoDeContas = { name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' };
 
-    if (prestacaoDeContas) {
-        files.push(prestacaoDeContas);
+    while (files.length < 9) {
+        files.push({ name: '', path: '' }); // Preenchendo até 9 posições se necessário
     }
+    files.push(prestacaoDeContas); // 🔹 Adiciona a Prestação de Contas na 10ª posição
 
+    // 🔹 Exibe os arquivos na tela
     files.forEach(file => {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = file.path;
-        link.textContent = file.name;
-        listItem.appendChild(link);
-        fileList.appendChild(listItem);
+        if (file.name) { // Evita exibir espaços vazios
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = file.path;
+            link.textContent = file.name;
+            listItem.appendChild(link);
+            fileList.appendChild(listItem);
+        }
     });
 }
 
@@ -88,8 +91,7 @@ function getFilesForApartment(apartment) {
     let files = [
         { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
         { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-        { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
-        { name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' } // 🔹 Arquivo agora será movido para o final
+        { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
 
     return files;
