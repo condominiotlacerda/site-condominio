@@ -54,24 +54,24 @@ function enableApartment() {
     }
 }
 
-function getFilesForApartment(apartmentId) {
+function showFiles(apartmentId) {
     const apartmentName = apartmentNames[apartmentId];
     let files = [];
 
     if (apartmentName) {
-        if (apartmentName === 'João Paulo') {
+        if (apartmentId === 'apto1') {
             files = ['boleto_joao_1.pdf', 'boleto_joao_2.pdf'];
-        } else if (apartmentName === 'Lizandro') {
+        } else if (apartmentId === 'apto101') {
             files = ['boleto_lizandro_1.pdf', 'boleto_lizandro_2.pdf'];
-        } else if (apartmentName === 'Felipe Granja') {
+        } else if (apartmentId === 'apto102') {
             files = ['boleto_felipe_1.pdf', 'boleto_felipe_2.pdf'];
-        } else if (apartmentName === 'Jorge') {
+        } else if (apartmentId === 'apto201' && apartmentName === 'Jorge') {
             files = ['boleto_jorge_1.pdf', 'boleto_jorge_2.pdf'];
-        } else if (apartmentName === 'Ângela') {
+        } else if (apartmentId === 'apto201' && apartmentName === 'Ângela') {
             files = ['boleto_angela_1.pdf', 'boleto_angela_2.pdf'];
-        } else if (apartmentName === 'Suzane') {
+        } else if (apartmentId === 'apto302') {
             files = ['boleto_suzane_1.pdf', 'boleto_suzane_2.pdf'];
-        } else if (apartmentName === 'Célia') {
+        } else if (apartmentId === 'apto401') {
             files = ['boleto_celia_1.pdf', 'boleto_celia_2.pdf'];
         }
 
