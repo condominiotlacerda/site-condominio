@@ -96,3 +96,9 @@ function getFilesForApartment(apartment) {
 
     return files;
 }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("apto202").disabled = true;
+    document.getElementById("apto301").disabled = true;
+});
+
