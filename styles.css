@@ -51,3 +51,14 @@ h1 {
     border: 2px solid red; /* 🔹 Adiciona um contorno vermelho */
 }
 
+.file-box {
+    position: absolute; /* Mantém a posição fixa na tela */
+    top: 200px; /* 🔹 Ajusta para ficar alinhado com o logo */
+    left: 15px; /* 🔹 Mantém alinhado no lado esquerdo */
+    width: 250px; /* 🔹 Define um tamanho adequado */
+    background-color: #fff; /* 🔹 Mantém um fundo visível */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
