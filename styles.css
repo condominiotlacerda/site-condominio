@@ -36,3 +36,13 @@ h1 {
     color: #007bff;
 }
 
+/* Estilização do logo */
+.logo {
+    width: 80px;  /* Define um tamanho fixo */
+    height: 80px; /* Mantém a proporção */
+    border-radius: 50%; /* Transforma a imagem em um círculo */
+    object-fit: cover; /* Garante que a imagem preencha o círculo sem distorcer */
+    position: absolute; /* Mantém fixo no canto superior esquerdo */
+    top: 10px;  /* Ajuste da posição superior */
+    left: 10px; /* Ajuste da posição esquerda */
+}
