@@ -20,6 +20,10 @@ function enableApartment() {
         // Desativa todos os botões antes de ativar o correto
         document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
 
+        // Limpa a lista de arquivos exibida anteriormente e esconde o container de arquivos
+        document.getElementById('file-list').innerHTML = '';
+        document.getElementById('file-container').style.display = 'none';
+
         // Habilita o botão do apartamento correspondente
         document.getElementById(id).disabled = false;
         activeApartmentButtonId = id; // Atualiza o botão ativo
