@@ -7,18 +7,23 @@ body {
 
 h1 {
     color: #333;
+    font-size: 1.8em;
 }
 
 .apartment-section {
     margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .apartment-button {
-    padding: 10px 20px;
+    padding: 10px 15px;
     margin: 5px;
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     cursor: pointer;
+    font-size: 1em;
 }
 
 .file-list {
@@ -36,49 +41,49 @@ h1 {
     color: #007bff;
 }
 
-/* Referente à imagem do Logo do Condomínio */
+/* 🔹 Logo do Condomínio */
 .logo {
     display: block;
-    width: 100px !important;
-    height: 100px !important;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    top: 10px;
-    left: 10px;
-    max-width: 100px !important;
-    max-height: 100px !important;
-    border: 1px solid red; /* 🔹 Adiciona um contorno vermelho */
+    top: 15px;
+    left: 15px;
+    max-width: 150px;
+    max-height: 150px;
+    border: 2px solid red;
 }
 
-/* Referente à posição que a lista dos arquivos é carregada */
+/* 🔹 Caixa da lista de arquivos */
 .file-box {
-    position: absolute;
-    top: 250px;
-    left: 15px;
-    width: 250px;
-    background-color: #f9f9f9; /* 🔹 Fundo levemente realçado */
+    position: relative;
+    top: 20px;
+    width: 80%;
+    margin: 0 auto;
+    background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid #ddd; /* 🔹 Adiciona uma borda sutil */
+    border: 2px solid #ddd;
     opacity: 0;
-    transform: scale(0.95); /* 🔹 Efeito de leve zoom ao carregar */
+    transform: scale(0.95);
     transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
 .file-box.active {
-    opacity: 1; /* 🔹 Aparece suavemente */
-    transform: scale(1); /* 🔹 Volta ao tamanho normal */
-    border-color: #555; /* 🔹 Borda levemente destacada */
+    opacity: 1;
+    transform: scale(1);
+    border-color: #555;
 }
 
+/* 🔹 Painel do visualizador de PDF */
 .viewer-box {
-    position: absolute;
-    top: 250px;
-    left: 280px; /* 🔹 Posiciona ao lado da lista de arquivos */
-    width: 600px;
-    height: 400px;
+    position: relative;
+    top: 20px;
+    width: 80%;
+    margin: 20px auto;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
@@ -95,12 +100,14 @@ h1 {
     border-color: #555;
 }
 
+/* 🔹 Ajuste do iframe */
 #file-viewer {
     width: 100%;
     height: 300px;
     border: none;
 }
 
+/* 🔹 Botão de download */
 .download-btn {
     display: block;
     margin-top: 10px;
@@ -115,4 +122,35 @@ h1 {
 
 .download-btn:hover {
     background-color: #0056b3;
+}
+
+/* 🔹 RESPONSIVIDADE PARA CELULAR 📱 */
+@media (max-width: 768px) {
+    .logo {
+        width: 100px;
+        height: 100px;
+        top: 10px;
+        left: 10px;
+    }
+
+    .apartment-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .apartment-button {
+        width: 80%;
+        font-size: 0.9em;
+        padding: 12px;
+    }
+
+    .file-box, .viewer-box {
+        width: 95%;
+        top: 10px;
+    }
+
+    #file-viewer {
+        height: 250px;
+    }
 }
