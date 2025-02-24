@@ -39,16 +39,16 @@ h1 {
 /* Referente à imagem do Logo do Condomínio */
 .logo {
     display: block;
-    width: 200px !important;
-    height: 200px !important;
+    width: 100px !important;
+    height: 100px !important;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    top: 15px;
-    left: 15px;
-    max-width: 200px !important;
-    max-height: 200px !important;
-    border: 2px solid red; /* 🔹 Adiciona um contorno vermelho */
+    top: 10px;
+    left: 10px;
+    max-width: 100px !important;
+    max-height: 100px !important;
+    border: 1px solid red; /* 🔹 Adiciona um contorno vermelho */
 }
 
 /* Referente à posição que a lista dos arquivos é carregada */
