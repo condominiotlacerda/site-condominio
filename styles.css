@@ -12,9 +12,6 @@ h1 {
 
 .apartment-section {
     margin-top: 30px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
 }
 
 .apartment-button {
@@ -44,24 +41,24 @@ h1 {
 /* 🔹 Logo do Condomínio */
 .logo {
     display: block;
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
     top: 15px;
     left: 15px;
-    max-width: 150px;
-    max-height: 150px;
+    max-width: 200px;
+    max-height: 200px;
     border: 2px solid red;
 }
 
 /* 🔹 Caixa da lista de arquivos */
 .file-box {
-    position: relative;
-    top: 20px;
-    width: 80%;
-    margin: 0 auto;
+    position: absolute;
+    top: 250px;
+    left: 15px;
+    width: 250px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
@@ -80,10 +77,11 @@ h1 {
 
 /* 🔹 Painel do visualizador de PDF */
 .viewer-box {
-    position: relative;
-    top: 20px;
-    width: 80%;
-    margin: 20px auto;
+    position: absolute;
+    top: 250px;
+    left: 280px;
+    width: 600px;
+    height: 400px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
@@ -124,7 +122,7 @@ h1 {
     background-color: #0056b3;
 }
 
-/* 🔹 RESPONSIVIDADE PARA CELULAR 📱 */
+/* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
 @media (max-width: 768px) {
     .logo {
         width: 100px;
@@ -140,14 +138,24 @@ h1 {
     }
 
     .apartment-button {
-        width: 80%;
+        width: 90%;
         font-size: 0.9em;
         padding: 12px;
     }
 
-    .file-box, .viewer-box {
-        width: 95%;
+    /* 🔹 No celular, a lista de arquivos e o visualizador ficam um abaixo do outro */
+    .file-box {
+        position: relative;
         top: 10px;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .viewer-box {
+        position: relative;
+        top: 20px;
+        width: 90%;
+        margin: 10px auto;
     }
 
     #file-viewer {
