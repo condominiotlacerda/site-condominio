@@ -103,9 +103,11 @@ function getFilesForApartment(apartment) {
     let files = [
         { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
         { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-        { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` },
-        { name: 'Prestação de Contas', path: baseUrl + `prestacao_de_contas.pdf` }
+        { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
+
+    // 🔹 Adiciona "Prestação de Contas" ao final da lista de arquivos
+    files.push({ name: 'Prestação de Contas', path: baseUrl + `prestacao_contas.pdf` });
 
     return files;
 }
