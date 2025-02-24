@@ -8,7 +8,7 @@ const accessCodes = {
     'LmN3[oPq]8': { id: 'apto401', name: 'Célia' }
 };
 
-let activeApartmentButtonId = null;
+let activeApartmentButtonId = null; // Armazena o ID do botão ativo
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value;
@@ -17,20 +17,21 @@ function enableApartment() {
     if (userData) {
         const { id, name } = userData;
 
-        // Desativa todos os botões
+        // Desativa todos os botões antes de ativar o correto
         document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
 
-        // Reseta as caixas de arquivos e o visualizador
-        resetFileContainers();
+        // Limpa a lista de arquivos exibida anteriormente e esconde o container de arquivos
+        document.getElementById('file-list').innerHTML = '';
+        document.getElementById('file-container').style.display = 'none';
 
-        // Habilita o botão correspondente
+        // Habilita o botão do apartamento correspondente
         document.getElementById(id).disabled = false;
-        activeApartmentButtonId = id;
+        activeApartmentButtonId = id; // Atualiza o botão ativo
 
-        // Exibe a mensagem de boas-vindas
+        // Atualiza mensagem de boas-vindas com o nome correto do usuário
         document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
 
-        // Limpa o campo do código
+        // Limpa o campo de código
         document.getElementById('accessCode').value = '';
     } else {
         alert('Código de acesso inválido.');
@@ -40,82 +41,76 @@ function enableApartment() {
 function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
+    const viewerContainer = document.getElementById('viewer-container');
 
-    // Garante que o container esteja visível
-    fileContainer.style.display = 'block';
+    fileContainer.style.display = 'none';
     fileList.innerHTML = '';
 
     document.getElementById('apartment-number').textContent = apartment;
+    fileContainer.style.display = 'block';
+
+    // 🔹 Remove e adiciona a classe para realçar suavemente
+    fileContainer.classList.remove('active');
+    setTimeout(() => fileContainer.classList.add('active'), 50);
 
     let files = getFilesForApartment(apartment);
 
-    // Adiciona arquivos extras para o apartamento 1
     if (apartment === '1') {
-        files = files.concat([
+        files.push(
             { name: 'Boleto Condomínio (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
             { name: 'Boleto Acordo M2D (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
             { name: 'Boleto Hidro/Eletr (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
             { name: 'Boleto Condomínio (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
             { name: 'Boleto Acordo M2D (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
             { name: 'Boleto Hidro/Eletr (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' }
-        ]);
+        );
     }
 
-    // Adiciona "Prestação de Contas" apenas uma vez no final
-    files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
-
-    // Exibe os arquivos na tela
     files.forEach(file => {
         const listItem = document.createElement('li');
         const link = document.createElement('a');
-        link.href = file.path;
+        link.href = "#";
         link.textContent = file.name;
-        link.target = '_blank';
-
-        link.addEventListener('click', function (event) {
+        link.onclick = function (event) {
             event.preventDefault();
             openFileViewer(file.path);
-        });
-
+        };
         listItem.appendChild(link);
         fileList.appendChild(listItem);
     });
+
+    // 🔹 Esconde o visualizador ao mudar de apartamento
+    viewerContainer.style.display = 'none';
+}
+
+function openFileViewer(filePath) {
+    const viewerContainer = document.getElementById('viewer-container');
+    const fileViewer = document.getElementById('file-viewer');
+    const downloadButton = document.getElementById('download-button');
+
+    fileViewer.src = filePath; // Exibe o arquivo no iframe
+    downloadButton.href = filePath; // Atualiza o link de download
+    viewerContainer.style.display = 'block'; // Exibe o visualizador
+
+    // 🔹 Adiciona classe para efeito suave
+    viewerContainer.classList.remove('active');
+    setTimeout(() => viewerContainer.classList.add('active'), 50);
 }
 
 function getFilesForApartment(apartment) {
-    const baseUrl = 'pdfs/';
-    return [
+    const baseUrl = 'pdfs/'; // Caminho base para os arquivos
+
+    let files = [
         { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
         { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
         { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
+
+    return files;
 }
 
-function openFileViewer(filePath) {
-    const viewerContainer = document.getElementById('file-viewer');
-    const viewerFrame = document.getElementById('viewer-frame');
-    const downloadButton = document.getElementById('download-button');
-
-    viewerFrame.src = filePath;
-    downloadButton.href = filePath;
-
-    viewerContainer.style.display = 'block';
-}
-
-function resetFileContainers() {
-    document.getElementById('file-container').style.display = 'none';
-    document.getElementById('file-list').innerHTML = '';
-    document.getElementById('file-viewer').style.display = 'none';
-}
-
-// Garante que os botões chamem `showFiles()`
+// 🔹 Desativa os botões 202 e 301 ao carregar a página
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll('.apartment-button').forEach(button => {
-        button.addEventListener('click', function () {
-            if (!this.disabled) {
-                const apartment = this.id.replace('apto', '');
-                showFiles(apartment);
-            }
-        });
-    });
+    document.getElementById("apto202").disabled = true;
+    document.getElementById("apto301").disabled = true;
 });
