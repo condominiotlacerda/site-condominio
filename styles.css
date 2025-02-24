@@ -126,10 +126,10 @@ h1 {
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
     .logo {
-        width: 10px !important;
-        height: 10px !important;
-        max-width: 10px !important;
-        max-height: 10px !important;
+        width: 50px !important;
+        height: 50px !important;
+        max-width: 50px !important;
+        max-height: 50px !important;
         top: 1px;
         left: 1px;
     }
