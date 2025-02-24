@@ -40,10 +40,6 @@ function showFiles(apartment) {
     const viewerContainer = document.getElementById('viewer-container');
     const fileViewer = document.getElementById('file-viewer');
 
-    // 🔹 Esconde e limpa o painel de visualização do último arquivo aberto
-    viewerContainer.style.display = 'none';
-    fileViewer.src = ""; // Remove o documento carregado
-
     fileContainer.style.display = 'none';
     fileList.innerHTML = '';
 
@@ -71,14 +67,28 @@ function showFiles(apartment) {
         const link = document.createElement('a');
         link.href = "#";
         link.textContent = file.name;
+
+        // 🔹 Detecta se o usuário está no celular
+        const isMobile = window.innerWidth <= 768;
+
         link.onclick = function (event) {
             event.preventDefault();
-            openFileViewer(file.path);
+            if (isMobile) {
+                // 🔹 No celular, abre diretamente o arquivo
+                window.open(file.path, "_blank");
+            } else {
+                // 🔹 No computador, exibe no painel de visualização
+                openFileViewer(file.path);
+            }
         };
+
         listItem.appendChild(link);
         fileList.appendChild(listItem);
     });
+
+    viewerContainer.style.display = 'none';
 }
+
 
 function openFileViewer(filePath) {
     const viewerContainer = document.getElementById('viewer-container');
