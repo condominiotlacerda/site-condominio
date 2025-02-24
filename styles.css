@@ -125,27 +125,6 @@ h1 {
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
 @media (max-width: 768px) {
     .logo {
-        width: 100px;
-        height: 100px;
-        top: 10px;
-        left: 10px;
-    }
-
-    .apartment-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .apartment-button {
-        width: 90%;
-        font-size: 0.9em;
-        padding: 12px;
-    }
-
-    /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
-@media (max-width: 768px) {
-    .logo {
         width: 20px;
         height: 20px;
         top: 1px;
