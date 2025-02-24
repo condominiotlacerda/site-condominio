@@ -21,6 +21,7 @@ function enableApartment() {
 
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
+        document.getElementById('viewer-container').style.display = 'none'; // 🔹 Esconde o painel de visualização
 
         document.getElementById(id).disabled = false;
         activeApartmentButtonId = id;
@@ -37,6 +38,11 @@ function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
     const viewerContainer = document.getElementById('viewer-container');
+    const fileViewer = document.getElementById('file-viewer');
+
+    // 🔹 Esconde e limpa o painel de visualização do último arquivo aberto
+    viewerContainer.style.display = 'none';
+    fileViewer.src = ""; // Remove o documento carregado
 
     fileContainer.style.display = 'none';
     fileList.innerHTML = '';
@@ -72,8 +78,6 @@ function showFiles(apartment) {
         listItem.appendChild(link);
         fileList.appendChild(listItem);
     });
-
-    viewerContainer.style.display = 'none';
 }
 
 function openFileViewer(filePath) {
@@ -104,7 +108,7 @@ function getFilesForApartment(apartment) {
     return files;
 }
 
-    document.addEventListener("DOMContentLoaded", function () { 
+document.addEventListener("DOMContentLoaded", function () { 
     document.getElementById("apto202").disabled = true;
     document.getElementById("apto301").disabled = true;
 });
