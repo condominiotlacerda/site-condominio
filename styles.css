@@ -41,15 +41,15 @@ h1 {
 /* 🔹 Logo do Condomínio */
 .logo {
     display: block;
-    width: 200px;
-    height: 200px;
+    width: 150px !important;
+    height: 150px !important;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    top: 15px;
-    left: 15px;
-    max-width: 200px;
-    max-height: 200px;
+    top: 5px;  /* 🔹 Alterado de 15px para 5px */
+    left: 5px; /* 🔹 Alterado de 15px para 5px */
+    max-width: 150px !important;
+    max-height: 150px !important;
     border: 2px solid red;
 }
 
