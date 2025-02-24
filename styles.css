@@ -143,19 +143,41 @@ h1 {
         padding: 12px;
     }
 
-    /* 🔹 No celular, a lista de arquivos e o visualizador ficam um abaixo do outro */
+    /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
+@media (max-width: 768px) {
+    .logo {
+        width: 20px;
+        height: 20px;
+        top: 1px;
+        left: 1px;
+    }
+
+    .apartment-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .apartment-button {
+        width: 90%;
+        font-size: 0.9em;
+        padding: 12px;
+    }
+
+    /* 🔹 No celular, a lista de arquivos ocupa 100% da largura */
     .file-box {
         position: relative;
         top: 10px;
-        width: 90%;
+        width: 100%;
         margin: 0 auto;
     }
 
+    /* 🔹 O visualizador agora aparece EXATAMENTE abaixo da lista */
     .viewer-box {
         position: relative;
-        top: 20px;
-        width: 90%;
-        margin: 10px auto;
+        top: 0;
+        width: 100%;
+        margin: 10px 0; /* 🔹 Remove o deslocamento lateral */
     }
 
     #file-viewer {
