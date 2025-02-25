@@ -9,10 +9,10 @@ const accessCodes = {
 };
 
 let activeApartmentButtonId = null;
-let currentAccessCode = null; // Adiciona esta linha
+let currentAccessCode = null;
 
 function registrarAcesso(codigo_acesso, condomino, documento_aberto) {
-    var url = "https://script.google.com/macros/s/AKfycbz2vgnfZOwdRRgWiET4DKy6eKuULGDIWp5AVDEG_g/dev";
+    var url = "https://script.google.com/macros/s/AKfycbz2vgnfZOwdRRgWiET4DKy6eKuULGDIWp5AVDEG_g/exec";
     var data_hora = new Date().toLocaleString();
     var data = {
         codigo_acesso: codigo_acesso,
@@ -56,7 +56,7 @@ function enableApartment() {
 
         document.getElementById('accessCode').value = '';
 
-        currentAccessCode = code; // Adiciona esta linha
+        currentAccessCode = code;
 
         registrarAcesso(code, name, "acesso ao sistema");
 
@@ -105,10 +105,10 @@ function showFiles(apartment) {
             event.preventDefault();
             if (isMobile) {
                 window.open(file.path, "_blank");
-                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name); // Usa currentAccessCode
+                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name);
             } else {
                 openFileViewer(file.path);
-                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name); // Usa currentAccessCode
+                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name);
             }
         };
 
@@ -118,7 +118,6 @@ function showFiles(apartment) {
 
     viewerContainer.style.display = 'none';
 }
-
 
 function openFileViewer(filePath) {
     const viewerContainer = document.getElementById('viewer-container');
@@ -142,7 +141,6 @@ function getFilesForApartment(apartment) {
         { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
 
-    //  Adiciona "Prestação de Contas" ao final da lista
     files.push({ name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' });
 
     return files;
