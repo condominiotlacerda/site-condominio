@@ -12,7 +12,7 @@ let activeApartmentButtonId = null;
 let currentAccessCode = null;
 
 function registrarAcesso(codigo_acesso, condomino, documento_aberto) {
-    var url = "https://script.google.com/macros/s/AKfycbw8prUkQnJsXWPOUGwYXJnqKmhtHWP2qeEQTkun0y8mGA8mY1qSkKJWTT2KgGX-jlY/exec";
+    var url = "https://script.google.com/macros/s/AKfycbwo03CQ730CWzk1hJzWiSQFfavij4BRll9UjamF0Xqf4KLGgdy19R7tmCXVu4hKeX4/exec";
     var data_hora = new Date().toLocaleString();
     var data = {
         codigo_acesso: codigo_acesso,
