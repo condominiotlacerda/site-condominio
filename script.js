@@ -11,7 +11,7 @@ const accessCodes = {
 let activeApartmentButtonId = null;
 
 function registrarAcesso(codigo_acesso, condomino, documento_aberto) {
-    var url = "URL_DO_APLICATIVO_DA_WEB"; // Substitua pelo URL do seu aplicativo da Web
+    var url = "https://script.google.com/macros/s/AKfycbyaPiD3rLziT98Ou68pFV2KVP5xAzNK8o3SAU16hFC4T-cBHeiWg783ugIqDyhN6_8/exec"; // Substitua pelo URL do seu aplicativo da Web
     var data_hora = new Date().toLocaleString();
     var data = {
         codigo_acesso: codigo_acesso,
