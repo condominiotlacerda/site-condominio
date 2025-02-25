@@ -9,32 +9,6 @@ const accessCodes = {
 };
 
 let activeApartmentButtonId = null;
-let currentAccessCode = null;
-
-function registrarAcesso(codigo_acesso, condomino, documento_aberto) {
-    var url = "https://script.google.com/macros/s/1mndnJ3T7uKwtuDDmWPkdOgWjs-4PEpGToxfcwa2V9eyFEQH75Ly6yJLa/exec";
-    var data_hora = new Date().toLocaleString();
-    var data = {
-        codigo_acesso: codigo_acesso,
-        condomino: condomino,
-        data_hora: data_hora,
-        documento_aberto: documento_aberto
-    };
-    fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log("Acesso registrado com sucesso:", result);
-    })
-    .catch(error => {
-        console.error("Erro ao registrar acesso:", error);
-    });
-}
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value;
@@ -47,7 +21,7 @@ function enableApartment() {
 
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
-        document.getElementById('viewer-container').style.display = 'none';
+        document.getElementById('viewer-container').style.display = 'none'; // 🔹 Esconde o painel de visualização
 
         document.getElementById(id).disabled = false;
         activeApartmentButtonId = id;
@@ -55,11 +29,6 @@ function enableApartment() {
         document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
 
         document.getElementById('accessCode').value = '';
-
-        currentAccessCode = code;
-
-        registrarAcesso(code, name, "acesso ao sistema");
-
     } else {
         alert('Código de acesso inválido.');
     }
@@ -99,16 +68,17 @@ function showFiles(apartment) {
         link.href = "#";
         link.textContent = file.name;
 
+        // 🔹 Detecta se o usuário está no celular
         const isMobile = window.innerWidth <= 768;
 
         link.onclick = function (event) {
             event.preventDefault();
             if (isMobile) {
+                // 🔹 No celular, abre diretamente o arquivo
                 window.open(file.path, "_blank");
-                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name);
             } else {
+                // 🔹 No computador, exibe no painel de visualização
                 openFileViewer(file.path);
-                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name);
             }
         };
 
@@ -118,6 +88,7 @@ function showFiles(apartment) {
 
     viewerContainer.style.display = 'none';
 }
+
 
 function openFileViewer(filePath) {
     const viewerContainer = document.getElementById('viewer-container');
@@ -141,12 +112,13 @@ function getFilesForApartment(apartment) {
         { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
 
+    // 🔹 Adiciona "Prestação de Contas" ao final da lista
     files.push({ name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' });
 
     return files;
 }
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () { 
     document.getElementById("apto202").disabled = true;
     document.getElementById("apto301").disabled = true;
 });
