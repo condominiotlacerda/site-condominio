@@ -9,9 +9,10 @@ const accessCodes = {
 };
 
 let activeApartmentButtonId = null;
+let currentAccessCode = null; // Adiciona esta linha
 
 function registrarAcesso(codigo_acesso, condomino, documento_aberto) {
-    var url = "https://script.google.com/macros/s/AKfycbyaPiD3rLziT98Ou68pFV2KVP5xAzNK8o3SAU16hFC4T-cBHeiWg783ugIqDyhN6_8/exec"; // Substitua pelo URL do seu aplicativo da Web
+    var url = "https://script.google.com/macros/s/AKfycbyaPiD3rLziT98Ou68pFV2KVP5xAzNK8o3SAU16hFC4T-cBHeiWg783ugIqDyhN6_8/exec";
     var data_hora = new Date().toLocaleString();
     var data = {
         codigo_acesso: codigo_acesso,
@@ -46,7 +47,7 @@ function enableApartment() {
 
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
-        document.getElementById('viewer-container').style.display = 'none'; //  Esconde o painel de visualização
+        document.getElementById('viewer-container').style.display = 'none';
 
         document.getElementById(id).disabled = false;
         activeApartmentButtonId = id;
@@ -55,7 +56,8 @@ function enableApartment() {
 
         document.getElementById('accessCode').value = '';
 
-        //  Chama a função registrarAcesso aqui
+        currentAccessCode = code; // Adiciona esta linha
+
         registrarAcesso(code, name, "acesso ao sistema");
 
     } else {
@@ -97,19 +99,16 @@ function showFiles(apartment) {
         link.href = "#";
         link.textContent = file.name;
 
-        //  Detecta se o usuário está no celular
         const isMobile = window.innerWidth <= 768;
 
         link.onclick = function (event) {
             event.preventDefault();
             if (isMobile) {
-                //  No celular, abre diretamente o arquivo
                 window.open(file.path, "_blank");
-                registrarAcesso(document.getElementById('accessCode').value, accessCodes[document.getElementById('accessCode').value].name, file.name);
+                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name); // Usa currentAccessCode
             } else {
-                //  No computador, exibe no painel de visualização
                 openFileViewer(file.path);
-                registrarAcesso(document.getElementById('accessCode').value, accessCodes[document.getElementById('accessCode').value].name, file.name);
+                registrarAcesso(currentAccessCode, accessCodes[currentAccessCode].name, file.name); // Usa currentAccessCode
             }
         };
 
