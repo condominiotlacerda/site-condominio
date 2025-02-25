@@ -30,7 +30,7 @@ function enableApartment() {
 
         document.getElementById('accessCode').value = '';
 
-        // Adicione o evento personalizado aqui
+        // Adicione o evento personalizado aqui envia para o Google Analytics
         gtag('event', 'login_success', {
             'access_code': code,
             'user_name': name,
