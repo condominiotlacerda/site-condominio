@@ -10,7 +10,7 @@
         // Inicia aqui o FIREBASE  ====================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"; 
 
         const firebaseConfig = {
           apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
@@ -27,38 +27,30 @@
         const analytics = getAnalytics(app);
         const db = getDatabase();
 
-        // Log de visualização da página
+        // Log page_view event
         logEvent(analytics, 'page_view');
 
-        // Função para registrar logs no Firebase com nome adequado
-        function logAccess(userCode, userName, downloadedFile, apartment) {
-            // Formata data e hora para evitar caracteres inválidos
-            const date = new Date();
-            const formattedDate = date.toISOString().replace(/:/g, "-");
+        // Função para registrar logs no Realtime Database do Firebase
+        function logAccess(userCode, userName, apartment, accessedDocument) {
+            const now = new Date();
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0]; 
+            let logFileName = `${userName}_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
 
-            // Gera a chave personalizada do log
-            const logKey = `${userName}_${apartment}_${downloadedFile.replace(/\s+/g, '')}_${userCode}_${formattedDate}`;
+            logFileName = logFileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Removendo caracteres inválidos
 
-            // Cria o objeto do log
             const accessLog = {
+                fileName: logFileName,
+                userCode: userCode,
                 userName: userName,
                 apartment: apartment,
-                downloadedFile: downloadedFile,
-                userCode: userCode,
-                accessDateTime: date.toISOString()
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString()
             };
 
-            // Referência do log no Firebase
-            const logRef = ref(db, 'logs/' + logKey);
-
-            // Salva o log no banco de dados
-            set(logRef, accessLog)
-                .then(() => {
-                    console.log('Log registrado com sucesso:', accessLog);
-                })
-                .catch(error => {
-                    console.error('Erro ao registrar o log:', error);
-                });
+            const logsRef = ref(db, `logs/`);
+            push(logsRef, accessLog) // Usando push() para evitar sobrescrita
+                .then(() => console.log("Log registrado com sucesso:", logFileName))
+                .catch(error => console.error("Erro ao registrar log:", error));
         }
 
         // Disponibiliza a função para uso no script.js
