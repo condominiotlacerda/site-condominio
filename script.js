@@ -8,30 +8,31 @@ const accessCodes = {
     'LmN3[oPq]8': { id: 'apto401', name: 'Célia' }
 };
 
-let activeUserCode = null; // Armazena o código do usuário autenticado
+let activeApartmentButtonId = null;
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value;
     const userData = accessCodes[code];
 
     if (userData) {
-        activeUserCode = code; // Salva o código do usuário autenticado
         const { id, name } = userData;
 
-        // Desativar todos os botões antes de ativar o correto
         document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
+
+        document.getElementById('file-list').innerHTML = '';
+        document.getElementById('file-container').style.display = 'none';
+        document.getElementById('viewer-container').style.display = 'none';
+
         document.getElementById(id).disabled = false;
+        activeApartmentButtonId = id;
 
         document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
-        document.getElementById('accessCode').value = '';
-        document.getElementById('accessCode').style.border = ''; // Remove borda vermelha se sucesso
 
-        // Registrar o acesso no Firebase corretamente
-        window.logAccess(code, name, 'Acesso ao apartamento');
+        document.getElementById('accessCode').value = '';
+
+        // Registrar o acesso no Firebase com a nova estrutura
+        window.logAccess(code, name, `Acesso ao apartamento ${id.replace('apto', '')}`, id.replace('apto', ''));
     } else {
-        const inputField = document.getElementById('accessCode');
-        inputField.style.border = '2px solid red';
-        setTimeout(() => { inputField.style.border = ''; }, 2000);
         alert('Código de acesso inválido.');
     }
 }
@@ -40,6 +41,7 @@ function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
     const viewerContainer = document.getElementById('viewer-container');
+    const fileViewer = document.getElementById('file-viewer');
 
     fileContainer.style.display = 'none';
     fileList.innerHTML = '';
@@ -51,17 +53,6 @@ function showFiles(apartment) {
     setTimeout(() => fileContainer.classList.add('active'), 50);
 
     let files = getFilesForApartment(apartment);
-
-    if (apartment === '1') {
-        files.push(
-            { name: 'Boleto Condomínio (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf' },
-            { name: 'Boleto Acordo M2D (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf' },
-            { name: 'Boleto Hidro/Eletr (A)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf' },
-            { name: 'Boleto Condomínio (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf' },
-            { name: 'Boleto Acordo M2D (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf' },
-            { name: 'Boleto Hidro/Eletr (B)', path: 'pdfs/boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf' }
-        );
-    }
 
     files.forEach(file => {
         const listItem = document.createElement('li');
@@ -79,9 +70,10 @@ function showFiles(apartment) {
                 openFileViewer(file.path);
             }
 
-            // Usa o código do usuário autenticado para registrar no Firebase corretamente
-            if (activeUserCode && accessCodes[activeUserCode]) {
-                window.logAccess(activeUserCode, accessCodes[activeUserCode].name, file.name);
+            // Registrar o download no Firebase com a nova estrutura
+            const userData = Object.values(accessCodes).find(user => user.id === `apto${apartment}`);
+            if (userData) {
+                window.logAccess(userData.id, userData.name, file.name, apartment);
             }
         };
 
@@ -119,7 +111,28 @@ function getFilesForApartment(apartment) {
     return files;
 }
 
-// Removida a desativação fixa dos botões 202 e 301 para evitar bloqueio indevido
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Página carregada e script iniciado.");
+    document.getElementById("apto202").disabled = true;
+    document.getElementById("apto301").disabled = true;
 });
+
+// Atualização na função logAccess para incluir nome, apartamento, arquivo baixado, código, data e hora
+window.logAccess = function (userCode, userName, downloadedFile, apartment) {
+    const db = getDatabase();
+    const accessLog = {
+        userName: userName,
+        apartment: apartment,
+        downloadedFile: downloadedFile,
+        userCode: userCode,
+        accessDateTime: new Date().toISOString() // Data e hora no formato UTC
+    };
+
+    const logsRef = ref(db, 'logs/');
+    push(logsRef, accessLog)
+        .then(() => {
+            console.log('Log registrado com sucesso:', accessLog);
+        })
+        .catch(error => {
+            console.error('Erro ao registrar o log:', error);
+        });
+};
