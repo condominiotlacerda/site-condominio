@@ -124,4 +124,36 @@ function openFileViewer(filePath) {
 
   downloadButton.addEventListener('click', () => {
     const db = getDatabase();
-    const logsRef =
+    const logsRef = ref(db, 'logs/');
+    push(logsRef, {
+      apartment: document.getElementById('apartment-number').textContent,
+      fileDownloaded: filePath,
+      timestamp: new Date().toISOString(),
+      action: 'downloadFile'
+    });
+  });
+
+  viewerContainer.style.display = 'block';
+
+  viewerContainer.classList.remove('active');
+  setTimeout(() => viewerContainer.classList.add('active'), 50);
+}
+
+function getFilesForApartment(apartment) {
+  const baseUrl = 'pdfs/';
+
+  let files = [
+    { name: 'Boleto Condomínio', path: baseUrl + `boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
+    { name: 'Boleto Acordo M2D', path: baseUrl + `boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
+    { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
+  ];
+
+  files.push({ name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' });
+
+  return files;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("apto202").disabled = true;
+  document.getElementById("apto301").disabled = true;
+});
