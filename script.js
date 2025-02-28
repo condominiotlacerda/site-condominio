@@ -21,7 +21,7 @@ function enableApartment() {
 
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
-        document.getElementById('viewer-container').style.display = 'none';
+        document.getElementById('viewer-container').style.display = 'none'; // 🔹 Esconde o painel de visualização
 
         document.getElementById(id).disabled = false;
         activeApartmentButtonId = id;
@@ -29,17 +29,34 @@ function enableApartment() {
         document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
 
         document.getElementById('accessCode').value = '';
-
-        // Adicione o evento personalizado aqui envia para o Google Analytics
-        gtag('event', 'login_success', {
-            'access_code': code,
-            'user_name': name,
-            'access_time': new Date().toLocaleString()
-        });
-
     } else {
         alert('Código de acesso inválido.');
     }
+}
+
+// Função para registrar o acesso
+function logAccess(userCode, userName, accessedDocument) {
+    const accessLog = {
+        userCode: userCode,
+        userName: userName,
+        accessDate: new Date().toISOString(),
+        accessedDocument: accessedDocument
+    };
+
+    // Enviar o log para o servidor
+    fetch('/log', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(accessLog)
+    }).then(response => {
+        if (response.ok) {
+            console.log('Log registrado com sucesso.');
+        } else {
+            console.error('Falha ao registrar o log.');
+        }
+    });
 }
 
 function showFiles(apartment) {
@@ -76,20 +93,21 @@ function showFiles(apartment) {
         link.href = "#";
         link.textContent = file.name;
 
+        // 🔹 Detecta se o usuário está no celular
         const isMobile = window.innerWidth <= 768;
 
         link.onclick = function (event) {
             event.preventDefault();
             if (isMobile) {
+                // 🔹 No celular, abre diretamente o arquivo
                 window.open(file.path, "_blank");
             } else {
+                // 🔹 No computador, exibe no painel de visualização
                 openFileViewer(file.path);
             }
-            //adicione o evento aqui
-            gtag('event', 'file_opened', {
-                'file_name': file.name,
-                'open_time': new Date().toLocaleString()
-            });
+
+            // Registrar o acesso
+            logAccess(code, name, file.name);
         };
 
         listItem.appendChild(link);
@@ -121,13 +139,13 @@ function getFilesForApartment(apartment) {
         { name: 'Boleto Hidro/Eletr', path: baseUrl + `boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
 
-    //  Adiciona "Prestação de Contas" ao final da lista
+    // 🔹 Adiciona "Prestação de Contas" ao final da lista
     files.push({ name: 'Prestação de Contas', path: baseUrl + 'contas/2025/2.fev/prestacao_contas.pdf' });
 
     return files;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () { 
     document.getElementById("apto202").disabled = true;
     document.getElementById("apto301").disabled = true;
 });
