@@ -34,31 +34,6 @@ function enableApartment() {
     }
 }
 
-// Função para registrar o acesso
-function logAccess(userCode, userName, accessedDocument) {
-    const accessLog = {
-        userCode: userCode,
-        userName: userName,
-        accessDate: new Date().toISOString(),
-        accessedDocument: accessedDocument
-    };
-
-    // Enviar o log para o servidor
-    fetch('/log', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(accessLog)
-    }).then(response => {
-        if (response.ok) {
-            console.log('Log registrado com sucesso.');
-        } else {
-            console.error('Falha ao registrar o log.');
-        }
-    });
-}
-
 function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
@@ -105,9 +80,6 @@ function showFiles(apartment) {
                 // 🔹 No computador, exibe no painel de visualização
                 openFileViewer(file.path);
             }
-
-            // Registrar o acesso
-            logAccess(code, name, file.name);
         };
 
         listItem.appendChild(link);
@@ -116,6 +88,7 @@ function showFiles(apartment) {
 
     viewerContainer.style.display = 'none';
 }
+
 
 function openFileViewer(filePath) {
     const viewerContainer = document.getElementById('viewer-container');
@@ -145,7 +118,7 @@ function getFilesForApartment(apartment) {
     return files;
 }
 
-    document.addEventListener("DOMContentLoaded", function () { 
+document.addEventListener("DOMContentLoaded", function () { 
     document.getElementById("apto202").disabled = true;
     document.getElementById("apto301").disabled = true;
 });
