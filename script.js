@@ -8,31 +8,30 @@ const accessCodes = {
     'LmN3[oPq]8': { id: 'apto401', name: 'Célia' }
 };
 
-let activeApartmentButtonId = null;
+let activeUserCode = null; // Armazena o código do usuário autenticado
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value;
     const userData = accessCodes[code];
 
     if (userData) {
+        activeUserCode = code; // Salva o código do usuário autenticado
         const { id, name } = userData;
 
+        // Desativar todos os botões antes de ativar o correto
         document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
-
-        document.getElementById('file-list').innerHTML = '';
-        document.getElementById('file-container').style.display = 'none';
-        document.getElementById('viewer-container').style.display = 'none';
-
         document.getElementById(id).disabled = false;
-        activeApartmentButtonId = id;
 
         document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
-
         document.getElementById('accessCode').value = '';
+        document.getElementById('accessCode').style.border = ''; // Remove borda vermelha se sucesso
 
-        // Registrar o acesso no Firebase
+        // Registrar o acesso no Firebase corretamente
         window.logAccess(code, name, 'Acesso ao apartamento');
     } else {
+        const inputField = document.getElementById('accessCode');
+        inputField.style.border = '2px solid red';
+        setTimeout(() => { inputField.style.border = ''; }, 2000);
         alert('Código de acesso inválido.');
     }
 }
@@ -41,7 +40,6 @@ function showFiles(apartment) {
     const fileContainer = document.getElementById('file-container');
     const fileList = document.getElementById('file-list');
     const viewerContainer = document.getElementById('viewer-container');
-    const fileViewer = document.getElementById('file-viewer');
 
     fileContainer.style.display = 'none';
     fileList.innerHTML = '';
@@ -81,8 +79,10 @@ function showFiles(apartment) {
                 openFileViewer(file.path);
             }
 
-            // Registrar o acesso no Firebase
-            window.logAccess(accessCodes[activeApartmentButtonId].id, accessCodes[activeApartmentButtonId].name, file.name);
+            // Usa o código do usuário autenticado para registrar no Firebase corretamente
+            if (activeUserCode && accessCodes[activeUserCode]) {
+                window.logAccess(activeUserCode, accessCodes[activeUserCode].name, file.name);
+            }
         };
 
         listItem.appendChild(link);
@@ -119,7 +119,7 @@ function getFilesForApartment(apartment) {
     return files;
 }
 
+// Removida a desativação fixa dos botões 202 e 301 para evitar bloqueio indevido
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("apto202").disabled = true;
-    document.getElementById("apto301").disabled = true;
+    console.log("Página carregada e script iniciado.");
 });
