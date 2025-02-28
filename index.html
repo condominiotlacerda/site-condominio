@@ -65,6 +65,9 @@
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
+
+      //Log page_view event.
+      logEvent(analytics, 'page_view'); // Adicione esta linha
     // termina aqui o FIREBASE  ====================================================================
     </script>
 
