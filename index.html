@@ -27,12 +27,12 @@
         const analytics = getAnalytics(app);
         const db = getDatabase();
 
-        // Log de acesso no Firebase
+        // Log de acesso no Firebase (com horário de Brasília)
         function logAccess(userCode, userName, apartment, accessedDocument) {
-            const now = new Date();
+            const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" })); // Ajuste para horário de Brasília
             const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
 
+            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
             fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
 
             const accessLog = {
@@ -44,7 +44,7 @@
             };
 
             const logRef = ref(db, `logs/${fileName}`); // Define o nome do log no Firebase
-            set(logRef, accessLog) // Usa `set()` para definir a chave personalizada
+            set(logRef, accessLog)
                 .then(() => console.log("Log registrado com nome correto:", fileName))
                 .catch(error => console.error("Erro ao registrar log:", error));
         }
