@@ -1,119 +1,108 @@
-// Importação das funções do Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-
-// Configuração do Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-    authDomain: "logsite-d81dd.firebaseapp.com",
-    databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-    projectId: "logsite-d81dd",
-    storageBucket: "logsite-d81dd.firebasestorage.app",
-    messagingSenderId: "285508603780",
-    appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-    measurementId: "G-B0JHRHTNKF"
-};
-
-// Inicializa o Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase();
-
-// Função para registrar logs no Firebase
-function logAccess(userCode, userName, apartment, accessedDocument) {
-    const now = new Date();
-
-    // Ajustando para o fuso horário de Brasília (UTC-3)
-    now.setHours(now.getHours() - 3);
-
-    // Formatação correta da data e hora
-    const formattedDate = now.toISOString().replace("T", "_").replace(/:/g, "_").split(".")[0];
-
-    // Nome do arquivo de log
-    const fileName = `${userName}_Acesso_ao_apartamento_${apartment}_${userCode}_${formattedDate}`;
-
-    // Objeto do log
-    const accessLog = {
-        userCode: userCode,
-        userName: userName,
-        apartment: `Acesso ao apartamento ${apartment}`,
-        accessDate: now.toISOString(),
-        accessedDocument: accessedDocument,
-        fileName: fileName
-    };
-
-    // Envia para o Firebase
-    const logsRef = ref(db, 'logs/');
-    push(logsRef, accessLog)
-        .then(() => console.log('Log registrado com sucesso:', fileName))
-        .catch(error => console.error('Erro ao registrar o log:', error));
-}
-
-// Disponibiliza a função para ser usada no HTML
-window.logAccess = logAccess;
-
-// Função para habilitar o acesso aos apartamentos após digitar o código correto
+// Função para habilitar os botões dos apartamentos com base no código de acesso
 function enableApartment() {
     const accessCode = document.getElementById("accessCode").value.trim();
-    const userName = "Usuário"; // Pode ser personalizado com um banco de usuários
+    const apartments = {
+        "FgH7+iJk=1": { name: "João Paulo", apt: "1" },
+        "code101": { name: "Usuário 101", apt: "101" },
+        "code102": { name: "Usuário 102", apt: "102" },
+        "code201": { name: "Usuário 201", apt: "201" },
+        "code202": { name: "Usuário 202", apt: "202" },
+        "code301": { name: "Usuário 301", apt: "301" },
+        "code302": { name: "Usuário 302", apt: "302" },
+        "code401": { name: "Usuário 401", apt: "401" }
+    };
 
-    if (accessCode) {
-        document.querySelectorAll(".apartment-button").forEach(btn => btn.disabled = false);
-        alert("Acesso liberado! Escolha um apartamento.");
+    if (apartments[accessCode]) {
+        const user = apartments[accessCode];
+        document.getElementById("welcome-message").innerHTML = 
+            `Seja bem-vindo(a), ${user.name}. Clique no botão do seu apartamento para acessar seus boletos.`;
+
+        document.getElementById(`apto${user.apt}`).disabled = false;
+
+        // Registra o acesso no Firebase
+        logAccess(accessCode, user.name, `Acesso ao apartamento ${user.apt}`);
     } else {
-        alert("Código de acesso inválido!");
+        alert("Código de acesso inválido.");
     }
 }
 
-// Função para exibir os arquivos de um apartamento específico
-function showFiles(apartment) {
+// Função para exibir os arquivos do apartamento selecionado
+function showFiles(apartmentNumber) {
     const fileContainer = document.getElementById("file-container");
     const fileList = document.getElementById("file-list");
-    const apartmentNumber = document.getElementById("apartment-number");
+    const apartmentTitle = document.getElementById("apartment-number");
 
-    // Define o número do apartamento no título
-    apartmentNumber.innerText = apartment;
-
-    // Limpa a lista antes de adicionar novos arquivos
     fileList.innerHTML = "";
+    apartmentTitle.textContent = apartmentNumber;
+    fileContainer.style.display = "block";
 
-    // Referências no Firebase para os boletos
-    let apartmentFiles = [apartment];
+    // Definição dos tipos de arquivos para cada apartamento
+    const fileTypes = [
+        { name: "Boleto Condomínio", suffix: "Boleto_Condominio_apto" },
+        { name: "Boleto Acordo M2D", suffix: "Boleto_Acordo_M2D_apto" },
+        { name: "Boleto Hidro/Eletr", suffix: "Boleto_Hidro_Eletr_apto" }
+    ];
 
-    // Se for o apartamento "1", adiciona também os arquivos de "1A" e "1B"
-    if (apartment === "1") {
-        apartmentFiles.push("1A", "1B");
+    // Se for o apartamento 1, incluir 1, 1a e 1b
+    let aptNumbers = [apartmentNumber];
+    if (apartmentNumber === "1") {
+        aptNumbers = ["1", "1a", "1b"];
     }
 
-    // Busca os arquivos no Firebase para os apartamentos definidos
-    apartmentFiles.forEach((apt) => {
-        const filesRef = ref(db, `arquivos/apartamento_${apt}`);
-
-        get(filesRef).then((snapshot) => {
-            if (snapshot.exists()) {
-                const files = snapshot.val();
-                Object.keys(files).forEach((fileName) => {
-                    const fileUrl = files[fileName];
-
-                    // Cria um item na lista
-                    const listItem = document.createElement("li");
-                    const link = document.createElement("a");
-                    link.href = fileUrl;
-                    link.textContent = fileName;
-                    link.target = "_blank";
-                    listItem.appendChild(link);
-
-                    fileList.appendChild(listItem);
-                });
-            }
-        }).catch((error) => {
-            console.error("Erro ao buscar arquivos:", error);
+    // Adicionar boletos para os apartamentos relevantes
+    aptNumbers.forEach(aptNum => {
+        fileTypes.forEach(file => {
+            const fileName = `${file.suffix}_${aptNum}.pdf`;
+            addFileLink(file.name, fileName);
         });
     });
 
-    // Exibe o container de arquivos
-    fileContainer.style.display = "block";
+    // Adicionar a prestação de contas (apenas uma vez para o apto 1)
+    if (apartmentNumber === "1") {
+        addFileLink("Prestação de Contas", "Prestacao_de_Contas_apto_1.pdf");
+    }
 }
 
-// Disponibiliza funções globalmente para o HTML
-window.enableApartment = enableApartment;
-window.showFiles = showFiles;
+// Função para adicionar um link de arquivo à lista
+function addFileLink(displayName, fileName) {
+    const fileList = document.getElementById("file-list");
+    const filePath = `arquivos/${fileName}`;
+
+    const listItem = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = filePath;
+    link.textContent = displayName;
+    link.target = "_blank";
+
+    listItem.appendChild(link);
+    fileList.appendChild(listItem);
+}
+
+// Função para registrar acessos no Firebase
+function logAccess(userCode, userName, accessedDocument) {
+    const db = firebase.database();
+
+    // Ajuste do horário para Brasília (UTC-3)
+    const now = new Date();
+    now.setUTCHours(now.getUTCHours() - 3); // Corrige o fuso horário
+
+    const formattedDate = now.toISOString();
+
+    const accessLog = {
+        userCode: userCode,
+        userName: userName,
+        accessDate: formattedDate,
+        accessedDocument: accessedDocument,
+        apartment: accessedDocument,
+        fileName: `${userName}_Acesso_ao_apartamento_${accessedDocument.replace(/\D/g, '')}_${userCode}_${formattedDate.replace(/[-T:.Z]/g, "_")}`
+    };
+
+    const logsRef = db.ref('logs/');
+    logsRef.push(accessLog)
+        .then(() => {
+            console.log('Log registrado com sucesso.');
+        })
+        .catch(error => {
+            console.error('Erro ao registrar o log:', error);
+        });
+}
