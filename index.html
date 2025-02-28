@@ -40,6 +40,33 @@
         <a id="download-button" href="#" download class="download-btn">Baixar Arquivo</a>
     </div>
 
+  
+    
+    <script type="module">
+      // Inicia aqui o FIREBASE  ====================================================================
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+        authDomain: "logsite-d81dd.firebaseapp.com",
+        projectId: "logsite-d81dd",
+        storageBucket: "logsite-d81dd.firebasestorage.app",
+        messagingSenderId: "285508603780",
+        appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+        measurementId: "G-B0JHRHTNKF"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    // termina aqui o FIREBASE  ====================================================================
+    </script>
 
 </body>
 </html>
