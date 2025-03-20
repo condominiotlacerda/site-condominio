@@ -1,7 +1,6 @@
 const accessCodes = {
     'aB9x-Yz!2W': { id: 'apto1', name: 'João Paulo' },
     'QrSt-Uv!W6': { id: 'apto1', name: 'José Rocha' },
-    'WvUt-Sr!Q9': { id: 'apto1', name: 'João Marcelo' }, // Novo usuário João Marcelo adicionado
     'cDe5_Fg#H7': { id: 'apto101', name: 'Lizandro' },
     'iJk1$Lm%N3': { id: 'apto102', name: 'Felipe Granja' },
     'oPq8^Rs&T4': { id: 'apto201', name: 'Jorge' },
