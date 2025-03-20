@@ -1,5 +1,6 @@
 const accessCodes = {
     'aB9x-Yz!2W': { id: 'apto1', name: 'João Paulo' },
+    'QrSt-Uv!W6': { id: 'apto1', name: 'José Rocha' }, // Novo usuário posicionado abaixo do outro apto 1
     'cDe5_Fg#H7': { id: 'apto101', name: 'Lizandro' },
     'iJk1$Lm%N3': { id: 'apto102', name: 'Felipe Granja' },
     'oPq8^Rs&T4': { id: 'apto201', name: 'Jorge' },
@@ -18,7 +19,7 @@ function enableApartment() {
         const { id, name } = userData;
 
         document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
-        
+
         document.getElementById('file-list').innerHTML = '';
         document.getElementById('file-container').style.display = 'none';
         document.getElementById('viewer-container').style.display = 'none';
@@ -135,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Ajuste para horário de Brasília (UTC-3)
 window.logAccess = function (userCode, userName, downloadedFile, apartment) {
     const db = getDatabase();
-    
+
     let now = new Date();
     now.setHours(now.getHours() - 3); // Ajusta para UTC-3
 
@@ -144,7 +145,7 @@ window.logAccess = function (userCode, userName, downloadedFile, apartment) {
         apartment: apartment,
         downloadedFile: downloadedFile,
         userCode: userCode,
-        accessDateTime: now.toISOString() 
+        accessDateTime: now.toISOString()
     };
 
     const logsRef = ref(db, 'logs/');
