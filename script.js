@@ -112,15 +112,7 @@ function getFilesForApartment(apartment) {
     ];
 
     // Verifica se o apartamento é 1, e adiciona os arquivos de 1a e 1b
-    if (apartment === "1") {
-        files.push({ name: 'Boleto Condomínio 1A', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_condominio_apto_1a.pdf` });
-        files.push({ name: 'Boleto Acordo M2D 1A', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1a.pdf` });
-        files.push({ name: 'Boleto Hidro/Eletr 1A', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1a.pdf` });
-
-        files.push({ name: 'Boleto Condomínio 1B', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_condominio_apto_1b.pdf` });
-        files.push({ name: 'Boleto Acordo M2D 1B', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_1b.pdf` });
-        files.push({ name: 'Boleto Hidro/Eletr 1B', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_1b.pdf` });
-    }
+    // REMOVIDO: Lógica específica para apartamento 1A e 1B
 
     // Adiciona a prestação de contas uma única vez
     files.push({ name: 'Prestação de Contas', path: `${baseUrl}contas/2025/2.fev/prestacao_contas.pdf` });
