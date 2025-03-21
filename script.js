@@ -6,7 +6,9 @@ const accessCodes = {
     'oPq8^Rs&T4': { id: 'apto201', name: 'Jorge' },
     'xY7z!aB-cD': { id: 'apto201', name: 'Ângela' },
     'FgH7+iJk=1': { id: 'apto302', name: 'Suzane' },
-    'LmN3[oPq]8': { id: 'apto401', name: 'Célia' }
+    'LmN3[oPq]8': { id: 'apto401', name: 'Célia' },
+    'uVw2*Xy(Z6': { id: 'apto202', name: 'Lígia' },
+    '1aB3)cDe-5': { id: 'apto301', name: 'João Marcelo' }
 };
 
 let activeApartmentButtonId = null;
