@@ -19,29 +19,24 @@ function enableApartment() {
 
     if (userData) {
         const { id, name } = userData;
-
-        document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
-
-        document.getElementById('file-list').innerHTML = '';
-        document.getElementById('file-container').style.display = 'none';
-        document.getElementById('viewer-container').style.display = 'none';
-
-        const aptButton = document.getElementById(id);
-        if (aptButton) {
-            aptButton.disabled = false;
-        } else {
-            alert('Erro: botão do apartamento não encontrado.');
-            return;
-        }
-
-        activeApartmentButtonId = id;
-
-        document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
-
-        document.getElementById('accessCode').value = '';
-
-        // Ajuste correto no registro de logs
-        window.logAccess(code, name, `Acesso ao apartamento ${id.replace('apto', '')}`, id);
+        localStorage.setItem('accessCode', code);
+        window.location.href = 'area_condominio.html';
+        // As linhas abaixo não são mais necessárias com o redirecionamento
+        // document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
+        // document.getElementById('file-list').innerHTML = '';
+        // document.getElementById('file-container').style.display = 'none';
+        // document.getElementById('viewer-container').style.display = 'none';
+        // const aptButton = document.getElementById(id);
+        // if (aptButton) {
+        //     aptButton.disabled = false;
+        // } else {
+        //     alert('Erro: botão do apartamento não encontrado.');
+        //     return;
+        // }
+        // activeApartmentButtonId = id;
+        // document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
+        // document.getElementById('accessCode').value = '';
+        window.logAccess(code, name, `Acesso à área do condômino`, 'homepage'); // Alterei a descrição do log
     } else {
         alert('Código de acesso inválido.');
     }
