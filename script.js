@@ -123,6 +123,22 @@ function getFilesForApartment(apartment) {
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("apto202").disabled = true;
     document.getElementById("apto301").disabled = true;
+
+    const formularioCadastro = document.getElementById('formularioCadastro');
+    if (formularioCadastro) {
+        formularioCadastro.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const emailCadastro = document.getElementById('emailCadastro').value;
+            const senhaCadastro = document.getElementById('senhaCadastro').value;
+            const codigoAcessoInput = document.getElementById('codigoAcesso');
+            const codigoAcesso = codigoAcessoInput.value;
+
+            console.log("Código de Acesso (Cadastro):", codigoAcesso); // Para verificar no console
+
+            const mensagemCadastro = document.getElementById('mensagemCadastro');
+            mensagemCadastro.textContent = 'Funcionalidade de cadastro ainda não implementada.';
+        });
+    }
 });
 
 // Ajuste para horário de Brasília (UTC-3)
