@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Login</title>
+    <script src="script.js" defer></script>
+    <script type="module">
+        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+
+        // Registra o evento de visualização da página
+        logEvent(analytics, 'page_view');
+
+        // Função para registrar acessos no Firebase com horário correto (UTC-3)
+        function logAccess(userCode, userName, apartment, accessedDocument) {
+            // Captura a data atual
+            const now = new Date();
+
+            // Ajusta para o horário de Brasília (UTC-3)
+            now.setHours(now.getHours() - 3);
+
+            // Converte a data para um formato seguro
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+
+            // Define o nome do arquivo de log
+            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
+
+            // Criação do objeto de log
+            const accessLog = {
+                userCode: userCode,
+                userName: userName,
+                apartment: `Acesso ao apartamento ${apartment}`,
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
+            };
+
+            // Grava o log no Firebase com o nome formatado corretamente
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
+        }
+
+        // Disponibiliza a função para uso no script.js
+        window.logAccess = logAccess;
+
+        // ==================== 🔥 FIM FIREBASE 🔥 ====================
+    </script>
+</head>
+<body>
+    <section id="login">
+        <h2>Login</h2>
+        <form id="formularioLogin">
+            <label for="emailLogin">Email:</label><br>
+            <input type="email" id="emailLogin" name="emailLogin" required><br><br>
+            <label for="senhaLogin">Senha:</label><br>
+            <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
+            <button type="submit">Entrar</button>
+            <div id="mensagemLogin"></div>
+        </form>
+        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+    </section>
+
+    <section id="cadastro" style="display:none;">
+        <h2>Cadastro</h2>
+        <form id="formularioCadastro">
+            <label for="emailCadastro">Email:</label><br>
+            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+            <label for="senhaCadastro">Senha:</label><br>
+            <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
+            <label for="codigoAcesso">Código de Acesso:</label><br>
+            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+            <button type="submit">Cadastrar</button>
+            <div id="mensagemCadastro"></div>
+        </form>
+        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Portal do Condomínio. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
