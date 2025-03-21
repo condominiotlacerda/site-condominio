@@ -69,62 +69,57 @@
 </head>
 <body>
     <header>
-        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
+        <h1>Bem-vindo ao Portal do Condomínio</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Página Inicial</a></li>
+                <li><a href="#">Avisos</a></li>
+                <li><a href="#">Documentos</a></li>
+                <li><a href="#">Contato</a></li>
+                <li id="loginLink"><a href="#">Login</a></li>
+                <li id="logoutLink" style="display:none;"><a href="#">Logout</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <h1>Condomínio T Lacerda</h1>
-    <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
-    <input type="password" id="accessCode" placeholder="Digite seu código">
-    <button onclick="enableApartment()">Acessar</button>
+    <div class="container">
+        <section id="content">
+            <p>Este é o conteúdo principal da página inicial.</p>
+        </section>
 
-    <div class="apartment-section">
-        <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
-        <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
-        <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
-        <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
-        <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
-        <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
-        <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
-        <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
+        <section id="login" style="display:none;">
+            <h2>Login</h2>
+            <form id="formularioLogin">
+                <label for="emailLogin">Email:</label><br>
+                <input type="email" id="emailLogin" name="emailLogin" required><br><br>
+                <label for="senhaLogin">Senha:</label><br>
+                <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
+                <button type="submit">Entrar</button>
+                <div id="mensagemLogin"></div>
+            </form>
+            <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+        </section>
+
+        <section id="cadastro" style="display:none;">
+            <h2>Cadastro</h2>
+            <form id="formularioCadastro">
+                <label for="emailCadastro">Email:</label><br>
+                <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+                <label for="senhaCadastro">Senha:</label><br>
+                <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
+                <label for="codigoAcesso">Código de Acesso:</label><br>
+                <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+                <button type="submit">Cadastrar</button>
+                <div id="mensagemCadastro"></div>
+            </form>
+            <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+        </section>
     </div>
 
-    <div id="file-container" class="file-box" style="display: none;">
-        <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
-        <ul class="file-list" id="file-list"></ul>
-    </div>
+    <footer>
+        <p>&copy; 2023 Portal do Condomínio. Todos os direitos reservados.</p>
+    </footer>
 
-    <div id="viewer-container" class="viewer-box" style="display: none;">
-        <h2>Visualizador de Arquivos</h2>
-        <iframe id="file-viewer" src="" frameborder="0"></iframe>
-        <a id="download-button" href="#" download class="download-btn">Baixar Arquivo</a>
-    </div>
-
-    <section id="login" style="display:none;">
-        <h2>Login</h2>
-        <form id="formularioLogin">
-            <label for="emailLogin">Email:</label><br>
-            <input type="email" id="emailLogin" name="emailLogin" required><br><br>
-            <label for="senhaLogin">Senha:</label><br>
-            <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
-            <button type="submit">Entrar</button>
-            <div id="mensagemLogin"></div>
-        </form>
-        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
-    </section>
-
-    <section id="cadastro" style="display:none;">
-        <h2>Cadastro</h2>
-        <form id="formularioCadastro">
-            <label for="emailCadastro">Email:</label><br>
-            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
-            <label for="senhaCadastro">Senha:</label><br>
-            <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
-            <label for="codigoAcesso">Código de Acesso:</label><br>
-            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
-            <button type="submit">Cadastrar</button>
-            <div id="mensagemCadastro"></div>
-        </form>
-        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
-    </section>
+    <script src="script.js"></script>
 </body>
 </html>
