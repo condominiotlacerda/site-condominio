@@ -13,14 +13,14 @@
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-          authDomain: "logsite-d81dd.firebaseapp.com",
-          databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-          projectId: "logsite-d81dd",
-          storageBucket: "logsite-d81dd.firebasestorage.app",
-          messagingSenderId: "285508603780",
-          appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-          measurementId: "G-B0JHRHTNKF"
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -34,7 +34,7 @@
         function logAccess(userCode, userName, apartment, accessedDocument) {
             // Captura a data atual
             const now = new Date();
-            
+
             // Ajusta para o horário de Brasília (UTC-3)
             now.setHours(now.getHours() - 3);
 
@@ -98,5 +98,33 @@
         <iframe id="file-viewer" src="" frameborder="0"></iframe>
         <a id="download-button" href="#" download class="download-btn">Baixar Arquivo</a>
     </div>
+
+    <section id="login" style="display:none;">
+        <h2>Login</h2>
+        <form id="formularioLogin">
+            <label for="emailLogin">Email:</label><br>
+            <input type="email" id="emailLogin" name="emailLogin" required><br><br>
+            <label for="senhaLogin">Senha:</label><br>
+            <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
+            <button type="submit">Entrar</button>
+            <div id="mensagemLogin"></div>
+        </form>
+        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+    </section>
+
+    <section id="cadastro" style="display:none;">
+        <h2>Cadastro</h2>
+        <form id="formularioCadastro">
+            <label for="emailCadastro">Email:</label><br>
+            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+            <label for="senhaCadastro">Senha:</label><br>
+            <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
+            <label for="codigoAcesso">Código de Acesso:</label><br>
+            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+            <button type="submit">Cadastrar</button>
+            <div id="mensagemCadastro"></div>
+        </form>
+        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+    </section>
 </body>
 </html>
