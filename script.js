@@ -153,6 +153,27 @@ document.addEventListener("DOMContentLoaded", function () {
             // Depois de criar o usuário, o próximo passo será armazenar esse código no banco de dados
         });
     }
+
+    const loginSection = document.getElementById('login');
+    const cadastroSection = document.getElementById('cadastro');
+    const mostrarCadastroLink = document.getElementById('mostrarCadastro');
+    const mostrarLoginLink = document.getElementById('mostrarLogin');
+
+    if (mostrarCadastroLink) {
+        mostrarCadastroLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginSection.style.display = 'none';
+            cadastroSection.style.display = 'block';
+        });
+    }
+
+    if (mostrarLoginLink) {
+        mostrarLoginLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            cadastroSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+    }
 });
 
 // Ajuste para horário de Brasília (UTC-3)
