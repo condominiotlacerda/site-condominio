@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formularioCadastro.addEventListener('submit', function(event) {
             event.preventDefault();
             const emailCadastro = document.getElementById('emailCadastro').value;
+            console.log("Valor do emailCadastro:", emailCadastro);
             const senhaCadastro = document.getElementById('senhaCadastro').value;
             const codigoAcessoInput = document.getElementById('codigoAcesso');
             const codigoAcesso = codigoAcessoInput.value;
