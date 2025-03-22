@@ -103,8 +103,8 @@ function getFilesForApartment(apartment) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("apto202").disabled = true;
-    document.getElementById("apto301").disabled = true;
+    //document.getElementById("apto202").disabled = true;
+    //document.getElementById("apto301").disabled = true;
 
     const formularioCadastro = document.getElementById('formularioCadastro');
     if (formularioCadastro) {
