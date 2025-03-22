@@ -116,8 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const codigoAcesso = codigoAcessoInput.value;
             const mensagemCadastro = document.getElementById('mensagemCadastro');
 
-            const auth = getAuth();
-            createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro)
+            const auth = firebase.auth();
+                firebase.auth().createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro)
                 .then((userCredential) => {
                     // Usuário criado com sucesso
                     const user = userCredential.user;
