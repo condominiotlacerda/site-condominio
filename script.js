@@ -123,8 +123,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     const user = userCredential.user;
                     console.log("Usuário criado com sucesso:", user.uid);
                     mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
-                    // Aqui, no futuro, você pode redirecionar o usuário ou fazer outras ações
-                    // como limpar o formulário
+
+                    // Vamos armazenar o código de acesso no Realtime Database
+                    const db = getDatabase();
+                    const userRef = ref(db, 'pendingApprovals/' + user.uid); // 'pendingApprovals' é o nó onde vamos guardar os dados
+
+                    set(userRef, {
+                        accessCode: codigoAcesso,
+                        email: emailCadastro // Podemos armazenar o email também para referência
+                    }).then(() => {
+                        console.log("Código de acesso armazenado para o usuário:", user.uid);
+                        // Opcional: limpar o formulário aqui
+                        formularioCadastro.reset();
+                    }).catch((error) => {
+                        console.error("Erro ao armazenar o código de acesso:", error);
+                        mensagemCadastro.textContent = 'Erro ao cadastrar. Tente novamente mais tarde.';
+                    });
                 })
                 .catch((error) => {
                     const errorCode = error.code;
