@@ -117,6 +117,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const codigoAcesso = codigoAcessoInput.value;
             const mensagemCadastro = document.getElementById('mensagemCadastro');
 
+            console.log("Tipo de getAuth:", typeof getAuth);
+            
             const auth = getAuth();
                 createUserWithEmailAndPassword(auth, document.getElementById('emailCadastro').value, senhaCadastro)
                 .then((userCredential) => {
