@@ -21,21 +21,6 @@ function enableApartment() {
         const { id, name } = userData;
         localStorage.setItem('accessCode', code);
         window.location.href = 'area_condominio.html';
-        // As linhas abaixo não são mais necessárias com o redirecionamento
-        // document.querySelectorAll('.apartment-button').forEach(btn => btn.disabled = true);
-        // document.getElementById('file-list').innerHTML = '';
-        // document.getElementById('file-container').style.display = 'none';
-        // document.getElementById('viewer-container').style.display = 'none';
-        // const aptButton = document.getElementById(id);
-        // if (aptButton) {
-        //     aptButton.disabled = false;
-        // } else {
-        //     alert('Erro: botão do apartamento não encontrado.');
-        //     return;
-        // }
-        // activeApartmentButtonId = id;
-        // document.getElementById('welcome-message').innerHTML = `Seja bem-vindo(a), ${name}. Clique no botão do seu apartamento para acessar seus boletos.`;
-        // document.getElementById('accessCode').value = '';
         window.logAccess(code, name, `Acesso à área do condômino`, 'homepage'); // Alterei a descrição do log
     } else {
         alert('Código de acesso inválido.');
@@ -129,11 +114,29 @@ document.addEventListener("DOMContentLoaded", function () {
             const senhaCadastro = document.getElementById('senhaCadastro').value;
             const codigoAcessoInput = document.getElementById('codigoAcesso');
             const codigoAcesso = codigoAcessoInput.value;
+            const mensagemCadastro = document.getElementById('mensagemCadastro');
+
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro)
+                .then((userCredential) => {
+                    // Usuário criado com sucesso
+                    const user = userCredential.user;
+                    console.log("Usuário criado com sucesso:", user.uid);
+                    mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
+                    // Aqui, no futuro, você pode redirecionar o usuário ou fazer outras ações
+                    // como limpar o formulário
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.error("Erro ao criar usuário:", errorCode, errorMessage);
+                    mensagemCadastro.textContent = 'Erro ao cadastrar: ' + errorMessage;
+                    // Aqui você pode tratar os diferentes tipos de erros (email já em uso, senha fraca, etc.)
+                });
 
             console.log("Código de Acesso (Cadastro):", codigoAcesso); // Para verificar no console
-
-            const mensagemCadastro = document.getElementById('mensagemCadastro');
-            mensagemCadastro.textContent = 'Funcionalidade de cadastro ainda não implementada.';
+            // Por enquanto, vamos manter o console.log do código de acesso aqui
+            // Depois de criar o usuário, o próximo passo será armazenar esse código no banco de dados
         });
     }
 });
