@@ -1,3 +1,5 @@
+import { getAuth } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
 const accessCodes = {
     'aB9x-Yz!2W': { id: 'apto1', name: 'João Paulo' },
     'QrSt-Uv!W6': { id: 'apto1', name: 'José Rocha' },
