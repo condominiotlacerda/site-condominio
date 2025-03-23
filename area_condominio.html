@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css?v=1.1">
-    <title>Condomínio T Lacerda - Boletos e Contas</title>
-    <script src="script.js" defer type="module"></script>
     <script type="module">
         // 🔥 Firebase Setup and Authentication Logic 🔥
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
@@ -95,11 +90,16 @@
         }
         window.logAccess = logAccess;
     </script>
+    <button id="logoutButton">Sair</button>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Boletos e Contas</title>
+    <script src="script.js" defer type="module"></script>
 </head>
 <body>
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
-        <button id="logoutButton">Sair</button>
     </header>
 
     <div class="container">
@@ -157,5 +157,6 @@
         <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
     </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
