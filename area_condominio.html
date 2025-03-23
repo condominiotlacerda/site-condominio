@@ -1,149 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <script type="module">
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-    const auth = getAuth();
+    <script type="module">
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // Usuário está logado, pode continuar na página
-            console.log("Usuário autenticado:", user.uid);
-        } else {
-            // Usuário não está logado, redirecione para a página de login
-            console.log("Usuário não autenticado, redirecionando para login...");
-            window.location.href = 'index.html';
-        }
-    });
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Usuário está logado, pode continuar na página
+            console.log("Usuário autenticado:", user.uid);
+        } else {
+            // Usuário não está logado, redirecione para a página de login
+            console.log("Usuário não autenticado, redirecionando para login...");
+            window.location.href = 'index.html';
+        }
+    });
 </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css?v=1.1">
-    <title>Condomínio T Lacerda - Boletos e Contas</title>
-    <script src="script.js" defer></script>
-    <script type="module">
-        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Boletos e Contas</title>
+    <script src="script.js" defer></script>
+    <script type="module">
+        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-            authDomain: "logsite-d81dd.firebaseapp.com",
-            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-            projectId: "logsite-d81dd",
-            storageBucket: "logsite-d81dd.firebasestorage.app",
-            messagingSenderId: "285508603780",
-            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-            measurementId: "G-B0JHRHTNKF"
-        };
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
+        };
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getDatabase();
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
 
-        // Registra o evento de visualização da página
-        logEvent(analytics, 'page_view');
+        // Registra o evento de visualização da página
+        logEvent(analytics, 'page_view');
 
-        // Função para registrar acessos no Firebase com horário correto (UTC-3)
-        function logAccess(userCode, userName, apartment, accessedDocument) {
-            // Captura a data atual
-            const now = new Date();
+        // Função para registrar acessos no Firebase com horário correto (UTC-3)
+        function logAccess(userCode, userName, apartment, accessedDocument) {
+            // Captura a data atual
+            const now = new Date();
 
-            // Ajusta para o horário de Brasília (UTC-3)
-            now.setHours(now.getHours() - 3);
+            // Ajusta para o horário de Brasília (UTC-3)
+            now.setHours(now.getHours() - 3);
 
-            // Converte a data para um formato seguro
-            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+            // Converte a data para um formato seguro
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
 
-            // Define o nome do arquivo de log
-            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
+            // Define o nome do arquivo de log
+            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
 
-            // Criação do objeto de log
-            const accessLog = {
-                userCode: userCode,
-                userName: userName,
-                apartment: `Acesso ao apartamento ${apartment}`,
-                accessedDocument: accessedDocument,
-                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
-            };
+            // Criação do objeto de log
+            const accessLog = {
+                userCode: userCode,
+                userName: userName,
+                apartment: `Acesso ao apartamento ${apartment}`,
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
+            };
 
-            // Grava o log no Firebase com o nome formatado corretamente
-            const logRef = ref(db, `logs/${fileName}`);
-            set(logRef, accessLog)
-                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-                .catch(error => console.error("Erro ao registrar log:", error));
-        }
+            // Grava o log no Firebase com o nome formatado corretamente
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
+        }
 
-        // Disponibiliza a função para uso no script.js
-        window.logAccess = logAccess;
+        // Disponibiliza a função para uso no script.js
+        window.logAccess = logAccess;
 
-        // ==================== 🔥 FIM FIREBASE 🔥 ====================
-    </script>
+        // ==================== 🔥 FIM FIREBASE 🔥 ====================
+    </script>
 </head>
 <body>
-    <header>
-        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
-    </header>
+    <header style="display: flex; justify-content: space-between; align-items: center;">
+        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
+        <button id="logoutButton" style="font-size: 0.8em; padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #f0f0f0; cursor: pointer;">Sair</button>
+    </header>
 
-    <div class="container">
-        <section id="content">
+    <div class="container">
+        <section id="content">
 
-        </section>
+        </section>
 
-        <h1>Condomínio T Lacerda</h1>
-        <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
-        <input type="password" id="accessCode" placeholder="Digite seu código">
-        <button onclick="enableApartment()">Acessar</button>
+        <h1>Condomínio T Lacerda</h1>
+        <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
+        <input type="password" id="accessCode" placeholder="Digite seu código">
+        <button onclick="enableApartment()">Acessar</button>
 
-        <div class="apartment-section">
-            <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
-            <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
-            <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
-            <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
-            <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
-            <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
-            <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
-            <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
-        </div>
+        <div class="apartment-section">
+            <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
+            <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
+            <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
+            <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
+            <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
+            <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
+            <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
+            <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
+        </div>
 
-        <section id="login" style="display:none;">
-            <h2>Login</h2>
-            <form id="formularioLogin">
-                <label for="emailLogin">Email:</label><br>
-                <input type="email" id="emailLogin" name="emailLogin" required><br><br>
-                <label for="senhaLogin">Senha:</label><br>
-                <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
-                <button type="submit">Entrar</button>
-                <div id="mensagemLogin"></div>
-            </form>
-            <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
-        </section>
+        <section id="login" style="display:none;">
+            <h2>Login</h2>
+            <form id="formularioLogin">
+                <label for="emailLogin">Email:</label><br>
+                <input type="email" id="emailLogin" name="emailLogin" required><br><br>
+                <label for="senhaLogin">Senha:</label><br>
+                <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
+                <button type="submit">Entrar</button>
+                <div id="mensagemLogin"></div>
+            </form>
+            <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+        </section>
 
-        <section id="cadastro" style="display:none;">
-            <h2>Cadastro</h2>
-            <form id="formularioCadastro">
-                <label for="emailCadastro">Email:</label><br>
-                <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
-                <label for="senhaCadastro">Senha:</label><br>
-                <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
-                <label for="codigoAcesso">Código de Acesso:</label><br>
-                <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
-                <button type="submit">Cadastrar</button>
-                <div id="mensagemCadastro"></div>
-            </form>
-            <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
-        </section>
-    </div>
+        <section id="cadastro" style="display:none;">
+            <h2>Cadastro</h2>
+            <form id="formularioCadastro">
+                <label for="emailCadastro">Email:</label><br>
+                <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+                <label for="senhaCadastro">Senha:</label><br>
+                <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
+                <label for="codigoAcesso">Código de Acesso:</label><br>
+                <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+                <button type="submit">Cadastrar</button>
+                <div id="mensagemCadastro"></div>
+            </form>
+            <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+        </section>
+    </div>
 
-    <footer>
-        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
-    </footer>
+    <footer>
+        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
+        <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
+    </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
