@@ -1,8 +1,65 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
+    <button id="logoutButton">Sair</button> // botão sair/deslogar
+    
     <script type="module">
+    
+    // Lógica para Logout (sair ou deslogar)
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+        const logoutButton = document.getElementById('logoutButton');
+        const auth = getAuth();
+
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                // Sign-out successful.
+                console.log('Usuário deslogado com sucesso.');
+                window.location.href = 'index.html'; // Redireciona para a página de login
+            }).catch((error) => {
+            // An error happened.
+            console.error('Erro ao deslogar:', error);
+            alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
+            });
+        });
+    }
+
+        // Lógica para deslogar em 3 minutos de inatividade
+    let inactivityTimeout = 3 * 60 * 1000; // 3 minutos em milissegundos
+    let timeoutId;
+
+        function resetInactivityTimer() {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+            signOut(auth).then(() => {
+            console.log('Usuário deslogado por inatividade.');
+            window.location.href = 'index.html'; // Redireciona para a página de login
+        }).catch((error) => {
+            console.error('Erro ao deslogar por inatividade:', error);
+        });
+        }, inactivityTimeout);
+    }
+
+// Inicializa o timer ao carregar a página
+resetInactivityTimer();
+
+// Reseta o timer em caso de atividade do usuário
+document.addEventListener('mousemove', resetInactivityTimer);
+document.addEventListener('keypress', resetInactivityTimer);
+        
+        
+        // Lógica para deslogar ou sair se fechar a aba ou o navegador
+        window.addEventListener('beforeunload', (event) => {
+            signOut(auth).then(() => {
+            console.log('Usuário deslogado ao fechar a aba/navegador.');
+            // Não é possível redirecionar confiavelmente aqui, pois o navegador pode interromper a ação.
+            }).catch((error) => {
+            console.error('Erro ao deslogar ao fechar:', error);
+            });
+        });
+        
+    // Verifica se o usuário está logoado    
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
     const auth = getAuth();
