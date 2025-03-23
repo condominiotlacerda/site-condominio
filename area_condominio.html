@@ -22,7 +22,7 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getDatabase();
-        const auth = getAuth();
+        const auth = getAuth(app);
         const logoutButton = document.getElementById('logoutButton');
 
         logEvent(analytics, 'page_view'); // Registra a visualização da página
