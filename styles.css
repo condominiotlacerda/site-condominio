@@ -1,189 +1,172 @@
 body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
 }
 
 h1 {
-    color: #333;
-    font-size: 1.8em;
+    color: #333;
+    font-size: 1.8em;
 }
 
 .apartment-section {
-    margin-top: 30px;
+    margin-top: 30px;
 }
 
 .apartment-button {
-    padding: 10px 15px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    font-size: 1em;
+    padding: 10px 15px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 1em;
 }
 
 .file-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
 }
 
 .file-list li {
-    margin: 5px 0;
+    margin: 5px 0;
 }
 
 .file-list a {
-    text-decoration: none;
-    color: #007bff;
+    text-decoration: none;
+    color: #007bff;
 }
 
 /* 🔹 Logo do Condomínio */
 .logo {
-    display: block;
-    width: 150px !important;
-    height: 150px !important;
-    border-radius: 50%;
-    object-fit: cover;
-    position: absolute;
-    top: 5px;  /* 🔹 Alterado de 15px para 5px */
-    left: 5px; /* 🔹 Alterado de 15px para 5px */
-    max-width: 150px !important;
-    max-height: 150px !important;
-    border: 2px solid red;
+    display: block;
+    width: 150px !important;
+    height: 150px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    top: 5px;  /* 🔹 Alterado de 15px para 5px */
+    left: 5px; /* 🔹 Alterado de 15px para 5px */
+    max-width: 150px !important;
+    max-height: 150px !important;
+    border: 2px solid red;
 }
 
 /* 🔹 Caixa da lista de arquivos */
 .file-box {
-    position: absolute;
-    top: 250px;
-    left: 15px;
-    width: 250px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid #ddd;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
+    position: absolute;
+    top: 250px;
+    left: 15px;
+    width: 250px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ddd;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
 .file-box.active {
-    opacity: 1;
-    transform: scale(1);
-    border-color: #555;
+    opacity: 1;
+    transform: scale(1);
+    border-color: #555;
 }
 
 /* 🔹 Painel do visualizador de PDF */
 .viewer-box {
-    position: absolute;
-    top: 250px;
-    left: 280px;
-    width: 600px;
-    height: 400px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid #ddd;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
+    position: absolute;
+    top: 250px;
+    left: 280px;
+    width: 600px;
+    height: 400px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ddd;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
 .viewer-box.active {
-    opacity: 1;
-    transform: scale(1);
-    border-color: #555;
+    opacity: 1;
+    transform: scale(1);
+    border-color: #555;
 }
 
 /* 🔹 Ajuste do iframe */
 #file-viewer {
-    width: 100%;
-    height: 300px;
-    border: none;
+    width: 100%;
+    height: 300px;
+    border: none;
 }
 
 /* 🔹 Botão de download */
 .download-btn {
-    display: block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    display: block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .download-btn:hover {
-    background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
 @media (max-width: 768px) {
-    /* 🔹 Reduzindo o logo para metade do tamanho atual */
-    .logo {
-        width: 50px !important;
-        height: 50px !important;
-        max-width: 50px !important;
-        max-height: 50px !important;
-        top: 1px;
-        left: 1px;
-    }
+    /* 🔹 Reduzindo o logo para metade do tamanho atual */
+    .logo {
+        width: 50px !important;
+        height: 50px !important;
+        max-width: 50px !important;
+        max-height: 50px !important;
+        top: 1px;
+        left: 1px;
+    }
 
-    .apartment-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+    .apartment-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-    .apartment-button {
-        width: 90%;
-        font-size: 0.9em;
-        padding: 12px;
-    }
+    .apartment-button {
+        width: 90%;
+        font-size: 0.9em;
+        padding: 12px;
+    }
 
-    /* 🔹 Ajuste da lista de arquivos para caber corretamente na tela */
-    .file-box {
-        position: relative;
-        top: 10px;
-        left: 5px;
-        right: 5px;
-        width: auto; /* 🔹 Agora a largura se ajusta automaticamente */
-        margin: 0 auto;
-    }
+    /* 🔹 Ajuste da lista de arquivos para caber corretamente na tela */
+    .file-box {
+        position: relative;
+        top: 10px;
+        left: 5px;
+        right: 5px;
+        width: auto; /* 🔹 Agora a largura se ajusta automaticamente */
+        margin: 0 auto;
+    }
 
-    /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
-    .viewer-box {
-        position: relative;
-        top: 0;
-        width: 100%;
-        left: 0;
-        margin: 10px 0;
-    }
+    /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
+    .viewer-box {
+        position: relative;
+        top: 0;
+        width: 100%;
+        left: 0;
+        margin: 10px 0;
+    }
 
-    #file-viewer {
-        height: 250px;
-        width: 100%;
-    }
-}
-/* Referentes ao botão Sair */
-header {
-    position: relative; /* Necessário para posicionar o botão Sair relativamente ao header */
-}
-
-#logoutButton {
-    position: absolute;
-    top: 10px; /* Ajuste a distância do topo conforme necessário */
-    right: 10px; /* Ajuste a distância da direita conforme necessário */
-    padding: 8px 12px; /* Ajuste o padding conforme necessário */
-    border: 1px solid #ccc; /* Use a mesma cor da borda dos botões dos apartamentos ou a que preferir */
-    border-radius: 5px; /* Use o mesmo border-radius dos botões dos apartamentos */
-    background-color: #f0f0f0; /* Use a mesma cor de fundo dos botões dos apartamentos ou a que preferir */
-    cursor: pointer;
-    font-size: 0.8em; /* Ajuste o tamanho da fonte se necessário */
-    z-index: 10; /* Garante que o botão fique acima de outros elementos, se necessário */
+    #file-viewer {
+        height: 250px;
+        width: 100%;
+    }
 }
