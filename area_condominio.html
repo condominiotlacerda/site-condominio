@@ -6,7 +6,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
@@ -29,17 +29,15 @@
 
         if (logoutButton) {
             logoutButton.addEventListener('click', () => {
-            signOut(auth).then(() => {
-            console.log('Usuário deslogado com sucesso.');
-            window.location.href = 'index.html'; // Redireciona para a página de login
-            }).catch((error) => {
-            console.error('Erro ao deslogar:', error);
-            alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
-            });
+                signOut(auth).then(() => {
+                    console.log('Usuário deslogado com sucesso.');
+                    window.location.href = 'index.html';
+                }).catch((error) => {
+                    console.error('Erro ao deslogar:', error);
+                    alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
+                });
             });
         }
-
-        import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
 const auth = getAuth(app); // Garanta que 'app' esteja inicializado
 
@@ -69,81 +67,47 @@ onAuthStateChanged(auth, (user) => {
         });
 });
 
-// Seu código restante (logout button, inactivity timer, beforeunload listener, logAccess) permanece aqui
+let inactivityTimeout = 3 * 60 * 1000; // 3 minutos em milissegundos
+let timeoutId;
 
-        onAuthStateChanged(auth, (user) => {
-
-            import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-
-            const auth = getAuth(app); // Certifique-se de que 'app' está inicializado
-
-                onAuthStateChanged(auth, (user) => {
-                setPersistence(auth, browserLocalPersistence)
-        .then(() => {
-        // A persistência foi definida com sucesso.
-        if (user) {
-            console.log("Usuário autenticado:", user.uid);
-        } else {
-            console.log("Usuário não autenticado, redirecionando para login...");
+function resetInactivityTimer() {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+        signOut(auth).then(() => {
+            console.log('Usuário deslogado por inatividade.');
             window.location.href = 'index.html';
-        }
-        return Promise.resolve();
-        })
-        .catch((error) => {
-        // Ocorreu um erro ao definir a persistência.
-        console.error("Erro ao definir persistência:", error);
+        }).catch((error) => {
+            console.error('Erro ao deslogar por inatividade:', error);
         });
+    }, inactivityTimeout);
+}
+
+resetInactivityTimer();
+document.addEventListener('mousemove', resetInactivityTimer);
+document.addEventListener('keypress', resetInactivityTimer);
+
+window.addEventListener('beforeunload', () => {
+    signOut(auth).then(() => {
+        console.log('Usuário deslogado ao fechar a aba/navegador.');
+    }).catch((error) => {
+        console.error('Erro ao deslogar ao fechar:', error);
     });
+});
 
-                if (user) {
-                    console.log("Usuário autenticado:", user.uid);
-                } else {
-                    console.log("Usuário não autenticado, redirecionando para login...");
-                    window.location.href = 'index.html';
-                }
-        });
-
-        let inactivityTimeout = 3 * 60 * 1000; // 3 minutos em milissegundos
-        let timeoutId;
-
-        function resetInactivityTimer() {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                signOut(auth).then(() => {
-                    console.log('Usuário deslogado por inatividade.');
-                    window.location.href = 'index.html';
-                }).catch((error) => {
-                    console.error('Erro ao deslogar por inatividade:', error);
-                });
-            }, inactivityTimeout);
-        }
-
-        resetInactivityTimer();
-        document.addEventListener('mousemove', resetInactivityTimer);
-        document.addEventListener('keypress', resetInactivityTimer);
-
-        window.addEventListener('beforeunload', () => {
-            signOut(auth).then(() => {
-                console.log('Usuário deslogado ao fechar a aba/navegador.');
-            }).catch((error) => {
-                console.error('Erro ao deslogar ao fechar:', error);
-            });
-        });
-
-        // Função para registrar acessos (a lógica permanece aqui)
-        function logAccess(userCode, userName, apartment, accessedDocument) {
-            const now = new Date();
-            now.setHours(now.getHours() - 3);
-            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
-            const accessLog = { userCode: userCode, userName: userName, apartment: `Acesso ao apartamento ${apartment}`, accessedDocument: accessedDocument, accessDate: now.toISOString() };
-            const logRef = ref(db, `logs/${fileName}`);
-            set(logRef, accessLog)
-                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-                .catch(error => console.error("Erro ao registrar log:", error));
-        }
-        window.logAccess = logAccess;
+// Função para registrar acessos (a lógica permanece aqui)
+function logAccess(userCode, userName, apartment, accessedDocument) {
+    const now = new Date();
+    now.setHours(now.getHours() - 3);
+    const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+    let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+    fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const accessLog = { userCode: userCode, userName: userName, apartment: `Acesso ao apartamento ${apartment}`, accessedDocument: accessedDocument, accessDate: now.toISOString() };
+    const logRef = ref(db, `logs/${fileName}`);
+    set(logRef, accessLog)
+        .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+        .catch(error => console.error("Erro ao registrar log:", error));
+}
+window.logAccess = logAccess;
     </script>
     <button id="logoutButton">Sair</button>
     <meta charset="UTF-8">
