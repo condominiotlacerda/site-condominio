@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
 const accessCodes = {
@@ -132,15 +132,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     // Vamos armazenar o código de acesso no Realtime Database
                     const db = getDatabase();
-
                     console.log("Objeto db:", db);
-                    
-                    const userRef = ref(db, 'pendingApprovals/' + user.uid); // 'pendingApprovals' é o nó onde vamos guardar os dados
 
-                    console.log("Objeto userRef:", userRef);                    
+                    const userRef = ref(db, 'pendingApprovals/' + user.uid); // 'pendingApprovals' é o nó onde vamos guardar os dados
+                    console.log("Objeto userRef:", userRef);
 
                     console.log("Tentando salvar dados no Realtime Database...");
-                    
+
                     set(userRef, {
                         accessCode: codigoAcesso,
                         email: emailCadastro // Podemos armazenar o email também para referência
@@ -149,8 +147,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         // Opcional: limpar o formulário aqui
                         formularioCadastro.reset();
 
-                        console.log("Dados salvos com sucesso no Realtime Database:", result);
-                        
+                        console.log("Dados salvos com sucesso no Realtime Database");
+
                     }).catch((error) => {
                         console.error("Erro ao armazenar o código de acesso:", error);
                         mensagemCadastro.textContent = 'Erro ao cadastrar. Tente novamente mais tarde.';
@@ -188,6 +186,37 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
             cadastroSection.style.display = 'none';
             loginSection.style.display = 'block';
+        });
+    }
+
+    const formularioLogin = document.getElementById('formularioLogin');
+    if (formularioLogin) {
+        formularioLogin.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const emailLogin = document.getElementById('emailLogin').value;
+            const senhaLogin = document.getElementById('senhaLogin').value;
+            const mensagemLogin = document.getElementById('mensagemLogin');
+
+            const auth = getAuth(); // Obtenha a instância do auth
+
+            console.log("Tentando login com:", emailLogin, senhaLogin);
+
+            signInWithEmailAndPassword(auth, emailLogin, senhaLogin)
+                .then((userCredential) => {
+                    // Usuário logado com sucesso
+                    const user = userCredential.user;
+                    console.log("Usuário logado com sucesso:", user.uid);
+                    mensagemLogin.textContent = 'Login realizado com sucesso!';
+                    // Redirecione o usuário para a área do condomínio ou outra página
+                    window.location.href = 'area_condominio.html';
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.error("Erro ao fazer login:", errorCode, errorMessage);
+                    mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
+                    // Aqui você pode tratar os diferentes tipos de erros de login (usuário não encontrado, senha incorreta, etc.)
+                });
         });
     }
 });
