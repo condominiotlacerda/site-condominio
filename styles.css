@@ -170,3 +170,31 @@ h1 {
         width: 100%;
     }
 }
+/* Referentes ao botão Sair */
+header {
+    /* Outros estilos do seu header */
+    position: relative; /* Necessário para posicionar o botão Sair relativamente ao header */
+    display: flex; /* Opcional: se você quiser usar flexbox para alinhar outros elementos no header */
+    align-items: center; /* Opcional */
+    justify-content: space-between; /* Opcional: para espaçar logo e botão se ambos estiverem no header */
+}
+
+#logoutButton {
+    position: absolute;
+    top: 10px; /* Ajuste a distância do topo conforme necessário */
+    right: 10px; /* Ajuste a distância da direita conforme necessário */
+    /* Outros estilos do botão Sair */
+}
+/* Layout do botão Sair*/
+#logoutButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 15px; /* Ajuste o padding conforme necessário */
+    border: 1px solid #ccc; /* Use a mesma cor da borda dos botões dos apartamentos ou a que preferir */
+    border-radius: 5px; /* Use o mesmo border-radius dos botões dos apartamentos */
+    background-color: #f0f0f0; /* Use a mesma cor de fundo dos botões dos apartamentos ou a que preferir */
+    cursor: pointer;
+    font-size: 1em; /* Ajuste o tamanho da fonte se necessário */
+    /* Outros estilos específicos para o botão Sair, se houver */
+}
