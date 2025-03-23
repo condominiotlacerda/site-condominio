@@ -3,21 +3,21 @@
 <head>
 
     <script type="module">
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-    const auth = getAuth();
+        const auth = getAuth();
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // Usuário está logado, pode continuar na página
-            console.log("Usuário autenticado:", user.uid);
-        } else {
-            // Usuário não está logado, redirecione para a página de login
-            console.log("Usuário não autenticado, redirecionando para login...");
-            window.location.href = 'index.html';
-        }
-    });
-</script>
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado, pode continuar na página
+                console.log("Usuário autenticado:", user.uid);
+            } else {
+                // Usuário não está logado, redirecione para a página de login
+                console.log("Usuário não autenticado, redirecionando para login...");
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +29,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
@@ -44,6 +45,7 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getDatabase();
+        const authFirebase = getFirebaseAuth();
 
         // Registra o evento de visualização da página
         logEvent(analytics, 'page_view');
@@ -82,10 +84,41 @@
         // Disponibiliza a função para uso no script.js
         window.logAccess = logAccess;
 
+        function sair() {
+            signOut(authFirebase).then(() => {
+                // Sign-out successful.
+                console.log('Usuário desconectado');
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                // An error happened.
+                console.error('Erro ao fazer logout:', error);
+            });
+        }
+
+        window.sair = sair;
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
     </script>
+    <style>
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
+    <button class="logout-button" onclick="sair()">Sair</button>
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
     </header>
