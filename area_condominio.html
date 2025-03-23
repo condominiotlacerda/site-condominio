@@ -40,6 +40,29 @@
         }
 
         onAuthStateChanged(auth, (user) => {
+            
+            import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+            const auth = getAuth(app); // Certifique-se de que 'app' está inicializado
+
+                onAuthStateChanged(auth, (user) => {
+                setPersistence(auth, browserLocalPersistence)
+            .then(() => {
+            // A persistência foi definida com sucesso.
+            if (user) {
+                console.log("Usuário autenticado:", user.uid);
+            } else {
+                console.log("Usuário não autenticado, redirecionando para login...");
+                window.location.href = 'index.html';
+            }
+            return Promise.resolve();
+            })
+            .catch((error) => {
+            // Ocorreu um erro ao definir a persistência.
+            console.error("Erro ao definir persistência:", error);
+            });
+        });
+            
             if (user) {
                 console.log("Usuário autenticado:", user.uid);
             } else {
