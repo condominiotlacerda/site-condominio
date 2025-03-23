@@ -2,126 +2,105 @@
 <html lang="pt-br">
 <head>
     <script type="module">
-    // 🔥 Firebase Setup and Authentication Logic 🔥
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        // 🔥 Firebase Setup and Authentication Logic 🔥
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-        authDomain: "logsite-d81dd.firebaseapp.com",
-        databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-        projectId: "logsite-d81dd",
-        storageBucket: "logsite-d81dd.firebasestorage.app",
-        messagingSenderId: "285508603780",
-        appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-        measurementId: "G-B0JHRHTNKF"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getDatabase();
-    const auth = getAuth(app);
-    const logoutButton = document.getElementById('logoutButton');
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+        const authInstance = getAuth(app);
 
-    logEvent(analytics, 'page_view'); // Registra a visualização da página
+        logEvent(analytics, 'page_view'); // Registra a visualização da página
 
-    console.log("Script Firebase inicializado.");
+        onAuthStateChanged(authInstance, (user) => {
+            setPersistence(authInstance, browserLocalPersistence)
+                .then(() => {
+                    const currentUser = authInstance.currentUser;
 
-    if (logoutButton) {
-        console.log("Botão Sair encontrado.");
-        logoutButton.addEventListener('click', () => {
-            console.log("Botão Sair clicado.");
-            signOut(auth).then(() => {
-                // Sign-out successful.
-                console.log('Usuário deslogado com sucesso.');
-                window.location.href = 'index.html'; // Redireciona para a página de login
-            }).catch((error) => {
-                // An error happened.
-                console.error('Erro ao deslogar:', error);
-                alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
-            });
-        });
-    } else {
-        console.log("Botão Sair não encontrado.");
-    }
-
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-
-const auth = getAuth(app); // Garanta que 'app' esteja inicializado
-console.log("Instância auth obtida novamente.");
-
-// Verifica o usuário atual imediatamente ao carregar a página
-const currentUser = auth.currentUser;
-console.log("Usuário atual ao carregar:", currentUser ? currentUser.uid : null);
-
-if (!currentUser) {
-    console.log("Usuário não autenticado no carregamento, redirecionando...");
-    window.location.href = 'index.html';
-} else {
-    console.log("Usuário autenticado no carregamento:", currentUser.uid);
-}
-
-onAuthStateChanged(auth, (user) => {
-    console.log("Estado de autenticação mudou:", user ? user.uid : null);
-    if (user) {
-        console.log("Usuário autenticado (onAuthStateChanged):", user.uid);
-    } else {
-        console.log("Usuário não autenticado (onAuthStateChanged), redirecionando para login...");
-        window.location.href = 'index.html';
-    }
-});
-
-    let inactivityTimeout = 3 * 60 * 1000; // 3 minutos em milissegundos
-    let timeoutId;
-
-    function resetInactivityTimer() {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            console.log('Usuário será deslogado por inatividade.');
-            signOut(auth).then(() => {
-                console.log('Usuário deslogado por inatividade.');
-                window.location.href = 'index.html'; // Redireciona para a página de login
-            }).catch((error) => {
-                console.error('Erro ao deslogar por inatividade:', error);
-            });
-        }, inactivityTimeout);
-    }
-
-    resetInactivityTimer();
-
-    document.addEventListener('mousemove', resetInactivityTimer);
-    document.addEventListener('keypress', resetInactivityTimer);
-
-
-    // Lógica para deslogar ou sair se fechar a aba ou o navegador
-    window.addEventListener('beforeunload', (event) => {
-        console.log('Evento beforeunload disparado.');
-        signOut(auth).then(() => {
-        console.log('Usuário deslogado ao fechar a aba/navegador.');
-        // Não é possível redirecionar confiavelmente aqui, pois o navegador pode interromper a ação.
-        }).catch((error) => {
-        console.error('Erro ao deslogar ao fechar:', error);
-        });
+                    if (!currentUser) {
+                        console.log("Usuário não autenticado no carregamento, redirecionando...");
+                        window.location.href = 'index.html';
+                    } else {
+                        console.log("Usuário autenticado no carregamento:", currentUser.uid);
+                    }
+                    return Promise.resolve();
+                })
+                .catch((error) => {
+                    console.error("Erro ao definir persistência:", error);
+                });
     });
 
-    // Função para registrar acessos (a lógica permanece aqui)
-    function logAccess(userCode, userName, apartment, accessedDocument) {
-        const now = new Date();
-        now.setHours(now.getHours() - 3);
-        const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-        let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-        fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
-        const accessLog = { userCode: userCode, userName: userName, apartment: `Acesso ao apartamento ${apartment}`, accessedDocument: accessedDocument, accessDate: now.toISOString() };
-        const logRef = ref(db, `logs/${fileName}`);
-        set(logRef, accessLog)
-            .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-            .catch(error => console.error("Erro ao registrar log:", error));
-    }
-    window.logAccess = logAccess;
-</script>
-    <button id="logoutButton">Sair</button>
+        let inactivityTimeout = 3 * 60 * 1000; // 3 minutos em milissegundos
+        let timeoutId;
+
+        function resetInactivityTimer() {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                signOut(authInstance).then(() => {
+                    console.log('Usuário deslogado por inatividade.');
+                    localStorage.removeItem('accessCode'); // Limpa o código de acesso por inatividade
+                    window.location.href = 'index.html';
+                }).catch((error) => {
+                    console.error('Erro ao deslogar por inatividade:', error);
+                });
+            }, inactivityTimeout);
+        }
+
+        resetInactivityTimer();
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('keypress', resetInactivityTimer);
+
+        window.addEventListener('beforeunload', () => {
+            signOut(authInstance).then(() => {
+                console.log('Usuário deslogado ao fechar a aba/navegador.');
+            }).catch((error) => {
+                console.error('Erro ao deslogar ao fechar:', error);
+            });
+        });
+
+        // Função para registrar acessos (a lógica permanece aqui)
+        function logAccess(userCode, userName, apartment, accessedDocument) {
+            const db = getDatabase();
+            let now = new Date();
+            now.setHours(now.getHours() - 3);
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
+            const accessLog = { userCode: userCode, userName: userName, apartment: `Acesso ao apartamento ${apartment}`, accessedDocument: accessedDocument, accessDate: now.toISOString() };
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
+        }
+        window.logAccess = logAccess;
+
+        // Disponibiliza a função enableApartment para o HTML
+        window.enableApartment = function() {
+            const code = document.getElementById('accessCode').value.trim();
+            const userData = Object.values(accessCodes).find(user => user.id === `apto${document.getElementById('apartment-number').textContent}`);
+
+            if (userData && Object.keys(accessCodes).find(key => accessCodes[key] === userData) === code) {
+                localStorage.setItem('accessCode', code);
+                // Acesso permitido, você pode adicionar aqui qualquer lógica adicional
+            } else {
+                alert('Código de acesso inválido para este apartamento.');
+            }
+        };
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css?v=1.1">
