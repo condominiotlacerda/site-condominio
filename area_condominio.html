@@ -1,34 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
-    <script type="module">
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-
-        const auth = getAuth();
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Usuário está logado, pode continuar na página
-                console.log("Usuário autenticado:", user.uid);
-            } else {
-                // Usuário não está logado, redirecione para a página de login
-                console.log("Usuário não autenticado, redirecionando para login...");
-                window.location.href = 'index.html';
-            }
-        });
-    </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css?v=1.1">
-    <title>Condomínio T Lacerda - Boletos e Contas</title>
-    <script src="script.js" defer></script>
     <script type="module">
         // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -46,9 +24,21 @@
         const analytics = getAnalytics(app);
         const db = getDatabase();
         const authFirebase = getFirebaseAuth();
+        const auth = getAuth(); // Moved getAuth() here
 
         // Registra o evento de visualização da página
         logEvent(analytics, 'page_view');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado, pode continuar na página
+                console.log("Usuário autenticado:", user.uid);
+            } else {
+                // Usuário não está logado, redirecione para a página de login
+                console.log("Usuário não autenticado, redirecionando para login...");
+                window.location.href = 'index.html';
+            }
+        });
 
         // Função para registrar acessos no Firebase com horário correto (UTC-3)
         function logAccess(userCode, userName, apartment, accessedDocument) {
@@ -98,6 +88,11 @@
         window.sair = sair;
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
     </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Boletos e Contas</title>
+    <script src="script.js" defer type="module"></script>
     <style>
         .logout-button {
             position: absolute;
@@ -178,6 +173,6 @@
         <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
