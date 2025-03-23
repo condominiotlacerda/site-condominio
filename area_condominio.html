@@ -29,13 +29,13 @@
 
         if (logoutButton) {
             logoutButton.addEventListener('click', () => {
-                signOut(auth).then(() => {
-                    console.log('Usuário deslogado com sucesso.');
-                    window.location.href = 'index.html';
-                }).catch((error) => {
-                    console.error('Erro ao deslogar:', error);
-                    alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
-                });
+            signOut(auth).then(() => {
+            console.log('Usuário deslogado com sucesso.');
+            window.location.href = 'index.html'; // Redireciona para a página de login
+            }).catch((error) => {
+            console.error('Erro ao deslogar:', error);
+            alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
+            });
             });
         }
 
