@@ -1,4 +1,5 @@
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
 const accessCodes = {
     'aB9x-Yz!2W': { id: 'apto1', name: 'João Paulo' },
@@ -120,9 +121,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const mensagemCadastro = document.getElementById('mensagemCadastro');
 
             console.log("Tipo de getAuth:", typeof getAuth);
-            
+
             const auth = getAuth();
-                createUserWithEmailAndPassword(auth, document.getElementById('emailCadastro').value, senhaCadastro)
+            createUserWithEmailAndPassword(auth, document.getElementById('emailCadastro').value, senhaCadastro)
                 .then((userCredential) => {
                     // Usuário criado com sucesso
                     const user = userCredential.user;
