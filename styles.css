@@ -184,23 +184,36 @@ h1 {
     cursor: pointer;
 }
 
+.logout-button {
+    position: absolute;
+    top: 10px; /* Adjust top spacing as needed */
+    right: 20px; /* Adjust right spacing as needed */
+    padding: 8px 15px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f44336; /* Cor vermelha para indicar sair */
+    color: white;
+    cursor: pointer;
+}
+
 .logout-button:hover {
     background-color: #d32f2f;
 }
 
 header {
-    position: relative; /* Necessário para posicionar o botão relativamente ao header */
+    position: relative; /* Needed for absolute positioning of the button */
     display: flex;
-    align-items: center;
-    justify-content: space-between; /* Coloca o logo à esquerda e deixa espaço para o botão */
+    align-items: center; /* Vertically align items in the header */
     padding: 10px 20px;
     background-color: #f0f0f0;
 }
 
-header h1 {
-    margin-left: 10px; /* Adiciona um pouco de espaço entre o logo e o título */
+header img.logo {
+    height: 50px; /* Adjust logo size as needed */
+    margin-right: 15px; /* Add some space between logo and title */
 }
 
-header img.logo {
-    height: 50px; /* Ajuste o tamanho do logo conforme necessário */
+header h1 {
+    /* No specific positioning needed for the title now */
 }
