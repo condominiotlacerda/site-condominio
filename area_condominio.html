@@ -39,6 +39,38 @@
             });
         }
 
+        import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+const auth = getAuth(app); // Garanta que 'app' esteja inicializado
+
+// Verifica o usuário atual imediatamente ao carregar a página
+const currentUser = auth.currentUser;
+
+if (!currentUser) {
+    console.log("Usuário não autenticado no carregamento, redirecionando...");
+    window.location.href = 'index.html';
+} else {
+    console.log("Usuário autenticado no carregamento:", currentUser.uid);
+}
+
+onAuthStateChanged(auth, (user) => {
+    setPersistence(auth, browserLocalPersistence)
+        .then(() => {
+            if (user) {
+                console.log("Usuário autenticado (onAuthStateChanged):", user.uid);
+            } else {
+                console.log("Usuário não autenticado (onAuthStateChanged), redirecionando...");
+                window.location.href = 'index.html';
+            }
+            return Promise.resolve();
+        })
+        .catch((error) => {
+            console.error("Erro ao definir persistência:", error);
+        });
+});
+
+// Seu código restante (logout button, inactivity timer, beforeunload listener, logAccess) permanece aqui
+                
         onAuthStateChanged(auth, (user) => {
             
             import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
