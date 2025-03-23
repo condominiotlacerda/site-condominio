@@ -30,19 +30,6 @@
     onAuthStateChanged(authInstance, (user) => {
         setPersistence(authInstance, browserLocalPersistence)
             .then(() => {
-                if (logoutButton) {
-                    logoutButton.addEventListener('click', () => {
-                        signOut(authInstance).then(() => {
-                            console.log('Usuário deslogado com sucesso.');
-                            localStorage.removeItem('accessCode'); // Limpa o código de acesso ao sair
-                            window.location.href = 'index.html';
-                        }).catch((error) => {
-                            console.error('Erro ao deslogar:', error);
-                            alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
-                        });
-                    });
-                }
-
                 const currentUser = authInstance.currentUser;
 
                 if (!currentUser) {
@@ -56,6 +43,19 @@
             .catch((error) => {
                 console.error("Erro ao definir persistência:", error);
             });
+
+        if (logoutButton) {
+            logoutButton.addEventListener('click', () => {
+                signOut(authInstance).then(() => {
+                    console.log('Usuário deslogado com sucesso.');
+                    localStorage.removeItem('accessCode'); // Limpa o código de acesso ao sair
+                    window.location.href = 'index.html';
+                }).catch((error) => {
+                    console.error('Erro ao deslogar:', error);
+                    alert('Ocorreu um erro ao deslogar. Por favor, tente novamente.');
+                });
+            });
+        }
     });
 
     let inactivityTimeout = 3 * 60 * 1000; // 3 minutos em milissegundos
