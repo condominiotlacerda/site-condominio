@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
     <script type="module">
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-        const auth = getAuth();
+    const auth = getAuth();
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Usuário está logado, pode continuar na página
-                console.log("Usuário autenticado:", user.uid);
-            } else {
-                // Usuário não está logado, redirecione para a página de login
-                console.log("Usuário não autenticado, redirecionando para login...");
-                window.location.href = 'index.html';
-            }
-        });
-
-        // Função para deslogar o usuário
-        window.signOutUser = () => {
-            signOut(auth).then(() => {
-                // Sign-out successful.
-                console.log("Usuário deslogado.");
-                window.location.href = 'index.html'; // Redireciona para a página de login
-            }).catch((error) => {
-                // An error happened.
-                console.error("Erro ao deslogar:", error);
-            });
-        };
-    </script>
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Usuário está logado, pode continuar na página
+            console.log("Usuário autenticado:", user.uid);
+        } else {
+            // Usuário não está logado, redirecione para a página de login
+            console.log("Usuário não autenticado, redirecionando para login...");
+            window.location.href = 'index.html';
+        }
+    });
+</script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,8 +88,6 @@
 <body>
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
-        <h1>Condomínio T Lacerda</h1>
-        <button class="logout-button" onclick="signOutUser()">Sair</button>
     </header>
 
     <div class="container">
@@ -108,6 +95,7 @@
 
         </section>
 
+        <h1>Condomínio T Lacerda</h1>
         <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
         <input type="password" id="accessCode" placeholder="Digite seu código">
         <button onclick="enableApartment()">Acessar</button>
