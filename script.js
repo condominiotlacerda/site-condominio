@@ -213,21 +213,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    console.log("Código de erro:", errorCode); // Adicione esta linha
+                    console.log("Código de erro:", errorCode); // Esta linha aqui
 
-                    if (errorCode === 'auth/user-not-found') {
-                        mensagemLogin.textContent = 'Usuário não encontrado. Verifique o seu email.';
-                    } else if (errorCode === 'auth/wrong-password') {
-                        mensagemLogin.textContent = 'Senha incorreta. Tente novamente.';
-                    } else if (errorCode === 'auth/invalid-email') {
+                    if (errorCode === 'auth/invalid-email') {
                         mensagemLogin.textContent = 'O email digitado é inválido.';
+                    } else if (errorCode === 'auth/invalid-credential') {
+                        mensagemLogin.textContent = 'Email ou senha incorretos. Verifique suas credenciais.';
                     } else {
                         mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage; // Mensagem genérica para outros erros
                     }
 
                     console.error("Erro ao fazer login:", errorCode, errorMessage);
                 });
-        });
+         });
     }
 });
 
