@@ -213,6 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    console.log("Código de erro:", errorCode); // Adicione esta linha
 
                     if (errorCode === 'auth/user-not-found') {
                         mensagemLogin.textContent = 'Usuário não encontrado. Verifique o seu email.';
