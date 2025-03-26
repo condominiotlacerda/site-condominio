@@ -79,9 +79,21 @@
             <label for="senhaLogin">Senha:</label><br>
             <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
             <button type="submit">Entrar</button>
+            <p><a href="#" id="forgotPassword">Esqueci minha senha</a></p>
             <div id="mensagemLogin"></div>
         </form>
         <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+    </section>
+
+    <section id="forgotPasswordSection" style="display:none;">
+        <h2>Recuperar Senha</h2>
+        <form id="forgotPasswordForm">
+            <label for="emailForgotPassword">Email:</label><br>
+            <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
+            <button type="submit">Enviar link de recuperação</button>
+            <div id="mensagemForgotPassword"></div>
+        </form>
+    <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
     </section>
 
     <section id="cadastro" style="display:none;">
