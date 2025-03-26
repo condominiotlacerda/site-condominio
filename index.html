@@ -1,162 +1,162 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css?v=1.1">
-    <title>Condomínio T Lacerda - Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Login</title>
 
-    <script type="module">
-        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    <script type="module">
+        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-            authDomain: "logsite-d81dd.firebaseapp.com",
-            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-            projectId: "logsite-d81dd",
-            storageBucket: "logsite-d81dd.firebasestorage.app",
-            messagingSenderId: "285508603780",
-            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-            measurementId: "G-B0JHRHTNKF"
-        };
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
+        };
 
-        const forgotPasswordLink = document.getElementById('forgotPassword');
-        const forgotPasswordSection = document.getElementById('forgotPasswordSection');
-        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-        const mensagemForgotPassword = document.getElementById('mensagemForgotPassword');
-        const mostrarLoginFromForgotLink = document.getElementById('mostrarLoginFromForgot');
-        const loginSection = document.getElementById('login');
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const forgotPasswordSection = document.getElementById('forgotPasswordSection');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const mensagemForgotPassword = document.getElementById('mensagemForgotPassword');
+        const mostrarLoginFromForgotLink = document.getElementById('mostrarLoginFromForgot');
+        const loginSection = document.getElementById('login');
 
-        if (forgotPasswordLink) {
-            forgotPasswordLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                loginSection.style.display = 'none';
-                forgotPasswordSection.style.display = 'block';
-            });
-        }
+        if (forgotPasswordLink) {
+            forgotPasswordLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                loginSection.style.display = 'none';
+                forgotPasswordSection.style.display = 'block';
+            });
+        }
 
-        if (mostrarLoginFromForgotLink) {
-            mostrarLoginFromForgotLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                forgotPasswordSection.style.display = 'none';
-                loginSection.style.display = 'block';
-            });
-        }
+        if (mostrarLoginFromForgotLink) {
+            mostrarLoginFromForgotLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                forgotPasswordSection.style.display = 'none';
+                loginSection.style.display = 'block';
+            });
+        }
 
-        if (forgotPasswordForm) {
-            forgotPasswordForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const emailForgotPassword = document.getElementById('emailForgotPassword').value;
-                const auth = getAuth();
+        if (forgotPasswordForm) {
+            forgotPasswordForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const emailForgotPassword = document.getElementById('emailForgotPassword').value;
+                const auth = getAuth();
 
-                sendPasswordResetEmail(auth, emailForgotPassword)
-                    .then(() => {
-                        mensagemForgotPassword.textContent = 'Um link para redefinir sua senha foi enviado para o seu e-mail.';
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        mensagemForgotPassword.textContent = 'Erro ao enviar o e-mail de recuperação: ' + errorMessage;
-                        console.error('Erro ao enviar e-mail de recuperação:', errorCode, errorMessage);
-                    });
-            });
-        }
+                sendPasswordResetEmail(auth, emailForgotPassword)
+                    .then(() => {
+                        mensagemForgotPassword.textContent = 'Um link para redefinir sua senha foi enviado para o seu e-mail.';
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        mensagemForgotPassword.textContent = 'Erro ao enviar o e-mail de recuperação: ' + errorMessage;
+                        console.error('Erro ao enviar e-mail de recuperação:', errorCode, errorMessage);
+                    });
+            });
+        }
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getDatabase(app);
-        const auth = getAuth(app);
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
 
-        // Função para registrar acessos no Firebase com horário correto (UTC-3)
-        function logAccess(userCode, userName, apartment, accessedDocument) {
-            // Captura a data atual
-            const now = new Date();
+        // Função para registrar acessos no Firebase com horário correto (UTC-3)
+        function logAccess(userCode, userName, apartment, accessedDocument) {
+            // Captura a data atual
+            const now = new Date();
 
-            // Ajusta para o horário de Brasília (UTC-3)
-            now.setHours(now.getHours() - 3);
+            // Ajusta para o horário de Brasília (UTC-3)
+            now.setHours(now.getHours() - 3);
 
-            // Converte a data para um formato seguro
-            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+            // Converte a data para um formato seguro
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
 
-            // Define o nome do arquivo de log
-            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
+            // Define o nome do arquivo de log
+            let fileName = `<span class="math-inline">\{userName\}\_Acesso\_apartamento\_</span>{apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
 
-            // Criação do objeto de log
-            const accessLog = {
-                userCode: userCode,
-                userName: userName,
-                apartment: `Acesso ao apartamento ${apartment}`,
-                accessedDocument: accessedDocument,
-                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
-            };
+            // Criação do objeto de log
+            const accessLog = {
+                userCode: userCode,
+                userName: userName,
+                apartment: `Acesso ao apartamento ${apartment}`,
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
+            };
 
-            // Grava o log no Firebase com o nome formatado corretamente
-            const logRef = ref(db, `logs/${fileName}`);
-            set(logRef, accessLog)
-                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-                .catch(error => console.error("Erro ao registrar log:", error));
-        }
+            // Grava o log no Firebase com o nome formatado corretamente
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
+        }
 
-        // Disponibiliza a função para uso no script.js
-        window.logAccess = logAccess;
+        // Disponibiliza a função para uso no script.js
+        window.logAccess = logAccess;
 
-        // ==================== 🔥 FIM FIREBASE 🔥 ====================
-    </script>
+        // ==================== 🔥 FIM FIREBASE 🔥 ====================
+    </script>
 </head>
 <body>
-    <header>
-        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
-    </header>
-    <section id="login">
-        <h2>Login</h2>
-        <form id="formularioLogin">
-            <label for="emailLogin">Email:</label><br>
-            <input type="email" id="emailLogin" name="emailLogin" required><br><br>
-            <label for="senhaLogin">Senha:</label><br>
-            <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
-            <button type="submit">Entrar</button>
-            <p><a href="#" id="forgotPassword">Esqueci minha senha</a></p>
-            <div id="mensagemLogin"></div>
-        </form>
-        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
-    </section>
+    <header>
+        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
+    </header>
+    <section id="login">
+        <h2>Login</h2>
+        <form id="formularioLogin">
+            <label for="emailLogin">Email:</label><br>
+            <input type="email" id="emailLogin" name="emailLogin" required><br><br>
+            <label for="senhaLogin">Senha:</label><br>
+            <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
+            <button type="submit">Entrar</button>
+            <p><a href="#" id="forgotPassword">Esqueci minha senha</a></p>
+            <div id="mensagemLogin">Login realizado com sucesso!</div>
+        </form>
+        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+    </section>
 
-    <section id="forgotPasswordSection" style="display:none;">
-        <h2>Recuperar Senha</h2>
-        <form id="forgotPasswordForm">
-            <label for="emailForgotPassword">Email:</label><br>
-            <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
-            <button type="submit">Enviar link de recuperação</button>
-            <div id="mensagemForgotPassword"></div>
-        </form>
-    <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
-    </section>
+    <section id="forgotPasswordSection" style="display:none;">
+        <h2>Recuperar Senha</h2>
+        <form id="forgotPasswordForm">
+            <label for="emailForgotPassword">Email:</label><br>
+            <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
+            <button type="submit">Enviar link de recuperação</button>
+            <div id="mensagemForgotPassword"></div>
+        </form>
+    <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
+    </section>
 
-    <section id="cadastro" style="display:none;">
-        <h2>Cadastro</h2>
-        <form id="formularioCadastro">
-            <label for="emailCadastro">Email:</label><br>
-            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
-            <label for="senhaCadastro">Senha:</label><br>
-            <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
-            <label for="codigoAcesso">Código de Acesso:</label><br>
-            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
-            <button type="submit">Cadastrar</button>
-            <div id="mensagemCadastro"></div>
-        </form>
-        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
-    </section>
+    <section id="cadastro" style="display:none;">
+        <h2>Cadastro</h2>
+        <form id="formularioCadastro">
+            <label for="emailCadastro">Email:</label><br>
+            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+            <label for="senhaCadastro">Senha:</label><br>
+            <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
+            <label for="codigoAcesso">Código de Acesso:</label><br>
+            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+            <button type="submit">Cadastrar</button>
+            <div id="mensagemCadastro"></div>
+        </form>
+        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+    </section>
 
-    <footer>
-        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
-    </footer>
+    <footer>
+        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
+        <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
+    </footer>
 <script src="script.js" defer type="module"></script>
 </body>
-</html>
+</html> Está correto agora?
