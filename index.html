@@ -11,7 +11,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
         import { getDatabase } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
@@ -23,6 +23,48 @@
             appId: "1:285508603780:web:dba70ace036ee8a37297d1",
             measurementId: "G-B0JHRHTNKF"
         };
+
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const forgotPasswordSection = document.getElementById('forgotPasswordSection');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const mensagemForgotPassword = document.getElementById('mensagemForgotPassword');
+        const mostrarLoginFromForgotLink = document.getElementById('mostrarLoginFromForgot');
+        const loginSection = document.getElementById('login');
+
+        if (forgotPasswordLink) {
+            forgotPasswordLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                loginSection.style.display = 'none';
+                forgotPasswordSection.style.display = 'block';
+            });
+        }
+
+        if (mostrarLoginFromForgotLink) {
+            mostrarLoginFromForgotLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                forgotPasswordSection.style.display = 'none';
+                loginSection.style.display = 'block';
+            });
+        }
+
+        if (forgotPasswordForm) {
+            forgotPasswordForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const emailForgotPassword = document.getElementById('emailForgotPassword').value;
+                const auth = getAuth();
+
+                sendPasswordResetEmail(auth, emailForgotPassword)
+                    .then(() => {
+                        mensagemForgotPassword.textContent = 'Um link para redefinir sua senha foi enviado para o seu e-mail.';
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        mensagemForgotPassword.textContent = 'Erro ao enviar o e-mail de recuperação: ' + errorMessage;
+                        console.error('Erro ao enviar e-mail de recuperação:', errorCode, errorMessage);
+                    });
+            });
+        }
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
