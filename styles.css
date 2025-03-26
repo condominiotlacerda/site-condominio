@@ -122,6 +122,14 @@ h1 {
     background-color: #0056b3;
 }
 
+#login,
+#forgotPasswordSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Outras regras de estilo para as seções, se houver */
+}
+
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
