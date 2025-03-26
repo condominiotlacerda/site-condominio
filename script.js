@@ -203,12 +203,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
             signInWithEmailAndPassword(auth, emailLogin, senhaLogin)
                 .then((userCredential) => {
-                    // Usuário logado com sucesso
                     const user = userCredential.user;
                     console.log("Usuário logado com sucesso:", user.uid);
-                    mensagemLogin.textContent = 'Login realizado com sucesso!';
-                    // Redirecione o usuário para a área do condomínio ou outra página
-                    window.location.href = 'area_condominio.html';
+                    const db = getDatabase();
+                    const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
+
+                    get(pendingRef).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            // Usuário ainda está em pendingApprovals, exibir mensagem
+                            mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
+                        } else {
+                            // Usuário não está em pendingApprovals, prosseguir com o login
+                            mensagemLogin.textContent = 'Login realizado com sucesso!';
+                            window.location.href = 'area_condominio.html';
+                        }
+                    }).catch((error) => {
+                        console.error("Erro ao verificar aprovação:", error);
+                        mensagemLogin.textContent = 'Ocorreu um erro ao verificar seu acesso. Tente novamente mais tarde.';
+                    });
                 })
                 .catch((error) => {
                     const errorCode = error.code;
