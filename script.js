@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (errorCode === 'auth/invalid-email') {
                         mensagemLogin.textContent = 'O email digitado é inválido.';
                     } else if (errorCode === 'auth/invalid-credential') {
-                        mensagemLogin.textContent = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
+                        mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
                     } else {
                         mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage; // Mensagem genérica para outros erros
                     }
