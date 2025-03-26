@@ -60,6 +60,7 @@
                     .catch((error) => {
                         const errorCode = error.code;
                         const errorMessage = error.message;
+                        console.log("Código de erro:", errorCode); // Adicione esta linha
                         mensagemForgotPassword.textContent = 'Erro ao enviar o e-mail de recuperação: ' + errorMessage;
                         console.error('Erro ao enviar e-mail de recuperação:', errorCode, errorMessage);
                     });
