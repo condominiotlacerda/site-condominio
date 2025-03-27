@@ -15,7 +15,10 @@ const firebaseConfig = {
   measurementId: "G-B0JHRHTNKF"
 };
 
+// Inicializa o Firebase App primeiro
 const app = initializeApp(firebaseConfig);
+
+// Agora inicializa os outros serviços
 const firestore = getFirestore(app);
 const auth = getAuth(app);
 const db = getDatabase(app);
