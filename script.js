@@ -97,10 +97,12 @@ function openFileViewer(filePath) {
 
 function getFilesForApartment(apartment) {
   const baseUrl = 'pdfs/';
+  // Remove o prefixo 'apto' para obter apenas o número
+  const aptoNumber = apartment.replace('apto', '');
   let files = [
-    { name: 'Boleto Condomínio', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
-    { name: 'Boleto Acordo M2D', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-    { name: 'Boleto Hidro/Eletr', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
+    { name: 'Boleto Condomínio', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_condominio_apto_${aptoNumber}.pdf` },
+    { name: 'Boleto Acordo M2D', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${aptoNumber}.pdf` },
+    { name: 'Boleto Hidro/Eletr', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${aptoNumber}.pdf` }
   ];
 
   files.push({ name: 'Prestação de Contas', path: `${baseUrl}contas/2025/2.fev/prestacao_contas.pdf` });
