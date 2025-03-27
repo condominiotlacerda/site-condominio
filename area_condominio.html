@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <script type="module">
@@ -166,5 +166,31 @@
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
         <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
     </footer>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const apartmentId = localStorage.getItem('apartmentId');
+            if (apartmentId) {
+              // Remove o prefixo 'apto' se ele existir para corresponder ao ID do botão
+              const aptoNumber = apartmentId.replace('apto', '');
+              const apartmentButton = document.getElementById('apto' + aptoNumber);
+              if (apartmentButton) {
+                apartmentButton.disabled = false;
+              }
+
+              // Opcional: Desabilitar os outros botões (caso queira)
+              const apartmentButtons = document.querySelectorAll('.apartment-button');
+              apartmentButtons.forEach(button => {
+                if (button.id !== 'apto' + aptoNumber) {
+                  button.disabled = true;
+                }
+              });
+            } else {
+              // Caso não encontre o ID do apartamento, você pode lidar com isso de alguma forma
+              console.error("ID do apartamento não encontrado no localStorage.");
+            }
+          });
+        </script>
+    
 </body>
 </html>
