@@ -1,259 +1,178 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <script type="module">
+        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-// Your Firebase configuration (replace with your actual config)
-const firebaseConfig = {
-  apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-  authDomain: "logsite-d81dd.firebaseapp.com",
-  databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-  projectId: "logsite-d81dd",
-  storageBucket: "logsite-d81dd.firebasestorage.app",
-  messagingSenderId: "285508603780",
-  appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-  measurementId: "G-B0JHRHTNKF"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
+        };
 
-const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+        const authFirebase = getFirebaseAuth();
+        const auth = getAuth(); // Moved getAuth() here
 
-let activeApartmentButtonId = null;
+        // Registra o evento de visualização da página
+        logEvent(analytics, 'page_view');
 
-function enableApartment() {
-  const code = document.getElementById('accessCode').value.trim();
-  alert('Esta funcionalidade foi substituída pelo cadastro.');
-}
-
-function showFiles(apartment) {
-  const fileContainer = document.getElementById('file-container');
-  const fileList = document.getElementById('file-list');
-  const viewerContainer = document.getElementById('viewer-container');
-
-  fileContainer.style.display = 'none';
-  fileList.innerHTML = '';
-
-  document.getElementById('apartment-number').textContent = apartment;
-  fileContainer.style.display = 'block';
-
-  fileContainer.classList.remove('active');
-  setTimeout(() => fileContainer.classList.add('active'), 50);
-
-  let files = getFilesForApartment(apartment);
-
-  files.forEach(file => {
-    const listItem = document.createElement('li');
-    const link = document.createElement('a');
-    link.href = "#";
-    link.textContent = file.name;
-
-    const isMobile = window.innerWidth <= 768;
-
-    link.onclick = function (event) {
-      event.preventDefault();
-      if (isMobile) {
-        window.open(file.path, "_blank");
-      } else {
-        openFileViewer(file.path);
-      }
-    };
-
-    listItem.appendChild(link);
-    fileList.appendChild(listItem);
-  });
-
-  viewerContainer.style.display = 'none';
-}
-
-function openFileViewer(filePath) {
-  const viewerContainer = document.getElementById('viewer-container');
-  const fileViewer = document.getElementById('file-viewer');
-  const downloadButton = document.getElementById('download-button');
-
-  fileViewer.src = filePath;
-  downloadButton.href = filePath;
-
-  viewerContainer.style.display = 'block';
-  viewerContainer.classList.remove('active');
-  setTimeout(() => viewerContainer.classList.add('active'), 50);
-}
-
-function getFilesForApartment(apartment) {
-  const baseUrl = 'pdfs/';
-  let files = [
-    { name: 'Boleto Condomínio', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_condominio_apto_${apartment}.pdf` },
-    { name: 'Boleto Acordo M2D', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_acordo_m2d_apto_${apartment}.pdf` },
-    { name: 'Boleto Hidro/Eletr', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
-  ];
-
-  files.push({ name: 'Prestação de Contas', path: `${baseUrl}contas/2025/2.fev/prestacao_contas.pdf` });
-
-  return files;
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  const formularioCadastro = document.getElementById('formularioCadastro');
-  if (formularioCadastro) {
-    formularioCadastro.addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const emailCadastro = document.getElementById('emailCadastro').value;
-      const senhaCadastro = document.getElementById('senhaCadastro').value;
-      const codigoAcessoInput = document.getElementById('codigoAcesso');
-      const codigoAcesso = codigoAcessoInput.value;
-      const mensagemCadastro = document.getElementById('mensagemCadastro');
-
-      const auth = getAuth();
-      const db = getDatabase();
-      const invitesCollection = collection(firestore, 'invites');
-      const inviteDocRef = doc(firestore, 'invites', codigoAcesso); // Obtém a referência ao documento pelo ID
-
-      try {
-        const docSnap = await getDoc(inviteDocRef); // Busca o documento pelo ID
-
-        if (docSnap.exists()) {
-          const inviteData = docSnap.data();
-          if (inviteData.isUsed === false) {
-            const apartmentId = inviteData.apartment;
-
-            if (apartmentId) {
-              try {
-                const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
-                const user = userCredential.user;
-                console.log("Usuário cadastrado com sucesso:", user.uid);
-                mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
-
-                // Salvar informações em pendingApprovals
-                const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
-                await set(pendingRef, {
-                  email: emailCadastro,
-                  accessCode: codigoAcesso,
-                  apartmentId: apartmentId
-                });
-
-                // Salvar informações em userApartments
-                const userApartmentRef = ref(db, 'userApartments/' + user.uid);
-                await set(userApartmentRef, {
-                  apartmentId: apartmentId
-                });
-
-                // Marcar o código como usado no Firestore
-                await updateDoc(inviteDocRef, { isUsed: true });
-
-                console.log("Dados salvos com sucesso no Realtime Database");
-                formularioCadastro.reset();
-
-              } catch (error) {
-                console.error("Erro ao criar usuário:", error);
-                mensagemCadastro.textContent = 'Erro ao cadastrar: ' + error.message;
-              }
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado, pode continuar na página
+                console.log("Usuário autenticado:", user.uid);
             } else {
-              mensagemCadastro.textContent = 'Erro ao obter o apartamento associado ao código.';
+                // Usuário não está logado, redirecione para a página de login
+                console.log("Usuário não autenticado, redirecionando para login...");
+                window.location.href = 'index.html';
             }
-          } else {
-            mensagemCadastro.textContent = 'Código de acesso já utilizado.';
-          }
-        } else {
-          mensagemCadastro.textContent = 'Código de acesso inválido.';
+        });
+
+        // Função para registrar acessos no Firebase com horário correto (UTC-3)
+        function logAccess(userCode, userName, apartment, accessedDocument) {
+            // Captura a data atual
+            const now = new Date();
+
+            // Ajusta para o horário de Brasília (UTC-3)
+            now.setHours(now.getHours() - 3);
+
+            // Converte a data para um formato seguro
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+
+            // Define o nome do arquivo de log
+            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
+
+            // Criação do objeto de log
+            const accessLog = {
+                userCode: userCode,
+                userName: userName,
+                apartment: `Acesso ao apartamento ${apartment}`,
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
+            };
+
+            // Grava o log no Firebase com o nome formatado corretamente
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
         }
 
-      } catch (error) {
-        console.error("Erro ao consultar o Firestore:", error);
-        mensagemCadastro.textContent = 'Erro ao verificar o código de acesso. Tente novamente mais tarde.';
-      }
-    });
-  }
+        // Disponibiliza a função para uso no script.js
+        window.logAccess = logAccess;
 
-  const loginSection = document.getElementById('login');
-  const cadastroSection = document.getElementById('cadastro');
-  const mostrarCadastroLink = document.getElementById('mostrarCadastro');
-  const mostrarLoginLink = document.getElementById('mostrarLogin');
-
-  if (mostrarCadastroLink) {
-    mostrarCadastroLink.addEventListener('click', function(event) {
-      event.preventDefault();
-      loginSection.style.display = 'none';
-      cadastroSection.style.display = 'block';
-    });
-  }
-
-  if (mostrarLoginLink) {
-    mostrarLoginLink.addEventListener('click', function(event) {
-      event.preventDefault();
-      cadastroSection.style.display = 'none';
-      loginSection.style.display = 'block';
-    });
-  }
-
-  const formularioLogin = document.getElementById('formularioLogin');
-  if (formularioLogin) {
-    formularioLogin.addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const emailLogin = document.getElementById('emailLogin').value;
-      const senhaLogin = document.getElementById('senhaLogin').value;
-      const mensagemLogin = document.getElementById('mensagemLogin');
-
-      const auth = getAuth();
-      const db = getDatabase();
-
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
-        const user = userCredential.user;
-        console.log("Usuário logado com sucesso:", user.uid);
-        const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
-        const snapshot = await get(pendingRef);
-
-        if (snapshot.exists()) {
-          mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
-        } else {
-          mensagemLogin.textContent = 'Login realizado com sucesso!';
-          const userDetailsRef = ref(db, 'userApartments/' + user.uid);
-          const userSnapshot = await get(userDetailsRef);
-
-          if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
-            const apartmentId = userSnapshot.val().apartmentId;
-            localStorage.setItem('apartmentId', apartmentId);
-            window.location.href = 'area_condominio.html';
-          } else {
-            console.error("apartmentId não encontrado para o usuário:", user.uid);
-            mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
-          }
-        }
-      } catch (error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("Código de erro:", errorCode);
-
-        if (errorCode === 'auth/invalid-email') {
-          mensagemLogin.textContent = 'O email digitado é inválido.';
-        } else if (errorCode === 'auth/invalid-credential') {
-          mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
-        } else {
-          mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
+        function sair() {
+            signOut(authFirebase).then(() => {
+                // Sign-out successful.
+                console.log('Usuário desconectado');
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                // An error happened.
+                console.error('Erro ao fazer logout:', error);
+            });
         }
 
-        console.error("Erro ao fazer login:", errorCode, errorMessage);
-      }
-    });
-  }
-});
+        window.sair = sair;
+        // ==================== 🔥 FIM FIREBASE 🔥 ====================
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Boletos e Contas</title>
+    <script src="script.js" defer type="module"></script>
+    <style>
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
 
-// Ajuste para horário de Brasília (UTC-3)
-window.logAccess = function (userCode, userName, downloadedFile, apartment) {
-  const db = getDatabase();
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <button class="logout-button" onclick="sair()">Sair</button>
+    <header>
+        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
+    </header>
 
-  let now = new Date();
-  now.setHours(now.getHours() - 3); // Ajusta para UTC-3
+    <div class="container">
+        <section id="content">
 
-  const accessLog = {
-    userName: userName,
-    apartment: apartment,
-    downloadedFile: downloadedFile,
-    userCode: userCode,
-    accessDateTime: now.toISOString()
-  };
+        </section>
 
-  const logsRef = ref(db, 'logs/');
-  push(logsRef, accessLog)
-    .then(() => console.log('Log registrado com sucesso:', accessLog))
-    .catch(error => console.error('Erro ao registrar o log:', error));
-};
+        <h1>Condomínio T Lacerda</h1>
+        <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
+        <input type="password" id="accessCode" placeholder="Digite seu código">
+        <button onclick="enableApartment()">Acessar</button>
+
+        <div class="apartment-section">
+            <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
+            <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
+            <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
+            <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
+            <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
+            <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
+            <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
+            <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
+        </div>
+
+        <section id="login" style="display:none;">
+            <h2>Login</h2>
+            <form id="formularioLogin">
+                <label for="emailLogin">Email:</label><br>
+                <input type="email" id="emailLogin" name="emailLogin" required><br><br>
+                <label for="senhaLogin">Senha:</label><br>
+                <input type="password" id="senhaLogin" name="senhaLogin" required><br><br>
+                <button type="submit">Entrar</button>
+                <div id="mensagemLogin"></div>
+            </form>
+            <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+        </section>
+
+        <section id="cadastro" style="display:none;">
+            <h2>Cadastro</h2>
+            <form id="formularioCadastro">
+                <label for="emailCadastro">Email:</label><br>
+                <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+                <label for="senhaCadastro">Senha:</label><br>
+                <input type="password" id="senhaCadastro" name="senhaCadastro" required><br><br>
+                <label for="codigoAcesso">Código de Acesso:</label><br>
+                <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+                <button type="submit">Cadastrar</button>
+                <div id="mensagemCadastro"></div>
+            </form>
+            <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
+        <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
