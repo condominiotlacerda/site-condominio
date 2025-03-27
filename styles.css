@@ -55,7 +55,7 @@ h1 {
 
 /* 🔹 Caixa da lista de arquivos */
 .file-box {
-    position: absolute;
+    /* position: absolute; */
     top: 250px;
     left: 15px;
     width: 250px;
