@@ -166,21 +166,5 @@
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
         <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const apartmentId = localStorage.getItem('apartmentId');
-            if (apartmentId) {
-                showFiles(apartmentId);
-            } else {
-                const fileContainer = document.getElementById('file-container');
-                if (fileContainer) {
-                    fileContainer.innerHTML = '<p>Informações do apartamento não encontradas. Por favor, faça login novamente.</p>';
-                }
-                // Opcional: Redirecionar para a página de login
-                // window.location.href = 'index.html';
-            }
-        });
-    </script>
 </body>
 </html>
