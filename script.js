@@ -1,7 +1,6 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { getDatabase, ref, set, get, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+import { getFirestore, collection, doc, getDoc, updateDoc, initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
 // Your Firebase configuration (replace with your actual config)
 const firebaseConfig = {
@@ -17,6 +16,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
 let activeApartmentButtonId = null;
 
@@ -102,13 +103,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const codigoAcesso = codigoAcessoInput.value;
             const mensagemCadastro = document.getElementById('mensagemCadastro');
 
-            const auth = getAuth();
-            const db = getDatabase();
             const invitesCollection = collection(firestore, 'invites');
-            const inviteDocRef = doc(firestore, 'invites', codigoAcesso); // Obtém a referência ao documento pelo ID
+            const inviteDocRef = doc(firestore, 'invites', codigoAcesso);
 
             try {
-                const docSnap = await getDoc(inviteDocRef); // Busca o documento pelo ID
+                const docSnap = await getDoc(inviteDocRef);
 
                 if (docSnap.exists()) {
                     const inviteData = docSnap.data();
@@ -122,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                 console.log("Usuário cadastrado com sucesso:", user.uid);
                                 mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
 
-                                // Salvar informações em pendingApprovals
                                 const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
                                 await set(pendingRef, {
                                     email: emailCadastro,
@@ -130,13 +128,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                     apartmentId: apartmentId
                                 });
 
-                                // Salvar informações em userApartments
                                 const userApartmentRef = ref(db, 'userApartments/' + user.uid);
                                 await set(userApartmentRef, {
                                     apartmentId: apartmentId
                                 });
 
-                                // Marcar o código como usado no Firestore
                                 await updateDoc(inviteDocRef, { isUsed: true });
 
                                 console.log("Dados salvos com sucesso no Realtime Database");
@@ -192,9 +188,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const senhaLogin = document.getElementById('senhaLogin').value;
             const mensagemLogin = document.getElementById('mensagemLogin');
 
-            const auth = getAuth();
-            const db = getDatabase();
-
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
                 const user = userCredential.user;
@@ -235,6 +228,27 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    // Carregar arquivos automaticamente na area_condominio.html após o login
+    const apartmentId = localStorage.getItem('apartmentId');
+    if (apartmentId) {
+        const welcomeMessage = document.getElementById('welcome-message');
+        if (welcomeMessage) {
+            welcomeMessage.textContent = 'Olá! Abaixo estão os seus documentos:';
+        }
+        const apartmentSection = document.querySelector('.apartment-section');
+        if (apartmentSection) {
+            apartmentSection.style.display = 'none';
+        }
+        showFiles(apartmentId);
+    } else if (window.location.pathname.includes('area_condominio.html')) {
+        const fileContainer = document.getElementById('file-container');
+        if (fileContainer) {
+            fileContainer.innerHTML = '<p>Informações do apartamento não encontradas. Por favor, faça login novamente.</p>';
+        }
+        // Opcional: Redirecionar para a página de login
+        // window.location.href = 'index.html';
+    }
 });
 
 // Ajuste para horário de Brasília (UTC-3)
@@ -257,3 +271,17 @@ window.logAccess = function (userCode, userName, downloadedFile, apartment) {
         .then(() => console.log('Log registrado com sucesso:', accessLog))
         .catch(error => console.error('Erro ao registrar o log:', error));
 };
+
+function sair() {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+        // Sign-out successful.
+        console.log('Usuário desconectado');
+        localStorage.removeItem('apartmentId'); // Limpa o ID do apartamento ao sair
+        window.location.href = 'index.html';
+    }).catch((error) => {
+        // An error happened.
+        console.error('Erro ao fazer logout:', error);
+    });
+}
+window.sair = sair;
