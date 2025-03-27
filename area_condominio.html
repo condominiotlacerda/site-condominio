@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <script type="module">
@@ -42,49 +42,33 @@
 
         // Função para registrar acessos no Firebase com horário correto (UTC-3)
         function logAccess(userCode, userName, apartment, accessedDocument) {
-            // Captura a data atual
             const now = new Date();
-
-            // Ajusta para o horário de Brasília (UTC-3)
             now.setHours(now.getHours() - 3);
-
-            // Converte a data para um formato seguro
             const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-
-            // Define o nome do arquivo de log
             let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
-
-            // Criação do objeto de log
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
             const accessLog = {
                 userCode: userCode,
                 userName: userName,
                 apartment: `Acesso ao apartamento ${apartment}`,
                 accessedDocument: accessedDocument,
-                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
+                accessDate: now.toISOString()
             };
-
-            // Grava o log no Firebase com o nome formatado corretamente
             const logRef = ref(db, `logs/${fileName}`);
             set(logRef, accessLog)
                 .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
                 .catch(error => console.error("Erro ao registrar log:", error));
         }
-
-        // Disponibiliza a função para uso no script.js
         window.logAccess = logAccess;
 
         function sair() {
             signOut(authFirebase).then(() => {
-                // Sign-out successful.
                 console.log('Usuário desconectado');
                 window.location.href = 'index.html';
             }).catch((error) => {
-                // An error happened.
                 console.error('Erro ao fazer logout:', error);
             });
         }
-
         window.sair = sair;
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
     </script>
@@ -106,7 +90,6 @@
             cursor: pointer;
             font-size: 1em;
         }
-
         .logout-button:hover {
             background-color: #d32f2f;
         }
@@ -120,7 +103,6 @@
 
     <div class="container">
         <section id="content">
-
         </section>
 
         <h1>Condomínio T Lacerda</h1>
@@ -138,6 +120,18 @@
             <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
             <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
         </div>
+
+        <section id="file-container" style="display:none; opacity: 0; transition: opacity 0.5s;">
+            <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
+            <ul id="file-list">
+                </ul>
+        </section>
+
+        <section id="viewer-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; opacity: 0; transition: opacity 0.5s;">
+            <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
+            <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
+            <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
+        </section>
 
         <section id="login" style="display:none;">
             <h2>Login</h2>
@@ -173,23 +167,20 @@
         <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
     </footer>
 
-    <script src="script.js" defer></script>
-
-    <script> // ==================================================== apresenta a lista de documentos associados ao apartamento que logou
-          document.addEventListener('DOMContentLoaded', function() {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             const apartmentId = localStorage.getItem('apartmentId');
             if (apartmentId) {
-              showFiles(apartmentId);
+                showFiles(apartmentId);
             } else {
-              const fileContainer = document.getElementById('file-container');
-              if (fileContainer) {
-                fileContainer.innerHTML = '<p>Informações do apartamento não encontradas. Por favor, faça login novamente.</p>';
-              }
-              // Opcional: Redirecionar para a página de login
-      // window.location.href = 'index.html';
+                const fileContainer = document.getElementById('file-container');
+                if (fileContainer) {
+                    fileContainer.innerHTML = '<p>Informações do apartamento não encontradas. Por favor, faça login novamente.</p>';
+                }
+                // Opcional: Redirecionar para a página de login
+                // window.location.href = 'index.html';
             }
-         }); // ==================================================== apresenta a lista de documentos associados ao apartamento que logou
-    </script> 
-    
+        });
+    </script>
 </body>
 </html>
