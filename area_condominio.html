@@ -124,11 +124,9 @@
         </section>
 
         <h1>Condomínio T Lacerda</h1>
-        <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Por favor, digite seu código de acesso.</p>
-        <input type="password" id="accessCode" placeholder="Digite seu código">
-        <button onclick="enableApartment()">Acessar</button>
+        <p id="welcome-message">Olá! Eu sou a Lacerda, assistente virtual do Condomínio T Lacerda.<br>Abaixo estão os seus documentos:</p>
 
-        <div class="apartment-section">
+        <div class="apartment-section" style="display:none;">
             <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
             <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
             <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
@@ -138,6 +136,18 @@
             <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
             <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
         </div>
+
+        <section id="file-container" style="display:none; opacity: 0; transition: opacity 0.5s;">
+            <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
+            <ul id="file-list">
+                </ul>
+        </section>
+
+        <section id="viewer-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; opacity: 0; transition: opacity 0.5s;">
+            <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
+            <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
+            <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
+        </section>
 
         <section id="login" style="display:none;">
             <h2>Login</h2>
@@ -173,6 +183,25 @@
         <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
     </footer>
 
-    <script src="script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apartmentId = localStorage.getItem('apartmentId');
+            if (apartmentId) {
+                const welcomeMessage = document.getElementById('welcome-message');
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = 'Olá! Abaixo estão os seus documentos:';
+                }
+                document.querySelector('.apartment-section').style.display = 'none'; // Esconde a seção de botões dos apartamentos
+                showFiles(apartmentId);
+            } else {
+                const fileContainer = document.getElementById('file-container');
+                if (fileContainer) {
+                    fileContainer.innerHTML = '<p>Informações do apartamento não encontradas. Por favor, faça login novamente.</p>';
+                }
+                // Opcional: Redirecionar para a página de login
+                // window.location.href = 'index.html';
+            }
+        });
+    </script>
 </body>
 </html>
