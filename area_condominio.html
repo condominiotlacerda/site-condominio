@@ -170,6 +170,7 @@
         <script>
           document.addEventListener('DOMContentLoaded', function() {
             const apartmentId = localStorage.getItem('apartmentId');
+              console.log('Apartment ID encontrado no localStorage:', apartmentId);
             if (apartmentId) {
               // Remove o prefixo 'apto' se ele existir para corresponder ao ID do botão
               const aptoNumber = apartmentId.replace('apto', '');
