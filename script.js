@@ -55,6 +55,9 @@ export function showFiles(apartment) {
     link.href = "#";
     link.textContent = file.name;
 
+    console.log('Criado link:', link); // Adicione esta linha
+    console.log('Texto do link:', file.name); // Adicione esta linha
+
     const isMobile = window.innerWidth <= 768;
 
     link.onclick = function (event) {
@@ -67,6 +70,7 @@ export function showFiles(apartment) {
     };
 
     listItem.appendChild(link);
+    console.log('Criado listItem:', listItem); // Adicione esta linha
     fileList.appendChild(listItem);
   });
 
