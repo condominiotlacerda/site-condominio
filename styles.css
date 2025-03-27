@@ -140,7 +140,8 @@ h1 {
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
-  text-align: center;
+  text-align: center; /* Garante que o texto dentro do h2 esteja centralizado */
+  width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
 }
 
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
