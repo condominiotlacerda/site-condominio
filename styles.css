@@ -136,6 +136,12 @@ h1 {
   width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
   /* Outros estilos que você possa ter para este campo */
 }
+/* Alinhamento das palavras Login, Recuperar Senha e Cadastro*/
+#login h2,
+#forgotPasswordSection h2,
+#cadastro h2 {
+  text-align: center;
+}
 
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
 @media (max-width: 768px) {
