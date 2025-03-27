@@ -1,6 +1,6 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 
 // Your Firebase configuration (replace with your actual config)
@@ -22,7 +22,6 @@ let activeApartmentButtonId = null;
 
 function enableApartment() {
     const code = document.getElementById('accessCode').value.trim();
-    // Firestore logic will handle this now
     alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
@@ -57,8 +56,6 @@ function showFiles(apartment) {
             } else {
                 openFileViewer(file.path);
             }
-
-            // The accessCodes object is no longer used, consider a different way to log apartment access if needed
         };
 
         listItem.appendChild(link);
@@ -89,10 +86,6 @@ function getFilesForApartment(apartment) {
         { name: 'Boleto Hidro/Eletr', path: `${baseUrl}boletos/2025/3.mar/boleto_tx_hidro_eletr_apto_${apartment}.pdf` }
     ];
 
-    // Verifica se o apartamento é 1, e adiciona os arquivos de 1a e 1b
-    // REMOVIDO: Lógica específica para apartamento 1A e 1B
-
-    // Adiciona a prestação de contas uma única vez
     files.push({ name: 'Prestação de Contas', path: `${baseUrl}contas/2025/2.fev/prestacao_contas.pdf` });
 
     return files;
@@ -112,52 +105,55 @@ document.addEventListener("DOMContentLoaded", function () {
             const auth = getAuth();
             const db = getDatabase();
             const invitesCollection = collection(firestore, 'invites');
-            const q = query(invitesCollection, where('accessCode', '==', codigoAcesso), where('isUsed', '==', false));
+            const inviteDocRef = doc(firestore, 'invites', codigoAcesso); // Obtém a referência ao documento pelo ID
 
             try {
-                const querySnapshot = await getDocs(q);
+                const docSnap = await getDoc(inviteDocRef); // Busca o documento pelo ID
 
-                if (!querySnapshot.empty) {
-                    let apartmentId = null;
-                    querySnapshot.forEach(doc => {
-                        apartmentId = doc.data().apartment;
-                        const inviteDocRef = doc(firestore, 'invites', doc.id);
-                        updateDoc(inviteDocRef, { isUsed: true });
-                    });
+                if (docSnap.exists()) {
+                    const inviteData = docSnap.data();
+                    if (inviteData.isUsed === false) {
+                        const apartmentId = inviteData.apartment;
 
-                    if (apartmentId) {
-                        try {
-                            const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
-                            const user = userCredential.user;
-                            console.log("Usuário cadastrado com sucesso:", user.uid);
-                            mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
+                        if (apartmentId) {
+                            try {
+                                const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
+                                const user = userCredential.user;
+                                console.log("Usuário cadastrado com sucesso:", user.uid);
+                                mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
 
-                            // Salvar informações em pendingApprovals
-                            const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
-                            await set(pendingRef, {
-                                email: emailCadastro,
-                                accessCode: codigoAcesso,
-                                apartmentId: apartmentId
-                            });
+                                // Salvar informações em pendingApprovals
+                                const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
+                                await set(pendingRef, {
+                                    email: emailCadastro,
+                                    accessCode: codigoAcesso,
+                                    apartmentId: apartmentId
+                                });
 
-                            // Salvar informações em userApartments
-                            const userApartmentRef = ref(db, 'userApartments/' + user.uid);
-                            await set(userApartmentRef, {
-                                apartmentId: apartmentId
-                            });
+                                // Salvar informações em userApartments
+                                const userApartmentRef = ref(db, 'userApartments/' + user.uid);
+                                await set(userApartmentRef, {
+                                    apartmentId: apartmentId
+                                });
 
-                            console.log("Dados salvos com sucesso no Realtime Database");
-                            formularioCadastro.reset();
+                                // Marcar o código como usado no Firestore
+                                await updateDoc(inviteDocRef, { isUsed: true });
 
-                        } catch (error) {
-                            console.error("Erro ao criar usuário:", error);
-                            mensagemCadastro.textContent = 'Erro ao cadastrar: ' + error.message;
+                                console.log("Dados salvos com sucesso no Realtime Database");
+                                formularioCadastro.reset();
+
+                            } catch (error) {
+                                console.error("Erro ao criar usuário:", error);
+                                mensagemCadastro.textContent = 'Erro ao cadastrar: ' + error.message;
+                            }
+                        } else {
+                            mensagemCadastro.textContent = 'Erro ao obter o apartamento associado ao código.';
                         }
                     } else {
-                        mensagemCadastro.textContent = 'Erro ao obter o apartamento associado ao código.';
+                        mensagemCadastro.textContent = 'Código de acesso já utilizado.';
                     }
                 } else {
-                    mensagemCadastro.textContent = 'Código de acesso inválido ou já utilizado.';
+                    mensagemCadastro.textContent = 'Código de acesso inválido.';
                 }
 
             } catch (error) {
