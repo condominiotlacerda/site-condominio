@@ -77,7 +77,7 @@ h1 {
 
 /* 🔹 Painel do visualizador de PDF */
 .viewer-box {
-    position: absolute;
+    /*position: absolute;*/
     top: 250px;
     left: 280px;
     width: 600px;
