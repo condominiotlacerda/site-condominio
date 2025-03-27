@@ -111,14 +111,14 @@
         <button onclick="enableApartment()">Acessar</button>
 
         <div class="apartment-section">
-            <button class="apartment-button" id="apto1" disabled onclick="import { showFiles } from './script.js'; showFiles('1')">Apartamento 1</button>
-            <button class="apartment-button" id="apto101" disabled onclick="import { showFiles } from './script.js'; showFiles('101')">Apartamento 101</button>
-            <button class="apartment-button" id="apto102" disabled onclick="import { showFiles } from './script.js'; showFiles('102')">Apartamento 102</button>
-            <button class="apartment-button" id="apto201" disabled onclick="import { showFiles } from './script.js'; showFiles('201')">Apartamento 201</button>
-            <button class="apartment-button" id="apto202" disabled onclick="import { showFiles } from './script.js'; showFiles('202')">Apartamento 202</button>
-            <button class="apartment-button" id="apto301" disabled onclick="import { showFiles } from './script.js'; showFiles('301')">Apartamento 301</button>
-            <button class="apartment-button" id="apto302" disabled onclick="import { showFiles } from './script.js'; showFiles('302')">Apartamento 302</button>
-            <button class="apartment-button" id="apto401" disabled onclick="import { showFiles } from './script.js'; showFiles('401')">Apartamento 401</button>
+            <button class="apartment-button" id="apto1" disabled onclick="loadFiles('1')">Apartamento 1</button>
+            <button class="apartment-button" id="apto101" disabled onclick="loadFiles('101')">Apartamento 101</button>
+            <button class="apartment-button" id="apto102" disabled onclick="loadFiles('102')">Apartamento 102</button>
+            <button class="apartment-button" id="apto201" disabled onclick="loadFiles('201')">Apartamento 201</button>
+            <button class="apartment-button" id="apto202" disabled onclick="loadFiles('202')">Apartamento 202</button>
+            <button class="apartment-button" id="apto301" disabled onclick="loadFiles('301')">Apartamento 301</button>
+            <button class="apartment-button" id="apto302" disabled onclick="loadFiles('302')">Apartamento 302</button>
+            <button class="apartment-button" id="apto401" disabled onclick="loadFiles('401')">Apartamento 401</button>
         </div>
 
         <section id="file-container" style="display:none; opacity: 0; transition: opacity 0.5s;">
@@ -168,12 +168,11 @@
     </footer>
 
     <script type="module">
-      import { showFiles } from './script.js'; // Importe a função showFiles do seu script.js
+      import { showFiles } from './script.js';
 
       document.addEventListener('DOMContentLoaded', function() {
         const apartmentId = localStorage.getItem('apartmentId');
         if (apartmentId) {
-          // Remove o prefixo 'apto' se ele existir para corresponder ao ID do botão
           const aptoNumber = apartmentId.replace('apto', '');
           const apartmentButton = document.getElementById('apto' + aptoNumber);
           if (apartmentButton) {
@@ -181,6 +180,11 @@
           }
         }
       });
+
+      // Função para ser chamada no onclick dos botões
+      window.loadFiles = function(apartment) {
+        showFiles(apartment);
+      };
     </script>
 </body>
 </html>
