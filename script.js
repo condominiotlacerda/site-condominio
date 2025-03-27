@@ -25,7 +25,7 @@ function enableApartment() {
   alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
-function showFiles(apartment) {
+export function showFiles(apartment) {
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
   const viewerContainer = document.getElementById('viewer-container');
