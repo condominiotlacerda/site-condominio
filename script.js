@@ -1,18 +1,17 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
-const accessCodes = {
-    'aB9x-Yz!2W': { id: 'apto1', name: 'João Paulo' },
-    'QrSt-Uv!W6': { id: 'apto1', name: 'José Rocha' },
-    'cDe5_Fg#H7': { id: 'apto101', name: 'Lizandro' },
-    'iJk1$Lm%N3': { id: 'apto102', name: 'Felipe Granja' },
-    'oPq8^Rs&T4': { id: 'apto201', name: 'Jorge' },
-    'xY7z!aB-cD': { id: 'apto201', name: 'Ângela' },
-    'FgH7+iJk=1': { id: 'apto302', name: 'Suzane' },
-    'LmN3[oPq]8': { id: 'apto401', name: 'Célia' },
-    'uVw2*Xy(Z6': { id: 'apto202', name: 'Lígia' },
-    '1aB3)cDe-5': { id: 'apto301', name: 'João Marcelo' }
-};
+let accessCodes = {};
+
+fetch('dados/codigos_acesso.json')
+  .then(response => response.json())
+  .then(data => {
+    accessCodes = data;
+    console.log('Códigos de acesso carregados:', accessCodes);
+  })
+  .catch(error => {
+    console.error('Erro ao carregar códigos de acesso:', error);
+  });
 
 let activeApartmentButtonId = null;
 
@@ -123,47 +122,50 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Tipo de getAuth:", typeof getAuth);
 
             const auth = getAuth();
-            createUserWithEmailAndPassword(auth, document.getElementById('emailCadastro').value, senhaCadastro)
-                .then((userCredential) => {
-                    // Usuário criado com sucesso
-                    const user = userCredential.user;
-                    console.log("Usuário criado com sucesso:", user.uid);
-                    mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
 
-                    // Vamos armazenar o código de acesso no Realtime Database
-                    const db = getDatabase();
-                    console.log("Objeto db:", db);
+            if (accessCodes.hasOwnProperty(codigoAcesso)) {
+                const userData = accessCodes[codigoAcesso];
+                const apartmentId = userData.id;
 
-                    const userRef = ref(db, 'pendingApprovals/' + user.uid); // 'pendingApprovals' é o nó onde vamos guardar os dados
-                    console.log("Objeto userRef:", userRef);
+                createUserWithEmailAndPassword(auth, document.getElementById('emailCadastro').value, senhaCadastro)
+                    .then((userCredential) => {
+                        // Usuário criado com sucesso
+                        const user = userCredential.user;
+                        console.log("Usuário criado com sucesso:", user.uid);
+                        mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
 
-                    console.log("Tentando salvar dados no Realtime Database...");
+                        // Vamos armazenar o código de acesso e apartmentId no Realtime Database
+                        const db = getDatabase();
 
-                    set(userRef, {
-                        accessCode: codigoAcesso,
-                        email: emailCadastro // Podemos armazenar o email também para referência
-                    }).then(() => {
-                        console.log("Código de acesso armazenado para o usuário:", user.uid);
-                        // Opcional: limpar o formulário aqui
-                        formularioCadastro.reset();
+                        // Salvar informações em pendingApprovals
+                        const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
+                        set(pendingRef, {
+                            email: emailCadastro,
+                            accessCode: codigoAcesso,
+                            apartmentId: apartmentId
+                        });
+
+                        // Salvar informações em userApartments
+                        const userApartmentRef = ref(db, 'userApartments/' + user.uid);
+                        set(userApartmentRef, {
+                            apartmentId: apartmentId
+                        });
 
                         console.log("Dados salvos com sucesso no Realtime Database");
+                        formularioCadastro.reset();
 
-                    }).catch((error) => {
-                        console.error("Erro ao armazenar o código de acesso:", error);
-                        mensagemCadastro.textContent = 'Erro ao cadastrar. Tente novamente mais tarde.';
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.error("Erro ao criar usuário:", errorCode, errorMessage);
+                        mensagemCadastro.textContent = 'Erro ao cadastrar: ' + errorMessage;
                     });
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.error("Erro ao criar usuário:", errorCode, errorMessage);
-                    mensagemCadastro.textContent = 'Erro ao cadastrar: ' + errorMessage;
-                    // Aqui você pode tratar os diferentes tipos de erros (email já em uso, senha fraca, etc.)
-                });
+            } else {
+                mensagemCadastro.textContent = 'Código de acesso inválido.';
+            }
 
             console.log("Código de Acesso (Cadastro):", codigoAcesso); // Para verificar no console
-            // Por enquanto, vamos manter o console.log do código de acesso aqui
             // Depois de criar o usuário, o próximo passo será armazenar esse código no banco de dados
         });
     }
@@ -215,7 +217,23 @@ document.addEventListener("DOMContentLoaded", function () {
                         } else {
                             // Usuário não está em pendingApprovals, prosseguir com o login
                             mensagemLogin.textContent = 'Login realizado com sucesso!';
-                            window.location.href = 'area_condominio.html';
+
+                            // Buscar o apartmentId do Realtime Database
+                            const userDetailsRef = ref(db, 'userApartments/' + user.uid);
+
+                            get(userDetailsRef).then((userSnapshot) => {
+                                if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
+                                    const apartmentId = userSnapshot.val().apartmentId;
+                                    localStorage.setItem('apartmentId', apartmentId); // Armazena o ID no localStorage
+                                    window.location.href = 'area_condominio.html';
+                                } else {
+                                    console.error("apartmentId não encontrado para o usuário:", user.uid);
+                                    mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
+                                }
+                            }).catch((error) => {
+                                console.error("Erro ao buscar detalhes do usuário:", error);
+                                mensagemLogin.textContent = 'Ocorreu um erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
+                            });
                         }
                     }).catch((error) => {
                         console.error("Erro ao verificar aprovação:", error);
@@ -237,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     console.error("Erro ao fazer login:", errorCode, errorMessage);
                 });
-         });
+        });
     }
 });
 
