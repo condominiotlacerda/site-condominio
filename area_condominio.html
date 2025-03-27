@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <script type="module">
@@ -111,14 +111,14 @@
         <button onclick="enableApartment()">Acessar</button>
 
         <div class="apartment-section">
-            <button class="apartment-button" id="apto1" disabled onclick="showFiles('1')">Apartamento 1</button>
-            <button class="apartment-button" id="apto101" disabled onclick="showFiles('101')">Apartamento 101</button>
-            <button class="apartment-button" id="apto102" disabled onclick="showFiles('102')">Apartamento 102</button>
-            <button class="apartment-button" id="apto201" disabled onclick="showFiles('201')">Apartamento 201</button>
-            <button class="apartment-button" id="apto202" disabled onclick="showFiles('202')">Apartamento 202</button>
-            <button class="apartment-button" id="apto301" disabled onclick="showFiles('301')">Apartamento 301</button>
-            <button class="apartment-button" id="apto302" disabled onclick="showFiles('302')">Apartamento 302</button>
-            <button class="apartment-button" id="apto401" disabled onclick="showFiles('401')">Apartamento 401</button>
+            <button class="apartment-button" id="apto1" disabled onclick="import { showFiles } from './script.js'; showFiles('1')">Apartamento 1</button>
+            <button class="apartment-button" id="apto101" disabled onclick="import { showFiles } from './script.js'; showFiles('101')">Apartamento 101</button>
+            <button class="apartment-button" id="apto102" disabled onclick="import { showFiles } from './script.js'; showFiles('102')">Apartamento 102</button>
+            <button class="apartment-button" id="apto201" disabled onclick="import { showFiles } from './script.js'; showFiles('201')">Apartamento 201</button>
+            <button class="apartment-button" id="apto202" disabled onclick="import { showFiles } from './script.js'; showFiles('202')">Apartamento 202</button>
+            <button class="apartment-button" id="apto301" disabled onclick="import { showFiles } from './script.js'; showFiles('301')">Apartamento 301</button>
+            <button class="apartment-button" id="apto302" disabled onclick="import { showFiles } from './script.js'; showFiles('302')">Apartamento 302</button>
+            <button class="apartment-button" id="apto401" disabled onclick="import { showFiles } from './script.js'; showFiles('401')">Apartamento 401</button>
         </div>
 
         <section id="file-container" style="display:none; opacity: 0; transition: opacity 0.5s;">
@@ -167,31 +167,20 @@
         <p style="font-size: 0.8em;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
     </footer>
 
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const apartmentId = localStorage.getItem('apartmentId');
-              console.log('Apartment ID encontrado no localStorage:', apartmentId);
-            if (apartmentId) {
-              // Remove o prefixo 'apto' se ele existir para corresponder ao ID do botão
-              const aptoNumber = apartmentId.replace('apto', '');
-              const apartmentButton = document.getElementById('apto' + aptoNumber);
-              if (apartmentButton) {
-                apartmentButton.disabled = false;
-              }
+    <script type="module">
+      import { showFiles } from './script.js'; // Importe a função showFiles do seu script.js
 
-              // Opcional: Desabilitar os outros botões (caso queira)
-              const apartmentButtons = document.querySelectorAll('.apartment-button');
-              apartmentButtons.forEach(button => {
-                if (button.id !== 'apto' + aptoNumber) {
-                  button.disabled = true;
-                }
-              });
-            } else {
-              // Caso não encontre o ID do apartamento, você pode lidar com isso de alguma forma
-              console.error("ID do apartamento não encontrado no localStorage.");
-            }
-          });
-        </script>
-    
+      document.addEventListener('DOMContentLoaded', function() {
+        const apartmentId = localStorage.getItem('apartmentId');
+        if (apartmentId) {
+          // Remove o prefixo 'apto' se ele existir para corresponder ao ID do botão
+          const aptoNumber = apartmentId.replace('apto', '');
+          const apartmentButton = document.getElementById('apto' + aptoNumber);
+          if (apartmentButton) {
+            apartmentButton.disabled = false;
+          }
+        }
+      });
+    </script>
 </body>
 </html>
