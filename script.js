@@ -26,9 +26,14 @@ function enableApartment() {
 }
 
 export function showFiles(apartment) {
+  console.log('Função showFiles chamada para o apartamento:', apartment);
+
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
   const viewerContainer = document.getElementById('viewer-container');
+
+  console.log('Elemento fileContainer:', fileContainer); // Movido para cá
+  console.log('Elemento fileList:', fileList);       // Movido para cá
 
   fileContainer.style.display = 'none';
   fileList.innerHTML = '';
@@ -40,6 +45,9 @@ export function showFiles(apartment) {
   setTimeout(() => fileContainer.classList.add('active'), 50);
 
   let files = getFilesForApartment(apartment);
+
+  console.log('Arquivos obtidos:', files);
+
 
   files.forEach(file => {
     const listItem = document.createElement('li');
