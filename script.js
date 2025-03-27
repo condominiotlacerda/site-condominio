@@ -74,7 +74,6 @@ export function showFiles(apartment) {
     fileList.appendChild(listItem);
   });
 
-  viewerContainer.style.display = 'none';
 }
 
 function openFileViewer(filePath) {
@@ -85,9 +84,15 @@ function openFileViewer(filePath) {
   fileViewer.src = filePath;
   downloadButton.href = filePath;
 
-  viewerContainer.style.display = 'block';
-  viewerContainer.classList.remove('active');
-  setTimeout(() => viewerContainer.classList.add('active'), 50);
+  // Remove o display none do estilo inline
+  viewerContainer.style.display = '';
+
+  // Adiciona a classe 'active' ao viewerContainer
+  viewerContainer.classList.add('active');
+
+  // Não precisamos remover a classe 'active' aqui, pois ela será adicionada agora
+  // viewerContainer.classList.remove('active');
+  // setTimeout(() => viewerContainer.classList.add('active'), 50);
 }
 
 function getFilesForApartment(apartment) {
