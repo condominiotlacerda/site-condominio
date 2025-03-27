@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <script type="module">
@@ -174,5 +174,30 @@
     </footer>
 
     <script src="script.js" defer></script>
+
+    <script> /*================para apresentar diretamente ao acessar a area_condominio.html os arquivos do apartamento associado ao email login*/
+          document.addEventListener('DOMContentLoaded', function() {
+            const apartmentId = localStorage.getItem('apartmentId');
+            if (apartmentId) {
+              const welcomeMessage = document.getElementById('welcome-message');
+              if (welcomeMessage) {
+                welcomeMessage.textContent = 'Olá! Abaixo estão os seus documentos:';
+              }
+              const apartmentSection = document.querySelector('.apartment-section');
+              if (apartmentSection) {
+                apartmentSection.style.display = 'none';
+              }
+              showFiles(apartmentId);
+            } else {
+              const fileContainer = document.getElementById('file-container');
+              if (fileContainer) {
+                fileContainer.innerHTML = '<p>Informações do apartamento não encontradas. Por favor, faça login novamente.</p>';
+              }
+              // Opcional: Redirecionar para a página de login
+              // window.location.href = 'index.html';
+            }
+          }); // ================para apresentar diretamente ao acessar a area_condominio.html os arquivos do apartamento associado ao email login
+        </script> 
+    
 </body>
 </html>
