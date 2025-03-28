@@ -108,7 +108,7 @@ function getFilesForApartment(apartment) {
     { name: 'Boleto Hidro/Eletr', path: `${baseUrl}boleto_tx_hidro_eletr_apto_${aptoNumber}.pdf` }
   ];
 
-  files.push({ name: 'Prestação de Contas', path: `${baseUrl}contas/2025/2.fev/prestacao_contas.pdf` });
+  files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf` });
 
   return files;
 }
