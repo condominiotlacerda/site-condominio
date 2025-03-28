@@ -139,6 +139,7 @@
 
                         if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
                             const apartmentId = userSnapshot.val().apartmentId;
+                            console.log('Apartment ID from DB (before storage):', apartmentId);
                             localStorage.setItem('apartmentId', apartmentId);
 
                             const invitesRef = collection(firestore, 'invites');
