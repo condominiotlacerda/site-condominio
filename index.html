@@ -157,12 +157,12 @@
                                         });
                                     } else {
                                         console.log("No user found in invites for apartment:", apartmentId);
-                                        window.location.href = 'area_condominio.html';
+                                        //window.location.href = 'area_condominio.html';
                                     }
                                 })
                                 .catch((error) => {
                                     console.error("Error fetching user name from Firestore in index.html:", error);
-                                    window.location.href = 'area_condominio.html';
+                                    //window.location.href = 'area_condominio.html';
                                 });
                         } else {
                             console.error("apartmentId não encontrado para o usuário:", user.uid);
