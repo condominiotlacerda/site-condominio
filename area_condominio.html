@@ -69,37 +69,34 @@
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
 
         document.addEventListener('DOMContentLoaded', function() {
-            const apartmentId = localStorage.getItem('apartmentId');
-
-            if (apartmentId) {
-                // Habilitar botão do apartamento
-                const aptoNumber = apartmentId.replace('apto', '');
+            const apartmentIdFromStorage = localStorage.getItem('apartmentId');
+            if (apartmentIdFromStorage) {
+                const aptoNumber = apartmentIdFromStorage.replace('apto', '');
                 const apartmentButton = document.getElementById('apto' + aptoNumber);
                 if (apartmentButton) {
                     apartmentButton.disabled = false;
                 }
+            }
 
-                // Obter e armazenar nome do usuário
-                const usersRef = ref(db, 'apartmentUsers/' + apartmentId);
-
-                get(usersRef)
+            const user = auth.currentUser;
+            if (user) {
+                const uid = user.uid;
+                const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
+                get(userApartmentRef)
                     .then((snapshot) => {
                         if (snapshot.exists()) {
-                            const userData = snapshot.val();
-                            const userName = userData.name;
-
-                            localStorage.setItem('userName', userName);
-                            console.log('Apartment ID:', apartmentId);
-                            console.log('User Name:', userName);
+                            const apartmentId = snapshot.val();
+                            console.log('Apartment ID (fetched from DB):', apartmentId);
+                            // Aqui você poderá usar o apartmentId para buscar o nome (próximo passo)
                         } else {
-                            console.log("No data available for apartment:", apartmentId);
+                            console.log("No apartment ID found for UID:", uid);
                         }
                     })
                     .catch((error) => {
-                        console.error("Error fetching user name:", error);
+                        console.error("Error fetching apartment ID:", error);
                     });
             } else {
-                console.log('Apartment ID not found in localStorage.');
+                console.log('No user logged in.');
             }
         });
 
@@ -207,35 +204,34 @@
         import { showFiles } from './script.js';
 
         document.addEventListener('DOMContentLoaded', function() {
-            const apartmentId = localStorage.getItem('apartmentId');
-            if (apartmentId) {
-                const aptoNumber = apartmentId.replace('apto', '');
+            const apartmentIdFromStorage = localStorage.getItem('apartmentId');
+            if (apartmentIdFromStorage) {
+                const aptoNumber = apartmentIdFromStorage.replace('apto', '');
                 const apartmentButton = document.getElementById('apto' + aptoNumber);
                 if (apartmentButton) {
                     apartmentButton.disabled = false;
                 }
+            }
 
-                // Obter e armazenar nome do usuário
-                const usersRef = ref(db, 'apartmentUsers/' + apartmentId);
-
-                get(usersRef)
+            const user = auth.currentUser;
+            if (user) {
+                const uid = user.uid;
+                const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
+                get(userApartmentRef)
                     .then((snapshot) => {
                         if (snapshot.exists()) {
-                            const userData = snapshot.val();
-                            const userName = userData.name;
-
-                            localStorage.setItem('userName', userName);
-                            console.log('Apartment ID:', apartmentId);
-                            console.log('User Name:', userName);
+                            const apartmentId = snapshot.val();
+                            console.log('Apartment ID (fetched from DB):', apartmentId);
+                            // Aqui você poderá usar o apartmentId para buscar o nome (próximo passo)
                         } else {
-                            console.log("No data available for apartment:", apartmentId);
+                            console.log("No apartment ID found for UID:", uid);
                         }
                     })
                     .catch((error) => {
-                        console.error("Error fetching user name:", error);
+                        console.error("Error fetching apartment ID:", error);
                     });
             } else {
-                console.log('Apartment ID not found in localStorage.');
+                console.log('No user logged in.');
             }
         });
 
