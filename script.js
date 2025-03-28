@@ -260,14 +260,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ajuste para horário de Brasília (UTC-3)
-window.logAccess = function (userCode, userName, downloadedFile, apartment) {
+window.logAccess = function (userCode, downloadedFile, apartment) {
   const db = getDatabase();
 
   let now = new Date();
   now.setHours(now.getHours() - 3); // Ajusta para UTC-3
 
   const accessLog = {
-    userName: userName,
     apartment: apartment,
     downloadedFile: downloadedFile,
     userCode: userCode,
