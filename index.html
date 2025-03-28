@@ -145,6 +145,7 @@
                             const q = query(invitesRef, where('apartment', '==', apartmentId));
                             getDocs(q)
                                 .then((querySnapshot) => {
+                                    console.log('QuerySnapshot size:', querySnapshot.size); // Adicione esta linha
                                     if (!querySnapshot.empty) {
                                         querySnapshot.forEach((doc) => {
                                             const userData = doc.data();
