@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
             const apartmentId = userSnapshot.val().apartmentId;
             localStorage.setItem('apartmentId', apartmentId);
-            //window.location.href = 'area_condominio.html';
+            window.location.href = 'area_condominio.html';
           } else {
             console.error("apartmentId não encontrado para o usuário:", user.uid);
             mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
