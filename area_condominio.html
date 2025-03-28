@@ -1,14 +1,13 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <script type="module">
         // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-        import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"; // Use a mesma versão para todos os auth imports
-        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+        import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
@@ -23,106 +22,56 @@
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-        const db = getDatabase(app);
+        const db = getDatabase();
         const authFirebase = getFirebaseAuth();
-        const auth = getAuth();
-        const firestore = getFirestore(app); // Inicialize o Firestore
+        const auth = getAuth(); // Moved getAuth() here
 
+        // Registra o evento de visualização da página
         logEvent(analytics, 'page_view');
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                // Usuário está logado, pode continuar na página
                 console.log("Usuário autenticado:", user.uid);
-                const uid = user.uid;
-                const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
-                get(userApartmentRef)
-                    .then((snapshot) => {
-                        if (snapshot.exists()) {
-                            const apartmentId = snapshot.val();
-                            console.log('Apartment ID (fetched from DB):', apartmentId);
-                            localStorage.setItem('apartmentId', apartmentId); // Garante que o apartmentId esteja no localStorage
-
-                            // Buscar nome do usuário no Firestore
-                            const invitesRef = collection(firestore, 'invites');
-                            const q = query(invitesRef, where('apartment', '==', apartmentId));
-                            getDocs(q)
-                                .then((querySnapshot) => {
-                                    if (!querySnapshot.empty) {
-                                        querySnapshot.forEach((doc) => {
-                                            const userData = doc.data();
-                                            const userName = userData.name;
-                                            localStorage.setItem('userName', userName);
-                                            console.log('User Name (fetched from Firestore):', userName);
-                                        });
-                                    } else {
-                                        console.log("No user found in invites for apartment:", apartmentId);
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.error("Error fetching user name from Firestore:", error);
-                                });
-
-                        } else {
-                            console.log("No apartment ID found for UID:", uid);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching apartment ID:", error);
-                    });
-        } else {
-            console.log('No user logged in.');
-        }
-    });
-
-    // Função para registrar acessos no Firebase com horário correto (UTC-3)
-    function logAccess(userCode, userName, apartment, accessedDocument) {
-        const now = new Date();
-        now.setHours(now.getHours() - 3);
-        const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-        let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-        fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
-        const accessLog = {
-            userCode: userCode,
-            userName: userName,
-            apartment: `Acesso ao apartamento ${apartment}`,
-            accessedDocument: accessedDocument,
-            accessDate: now.toISOString()
-        };
-        const logRef = ref(db, `logs/${fileName}`);
-        set(logRef, accessLog)
-            .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-            .catch(error => console.error("Erro ao registrar log:", error));
-    }
-    window.logAccess = logAccess;
-
-    function sair() {
-        signOut(authFirebase).then(() => {
-            console.log('Usuário desconectado');
-            window.location.href = 'index.html';
-        }).catch((error) => {
-            console.error('Erro ao fazer logout:', error);
-        });
-    }
-    window.sair = sair;
-    // ==================== 🔥 FIM FIREBASE 🔥 ====================
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Habilitar botões dos apartamentos (agora dependemos que o apartmentId esteja no localStorage)
-        const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-        if (apartmentIdFromStorage) {
-            const aptoNumber = apartmentIdFromStorage.replace('apto', '');
-            const apartmentButton = document.getElementById('apto' + aptoNumber);
-            if (apartmentButton) {
-                apartmentButton.disabled = false;
+            } else {
+                // Usuário não está logado, redirecione para a página de login
+                console.log("Usuário não autenticado, redirecionando para login...");
+                window.location.href = 'index.html';
             }
-        }
-    });
+        });
 
-    // Função para ser chamada no onclick dos botões
-    window.loadFiles = function(apartment) {
-        showFiles(apartment);
-    };
-</script>
+        // Função para registrar acessos no Firebase com horário correto (UTC-3)
+        function logAccess(userCode, userName, apartment, accessedDocument) {
+            const now = new Date();
+            now.setHours(now.getHours() - 3);
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
+            const accessLog = {
+                userCode: userCode,
+                userName: userName,
+                apartment: `Acesso ao apartamento ${apartment}`,
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString()
+            };
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
+        }
+        window.logAccess = logAccess;
+
+        function sair() {
+            signOut(authFirebase).then(() => {
+                console.log('Usuário desconectado');
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Erro ao fazer logout:', error);
+            });
+        }
+        window.sair = sair;
+        // ==================== 🔥 FIM FIREBASE 🔥 ====================
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css?v=1.1">
@@ -173,15 +122,15 @@
         </div>
 
         <section id="file-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
-            <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
-            <ul id="file-list" style="color: black;">
-            </ul>
+          <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
+          <ul id="file-list" style="color: black;">
+          </ul>
         </section>
 
         <section id="viewer-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; transition: opacity 0.5s;">
-            <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
-            <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
-            <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
+          <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
+          <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
+          <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
         </section>
 
         <section id="login" style="display:none;">
@@ -219,23 +168,23 @@
     </footer>
 
     <script type="module">
-        import { showFiles } from './script.js';
+      import { showFiles } from './script.js';
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-            if (apartmentIdFromStorage) {
-                const aptoNumber = apartmentIdFromStorage.replace('apto', '');
-                const apartmentButton = document.getElementById('apto' + aptoNumber);
-                if (apartmentButton) {
-                    apartmentButton.disabled = false;
-                }
-            }
-        });
+      document.addEventListener('DOMContentLoaded', function() {
+        const apartmentId = localStorage.getItem('apartmentId');
+        if (apartmentId) {
+          const aptoNumber = apartmentId.replace('apto', '');
+          const apartmentButton = document.getElementById('apto' + aptoNumber);
+          if (apartmentButton) {
+            apartmentButton.disabled = false;
+          }
+        }
+      });
 
-        // Função para ser chamada no onclick dos botões
-        window.loadFiles = function(apartment) {
-            showFiles(apartment);
-        };
+      // Função para ser chamada no onclick dos botões
+      window.loadFiles = function(apartment) {
+        showFiles(apartment);
+      };
     </script>
 </body>
 </html>
