@@ -171,17 +171,15 @@
       import { showFiles } from './script.js';
 
       document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() { // Adicionamos um setTimeout
-    const apartmentId = localStorage.getItem('apartmentId');
-    if (apartmentId) {
-      const aptoNumber = apartmentId.replace('apto', '');
-      const apartmentButton = document.getElementById('apto' + aptoNumber);
-      if (apartmentButton) {
-        apartmentButton.disabled = false;
-      }
-    }
-  }, 500); // Aguarda 500 milissegundos (meio segundo)
-});
+        const apartmentId = localStorage.getItem('apartmentId');
+        if (apartmentId) {
+          const aptoNumber = apartmentId.replace('apto', '');
+          const apartmentButton = document.getElementById('apto' + aptoNumber);
+          if (apartmentButton) {
+            apartmentButton.disabled = false;
+          }
+        }
+      });
 
       // Função para ser chamada no onclick dos botões
       window.loadFiles = function(apartment) {
