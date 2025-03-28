@@ -94,7 +94,7 @@ function openFileViewer(filePath, fileName) {
   // Não precisamos remover a classe 'active' aqui, pois ela será adicionada agora
   // viewerContainer.classList.remove('active');
   // setTimeout(() => viewerContainer.classList.add('active'), 50);
-  window.logAccess('CODIGO_DE_TESTE', 'NOME_DE_TESTE', file.name, document.getElementById('apartment-number').textContent);
+  window.logAccess('CODIGO_DE_TESTE', 'NOME_DE_TESTE', fileName, document.getElementById('apartment-number').textContent);
 }
 
 function getFilesForApartment(apartment) {
