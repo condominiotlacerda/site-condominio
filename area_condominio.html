@@ -2,109 +2,105 @@
 <html lang="pt-br">
 <head>
     <script type="module">
-        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-        import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-            authDomain: "logsite-d81dd.firebaseapp.com",
-            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-            projectId: "logsite-d81dd",
-            storageBucket: "logsite-d81dd.firebasestorage.app",
-            messagingSenderId: "285508603780",
-            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-            measurementId: "G-B0JHRHTNKF"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+        authDomain: "logsite-d81dd.firebaseapp.com",
+        databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+        projectId: "logsite-d81dd",
+        storageBucket: "logsite-d81dd.firebasestorage.app",
+        messagingSenderId: "285508603780",
+        appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+        measurementId: "G-B0JHRHTNKF"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getDatabase(app); // Inicialize o banco de dados aqui
-        const authFirebase = getFirebaseAuth();
-        const auth = getAuth();
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getDatabase(app);
+    const authFirebase = getFirebaseAuth();
+    const auth = getAuth();
 
-        logEvent(analytics, 'page_view');
+    logEvent(analytics, 'page_view');
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log("Usuário autenticado:", user.uid);
-            } else {
-                console.log("Usuário não autenticado, redirecionando para login...");
-                window.location.href = 'index.html';
-            }
-        });
-
-        function logAccess(userCode, userName, apartment, accessedDocument) {
-            const now = new Date();
-            now.setHours(now.getHours() - 3);
-            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
-            const accessLog = {
-                userCode: userCode,
-                userName: userName,
-                apartment: `Acesso ao apartamento ${apartment}`,
-                accessedDocument: accessedDocument,
-                accessDate: now.toISOString()
-            };
-            const logRef = ref(db, `logs/${fileName}`);
-            set(logRef, accessLog)
-                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-                .catch(error => console.error("Erro ao registrar log:", error));
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("Usuário autenticado:", user.uid);
+            const uid = user.uid;
+            const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
+            get(userApartmentRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const apartmentId = snapshot.val();
+                        console.log('Apartment ID (fetched from DB):', apartmentId);
+                        localStorage.setItem('apartmentId', apartmentId); // Garante que o apartmentId esteja no localStorage
+                        // Aqui você poderá usar o apartmentId para buscar o nome (próximo passo)
+                    } else {
+                        console.log("No apartment ID found for UID:", uid);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching apartment ID:", error);
+                });
+        } else {
+            console.log('No user logged in.');
         }
-        window.logAccess = logAccess;
+    });
 
-        function sair() {
-            signOut(authFirebase).then(() => {
-                console.log('Usuário desconectado');
-                window.location.href = 'index.html';
-            }).catch((error) => {
-                console.error('Erro ao fazer logout:', error);
-            });
-        }
-        window.sair = sair;
-        // ==================== 🔥 FIM FIREBASE 🔥 ====================
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-            if (apartmentIdFromStorage) {
-                const aptoNumber = apartmentIdFromStorage.replace('apto', '');
-                const apartmentButton = document.getElementById('apto' + aptoNumber);
-                if (apartmentButton) {
-                    apartmentButton.disabled = false;
-                }
-            }
-
-            const user = auth.currentUser;
-            if (user) {
-                const uid = user.uid;
-                const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
-                get(userApartmentRef)
-                    .then((snapshot) => {
-                        if (snapshot.exists()) {
-                            const apartmentId = snapshot.val();
-                            console.log('Apartment ID (fetched from DB):', apartmentId);
-                            // Aqui você poderá usar o apartmentId para buscar o nome (próximo passo)
-                        } else {
-                            console.log("No apartment ID found for UID:", uid);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching apartment ID:", error);
-                    });
-            } else {
-                console.log('No user logged in.');
-            }
-        });
-
-        // Função para ser chamada no onclick dos botões
-        window.loadFiles = function(apartment) {
-            showFiles(apartment);
+    // Função para registrar acessos no Firebase com horário correto (UTC-3)
+    function logAccess(userCode, userName, apartment, accessedDocument) {
+        const now = new Date();
+        now.setHours(now.getHours() - 3);
+        const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+        let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+        fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
+        const accessLog = {
+            userCode: userCode,
+            userName: userName,
+            apartment: `Acesso ao apartamento ${apartment}`,
+            accessedDocument: accessedDocument,
+            accessDate: now.toISOString()
         };
-    </script>
+        const logRef = ref(db, `logs/${fileName}`);
+        set(logRef, accessLog)
+            .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+            .catch(error => console.error("Erro ao registrar log:", error));
+    }
+    window.logAccess = logAccess;
+
+    function sair() {
+        signOut(authFirebase).then(() => {
+            console.log('Usuário desconectado');
+            window.location.href = 'index.html';
+        }).catch((error) => {
+            console.error('Erro ao fazer logout:', error);
+        });
+    }
+    window.sair = sair;
+    // ==================== 🔥 FIM FIREBASE 🔥 ====================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Habilitar botões dos apartamentos (agora dependemos que o apartmentId esteja no localStorage)
+        const apartmentIdFromStorage = localStorage.getItem('apartmentId');
+        if (apartmentIdFromStorage) {
+            const aptoNumber = apartmentIdFromStorage.replace('apto', '');
+            const apartmentButton = document.getElementById('apto' + aptoNumber);
+            if (apartmentButton) {
+                apartmentButton.disabled = false;
+            }
+        }
+    });
+
+    // Função para ser chamada no onclick dos botões
+    window.loadFiles = function(apartment) {
+        showFiles(apartment);
+    };
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css?v=1.1">
