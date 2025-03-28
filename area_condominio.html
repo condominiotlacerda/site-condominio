@@ -1,11 +1,11 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <script type="module">
         // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
@@ -22,25 +22,21 @@
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-        const db = getDatabase();
+        const db = getDatabase(app); // Inicialize o banco de dados aqui
         const authFirebase = getFirebaseAuth();
-        const auth = getAuth(); // Moved getAuth() here
+        const auth = getAuth();
 
-        // Registra o evento de visualização da página
         logEvent(analytics, 'page_view');
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Usuário está logado, pode continuar na página
                 console.log("Usuário autenticado:", user.uid);
             } else {
-                // Usuário não está logado, redirecione para a página de login
                 console.log("Usuário não autenticado, redirecionando para login...");
                 window.location.href = 'index.html';
             }
         });
 
-        // Função para registrar acessos no Firebase com horário correto (UTC-3)
         function logAccess(userCode, userName, apartment, accessedDocument) {
             const now = new Date();
             now.setHours(now.getHours() - 3);
@@ -71,6 +67,46 @@
         }
         window.sair = sair;
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const apartmentId = localStorage.getItem('apartmentId');
+
+            if (apartmentId) {
+                // Habilitar botão do apartamento
+                const aptoNumber = apartmentId.replace('apto', '');
+                const apartmentButton = document.getElementById('apto' + aptoNumber);
+                if (apartmentButton) {
+                    apartmentButton.disabled = false;
+                }
+
+                // Obter e armazenar nome do usuário
+                const usersRef = ref(db, 'apartmentUsers/' + apartmentId);
+
+                get(usersRef)
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const userData = snapshot.val();
+                            const userName = userData.name;
+
+                            localStorage.setItem('userName', userName);
+                            console.log('Apartment ID:', apartmentId);
+                            console.log('User Name:', userName);
+                        } else {
+                            console.log("No data available for apartment:", apartmentId);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching user name:", error);
+                    });
+            } else {
+                console.log('Apartment ID not found in localStorage.');
+            }
+        });
+
+        // Função para ser chamada no onclick dos botões
+        window.loadFiles = function(apartment) {
+            showFiles(apartment);
+        };
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,15 +158,15 @@
         </div>
 
         <section id="file-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
-          <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
-          <ul id="file-list" style="color: black;">
-          </ul>
+            <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
+            <ul id="file-list" style="color: black;">
+            </ul>
         </section>
 
         <section id="viewer-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; transition: opacity 0.5s;">
-          <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
-          <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
-          <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
+            <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
+            <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
+            <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
         </section>
 
         <section id="login" style="display:none;">
@@ -168,23 +204,45 @@
     </footer>
 
     <script type="module">
-      import { showFiles } from './script.js';
+        import { showFiles } from './script.js';
 
-      document.addEventListener('DOMContentLoaded', function() {
-        const apartmentId = localStorage.getItem('apartmentId');
-        if (apartmentId) {
-          const aptoNumber = apartmentId.replace('apto', '');
-          const apartmentButton = document.getElementById('apto' + aptoNumber);
-          if (apartmentButton) {
-            apartmentButton.disabled = false;
-          }
-        }
-      });
+        document.addEventListener('DOMContentLoaded', function() {
+            const apartmentId = localStorage.getItem('apartmentId');
+            if (apartmentId) {
+                const aptoNumber = apartmentId.replace('apto', '');
+                const apartmentButton = document.getElementById('apto' + aptoNumber);
+                if (apartmentButton) {
+                    apartmentButton.disabled = false;
+                }
 
-      // Função para ser chamada no onclick dos botões
-      window.loadFiles = function(apartment) {
-        showFiles(apartment);
-      };
+                // Obter e armazenar nome do usuário
+                const usersRef = ref(db, 'apartmentUsers/' + apartmentId);
+
+                get(usersRef)
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const userData = snapshot.val();
+                            const userName = userData.name;
+
+                            localStorage.setItem('userName', userName);
+                            console.log('Apartment ID:', apartmentId);
+                            console.log('User Name:', userName);
+                        } else {
+                            console.log("No data available for apartment:", apartmentId);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching user name:", error);
+                    });
+            } else {
+                console.log('Apartment ID not found in localStorage.');
+            }
+        });
+
+        // Função para ser chamada no onclick dos botões
+        window.loadFiles = function(apartment) {
+            showFiles(apartment);
+        };
     </script>
 </body>
 </html>
