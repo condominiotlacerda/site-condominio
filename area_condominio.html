@@ -2,73 +2,73 @@
 <html lang="pt-br">
 <head>
     <script type="module">
-    // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-    import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"; // Importe o Firestore
+        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"; // Use a mesma versão para todos os auth imports
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-        authDomain: "logsite-d81dd.firebaseapp.com",
-        databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-        projectId: "logsite-d81dd",
-        storageBucket: "logsite-d81dd.firebasestorage.app",
-        messagingSenderId: "285508603780",
-        appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-        measurementId: "G-B0JHRHTNKF"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getDatabase(app);
-    const authFirebase = getFirebaseAuth();
-    const auth = getAuth();
-    const firestore = getFirestore(app); // Inicialize o Firestore
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        const authFirebase = getFirebaseAuth();
+        const auth = getAuth();
+        const firestore = getFirestore(app); // Inicialize o Firestore
 
-    logEvent(analytics, 'page_view');
+        logEvent(analytics, 'page_view');
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log("Usuário autenticado:", user.uid);
-            const uid = user.uid;
-            const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
-            get(userApartmentRef)
-                .then((snapshot) => {
-                    if (snapshot.exists()) {
-                        const apartmentId = snapshot.val();
-                        console.log('Apartment ID (fetched from DB):', apartmentId);
-                        localStorage.setItem('apartmentId', apartmentId); // Garante que o apartmentId esteja no localStorage
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("Usuário autenticado:", user.uid);
+                const uid = user.uid;
+                const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
+                get(userApartmentRef)
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const apartmentId = snapshot.val();
+                            console.log('Apartment ID (fetched from DB):', apartmentId);
+                            localStorage.setItem('apartmentId', apartmentId); // Garante que o apartmentId esteja no localStorage
 
-                        // Buscar nome do usuário no Firestore
-                        const invitesRef = collection(firestore, 'invites');
-                        const q = query(invitesRef, where('apartment', '==', apartmentId));
-                        getDocs(q)
-                            .then((querySnapshot) => {
-                                if (!querySnapshot.empty) {
-                                    querySnapshot.forEach((doc) => {
-                                        const userData = doc.data();
-                                        const userName = userData.name;
-                                        localStorage.setItem('userName', userName);
-                                        console.log('User Name (fetched from Firestore):', userName);
-                                    });
-                                } else {
-                                    console.log("No user found in invites for apartment:", apartmentId);
-                                }
-                            })
-                            .catch((error) => {
-                                console.error("Error fetching user name from Firestore:", error);
-                            });
+                            // Buscar nome do usuário no Firestore
+                            const invitesRef = collection(firestore, 'invites');
+                            const q = query(invitesRef, where('apartment', '==', apartmentId));
+                            getDocs(q)
+                                .then((querySnapshot) => {
+                                    if (!querySnapshot.empty) {
+                                        querySnapshot.forEach((doc) => {
+                                            const userData = doc.data();
+                                            const userName = userData.name;
+                                            localStorage.setItem('userName', userName);
+                                            console.log('User Name (fetched from Firestore):', userName);
+                                        });
+                                    } else {
+                                        console.log("No user found in invites for apartment:", apartmentId);
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Error fetching user name from Firestore:", error);
+                                });
 
-                    } else {
-                        console.log("No apartment ID found for UID:", uid);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching apartment ID:", error);
-                });
+                        } else {
+                            console.log("No apartment ID found for UID:", uid);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching apartment ID:", error);
+                    });
         } else {
             console.log('No user logged in.');
         }
@@ -229,27 +229,6 @@
                 if (apartmentButton) {
                     apartmentButton.disabled = false;
                 }
-            }
-
-            const user = auth.currentUser;
-            if (user) {
-                const uid = user.uid;
-                const userApartmentRef = ref(db, 'userApartments/' + uid + '/apartmentId');
-                get(userApartmentRef)
-                    .then((snapshot) => {
-                        if (snapshot.exists()) {
-                            const apartmentId = snapshot.val();
-                            console.log('Apartment ID (fetched from DB):', apartmentId);
-                            // Aqui você poderá usar o apartmentId para buscar o nome (próximo passo)
-                        } else {
-                            console.log("No apartment ID found for UID:", uid);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching apartment ID:", error);
-                    });
-            } else {
-                console.log('No user logged in.');
             }
         });
 
