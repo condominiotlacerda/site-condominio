@@ -112,6 +112,36 @@ function getFilesForApartment(apartment) {
   return files;
 }
 
+function logAccess(userCode, userName, apartment, accessedDocument) {
+            // Captura a data atual
+            const now = new Date();
+
+            // Ajusta para o horário de Brasília (UTC-3)
+            now.setHours(now.getHours() - 3);
+
+            // Converte a data para um formato seguro
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+
+            // Define o nome do arquivo de log
+            let fileName = `<span class="math-inline">\{userName\}\_Acesso\_apartamento\_</span>{apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
+
+            // Criação do objeto de log
+            const accessLog = {
+                userCode: userCode,
+                userName: userName,
+                apartment: `Acesso ao apartamento ${apartment}`,
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
+            };
+
+            // Grava o log no Firebase com o nome formatado corretamente
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
+        }
+
 document.addEventListener("DOMContentLoaded", function () {
   const formularioCadastro = document.getElementById('formularioCadastro');
   if (formularioCadastro) {
