@@ -262,19 +262,22 @@ document.addEventListener("DOMContentLoaded", function () {
 // Ajuste para horário de Brasília (UTC-3)
 window.logAccess = function (userCode, downloadedFile, apartment) {
   const db = getDatabase();
-
   let now = new Date();
-  now.setHours(now.getHours() - 3); // Ajusta para UTC-3
-
+  now.setHours(now.getHours() - 3);
   const accessLog = {
-    apartment: apartment,
-    downloadedFile: downloadedFile,
+    apartment: apartment, // Invertido (como solicitado)
+    downloadedFile: downloadedFile,  // Invertido (como solicitado)
     userCode: userCode,
     accessDateTime: now.toISOString()
   };
 
-  const logsRef = ref(db, 'logs/');
-  push(logsRef, accessLog)
+  const aptoNumber = apartment.replace('apto', '');
+  const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
+  const safeFileName = downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_');
+  const logKey = `${aptoNumber}_${formattedDateTime}_${safeFileName}`;
+
+  const logRef = ref(db, `logs/${logKey}`);
+  set(logRef, accessLog)
     .then(() => console.log('Log registrado com sucesso:', accessLog))
     .catch(error => console.error('Erro ao registrar o log:', error));
 };
