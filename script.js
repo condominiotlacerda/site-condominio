@@ -1,5 +1,3 @@
-console.log('script.js loaded');
-
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
@@ -18,7 +16,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
 const firestore = getFirestore(app);
 
 let activeApartmentButtonId = null;
@@ -68,7 +65,7 @@ export function showFiles(apartment) {
       if (isMobile) {
         window.open(file.path, "_blank");
       } else {
-        openFileViewer(file.path, file.name); // Passa o nome do arquivo como segundo argumento
+        openFileViewer(file.path);
       }
     };
 
@@ -79,8 +76,7 @@ export function showFiles(apartment) {
 
 }
 
-function openFileViewer(filePath, fileName) {
-  console.log('Função openFileViewer chamada com:', filePath); // Adicione esta linha
+function openFileViewer(filePath) {
   const viewerContainer = document.getElementById('viewer-container');
   const fileViewer = document.getElementById('file-viewer');
   const downloadButton = document.getElementById('download-button');
@@ -97,7 +93,6 @@ function openFileViewer(filePath, fileName) {
   // Não precisamos remover a classe 'active' aqui, pois ela será adicionada agora
   // viewerContainer.classList.remove('active');
   // setTimeout(() => viewerContainer.classList.add('active'), 50);
-  logAccess('CODIGO_DE_TESTE', 'NOME_DE_TESTE', fileName, document.getElementById('apartment-number').textContent);
 }
 
 function getFilesForApartment(apartment) {
@@ -114,36 +109,6 @@ function getFilesForApartment(apartment) {
 
   return files;
 }
-
-function logAccess(userCode, userName, apartment, accessedDocument) {
-            // Captura a data atual
-            const now = new Date();
-
-            // Ajusta para o horário de Brasília (UTC-3)
-            now.setHours(now.getHours() - 3);
-
-            // Converte a data para um formato seguro
-            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-
-            // Define o nome do arquivo de log
-            let fileName = `<span class="math-inline">\{userName\}\_Acesso\_apartamento\_</span>{apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Remove caracteres inválidos
-
-            // Criação do objeto de log
-            const accessLog = {
-                userCode: userCode,
-                userName: userName,
-                apartment: `Acesso ao apartamento ${apartment}`,
-                accessedDocument: accessedDocument,
-                accessDate: now.toISOString() // Salvo já no fuso horário de Brasília
-            };
-
-            // Grava o log no Firebase com o nome formatado corretamente
-            const logRef = ref(db, `logs/${fileName}`);
-            set(logRef, accessLog)
-                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-                .catch(error => console.error("Erro ao registrar log:", error));
-        }
 
 document.addEventListener("DOMContentLoaded", function () {
   const formularioCadastro = document.getElementById('formularioCadastro');
