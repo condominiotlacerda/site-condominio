@@ -64,7 +64,7 @@ export function showFiles(apartment) {
       const now = new Date(); // Obtém a data e hora atual
 
       // Chama a função logAccess para enviar as informações
-      logAccess(null, localStorage.getItem('userName') || 'Usuário Deslogado', apartmentId, documentName);
+      logAccess(null, documentName, apartmentId);
 
       if (isMobile) {
         window.open(file.path, "_blank");
