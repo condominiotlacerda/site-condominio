@@ -77,6 +77,7 @@ export function showFiles(apartment) {
 }
 
 function openFileViewer(filePath) {
+  console.log('Função openFileViewer chamada com:', filePath); // Adicione esta linha
   const viewerContainer = document.getElementById('viewer-container');
   const fileViewer = document.getElementById('file-viewer');
   const downloadButton = document.getElementById('download-button');
