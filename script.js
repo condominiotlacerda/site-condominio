@@ -65,7 +65,7 @@ export function showFiles(apartment) {
       if (isMobile) {
         window.open(file.path, "_blank");
       } else {
-        openFileViewer(file.path);
+        openFileViewer(file.path, file.name); // Passa o nome do arquivo como segundo argumento
       }
     };
 
@@ -76,7 +76,7 @@ export function showFiles(apartment) {
 
 }
 
-function openFileViewer(filePath) {
+function openFileViewer(filePath, fileName) {
   console.log('Função openFileViewer chamada com:', filePath); // Adicione esta linha
   const viewerContainer = document.getElementById('viewer-container');
   const fileViewer = document.getElementById('file-viewer');
