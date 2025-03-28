@@ -55,13 +55,17 @@ export function showFiles(apartment) {
     link.href = "#";
     link.textContent = file.name;
 
-    console.log('Criado link:', link); // Adicione esta linha
-    console.log('Texto do link:', file.name); // Adicione esta linha
-
     const isMobile = window.innerWidth <= 768;
 
     link.onclick = function (event) {
       event.preventDefault();
+      const apartmentId = localStorage.getItem('apartmentId'); // Pega o apartmentId do localStorage
+      const documentName = file.name; // Obtém o nome do documento
+      const now = new Date(); // Obtém a data e hora atual
+
+      // Chama a função logAccess para enviar as informações
+      logAccess(null, localStorage.getItem('userName') || 'Usuário Deslogado', apartmentId, documentName);
+
       if (isMobile) {
         window.open(file.path, "_blank");
       } else {
@@ -70,7 +74,6 @@ export function showFiles(apartment) {
     };
 
     listItem.appendChild(link);
-    console.log('Criado listItem:', listItem); // Adicione esta linha
     fileList.appendChild(listItem);
   });
 
