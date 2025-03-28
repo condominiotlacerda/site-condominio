@@ -18,6 +18,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 const firestore = getFirestore(app);
 
 let activeApartmentButtonId = null;
