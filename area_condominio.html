@@ -8,6 +8,7 @@
     import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"; // Importe o Firestore
 
     const firebaseConfig = {
         apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
@@ -25,6 +26,7 @@
     const db = getDatabase(app);
     const authFirebase = getFirebaseAuth();
     const auth = getAuth();
+    const firestore = getFirestore(app); // Inicialize o Firestore
 
     logEvent(analytics, 'page_view');
 
@@ -39,7 +41,27 @@
                         const apartmentId = snapshot.val();
                         console.log('Apartment ID (fetched from DB):', apartmentId);
                         localStorage.setItem('apartmentId', apartmentId); // Garante que o apartmentId esteja no localStorage
-                        // Aqui você poderá usar o apartmentId para buscar o nome (próximo passo)
+
+                        // Buscar nome do usuário no Firestore
+                        const invitesRef = collection(firestore, 'invites');
+                        const q = query(invitesRef, where('apartment', '==', apartmentId));
+                        getDocs(q)
+                            .then((querySnapshot) => {
+                                if (!querySnapshot.empty) {
+                                    querySnapshot.forEach((doc) => {
+                                        const userData = doc.data();
+                                        const userName = userData.name;
+                                        localStorage.setItem('userName', userName);
+                                        console.log('User Name (fetched from Firestore):', userName);
+                                    });
+                                } else {
+                                    console.log("No user found in invites for apartment:", apartmentId);
+                                }
+                            })
+                            .catch((error) => {
+                                console.error("Error fetching user name from Firestore:", error);
+                            });
+
                     } else {
                         console.log("No apartment ID found for UID:", uid);
                     }
