@@ -213,7 +213,6 @@ document.addEventListener("DOMContentLoaded", function () {
   link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
 
   // Adiciona um evento de clique para chamar a função openFileViewer
-   const link = document.createElement('a');
   link.href = "#"; // Alteramos o href para "#"
   const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
   link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
