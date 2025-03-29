@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Adiciona um evento de clique para chamar a função openFileViewer
   link.addEventListener('click', function(event) {
     event.preventDefault(); // Evita que o link tente navegar para "#"
+    console.log('Link da Prestação de Contas clicado!');
     openFileViewer(caminhoPrestacaoContas); // Chama a função para abrir no viewer
   });
 
@@ -204,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Adiciona um evento de clique para chamar a função openFileViewer
   link.addEventListener('click', function(event) {
+    console.log('Link da Prestação de Contas clicado!');
     event.preventDefault(); // Evita que o link tente navegar para "#"
     openFileViewer(caminhoPrestacaoContas); // Chama a função para abrir no viewer
   });
