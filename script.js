@@ -134,6 +134,23 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error('Erro ao carregar nomes das taxas:', error);
       // Defina nomes padrão aqui se necessário
     });
+
+  const anoConta = document.getElementById('ano-conta');
+  const mesConta = document.getElementById('mes-conta');
+
+  if (anoConta) {
+    anoConta.addEventListener('change', function() {
+      // Chamaremos uma função aqui quando o ano mudar
+      console.log('Ano selecionado:', this.value);
+    });
+  }
+
+  if (mesConta) {
+    mesConta.addEventListener('change', function() {
+      // Chamaremos uma função aqui quando o mês mudar
+      console.log('Mês selecionado:', this.value);
+    });
+  }
   
   const formularioCadastro = document.getElementById('formularioCadastro');
   if (formularioCadastro) {
