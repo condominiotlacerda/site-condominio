@@ -104,9 +104,9 @@ function getFilesForApartment(apartment) {
   const baseUrl = 'pdfs/boletos/';
   const aptoNumber = apartment.replace('apto', '');
   let files = [
-    { name: nomesTaxas.taxaCondominio || 'Taxa Condominial', path: `<span class="math-inline">\{baseUrl\}boleto\_tx\_condominio\_apto\_</span>{aptoNumber}.pdf` },
-    { name: nomesTaxas.taxa1Name || 'Taxa Acordo M2D', path: `<span class="math-inline">\{baseUrl\}boleto\_tx\_1\_apto\_</span>{aptoNumber}.pdf` },
-    { name: nomesTaxas.taxa2Name || 'Taxa Hidro/Eletr', path: `<span class="math-inline">\{baseUrl\}boleto\_tx\_2\_apto\_</span>{aptoNumber}.pdf` }
+    { name: nomesTaxas.taxaCondominio || 'Taxa Condominial', path: `${baseUrl}boleto_tx_condominio_apto_${aptoNumber}.pdf` },
+    { name: nomesTaxas.taxa1Name || 'Taxa Acordo M2D', path: `${baseUrl}boleto_tx_1_apto_${aptoNumber}.pdf` },
+    { name: nomesTaxas.taxa2Name || 'Taxa Hidro/Eletr', path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` }
   ];
 
   files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
