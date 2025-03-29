@@ -115,8 +115,6 @@ function getFilesForApartment(apartment) {
     { name: nomesTaxas.taxa2Name || 'Taxa Hidro/Eletr', path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` }
   ];
 
-  files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
-
   return files;
 }
 
