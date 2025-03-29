@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  if (mesConta) {    
+  if (mesConta) {
     mesConta.addEventListener('change', function() {
       const listaContas = document.getElementById('contas-list');
       const mesSelecionado = this.value;
@@ -200,50 +200,38 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log('Caminho da Prestação de Contas (após mudança de mês):', caminhoPrestacaoContas);
 
       // Limpa a lista de contas
-  // Limpa a lista de contas
-  listaContas.innerHTML = '';
+      listaContas.innerHTML = '';
 
-  // Cria um novo item de lista
-  const listItem = document.createElement('li');
+      // Cria um novo item de lista
+      const listItem = document.createElement('li');
 
-  // Cria um link para o arquivo
-  const link = document.createElement('a');
-  link.href = "#"; // Alteramos o href para "#"
-  const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+      // Cria um link para o arquivo
+      const link = document.createElement('a'); // 👈 DECLARAÇÃO DA VARIÁVEL LINK
+      link.href = "#"; // Alteramos o href para "#"
+      const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+      link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
 
-  // Adiciona um evento de clique para chamar a função openFileViewer
-  link.href = "#"; // Alteramos o href para "#"
-  const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+      // Adiciona um evento de clique para chamar a função openFileViewer
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        console.log('Link da Prestação de Contas clicado!');
+        const anoSelecionado = anoConta.value;
+        const mesSelecionado = mesConta.value;
+        const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+        const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
+        try {
+          logAccess(null, documento, localStorage.getItem('apartmentId'));
+        } catch (error) {
+          console.error('Erro ao executar logAccess:', error);
+        }
+        openFileViewer(caminhoPrestacaoContas);
+      });
 
-  // Adiciona um evento de clique para chamar a função openFileViewer
-  link.addEventListener('click', function(event) {
-    event.preventDefault();
-    console.log('Link da Prestação de Contas clicado!');
-    const anoSelecionado = anoConta.value;
-    const mesSelecionado = mesConta.value;
-    const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-    const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
-    try {
-      logAccess(null, documento, localStorage.getItem('apartmentId'));
-    } catch (error) {
-      console.error('Erro ao executar logAccess:', error);
-    }
-    openFileViewer(caminhoPrestacaoContas);
-  });
+      // Adiciona o link ao item de lista
+      listItem.appendChild(link);
 
-  // Adiciona o link ao item de lista
-  listItem.appendChild(link);
-
-  // Adiciona o item de lista à lista de contas
-  listaContas.appendChild(l
-
-  // Adiciona o link ao item de lista
-  listItem.appendChild(link);
-
-  // Adiciona o item de lista à lista de contas
-  listaContas.appendChild(listItem);
+      // Adiciona o item de lista à lista de contas
+      listaContas.appendChild(listItem);
 
       // Próximos passos virão aqui...
     });
