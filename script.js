@@ -164,9 +164,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Adiciona um evento de clique para chamar a função openFileViewer
   link.addEventListener('click', function(event) {
-    event.preventDefault(); // Evita que o link tente navegar para "#"
+    event.preventDefault();
     console.log('Link da Prestação de Contas clicado!');
-    openFileViewer(caminhoPrestacaoContas); // Chama a função para abrir no viewer
+    const anoSelecionado = anoConta.value;
+    const mesSelecionado = mesConta.value;
+    const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+    const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
+    try {
+      logAccess(null, documento, localStorage.getItem('apartmentId'));
+    } catch (error) {
+      console.error('Erro ao executar logAccess:', error);
+    }
+    openFileViewer(caminhoPrestacaoContas);
   });
 
   // Adiciona o link ao item de lista
@@ -204,11 +213,32 @@ document.addEventListener("DOMContentLoaded", function () {
   link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
 
   // Adiciona um evento de clique para chamar a função openFileViewer
+   const link = document.createElement('a');
+  link.href = "#"; // Alteramos o href para "#"
+  const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+
+  // Adiciona um evento de clique para chamar a função openFileViewer
   link.addEventListener('click', function(event) {
+    event.preventDefault();
     console.log('Link da Prestação de Contas clicado!');
-    event.preventDefault(); // Evita que o link tente navegar para "#"
-    openFileViewer(caminhoPrestacaoContas); // Chama a função para abrir no viewer
+    const anoSelecionado = anoConta.value;
+    const mesSelecionado = mesConta.value;
+    const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+    const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
+    try {
+      logAccess(null, documento, localStorage.getItem('apartmentId'));
+    } catch (error) {
+      console.error('Erro ao executar logAccess:', error);
+    }
+    openFileViewer(caminhoPrestacaoContas);
   });
+
+  // Adiciona o link ao item de lista
+  listItem.appendChild(link);
+
+  // Adiciona o item de lista à lista de contas
+  listaContas.appendChild(l
 
   // Adiciona o link ao item de lista
   listItem.appendChild(link);
