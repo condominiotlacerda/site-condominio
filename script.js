@@ -167,6 +167,11 @@ document.addEventListener("DOMContentLoaded", function () {
       // Próximos passos virão aqui...
     });
   }
+
+  function obterAbreviacaoMes(numeroMes) {
+  const meses = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  return meses[numeroMes] || ""; // Retorna a abreviação ou vazio se o número do mês for inválido
+}
   
   const formularioCadastro = document.getElementById('formularioCadastro');
   if (formularioCadastro) {
