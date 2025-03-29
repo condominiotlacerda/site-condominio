@@ -1,3 +1,5 @@
+let nomesTaxas = {};
+
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set, get, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
@@ -100,20 +102,33 @@ function openFileViewer(filePath) {
 
 function getFilesForApartment(apartment) {
   const baseUrl = 'pdfs/boletos/';
-  // Remove o prefixo 'apto' para obter apenas o número
   const aptoNumber = apartment.replace('apto', '');
   let files = [
-  { name: 'Taxa Condominial', path: `${baseUrl}boleto_tx_condominio_apto_${aptoNumber}.pdf` },
-  { name: 'Taxa Acordo M2D', path: `${baseUrl}boleto_tx_1_apto_${aptoNumber}.pdf` },
-  { name: 'Taxa Hidro/Eletr', path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` }
-];
+    { name: nomesTaxas.taxaCondominio || 'Taxa Condominial', path: `<span class="math-inline">\{baseUrl\}boleto\_tx\_condominio\_apto\_</span>{aptoNumber}.pdf` },
+    { name: nomesTaxas.taxa1Name || 'Taxa Acordo M2D', path: `<span class="math-inline">\{baseUrl\}boleto\_tx\_1\_apto\_</span>{aptoNumber}.pdf` },
+    { name: nomesTaxas.taxa2Name || 'Taxa Hidro/Eletr', path: `<span class="math-inline">\{baseUrl\}boleto\_tx\_2\_apto\_</span>{aptoNumber}.pdf` }
+  ];
 
-files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
+  files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
 
-return files;
+  return files;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
+  // Código para buscar o arquivo name_taxas.json
+  fetch('dados/name_taxas.json')
+    .then(response => response.json())
+    .then(data => {
+      nomesTaxas = data;
+      console.log('Nomes das taxas carregados:', nomesTaxas);
+      // Qualquer código que dependa de nomesTaxas pode ser colocado aqui ou em funções chamadas aqui
+    })
+    .catch(error => {
+      console.error('Erro ao carregar nomes das taxas:', error);
+      // Defina nomes padrão aqui se necessário
+    });
+  
   const formularioCadastro = document.getElementById('formularioCadastro');
   if (formularioCadastro) {
     formularioCadastro.addEventListener('submit', async function(event) {
