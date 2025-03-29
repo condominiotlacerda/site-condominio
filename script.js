@@ -140,15 +140,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (anoConta) {
     anoConta.addEventListener('change', function() {
-      // Chamaremos uma função aqui quando o ano mudar
-      console.log('Ano selecionado:', this.value);
+      const anoSelecionado = this.value;
+      const mesSelecionado = mesConta.value;
+      console.log('Ano selecionado:', anoSelecionado);
+      console.log('Mês selecionado (após mudança de ano):', mesSelecionado);
+
+      // Construindo o caminho do arquivo
+      const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.` + obterAbreviacaoMes(parseInt(mesSelecionado)) + `/prestacao_contas.pdf`;
+      console.log('Caminho da Prestação de Contas (após mudança de ano):', caminhoPrestacaoContas);
+
+      // Próximos passos virão aqui...
     });
   }
 
   if (mesConta) {
     mesConta.addEventListener('change', function() {
-      // Chamaremos uma função aqui quando o mês mudar
-      console.log('Mês selecionado:', this.value);
+      const mesSelecionado = this.value;
+      const anoSelecionado = anoConta.value;
+      console.log('Mês selecionado:', mesSelecionado);
+      console.log('Ano selecionado (após mudança de mês):', anoSelecionado);
+
+      // Construindo o caminho do arquivo
+      const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.` + obterAbreviacaoMes(parseInt(mesSelecionado)) + `/prestacao_contas.pdf`;
+      console.log('Caminho da Prestação de Contas (após mudança de mês):', caminhoPrestacaoContas);
+
+      // Próximos passos virão aqui...
     });
   }
   
