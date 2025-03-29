@@ -160,17 +160,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Cria um link para o arquivo
   const link = document.createElement('a');
-  link.href = caminhoPrestacaoContas;
+  link.href = "#"; // Alteramos o href para "#"
   const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
   link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
-  link.target = "_blank"; // Abre o link em uma nova aba (opcional)
+
+  // Adiciona um evento de clique para chamar a função openFileViewer
+  link.addEventListener('click', function(event) {
+    event.preventDefault(); // Evita que o link tente navegar para "#"
+    openFileViewer(caminhoPrestacaoContas); // Chama a função para abrir no viewer
+  });
 
   // Adiciona o link ao item de lista
   listItem.appendChild(link);
 
   // Adiciona o item de lista à lista de contas
   listaContas.appendChild(listItem);
-
       // Próximos passos virão aqui...
     });
   }
@@ -188,6 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log('Caminho da Prestação de Contas (após mudança de mês):', caminhoPrestacaoContas);
 
       // Limpa a lista de contas
+  // Limpa a lista de contas
   listaContas.innerHTML = '';
 
   // Cria um novo item de lista
@@ -195,10 +200,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Cria um link para o arquivo
   const link = document.createElement('a');
-  link.href = caminhoPrestacaoContas;
+  link.href = "#"; // Alteramos o href para "#"
   const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
   link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
-  link.target = "_blank"; // Abre o link em uma nova aba (opcional)
+
+  // Adiciona um evento de clique para chamar a função openFileViewer
+  link.addEventListener('click', function(event) {
+    event.preventDefault(); // Evita que o link tente navegar para "#"
+    openFileViewer(caminhoPrestacaoContas); // Chama a função para abrir no viewer
+  });
 
   // Adiciona o link ao item de lista
   listItem.appendChild(link);
