@@ -33,18 +33,26 @@ export function showFiles(apartment) {
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
   const viewerContainer = document.getElementById('viewer-container');
+  const contasContainer = document.getElementById('contas-container'); // Pega a referência para a nova caixa
 
-  console.log('Elemento fileContainer:', fileContainer); // Movido para cá
-  console.log('Elemento fileList:', fileList);       // Movido para cá
+  console.log('Elemento fileContainer:', fileContainer);
+  console.log('Elemento fileList:', fileList);
+  console.log('Elemento contasContainer:', contasContainer); // Log para verificar a referência
 
   fileContainer.style.display = 'none';
+  contasContainer.style.display = 'none'; // Garante que a nova caixa também esteja inicialmente escondida
   fileList.innerHTML = '';
 
   document.getElementById('apartment-number').textContent = apartment;
   fileContainer.style.display = 'block';
+  contasContainer.style.display = 'block'; // Mostra a nova caixa
 
   fileContainer.classList.remove('active');
-  setTimeout(() => fileContainer.classList.add('active'), 50);
+  contasContainer.classList.remove('active'); // Remove a classe active da nova caixa
+  setTimeout(() => {
+    fileContainer.classList.add('active');
+    contasContainer.classList.add('active'); // Adiciona a classe active para a transição na nova caixa
+  }, 50);
 
   let files = getFilesForApartment(apartment);
 
@@ -61,11 +69,10 @@ export function showFiles(apartment) {
 
     link.onclick = function (event) {
       event.preventDefault();
-      const apartmentId = localStorage.getItem('apartmentId'); // Pega o apartmentId do localStorage
-      const documentName = file.name; // Obtém o nome do documento
-      const now = new Date(); // Obtém a data e hora atual
+      const apartmentId = localStorage.getItem('apartmentId');
+      const documentName = file.name;
+      const now = new Date();
 
-      // Chama a função logAccess para enviar as informações
       logAccess(null, documentName, apartmentId);
 
       if (isMobile) {
@@ -80,7 +87,6 @@ export function showFiles(apartment) {
   });
 
 }
-
 function openFileViewer(filePath) {
   const viewerContainer = document.getElementById('viewer-container');
   const fileViewer = document.getElementById('file-viewer');
