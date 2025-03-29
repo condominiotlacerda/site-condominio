@@ -144,6 +144,13 @@ h1 {
   width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
 }
 
+#file-list-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
