@@ -103,9 +103,9 @@ function getFilesForApartment(apartment) {
   // Remove o prefixo 'apto' para obter apenas o número
   const aptoNumber = apartment.replace('apto', '');
   let files = [
-  { name: 'Boleto Condomínio', path: `${baseUrl}boleto_tx_condominio_apto_${aptoNumber}.pdf` },
-  { name: 'Boleto Acordo M2D', path: `${baseUrl}boleto_tx_acordo_m2d_apto_${aptoNumber}.pdf` },
-  { name: 'Boleto Hidro/Eletr', path: `${baseUrl}boleto_tx_hidro_eletr_apto_${aptoNumber}.pdf` }
+  { name: 'Taxa Condominial', path: `${baseUrl}boleto_tx_condominio_apto_${aptoNumber}.pdf` },
+  { name: 'Taxa Acordo M2D', path: `${baseUrl}boleto_tx_1_apto_${aptoNumber}.pdf` },
+  { name: 'Taxa Hidro/Eletr', path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` }
 ];
 
 files.push({ name: 'Prestação de Contas', path: 'pdfs/contas/2025/2.fev/prestacao_contas.pdf' });
