@@ -140,6 +140,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (anoConta) {
     anoConta.addEventListener('change', function() {
+        
+      const listaContas = document.getElementById('contas-list');
+    
       const anoSelecionado = this.value;
       const mesSelecionado = mesConta.value;
       console.log('Ano selecionado:', anoSelecionado);
@@ -149,12 +152,32 @@ document.addEventListener("DOMContentLoaded", function () {
       const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.` + obterAbreviacaoMes(parseInt(mesSelecionado)) + `/prestacao_contas.pdf`;
       console.log('Caminho da Prestação de Contas (após mudança de ano):', caminhoPrestacaoContas);
 
+      // Limpa a lista de contas
+  listaContas.innerHTML = '';
+
+  // Cria um novo item de lista
+  const listItem = document.createElement('li');
+
+  // Cria um link para o arquivo
+  const link = document.createElement('a');
+  link.href = caminhoPrestacaoContas;
+  const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+  link.target = "_blank"; // Abre o link em uma nova aba (opcional)
+
+  // Adiciona o link ao item de lista
+  listItem.appendChild(link);
+
+  // Adiciona o item de lista à lista de contas
+  listaContas.appendChild(listItem);
+
       // Próximos passos virão aqui...
     });
   }
 
-  if (mesConta) {
+  if (mesConta) {    
     mesConta.addEventListener('change', function() {
+      const listaContas = document.getElementById('contas-list');
       const mesSelecionado = this.value;
       const anoSelecionado = anoConta.value;
       console.log('Mês selecionado:', mesSelecionado);
@@ -163,6 +186,25 @@ document.addEventListener("DOMContentLoaded", function () {
       // Construindo o caminho do arquivo
       const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.` + obterAbreviacaoMes(parseInt(mesSelecionado)) + `/prestacao_contas.pdf`;
       console.log('Caminho da Prestação de Contas (após mudança de mês):', caminhoPrestacaoContas);
+
+      // Limpa a lista de contas
+  listaContas.innerHTML = '';
+
+  // Cria um novo item de lista
+  const listItem = document.createElement('li');
+
+  // Cria um link para o arquivo
+  const link = document.createElement('a');
+  link.href = caminhoPrestacaoContas;
+  const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+  link.target = "_blank"; // Abre o link em uma nova aba (opcional)
+
+  // Adiciona o link ao item de lista
+  listItem.appendChild(link);
+
+  // Adiciona o item de lista à lista de contas
+  listaContas.appendChild(listItem);
 
       // Próximos passos virão aqui...
     });
