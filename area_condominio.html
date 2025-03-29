@@ -121,17 +121,32 @@
         </div>
 
         <div id="file-list-wrapper">
-          <section id="file-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
-            <h2>Arquivos do Apartamento <span id="apartment-number"></span></h2>
-            <ul id="file-list" style="color: black;">
-            </ul>
-          </section>
-
           <section id="contas-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto; margin-left: 20px;">
-            <h2>Prestações de Contas</h2>
-            <ul id="contas-list" style="color: black;">
-            </ul>
-          </section>
+          <h2>Prestações de Contas</h2>
+          <label for="ano-conta">Ano:</label>
+          <select id="ano-conta">
+            <option value="2025" selected>2025</option>
+          </select>
+
+          <label for="mes-conta">Mês:</label>
+          <select id="mes-conta">
+            <option value="">Selecione o mês</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+          <ul id="contas-list" style="color: black;">
+          </ul>
+        </section>
         </div>
         
         <section id="viewer-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; transition: opacity 0.5s;">
