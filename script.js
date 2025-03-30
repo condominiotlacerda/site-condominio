@@ -99,6 +99,7 @@ export function showFiles(apartment) {
       let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/apartmentId(\d+)firebase/)?.[1] : null;
       const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
       const notificationsList = document.getElementById('notifications-list');
+      console.log('Valor de apartmentId para buscar notificações:', apartmentId); // 👈 Adicione esta linha aqui
       notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
       if (apartmentId && notificacoesData[apartmentId]) {
