@@ -91,17 +91,51 @@ export function showFiles(apartment) {
     fileList.appendChild(listItem);
   });
 
-  // Carrega as notificações aqui (o código que já criamos para o fetch)
+  // Carrega as notificações aqui
   fetch('dados/notificacoes.json')
     .then(response => response.json())
     .then(notificacoesData => {
       const apartmentId = localStorage.getItem('apartmentId');
       const notificationsList = document.getElementById('notifications-list');
+      notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
       if (apartmentId && notificacoesData[apartmentId]) {
-        notificationsList.textContent = notificacoesData[apartmentId];
+        const notificationText = notificacoesData[apartmentId];
+        const lines = notificationText.split('\n');
+        let notificationCount = 0;
+
+        for (let i = 1; i < lines.length; i++) { // Começa da segunda linha (após "Notificações")
+          const line = lines[i].trim();
+          if (line.startsWith(notificationCount + 1 + '.')) {
+            notificationCount++;
+            const parts = line.split('.');
+            if (parts.length > 1) {
+              const notificationId = parts[0].trim();
+              const notificationDescription = parts.slice(1).join('.').trim();
+              const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentId.replace('apto_', '')}.pdf`;
+
+              const listItem = document.createElement('li');
+              const link = document.createElement('a');
+              link.href = filename; // Caminho para o arquivo na pasta notificacoes
+              link.textContent = line; // Usando a linha completa para exibir o número também
+              link.target = '_blank'; // Para abrir o PDF em uma nova aba
+
+              listItem.appendChild(link);
+              notificationsList.appendChild(listItem);
+            }
+          }
+        }
+
+        if (notificationsList.innerHTML === '') {
+          const listItem = document.createElement('li');
+          listItem.textContent = 'Nenhuma notificação para este apartamento.';
+          notificationsList.appendChild(listItem);
+        }
+
       } else {
-        notificationsList.textContent = 'Nenhuma notificação para este apartamento.';
+        const listItem = document.createElement('li');
+        listItem.textContent = 'Nenhuma notificação para este apartamento.';
+        notificationsList.appendChild(listItem);
       }
     })
     .catch(error => {
