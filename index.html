@@ -186,6 +186,28 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+  const senhaCadastroInput = document.getElementById('senhaCadastro');
+  const senhaLoginInput = document.getElementById('senhaLogin');
+
+  if (senhaCadastroInput) {
+    senhaCadastroInput.addEventListener('input', function() {
+      if (this.value.length > this.maxLength) {
+        this.value = this.value.slice(0, this.maxLength);
+      }
+    });
+  }
+
+  if (senhaLoginInput) {
+    senhaLoginInput.addEventListener('input', function() {
+      if (this.value.length > this.maxLength) {
+        this.value = this.value.slice(0, this.maxLength);
+      }
+    });
+  }
+});
+        
     </script>
 </head>
 <body>
