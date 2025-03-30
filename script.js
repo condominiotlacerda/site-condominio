@@ -96,7 +96,7 @@ export function showFiles(apartment) {
     .then(response => response.json())
     .then(notificacoesData => {
       const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-      let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/apartmentId(\d+)firebase/)?.[1] : null;
+      let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/apartmentId(\d+)/)?.[1] : null;
       const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
       const notificationsList = document.getElementById('notifications-list');
       console.log('Valor de apartmentId para buscar notificações:', apartmentId); // 👈 Adicione esta linha aqui
