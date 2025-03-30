@@ -187,12 +187,14 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        <script>
+document.addEventListener('DOMContentLoaded', function() {
   const senhaCadastroInput = document.getElementById('senhaCadastro');
   const senhaLoginInput = document.getElementById('senhaLogin');
 
   if (senhaCadastroInput) {
     senhaCadastroInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
       if (this.value.length > this.maxLength) {
         this.value = this.value.slice(0, this.maxLength);
       }
@@ -201,6 +203,7 @@
 
   if (senhaLoginInput) {
     senhaLoginInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
       if (this.value.length > this.maxLength) {
         this.value = this.value.slice(0, this.maxLength);
       }
