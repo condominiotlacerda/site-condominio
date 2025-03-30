@@ -96,7 +96,8 @@ export function showFiles(apartment) {
     .then(response => response.json())
     .then(notificacoesData => {
       const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-      const apartmentId = `apto_${apartmentIdFromStorage}`; // Adiciona o prefixo "apto_"
+      let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/apartmentId(\d+)firebase/)?.[1] : null;
+      const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
       const notificationsList = document.getElementById('notifications-list');
       notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
