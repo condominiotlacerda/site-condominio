@@ -151,6 +151,13 @@ h1 {
   gap: 20px;
 }
 
+@media (min-width: 769px) {
+  #contas-container {
+    width: 300px; /* Largura para desktop (igual ao inline) */
+    margin-left: 20px; /* Margem esquerda para desktop (igual ao inline) */
+  }
+}
+
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
