@@ -112,7 +112,8 @@ function getFilesForApartment(apartment) {
   let files = [
     { name: nomesTaxas.taxaCondominio || 'Taxa Condominial', path: `${baseUrl}boleto_tx_condominio_apto_${aptoNumber}.pdf` },
     { name: nomesTaxas.taxa1Name || 'Taxa Acordo M2D', path: `${baseUrl}boleto_tx_1_apto_${aptoNumber}.pdf` },
-    { name: nomesTaxas.taxa2Name || 'Taxa Hidro/Eletr', path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` }
+    { name: nomesTaxas.taxa2Name || 'Taxa Hidro/Eletr', path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` },
+    { name: nomesTaxas.taxa3Name || 'Tx Teste', path: `${baseUrl}boleto_tx_3_apto_${aptoNumber}.pdf` } // 👈 Adicionamos esta linha
   ];
 
   return files;
