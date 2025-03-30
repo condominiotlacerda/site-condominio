@@ -120,9 +120,13 @@ export function showFiles(apartment) {
 
               const listItem = document.createElement('li');
               const link = document.createElement('a');
-              link.href = filename; // Caminho para o arquivo na pasta notificacoes
+              link.href = '#'; // Alteramos o href para "#"
               link.textContent = line; // Usando a linha completa para exibir o número também
-              link.target = '_blank'; // Para abrir o PDF em uma nova aba
+
+              link.addEventListener('click', function(event) {
+                event.preventDefault(); // Evita que o link abra uma nova aba
+                openFileViewer(filename); // Chama a função para abrir no visualizador
+              });
 
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
