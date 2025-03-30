@@ -96,6 +96,7 @@ export function showFiles(apartment) {
     .then(response => response.json())
     .then(notificacoesData => {
       const apartmentIdFromStorage = localStorage.getItem('apartmentId');
+      console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage); // 👈 Adicione esta linha
       let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/apartmentId(\d+)/)?.[1] : null;
       const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
       const notificationsList = document.getElementById('notifications-list');
