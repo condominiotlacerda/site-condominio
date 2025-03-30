@@ -124,8 +124,12 @@ export function showFiles(apartment) {
               link.textContent = line; // Usando a linha completa para exibir o número também
 
               link.addEventListener('click', function(event) {
-                event.preventDefault(); // Evita que o link abra uma nova aba
-                openFileViewer(filename); // Chama a função para abrir no visualizador
+                event.preventDefault();
+                // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
+                const apartmentId = localStorage.getItem('apartmentId');
+                const notificationText = this.textContent;
+                logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentId);
+                openFileViewer(filename);
               });
 
               listItem.appendChild(link);
