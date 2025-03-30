@@ -205,5 +205,10 @@ h1 {
     align-items: center; /* Opcional: Centraliza os itens horizontalmente se desejar */
     gap: 10px; /* Opcional: Adiciona um pequeno espaço entre as caixas */
   }
+
+  #contas-container { /* regras para div que contém caixas lista arquivos, prestação contas */
+    width: 95%; /* Ajuste a largura conforme necessário */
+    margin: 0 auto; /* Centraliza a caixa horizontalmente */
+  }
     
 } /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
