@@ -151,7 +151,7 @@ h1 {
   gap: 20px;
 }
 
-/* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 */
+/* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
     .logo {
@@ -198,4 +198,12 @@ h1 {
         height: 250px;
         width: 100%;
     }
-}
+
+    #file-list-wrapper { /* regras para div que contém caixas lista arquivos, prestação contas */
+    display: flex;
+    flex-direction: column; /* Alteramos para column para que os itens fiquem um abaixo do outro */
+    align-items: center; /* Opcional: Centraliza os itens horizontalmente se desejar */
+    gap: 10px; /* Opcional: Adiciona um pequeno espaço entre as caixas */
+  }
+    
+} /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
