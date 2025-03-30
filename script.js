@@ -110,7 +110,7 @@ export function showFiles(apartment) {
 
         for (let i = 1; i < lines.length; i++) { // Começa da segunda linha (após "Notificações")
           const line = lines[i].trim();
-          if (/^\d+\./.test(line)) {
+          if (line.startsWith(String(notificationCount + 1) + '.')) {
             notificationCount++;
             const parts = line.split('.');
             if (parts.length > 1) {
