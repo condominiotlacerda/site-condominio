@@ -95,7 +95,8 @@ export function showFiles(apartment) {
   fetch('dados/notificacoes.json')
     .then(response => response.json())
     .then(notificacoesData => {
-      const apartmentId = localStorage.getItem('apartmentId');
+      const apartmentIdFromStorage = localStorage.getItem('apartmentId');
+      const apartmentId = `apto_${apartmentIdFromStorage}`; // Adiciona o prefixo "apto_"
       const notificationsList = document.getElementById('notifications-list');
       notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
