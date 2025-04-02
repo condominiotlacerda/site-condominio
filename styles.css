@@ -159,9 +159,11 @@ h1 {
 }
 
 .file-box h2 {
-  font-size: 1.2em; /* Experimente este valor ou outro de sua preferência */
-  margin-top: 10px; /* Adicionando um pouco de margem acima do título, se necessário */
-  margin-bottom: 10px; /* Adicionando um pouco de margem abaixo do título, se necessário */
+    font-size: 1.2em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-block-start: 0; /* Resetando a margem superior padrão */
+    margin-block-end: 0;   /* Resetando a margem inferior padrão */
 }
 
 #documentos-list {
