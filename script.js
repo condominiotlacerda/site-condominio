@@ -93,6 +93,7 @@ export function showFiles(apartment) {
     };
 
     listItem.appendChild(link);
+    listItem.appendChild(document.createElement('br')); // A TAG <br> É ADICIONADA AQUI
     fileList.appendChild(listItem);
   });
 
