@@ -33,6 +33,10 @@ h1 {
     margin: 5px 0;
 }
 
+#file-list li {
+  margin-bottom: 10px; /* Experimente diferentes valores como 5px, 15px, etc. */
+}
+
 .file-list a {
     text-decoration: none;
     color: #007bff;
