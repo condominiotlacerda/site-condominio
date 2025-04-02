@@ -1,4 +1,4 @@
-let nomesTaxas = {};
+  let nomesTaxas = {};
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set, get, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
@@ -164,19 +164,20 @@ export function showFiles(apartment) {
       }
     });
 
-const documentosList = document.getElementById('documentos-list');
-  if (documentosList && apartment) {
-    const previsaoLink = document.createElement('a');
-    previsaoLink.href = 'previsao_despesas/previsao_despesas.pdf';
-    previsaoLink.textContent = 'Previsão de despesas';
-    previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
+    const documentosList = document.getElementById('documentos-list');
+    if (documentosList && apartment) {
+      const previsaoLink = document.createElement('a');
+      previsaoLink.href = 'previsao_despesas/previsao_despesas.pdf';
+      previsaoLink.textContent = 'Previsão de despesas';
+      previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
 
-    const listItem = document.createElement('li');
-    listItem.appendChild(previsaoLink);
-    listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
+      const listItem = document.createElement('li');
+      listItem.appendChild(previsaoLink);
+      listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
 
-    documentosList.appendChild(listItem);
-  }
+      documentosList.appendChild(listItem);
+    }
+  
 }
 
 function openFileViewer(filePath) {
