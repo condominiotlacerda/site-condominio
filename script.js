@@ -163,6 +163,20 @@ export function showFiles(apartment) {
         notificationsList.textContent = 'Erro ao carregar notificações.';
       }
     });
+
+const documentosList = document.getElementById('documentos-list');
+  if (documentosList && apartment) {
+    const previsaoLink = document.createElement('a');
+    previsaoLink.href = 'previsao_despesas/previsao_despesas.pdf';
+    previsaoLink.textContent = 'Previsão de despesas';
+    previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
+
+    const listItem = document.createElement('li');
+    listItem.appendChild(previsaoLink);
+    listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
+
+    documentosList.appendChild(listItem);
+  }
 }
 
 function openFileViewer(filePath) {
