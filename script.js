@@ -35,6 +35,7 @@ export function showFiles(apartment) {
   const viewerContainer = document.getElementById('viewer-container');
   const contasContainer = document.getElementById('contas-container');
   const notificationsContainer = document.getElementById('notifications-container'); // Pega a referência para a caixa de notificações
+  const documentosContainer = document.getElementById('documentos-container');
 
   console.log('Elemento fileContainer:', fileContainer);
   console.log('Elemento fileList:', fileList);
@@ -44,20 +45,24 @@ export function showFiles(apartment) {
   fileContainer.style.display = 'none';
   contasContainer.style.display = 'none';
   notificationsContainer.style.display = 'none'; // Garante que a caixa de notificações também esteja inicialmente escondida
+  documentosContainer.style.display = 'none';
   fileList.innerHTML = '';
 
   document.getElementById('apartment-number').textContent = apartment;
   fileContainer.style.display = 'block';
   contasContainer.style.display = 'block';
   notificationsContainer.style.display = 'block'; // Mostra a caixa de notificações
+  documentosContainer.style.display = 'block';
 
   fileContainer.classList.remove('active');
   contasContainer.classList.remove('active');
   notificationsContainer.classList.remove('active'); // Remove a classe active da caixa de notificações
+  documentosContainer.classList.remove('active');
   setTimeout(() => {
     fileContainer.classList.add('active');
     contasContainer.classList.add('active');
     notificationsContainer.classList.add('active'); // Adiciona a classe active para a transição na caixa de notificações
+    documentosContainer.classList.add('active');
   }, 50);
 
   let files = getFilesForApartment(apartment);
