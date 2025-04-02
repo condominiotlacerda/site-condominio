@@ -171,10 +171,12 @@ export function showFiles(apartment) {
         previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
         previsaoLink.href = '#'; // Mantenha o href para indicar que é um link
         previsaoLink.addEventListener('click', function(event) {
-          event.preventDefault();
-          const filePath = 'previsao_despesas/previsao_despesas.pdf';
-          openFileViewer(filePath);
-        });
+        event.preventDefault();
+        const filePath = 'previsao_despesas/previsao_despesas.pdf';
+        const apartmentId = localStorage.getItem('apartmentId'); // Obtém o ID do apartamento
+        logAccess(null, 'Visualização de Previsão de despesas', apartmentId); // Adiciona o log de acesso
+        openFileViewer(filePath);
+      });
 
         const listItem = document.createElement('li');
         listItem.appendChild(previsaoLink);
