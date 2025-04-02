@@ -165,18 +165,23 @@ export function showFiles(apartment) {
     });
 
     const documentosList = document.getElementById('documentos-list');
-    if (documentosList && apartment) {
-      const previsaoLink = document.createElement('a');
-      previsaoLink.href = 'previsao_despesas/previsao_despesas.pdf';
-      previsaoLink.textContent = 'Previsão de despesas';
-      previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
+      if (documentosList && apartment) {
+        const previsaoLink = document.createElement('a');
+        previsaoLink.textContent = 'Previsão de despesas';
+        previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
+        previsaoLink.href = '#'; // Mantenha o href para indicar que é um link
+        previsaoLink.addEventListener('click', function(event) {
+          event.preventDefault();
+          const filePath = 'previsao_despesas/previsao_despesas.pdf';
+          openFileViewer(filePath);
+        });
 
-      const listItem = document.createElement('li');
-      listItem.appendChild(previsaoLink);
-      listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
+        const listItem = document.createElement('li');
+        listItem.appendChild(previsaoLink);
+        listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
 
-      documentosList.appendChild(listItem);
-    }
+        documentosList.appendChild(listItem);
+      }
   
 }
 
