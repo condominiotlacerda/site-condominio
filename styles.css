@@ -158,6 +158,12 @@ h1 {
   }
 }
 
+.file-box h2 {
+  font-size: 1.2em; /* Experimente este valor ou outro de sua preferência */
+  margin-top: 10px; /* Adicionando um pouco de margem acima do título, se necessário */
+  margin-bottom: 10px; /* Adicionando um pouco de margem abaixo do título, se necessário */
+}
+
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
@@ -190,6 +196,12 @@ h1 {
         right: 5px;
         width: auto; /* 🔹 Agora a largura se ajusta automaticamente */
         margin: 0 auto;
+    }
+
+    .file-box h2 {
+    font-size: 1.0em; /* Experimente este valor ou outro de sua preferência para mobile */
+    margin-top: 8px; /* Ajustando as margens para mobile, se necessário */
+    margin-bottom: 8px;
     }
 
     /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
