@@ -1,5 +1,19 @@
 {
+  "name": "site-condominio-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for site-condominio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
-    "firebase-admin": "^13.2.0"
-  }
+    "firebase-admin": "^12.0.0"
+  },
+  "keywords": [
+    "netlify",
+    "functions",
+    "firebase"
+  ],
+  "author": "",
+  "license": "ISC"
 }
