@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "firebase-admin": "^12.0.0"
+    "firebase-admin": "^12.0.0",
+    "dotenv": "^16.0.3" <---- Adicione esta linha aqui
   },
   "keywords": [
     "netlify",
