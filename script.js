@@ -474,16 +474,33 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ajuste para horário de Brasília (UTC-3)
-window.logAccess = function (userCode, downloadedFile, apartment) {
-  const db = getDatabase();
-  let now = new Date();
-  now.setHours(now.getHours() - 3);
-  const accessLog = {
-    apartment: apartment, // Invertido (como solicitado)
-    downloadedFile: downloadedFile,  // Invertido (como solicitado)
-    userCode: userCode,
-    accessDateTime: now.toISOString()
-  };
+      window.logAccess = function (userCode, downloadedFile, apartment) {
+        const logData = {
+          userCode: userCode,
+          downloadedFile: downloadedFile, // Mantendo o nome 'downloadedFile' como está
+          apartment: apartment,
+          accessDateTime: new Date().toISOString()
+        };
+
+        fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/log-access', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(logData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('Log de acesso registrado com sucesso através da função.');
+          } else {
+            console.error('Erro ao registrar log de acesso:', data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao enviar dados de log para a função:', error);
+        });
+      };
 
   const aptoNumber = apartment.replace('apto', '');
   const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
