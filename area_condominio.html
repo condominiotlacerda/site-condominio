@@ -9,6 +9,8 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
+            window.getFirebaseAuth = getFirebaseAuth;
+
         const firebaseConfig = {
             apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
             authDomain: "logsite-d81dd.firebaseapp.com",
