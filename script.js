@@ -501,14 +501,3 @@ document.addEventListener("DOMContentLoaded", function () {
           console.error('Erro ao enviar dados de log para a função:', error);
         });
       };
-
-  const aptoNumber = apartment.replace('apto', '');
-  const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
-  const safeFileName = downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_');
-  const logKey = `${aptoNumber}_${formattedDateTime}_${safeFileName}`;
-  console.log('Log Key gerada:', logKey);
-  const logRef = ref(db, `logs/${logKey}`);
-  set(logRef, accessLog)
-    .then(() => console.log('Log registrado com sucesso:', accessLog))
-    .catch(error => console.error('Erro ao registrar o log:', error));
-};
