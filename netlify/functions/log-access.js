@@ -2,8 +2,9 @@ const admin = require('firebase-admin');
 
 // Inicialize o Firebase Admin SDK fora do handler para reutilizar a conexão
 if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
   admin.initializeApp({
-    credential: admin.credential.cert(require('./serviceAccountKey.json')),
+    credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com"
   });
 }
@@ -12,7 +13,7 @@ exports.handler = async (event) => {
   try {
     if (event.httpMethod !== 'POST') {
       return { statusCode: 405, headers: {
-        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io",
+        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio/",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
       }, body: 'Method Not Allowed' };
@@ -36,7 +37,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io", // NÃO ESQUEÇA DE SUBSTITUIR PELO SEU DOMÍNIO!
+        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio/", // NÃO ESQUEÇA DE SUBSTITUIR PELO SEU DOMÍNIO!
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
       },
@@ -47,7 +48,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io", // E AQUI TAMBÉM!
+        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio/", // E AQUI TAMBÉM!
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
       },
