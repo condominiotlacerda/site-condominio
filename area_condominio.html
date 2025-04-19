@@ -9,11 +9,10 @@
         //import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
         
-        //const auth = getAuth(); // Adicione esta linha
+        const auth = getAuth(); // Adicione esta linha
         //const authFirebase = getFirebaseAuth();
 
-        onAuthStateChanged(null, (user) => {
-            const auth = getAuth(); // Inicialize auth aqui dentro
+        onAuthStateChanged(auth, (user) => {
         if (user) {
             // Usuário está logado, obtenha o ID token e verifique com a Netlify Function
             console.log("Usuário autenticado:", user.uid);
