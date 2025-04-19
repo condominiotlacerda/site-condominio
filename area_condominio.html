@@ -8,8 +8,6 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-        const authFirebase = getFirebaseAuth();
-
         // Registra o evento de visualização da página
         logEvent(analytics, 'page_view');
 
@@ -76,12 +74,13 @@
         window.logAccess = logAccess;
 
         function sair() {
-            signOut(authFirebase).then(() => {
-                console.log('Usuário desconectado');
-                window.location.href = 'index.html';
-            }).catch((error) => {
-                console.error('Erro ao fazer logout:', error);
-            });
+          const auth = getAuth(); // Obtenha a instância do auth aqui
+          signOut(auth).then(() => {
+            console.log('Usuário desconectado');
+            window.location.href = 'index.html';
+          }).catch((error) => {
+            console.error('Erro ao fazer logout:', error);
+          });
         }
         window.sair = sair;
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
