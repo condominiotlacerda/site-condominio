@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ajuste para horário de Brasília (UTC-3)
-      window.logAccess = function (userCode, downloadedFile, apartment) {
+      export function logAccess(userCode, downloadedFile, apartment) {
         const logData = {
           userCode: userCode,
           downloadedFile: downloadedFile, // Mantendo o nome 'downloadedFile' como está
