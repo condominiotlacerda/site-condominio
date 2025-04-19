@@ -13,7 +13,7 @@ exports.handler = async (event) => {
   try {
     if (event.httpMethod !== 'POST') {
       return { statusCode: 405, headers: {
-        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio/",
+        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
       }, body: 'Method Not Allowed' };
