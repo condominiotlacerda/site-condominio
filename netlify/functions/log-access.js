@@ -10,6 +10,19 @@ if (!admin.apps.length) {
 }
 
 exports.handler = async (event) => {
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "3600", // How long the results of a preflight request can be cached (in seconds)
+      },
+      body: "",
+    };
+  }
+
   try {
     if (event.httpMethod !== 'POST') {
       return { statusCode: 405, headers: {
@@ -37,7 +50,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio", // NÃO ESQUEÇA DE SUBSTITUIR PELO SEU DOMÍNIO!
+        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
       },
@@ -48,7 +61,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio", // E AQUI TAMBÉM!
+        "Access-Control-Allow-Origin": "https://condominiotlacerda.github.io/site-condominio",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type"
       },
