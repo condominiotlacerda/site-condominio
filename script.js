@@ -185,10 +185,6 @@ function openFileViewer(filePath) {
 
   // Adiciona a classe 'active' ao viewerContainer
   viewerContainer.classList.add('active');
-
-  // Não precisamos remover a classe 'active' aqui, pois ela será adicionada agora
-  // viewerContainer.classList.remove('active');
-  // setTimeout(() => viewerContainer.classList.add('active'), 50);
 }
 
 function getFilesForApartment(apartment) {
@@ -200,7 +196,6 @@ function getFilesForApartment(apartment) {
     { name: nomesTaxas.taxa2Name, path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` },
     { name: nomesTaxas.taxa3Name, path: `${baseUrl}boleto_tx_3_apto_${aptoNumber}.pdf` } // 👈 Adicionamos esta linha
   ];
-
   return files;
 }
 
