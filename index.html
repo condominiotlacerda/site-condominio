@@ -234,33 +234,34 @@
 
     <footer>
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em; text-align: center;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
+        <p style="font-size: 0.8em; text-align: center;">Solução desenvolvida por Unidade 301.</p>
     </footer>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const senhaCadastroInput = document.getElementById('senhaCadastro');
-  const senhaLoginInput = document.getElementById('senhaLogin');
+  
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const senhaCadastroInput = document.getElementById('senhaCadastro');
+      const senhaLoginInput = document.getElementById('senhaLogin');
 
-  if (senhaCadastroInput) {
-    senhaCadastroInput.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
-      if (this.value.length > this.maxLength) {
-        this.value = this.value.slice(0, this.maxLength);
-      }
-    });
-  }
+      if (senhaCadastroInput) {
+        senhaCadastroInput.addEventListener('input', function() {
+          this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
+          if (this.value.length > this.maxLength) {
+            this.value = this.value.slice(0, this.maxLength);
+          }
+        });
+      }
 
-  if (senhaLoginInput) {
-    senhaLoginInput.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
-      if (this.value.length > this.maxLength) {
-        this.value = this.value.slice(0, this.maxLength);
-      }
-    });
-  }
-});
+      if (senhaLoginInput) {
+        senhaLoginInput.addEventListener('input', function() {
+          this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
+          if (this.value.length > this.maxLength) {
+            this.value = this.value.slice(0, this.maxLength);
+          }
+        });
+      }
+    });
         
     </script>
-<script src="script.js" defer type="module"></script>
+    <script src="script.js" defer type="module"></script>
 </body>
 </html>
