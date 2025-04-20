@@ -170,8 +170,9 @@
             }
         }
     } catch (error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        console.log("Erro capturado:", error); // Log do objeto de erro completo
+        const errorCode = error?.code;
+        const errorMessage = error?.message;
         console.log("Código de erro:", errorCode);
 
         if (errorCode === 'auth/invalid-email') {
@@ -179,9 +180,14 @@
         } else if (errorCode === 'auth/invalid-credential') {
             mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
         } else {
-            mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
-            console.error("Erro ao fazer login:", errorCode, errorMessage);
+            if (errorMessage) {
+                mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
+            } else {
+                mensagemLogin.textContent = 'Ocorreu um erro ao fazer login.';
+            }
         }
+
+        console.error("Erro ao fazer login:", errorCode, errorMessage);
     }
 });
         }
