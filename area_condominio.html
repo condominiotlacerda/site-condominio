@@ -5,54 +5,7 @@
         // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-        //import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-
-        
-        //const auth = getAuth(); // Adicione esta linha
-        //const authFirebase = getFirebaseAuth();
-        
-        /*
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // Usuário está logado, obtenha o ID token e verifique com a Netlify Function
-            console.log("Usuário autenticado:", user.uid);
-            user.getIdToken().then(function(idToken) {
-              fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/auth', {
-                method: 'GET',
-                headers: {
-                  'Authorization': 'Bearer ' + idToken
-                }
-              })
-              .then(response => response.json())
-              .then(data => {
-                if (data.uid) {
-                  // Token válido, o usuário pode continuar na página
-                  console.log("Token verificado com sucesso pela função, UID:", data.uid);
-                  // Aqui você pode habilitar os botões dos apartamentos ou carregar outros dados protegidos
-                  const apartmentButtons = document.querySelectorAll('.apartment-button');
-                  apartmentButtons.forEach(button => button.disabled = false);
-                } else if (data.error) {
-                  // Token inválido ou expirado, redirecione para login
-                  console.error("Erro ao verificar o token pela função:", data.error);
-                  window.location.href = 'index.html';
-                }
-              })
-              .catch(error => {
-                console.error("Erro ao enviar token para a função:", error);
-                // Redirecione para login em caso de erro de comunicação com a função
-                window.location.href = 'index.html';
-              });
-            }).catch(function(error) {
-              console.error("Erro ao obter o ID Token:", error);
-              window.location.href = 'index.html'; // Redirecione para login se não conseguir obter o token
-            });
-          } else {
-            // Usuário não está logado, redirecione para a página de login
-            console.log("Usuário não autenticado, redirecionando para login...");
-            window.location.href = 'index.html';
-          }
-        }); */
 
         // Função para registrar acessos no Firebase com horário correto (UTC-3)
         function logAccess(userCode, userName, apartment, accessedDocument) {
@@ -118,7 +71,6 @@
         <h1>Condomínio T Lacerda</h1>
         <p id="welcome-message">Portal do Condomínio T Lacerda.</p>
         
-
         <div class="apartment-section">
             <button class="apartment-button" id="apto1" disabled onclick="loadFiles('apto1')">Apartamento 1</button>
             <button class="apartment-button" id="apto101" disabled onclick="loadFiles('apto101')">Apartamento 101</button>
@@ -224,7 +176,7 @@
 
     <footer>
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em;">Solução desenvolvida por João, Unidade 301.</p>
+        <p style="font-size: 0.8em;">Solução desenvolvida por Unidade 301.</p>
     </footer>
 
     <script type="module">
