@@ -4,6 +4,8 @@ const path = require('path');
 const indexHtmlPath = path.join(__dirname, 'index.html');
 let indexHtmlContent = fs.readFileSync(indexHtmlPath, 'utf8');
 
+console.log("process.env:", process.env);
+
 indexHtmlContent = indexHtmlContent.replace(
   /"VITE_FIREBASE_API_KEY_PLACEHOLDER"/g,
   `"${process.env.FIREBASE_API_KEY}"`
