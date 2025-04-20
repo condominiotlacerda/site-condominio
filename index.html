@@ -118,73 +118,72 @@
         const formularioLogin = document.getElementById('formularioLogin');
         if (formularioLogin) {
             formularioLogin.addEventListener('submit', async function(event) {
-                event.preventDefault();
-                const emailLogin = document.getElementById('emailLogin').value;
-                const senhaLogin = document.getElementById('senhaLogin').value;
-                const mensagemLogin = document.getElementById('mensagemLogin');
+    event.preventDefault();
+    const emailLogin = document.getElementById('emailLogin').value;
+    const senhaLogin = document.getElementById('senhaLogin').value;
+    const mensagemLogin = document.getElementById('mensagemLogin');
 
-                try {
-                    const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
-                    const user = userCredential.user;
-                    console.log("Usuário logado com sucesso:", user.uid);
-                    const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
-                    const snapshot = await get(pendingRef);
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
+        const user = userCredential.user;
+        console.log("Usuário logado com sucesso:", user.uid);
+        const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
+        const snapshot = await get(pendingRef);
 
-                    if (snapshot.exists()) {
-                        mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
-                    } else {
-                        mensagemLogin.textContent = 'Login realizado com sucesso!';
-                        const userDetailsRef = ref(db, 'userApartments/' + user.uid);
-                        const userSnapshot = await get(userDetailsRef);
+        if (snapshot.exists()) {
+            mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
+        } else {
+            mensagemLogin.textContent = 'Login realizado com sucesso!';
+            const userDetailsRef = ref(db, 'userApartments/' + user.uid);
+            const userSnapshot = await get(userDetailsRef);
 
-                        if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
-                            const apartmentId = userSnapshot.val().apartmentId;
-                            console.log('Apartment ID from DB (before storage):', apartmentId);
-                            localStorage.setItem('apartmentId', apartmentId);
+            if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
+                const apartmentId = userSnapshot.val().apartmentId;
+                console.log('Apartment ID from DB (before storage):', apartmentId);
+                localStorage.setItem('apartmentId', apartmentId);
 
-                            const invitesRef = collection(firestore, 'invites');
-                            const q = query(invitesRef, where('apartment', '==', apartmentId));
-                            getDocs(q)
-                                .then((querySnapshot) => {
-                                    console.log('QuerySnapshot size:', querySnapshot.size); // Adicione esta linha
-                                    if (!querySnapshot.empty) {
-                                        querySnapshot.forEach((doc) => {
-                                            const userData = doc.data();
-                                            const userName = userData.name;
-                                            localStorage.setItem('userName', userName);
-                                            console.log('User Name (fetched from Firestore in index.html):', userName);
-                                            window.location.href = 'area_condominio.html';
-                                        });
-                                    } else {
-                                        console.log("No user found in invites for apartment:", apartmentId);
-                                        window.location.href = 'area_condominio.html';
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.error("Error fetching user name from Firestore in index.html:", error);
-                                    window.location.href = 'area_condominio.html';
-                                });
-                        } else {
-                            console.error("apartmentId não encontrado para o usuário:", user.uid);
-                            mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
-                        }
-                    }
-                } catch (error) {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log("Código de erro:", errorCode);
+                const invitesRef = collection(firestore, 'invites');
+                const q = query(invitesRef, where('apartment', '==', apartmentId));
+                getDocs(q)
+                    .then((querySnapshot) => {
+                        console.log('QuerySnapshot size:', querySnapshot.size); // Adicione esta linha
+                        if (!querySnapshot.empty) {
+                            querySnapshot.forEach((doc) => {
+                                const userData = doc.data();
+                                const userName = userData.name;
+                                localStorage.setItem('userName', userName);
+                                console.log('User Name (fetched from Firestore in index.html):', userName);
+                                window.location.href = 'area_condominio.html';
+                            });
+                        } else {
+                            console.log("No user found in invites for apartment:", apartmentId);
+                            window.location.href = 'area_condominio.html';
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching user name from Firestore in index.html:", error);
+                        window.location.href = 'area_condominio.html';
+                    });
+            } else {
+                console.error("apartmentId não encontrado para o usuário:", user.uid);
+                mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
+            }
+        }
+    } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("Código de erro:", errorCode);
 
-                    if (errorCode === 'auth/invalid-email') {
-                        mensagemLogin.textContent = 'O email digitado é inválido.';
-                    } else if (errorCode === 'auth/invalid-credential') {
-                        mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
-                    } else {
-                        mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
-                    }
-
-                    console.error("Erro ao fazer login:", errorCode, errorMessage);
-                }
-            });
+        if (errorCode === 'auth/invalid-email') {
+            mensagemLogin.textContent = 'O email digitado é inválido.';
+        } else if (errorCode === 'auth/invalid-credential') {
+            mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
+        } else {
+            mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
+            console.error("Erro ao fazer login:", errorCode, errorMessage);
+        }
+    }
+});
         }
     </script>
 </head>
