@@ -170,6 +170,7 @@
             }
         }
     } catch (error) {
+        import { ref } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"; // Importe ref aqui
         console.log("Erro capturado:", error); // Log do objeto de erro completo
         const errorCode = error?.code;
         const errorMessage = error?.message;
