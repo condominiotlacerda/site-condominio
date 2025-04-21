@@ -14,6 +14,7 @@ function enableApartment() {
 }
 
 export async function showFiles(apartment) {
+  console.log('showFiles foi chamada com o apartamento:', apartment);
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
   const fileContainer = document.getElementById('file-container');
