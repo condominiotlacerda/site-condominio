@@ -154,23 +154,30 @@
                         const userDetailsRef = ref(db, 'userApartments/' + user.uid);
                         const userSnapshot = await get(userDetailsRef);
 
-                        if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
-                            const apartmentId = userSnapshot.val().apartmentId;
-                            localStorage.setItem('apartmentId', apartmentId);
+                        const userDetailsRef = ref(db, 'userApartments/' + user.uid);
+                            get(userDetailsRef)
+                                .then((snapshot) => {
+                                    if (snapshot.exists()) {
+                                        const userData = snapshot.val();
+                                        const apartmentId = userData.apartmentId;
+                                        const userName = userData.userName; // Buscamos o userName do Realtime Database
 
-                            const invitesRef = collection(firestore, 'invites');
-                            const q = query(invitesRef, where('apartment', '==', apartmentId));
-                            getDocs(q)
-                                .then((querySnapshot) => {
-                                    console.log('QuerySnapshot size:', querySnapshot.size); // Adicione esta linha
-                                    if (!querySnapshot.empty) {
-                                        querySnapshot.forEach((doc) => {
-                                            const userData = doc.data();
-                                            const userName = userData.name;
-                                            localStorage.setItem('userName', userName);
-                                            console.log('User Name (fetched from Firestore in index.html):', userName);
-                                            window.location.href = 'area_condominio.html';
-                                        });
+                                        localStorage.setItem('apartmentId', apartmentId);
+                                        localStorage.setItem('userName', userName);
+
+                                        console.log('Apartment ID (from Realtime DB):', apartmentId);
+                                        console.log('User Name (from Realtime DB):', userName);
+
+                                        window.location.href = 'area_condominio.html';
+                                    } else {
+                                        console.error("Dados do apartamento não encontrados para o usuário:", user.uid);
+                                        mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Erro ao buscar dados do usuário no Realtime Database:", error);
+                                    mensagemLogin.textContent = 'Erro ao carregar informações. Tente novamente mais tarde.';
+                                });
                                     } else {
                                         console.log("No user found in invites for apartment:", apartmentId);
                                         window.location.href = 'area_condominio.html';
