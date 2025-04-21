@@ -29,29 +29,28 @@
         window.logAccess = logAccess;
 
         function sair() {
-          console.log('Usuário solicitou sair.');
-          localStorage.removeItem('apartmentId202firebase:host:logsite-d81dd-default-rtdb.firebaseio.com"s-usc1a-nss-2014.firebaseio.com"');
-          console.log('Removendo apartmentId202firebase...');
-          localStorage.removeItem('0"firebase:authUser:AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM:[DEFAULT]"');
-          console.log('Removendo firebase:authUser...');
-          localStorage.removeItem('0"[DEFAULT]!1:285508603780:web:dba70ace036ee8a37297d1"');
-          console.log('Removendo 0"[DEFAULT]!1:285508603780...');
-          localStorage.removeItem('1"[DEFAULT]!1:927599674940:web:e349fb44da02c9063e6539"');
-          console.log('Removendo 1"[DEFAULT]!1:927599674940...');
-          localStorage.removeItem('apartmentId'); // Adicione esta linha para remover a chave 'apartmentId' diretamente
-          console.log('Removendo apartmentId...');
-          window.location.href = 'index.html';
-          console.log('Redirecionando para index.html');
+            console.log('Usuário solicitou sair.');
+            localStorage.removeItem('apartmentId202firebase:host:logsite-d81dd-default-rtdb.firebaseio.com"s-usc1a-nss-2014.firebaseio.com"');
+            console.log('Removendo apartmentId202firebase...');
+            localStorage.removeItem('0"firebase:authUser:AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM:[DEFAULT]"');
+            console.log('Removendo firebase:authUser...');
+            localStorage.removeItem('0"[DEFAULT]!1:285508603780:web:dba70ace036ee8a37297d1"');
+            console.log('Removendo 0"[DEFAULT]!1:285508603780...');
+            localStorage.removeItem('1"[DEFAULT]!1:927599674940:web:e349fb44da02c9063e6539"');
+            console.log('Removendo 1"[DEFAULT]!1:927599674940...');
+            localStorage.removeItem('apartmentId'); // Adicione esta linha para remover a chave 'apartmentId' diretamente
+            console.log('Removendo apartmentId...');
+            window.location.href = 'index.html';
+            console.log('Redirecionando para index.html');
         }
         window.sair = sair;
-        
+
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css?v=1.1">
     <title>Condomínio T Lacerda - Boletos e Contas</title>
-    <script src="script.js" defer type="module"></script>
     <style>
         .logout-button {
             position: absolute;
@@ -106,12 +105,12 @@
     import { showFiles, logAccess } from './script.js';
 
     // Função para ser chamada no onclick dos botões
-    window.loadFiles = async function(apartment) { // Adicione a palavra async aqui
+    window.loadFiles = async function(apartment) { // Removi a palavra async aqui para voltar ao estado anterior
       showFiles(apartment);
     };
-      
+
   </script>
-    
+
     <button class="logout-button" onclick="sair()">Sair</button>
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
@@ -123,7 +122,7 @@
 
         <h1>Condomínio T Lacerda</h1>
         <p id="welcome-message">Portal do Condomínio T Lacerda.</p>
-        
+
         <div class="apartment-section">
             <button class="apartment-button" id="apto1" disabled onclick="loadFiles('apto1')">Apartamento 1</button>
             <button class="apartment-button" id="apto101" disabled onclick="loadFiles('apto101')">Apartamento 101</button>
@@ -136,66 +135,66 @@
         </div>
         <hr>
         <div id="file-list-wrapper">
-          <section id="file-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
-            <h2>Arquivos do <span id="apartment-number"></span></h2>
-            <hr>
-            <ul id="file-list" style="color: black;">
-            </ul>
-          </section>
+            <section id="file-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
+                <h2>Arquivos do <span id="apartment-number"></span></h2>
+                <hr>
+                <ul id="file-list" style="color: black;">
+                </ul>
+            </section>
 
-          <section id="contas-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
-            <h2>Transparência</h2>
-            <hr>
-            <label for="ano-conta">Ano:</label>
-            <select id="ano-conta">
-              <option value="2025" selected>2025</option>
-            </select><br><br>
+            <section id="contas-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
+                <h2>Transparência</h2>
+                <hr>
+                <label for="ano-conta">Ano:</label>
+                <select id="ano-conta">
+                    <option value="2025" selected>2025</option>
+                </select><br><br>
 
-            <label for="mes-conta">Mês:</label>
-            <select id="mes-conta">
-              <option value="">Selecione o mês</option>
-              <option value="1">Janeiro</option>
-              <option value="2">Fevereiro</option>
-              <option value="3">Março</option>
-              <option value="4">Abril</option>
-              <option value="5">Maio</option>
-              <option value="6">Junho</option>
-              <option value="7">Julho</option>
-              <option value="8">Agosto</option>
-              <option value="9">Setembro</option>
-              <option value="10">Outubro</option>
-              <option value="11">Novembro</option>
-              <option value="12">Dezembro</option>
-            </select>
-            <ul id="contas-list" style="color: black;">
-            </ul>
-          </section>
-                
-          <section id="notifications-container" class="file-box" style="display: none; transition: opacity 0.5s, transform 0.3s ease, border-color 0.4s ease; height: 300px; width: 300px; overflow: auto;">
-            <h2>Histórico de notificações</h2>
-            <hr>    
-            <div id="notifications-list" style="color: black; white-space: pre-line;">
-            </div>
-          </section>
+                <label for="mes-conta">Mês:</label>
+                <select id="mes-conta">
+                    <option value="">Selecione o mês</option>
+                    <option value="1">Janeiro</option>
+                    <option value="2">Fevereiro</option>
+                    <option value="3">Março</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Maio</option>
+                    <option value="6">Junho</option>
+                    <option value="7">Julho</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+                <ul id="contas-list" style="color: black;">
+                </ul>
+            </section>
 
-          <section id="documentos-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
-            <h2>Documentos</h2>
-            <hr>
-            <div id="documentos-list" style="color: black;">
-            </div>
-          </section>
-                
+            <section id="notifications-container" class="file-box" style="display: none; transition: opacity 0.5s, transform 0.3s ease, border-color 0.4s ease; height: 300px; width: 300px; overflow: auto;">
+                <h2>Histórico de notificações</h2>
+                <hr>
+                <div id="notifications-list" style="color: black; white-space: pre-line;">
+                </div>
+            </section>
+
+            <section id="documentos-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
+                <h2>Documentos</h2>
+                <hr>
+                <div id="documentos-list" style="color: black;">
+                </div>
+            </section>
+
         </div>
-            <hr>
-              <div style="text-align: left;">
+        <hr>
+            <div style="text-align: left;">
                 <img src="/site-condominio/images/tokio_marine.jpg" width="328" height="78" alt="Imagem Tokio Marine">
-              </div>
-            <hr>
-        
+            </div>
+        <hr>
+
         <section id="viewer-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; transition: opacity 0.5s;">
-          <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
-          <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
-          <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
+            <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
+            <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
+            <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
         </section>
 
         <section id="login" style="display:none;">
