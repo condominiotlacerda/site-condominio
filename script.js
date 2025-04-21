@@ -11,10 +11,10 @@ const firebaseConfig = {
   authDomain: "logsite-d81dd.firebaseapp.com",
   databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
   projectId: "logsite-d81dd",
-  storageBucket: "logsite-d81dd.firebasestorage.app",
-  messagingSenderId: "285508603780",
+  // storageBucket: "logsite-d81dd.firebasestorage.app",
+  // messagingSenderId: "285508603780",
   appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-  measurementId: "G-B0JHRHTNKF"
+  // measurementId: "G-B0JHRHTNKF"
 };
 
 const app = initializeApp(firebaseConfig);
