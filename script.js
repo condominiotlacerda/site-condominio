@@ -1,3 +1,4 @@
+import { fetchDatabaseURL } from './index.html'; // Ajuste o caminho se necessário
 let nomesTaxas = {};
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
@@ -12,7 +13,7 @@ function enableApartment() {
   alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
-export function showFiles(apartment) {
+export async function showFiles(apartment) {
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
   const fileContainer = document.getElementById('file-container');
@@ -68,7 +69,10 @@ export function showFiles(apartment) {
       const documentName = file.name;
       const now = new Date();
 
-      logAccess(null, documentName, apartmentId);
+      // Busque o databaseURL aqui
+      const databaseURL = await fetchDatabaseURL();
+
+      logAccess(null, documentName, apartmentId, databaseURL);
 
       if (isMobile) {
         window.open(file.path, "_blank");
