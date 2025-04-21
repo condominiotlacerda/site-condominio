@@ -30,21 +30,9 @@
 
         function sair() {
           console.log('Usuário solicitou sair.');
-          localStorage.removeItem('apartmentId202firebase:host:logsite-d81dd-default-rtdb.firebaseio.com"s-usc1a-nss-2014.firebaseio.com"');
-          console.log('Removendo apartmentId202firebase...');
-          localStorage.removeItem('0"firebase:authUser:AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM:[DEFAULT]"');
-          console.log('Removendo firebase:authUser...');
-          localStorage.removeItem('0"[DEFAULT]!1:285508603780:web:dba70ace036ee8a37297d1"');
-          console.log('Removendo 0"[DEFAULT]!1:285508603780...');
-          localStorage.removeItem('1"[DEFAULT]!1:927599674940:web:e349fb44da02c9063e6539"');
-          console.log('Removendo 1"[DEFAULT]!1:927599674940...');
-          localStorage.removeItem('apartmentId'); // Adicione esta linha para remover a chave 'apartmentId' diretamente
-          console.log('Removendo apartmentId...');
           window.location.href = 'index.html';
-          console.log('Redirecionando para index.html');
         }
         window.sair = sair;
-        
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
     </script>
     <meta charset="UTF-8">
@@ -71,46 +59,6 @@
     </style>
 </head>
 <body>
-  <script type="module">
-    document.addEventListener('DOMContentLoaded', function() {
-      // Adicionando um pequeno atraso para garantir que a remoção do localStorage tenha efeito
-      setTimeout(function() {
-        const apartmentId = localStorage.getItem('apartmentId');
-        if (!apartmentId) {
-          console.log('apartmentId não encontrado no carregamento da página. Redirecionando para index.html.');
-          window.location.replace('index.html'); // Usar replace para evitar que a página area_condominio.html fique no histórico
-        } else {
-          console.log('apartmentId encontrado no carregamento da página:', apartmentId);
-          // Lógica para habilitar o botão do apartamento
-          const aptoNumber = apartmentId.replace('apto', '');
-          const apartmentButton = document.getElementById('apto' + aptoNumber);
-          if (apartmentButton) {
-            apartmentButton.disabled = false;
-          }
-        }
-      }, 100); // Atraso de 100 milissegundos
-    });
-
-    window.addEventListener('beforeunload', function (event) {
-      for (let i = localStorage.length - 1; i >= 0; i--) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('apartmentId')) {
-          localStorage.removeItem(key);
-        }
-      }
-      localStorage.removeItem('0"firebase:authUser:AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM:[DEFAULT]"');
-      localStorage.removeItem('0"[DEFAULT]!1:285508603780:web:dba70ace036ee8a37297d1"');
-      localStorage.removeItem('1"[DEFAULT]!1:927599674940:web:e349fb44da02c9063e6539"');
-    });
-
-    import { showFiles, logAccess } from './script.js';
-
-    // Função para ser chamada no onclick dos botões
-    window.loadFiles = function(apartment) {
-      showFiles(apartment);
-    };
-  </script>
-    
     <button class="logout-button" onclick="sair()">Sair</button>
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
@@ -230,5 +178,25 @@
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
         <p style="font-size: 0.8em;">Solução desenvolvida por Unidade 301.</p>
     </footer>
+
+    <script type="module">
+      import { showFiles, logAccess } from './script.js';
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const apartmentId = localStorage.getItem('apartmentId');
+        if (apartmentId) {
+          const aptoNumber = apartmentId.replace('apto', '');
+          const apartmentButton = document.getElementById('apto' + aptoNumber);
+          if (apartmentButton) {
+            apartmentButton.disabled = false;
+          }
+        }
+      });
+
+      // Função para ser chamada no onclick dos botões
+      window.loadFiles = function(apartment) {
+        showFiles(apartment);
+      };
+    </script>
 </body>
 </html>
