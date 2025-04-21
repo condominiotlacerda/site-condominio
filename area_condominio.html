@@ -106,9 +106,10 @@
     import { showFiles, logAccess } from './script.js';
 
     // Função para ser chamada no onclick dos botões
-    window.loadFiles = function(apartment) {
+    window.loadFiles = async function(apartment) { // Adicione a palavra async aqui
       showFiles(apartment);
     };
+      
   </script>
     
     <button class="logout-button" onclick="sair()">Sair</button>
