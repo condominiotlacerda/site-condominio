@@ -71,6 +71,7 @@ export async function showFiles(apartment) {
       const now = new Date();
 
       // Busque o databaseURL aqui
+      console.log('Executando await fetchDatabaseURL para o apartamento:', apartment);
       const databaseURL = await fetchDatabaseURL();
 
       logAccess(null, documentName, apartmentId, databaseURL);
