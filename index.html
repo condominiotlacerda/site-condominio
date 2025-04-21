@@ -1,285 +1,289 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css?v=1.1">
-    <title>Condomínio T Lacerda - Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Login</title>
 
-    <script type="module">
-        import { fetchDatabaseURL } from './utils.js';
-        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+    <script type="module">
+        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-                apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-                authDomain: "logsite-d81dd.firebaseapp.com",
-                // databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-                projectId: "logsite-d81dd",
-                appId: "1:285508603780:web:dba70ace036ee8a37297d1"
-            };
-                
-        /*        
         const firebaseConfig = {
-            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-            authDomain: "logsite-d81dd.firebaseapp.com",
-            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-            projectId: "logsite-d81dd",
-            storageBucket: "logsite-d81dd.firebasestorage.app",
-            messagingSenderId: "285508603780",
-            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-            measurementId: "G-B0JHRHTNKF"
-        };
-        */
-      
-        
-        const forgotPasswordLink = document.getElementById('forgotPassword');
-        const forgotPasswordSection = document.getElementById('forgotPasswordSection');
-        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-        const mensagemForgotPassword = document.getElementById('mensagemForgotPassword');
-        const mostrarLoginFromForgotLink = document.getElementById('mostrarLoginFromForgot');
-        const loginSection = document.getElementById('login');
-        const cadastroSection = document.getElementById('cadastro');
-        const mostrarCadastroLink = document.getElementById('mostrarCadastro');
-        const mostrarLoginLink = document.getElementById('mostrarLogin');
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            // databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1"
+        };
 
-        if (forgotPasswordLink) {
-            forgotPasswordLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                loginSection.style.display = 'none';
-                forgotPasswordSection.style.display = 'block';
-            });
-        }
-
-        if (mostrarLoginFromForgotLink) {
-            mostrarLoginFromForgotLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                forgotPasswordSection.style.display = 'none';
-                loginSection.style.display = 'block';
-            });
-        }
-
-        if (forgotPasswordForm) {
-            forgotPasswordForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const emailForgotPassword = document.getElementById('emailForgotPassword').value;
-                const auth = getAuth();
-
-                sendPasswordResetEmail(auth, emailForgotPassword)
-                    .then(() => {
-                        mensagemForgotPassword.textContent = 'Um link para redefinir sua senha foi enviado para o seu e-mail.';
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        mensagemForgotPassword.textContent = 'Erro ao enviar o e-mail de recuperação: ' + errorMessage;
-                        console.error('Erro ao enviar e-mail de recuperação:', errorCode, errorMessage);
-                    });
-            });
-        }
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getDatabase(app);
-        const auth = getAuth(app);
-        const firestore = getFirestore(app);
-
-        // Função para registrar acessos no Firebase com horário correto (UTC-3)
-        function logAccess(userCode, userName, apartment, accessedDocument, databaseURL) {
-            const now = new Date();
-            now.setHours(now.getHours() - 3);
-            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
-            const accessLog = {
-                userCode: userCode,
-                userName: userName,
-                apartment: `Acesso ao apartamento ${apartment}`,
-                accessedDocument: accessedDocument,
-                accessDate: now.toISOString()
-            };
-            const logRef = ref(db, `logs/${fileName}`);
-            set(logRef, accessLog)
-                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-                .catch(error => console.error("Erro ao registrar log:", error));
-        }
-
-        window.logAccess = logAccess;
-
-        if (mostrarCadastroLink) {
-            mostrarCadastroLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                loginSection.style.display = 'none';
-                cadastroSection.style.display = 'block';
-            });
-        }
-
-        if (mostrarLoginLink) {
-            mostrarLoginLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                cadastroSection.style.display = 'none';
-                loginSection.style.display = 'block';
-            });
-        }
-
-        const formularioLogin = document.getElementById('formularioLogin');
-        if (formularioLogin) {
-            formularioLogin.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const emailLogin = document.getElementById('emailLogin').value;
-            const senhaLogin = document.getElementById('senhaLogin').value;
-            const mensagemLogin = document.getElementById('mensagemLogin');
+        async function fetchDatabaseURL() {
+            const firestore = getFirestore();
+            const variablesCollection = collection(firestore, 'variables');
+            const databaseURLDoc = doc(variablesCollection, 'FIREBASE_DATABASE_URL');
 
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
-                const user = userCredential.user;
-                console.log("Usuário logado com sucesso:", user.uid);
-                const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
-                const snapshot = await get(pendingRef);
-
-                if (snapshot.exists()) {
-                    mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
+                const docSnap = await getDoc(databaseURLDoc);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    return data.DATABASE_URL; // Lembre-se que o nome do campo no seu documento é 'DATABASE_URL'
                 } else {
-                    mensagemLogin.textContent = 'Login realizado com sucesso!';
-                    const userDetailsRef = ref(db, 'userApartments/' + user.uid);
-                    const userSnapshot = await get(userDetailsRef);
-
-                    if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
-                        const apartmentId = userSnapshot.val().apartmentId;
-                        console.log('Apartment ID from DB (before storage):', apartmentId);
-                        localStorage.setItem('apartmentId', 'apto' + apartmentId);
-
-                        const invitesRef = collection(firestore, 'invites');
-                        const q = query(invitesRef, where('apartment', '==', apartmentId));
-                        getDocs(q)
-                            .then((querySnapshot) => {
-                                console.log('QuerySnapshot size:', querySnapshot.size); // Adicione esta linha
-                                if (!querySnapshot.empty) {
-                                    querySnapshot.forEach((doc) => {
-                                        const userData = doc.data();
-                                        const userName = userData.name;
-                                        localStorage.setItem('userName', userName);
-                                        console.log('User Name (fetched from Firestore in index.html):', userName);
-                                        window.location.href = 'area_condominio.html';
-                                    });
-                                } else {
-                                    console.log("No user found in invites for apartment:", apartmentId);
-                                    window.location.href = 'area_condominio.html';
-                                }
-                            })
-                            .catch((error) => {
-                                console.error("Error fetching user name from Firestore in index.html:", error);
-                                window.location.href = 'area_condominio.html';
-                            });
-                    } else {
-                        console.error("apartmentId não encontrado para o usuário:", user.uid);
-                        mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
-                    }
+                    console.error("Documento 'FIREBASE_DATABASE_URL' não encontrado no Firestore");
+                    return null;
                 }
             } catch (error) {
-                console.log("Erro capturado:", error); // Log do objeto de erro completo
-                const errorCode = error?.code;
-                const errorMessage = error?.message;
-                console.log("Código de erro:", errorCode);
-
-                if (errorCode === 'auth/invalid-email') {
-                    mensagemLogin.textContent = 'O email digitado é inválido.';
-                } else if (errorCode === 'auth/invalid-credential') {
-                    mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
-                } else {
-                    if (errorMessage) {
-                        mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
-                    } else {
-                        mensagemLogin.textContent = 'Ocorreu um erro ao fazer login.';
-                    }
-                }
-
-                console.error("Erro ao fazer login:", errorCode, errorMessage);
+                console.error("Erro ao buscar databaseURL do Firestore:", error);
+                return null;
             }
-        });
-        }
-    </script>
+        }
+
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const forgotPasswordSection = document.getElementById('forgotPasswordSection');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const mensagemForgotPassword = document.getElementById('mensagemForgotPassword');
+        const mostrarLoginFromForgotLink = document.getElementById('mostrarLoginFromForgot');
+        const loginSection = document.getElementById('login');
+        const cadastroSection = document.getElementById('cadastro');
+        const mostrarCadastroLink = document.getElementById('mostrarCadastro');
+        const mostrarLoginLink = document.getElementById('mostrarLogin');
+
+        if (forgotPasswordLink) {
+            forgotPasswordLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                loginSection.style.display = 'none';
+                forgotPasswordSection.style.display = 'block';
+            });
+        }
+
+        if (mostrarLoginFromForgotLink) {
+            mostrarLoginFromForgotLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                forgotPasswordSection.style.display = 'none';
+                loginSection.style.display = 'block';
+            });
+        }
+
+        if (forgotPasswordForm) {
+            forgotPasswordForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const emailForgotPassword = document.getElementById('emailForgotPassword').value;
+                const auth = getAuth();
+
+                sendPasswordResetEmail(auth, emailForgotPassword)
+                    .then(() => {
+                        mensagemForgotPassword.textContent = 'Um link para redefinir sua senha foi enviado para o seu e-mail.';
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        mensagemForgotPassword.textContent = 'Erro ao enviar o e-mail de recuperação: ' + errorMessage;
+                        console.error('Erro ao enviar e-mail de recuperação:', errorCode, errorMessage);
+                    });
+            });
+        }
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const firestore = getFirestore(app);
+
+        // Função para registrar acessos no Firebase com horário correto (UTC-3)
+        function logAccess(userCode, userName, apartment, accessedDocument, databaseURL) {
+            const now = new Date();
+            now.setHours(now.getHours() - 3);
+            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
+            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
+            const accessLog = {
+                userCode: userCode,
+                userName: userName,
+                apartment: `Acesso ao apartamento ${apartment}`,
+                accessedDocument: accessedDocument,
+                accessDate: now.toISOString()
+            };
+            const logRef = ref(db, `logs/${fileName}`);
+            set(logRef, accessLog)
+                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
+                .catch(error => console.error("Erro ao registrar log:", error));
+        }
+
+        window.logAccess = logAccess;
+
+        if (mostrarCadastroLink) {
+            mostrarCadastroLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                loginSection.style.display = 'none';
+                cadastroSection.style.display = 'block';
+            });
+        }
+
+        if (mostrarLoginLink) {
+            mostrarLoginLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                cadastroSection.style.display = 'none';
+                loginSection.style.display = 'block';
+            });
+        }
+
+        const formularioLogin = document.getElementById('formularioLogin');
+        if (formularioLogin) {
+            formularioLogin.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const emailLogin = document.getElementById('emailLogin').value;
+                const senhaLogin = document.getElementById('senhaLogin').value;
+                const mensagemLogin = document.getElementById('mensagemLogin');
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
+                    const user = userCredential.user;
+                    console.log("Usuário logado com sucesso:", user.uid);
+                    const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
+                    const snapshot = await get(pendingRef);
+
+                    if (snapshot.exists()) {
+                        mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
+                    } else {
+                        mensagemLogin.textContent = 'Login realizado com sucesso!';
+                        const userDetailsRef = ref(db, 'userApartments/' + user.uid);
+                        const userSnapshot = await get(userDetailsRef);
+
+                        if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
+                            const apartmentId = userSnapshot.val().apartmentId;
+                            localStorage.setItem('apartmentId', apartmentId);
+
+                            const invitesRef = collection(firestore, 'invites');
+                            const q = query(invitesRef, where('apartment', '==', apartmentId));
+                            getDocs(q)
+                                .then((querySnapshot) => {
+                                    console.log('QuerySnapshot size:', querySnapshot.size); // Adicione esta linha
+                                    if (!querySnapshot.empty) {
+                                        querySnapshot.forEach((doc) => {
+                                            const userData = doc.data();
+                                            const userName = userData.name;
+                                            localStorage.setItem('userName', userName);
+                                            console.log('User Name (fetched from Firestore in index.html):', userName);
+                                            window.location.href = 'area_condominio.html';
+                                        });
+                                    } else {
+                                        console.log("No user found in invites for apartment:", apartmentId);
+                                        window.location.href = 'area_condominio.html';
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.error("Error fetching user name from Firestore in index.html:", error);
+                                    window.location.href = 'area_condominio.html';
+                                });
+                        } else {
+                            console.error("apartmentId não encontrado para o usuário:", user.uid);
+                            mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
+                        }
+                    }
+                } catch (error) {
+                    console.log("Erro capturado:", error); // Log do objeto de erro completo
+                    const errorCode = error?.code;
+                    const errorMessage = error?.message;
+                    console.log("Código de erro:", errorCode);
+
+                    if (errorCode === 'auth/invalid-email') {
+                        mensagemLogin.textContent = 'O email digitado é inválido.';
+                    } else if (errorCode === 'auth/invalid-credential') {
+                        mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
+                    } else {
+                        if (errorMessage) {
+                            mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
+                        } else {
+                            mensagemLogin.textContent = 'Ocorreu um erro ao fazer login.';
+                        }
+                    }
+
+                    console.error("Erro ao fazer login:", errorCode, errorMessage);
+                }
+            });
+        }
+    </script>
 </head>
-    
+
 <body>
-    <header>
-        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
-    </header>
-    <section id="login">
-        <h2>Login</h2>
-        <form id="formularioLogin">
-            <label for="emailLogin">Email:</label><br>
-            <input type="email" id="emailLogin" name="emailLogin" required style="width: 270px;"><br><br>
-            <label for="senhaLogin">Senha:</label><br>
-            <input type="password" id="senhaLogin" name="senhaLogin" maxlength="6" inputmode="numeric"><br><br>
-            <button type="submit" style="margin-right: 10px;">Entrar</button><br><br>
-            <a href="#" id="forgotPassword">Esqueci minha senha</a><br>
-            <div id="mensagemLogin"></div>
-        </form>
-        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
-    </section>
+    <header>
+        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
+    </header>
+    <section id="login">
+        <h2>Login</h2>
+        <form id="formularioLogin">
+            <label for="emailLogin">Email:</label><br>
+            <input type="email" id="emailLogin" name="emailLogin" required style="width: 270px;"><br><br>
+            <label for="senhaLogin">Senha:</label><br>
+            <input type="password" id="senhaLogin" name="senhaLogin" maxlength="6" inputmode="numeric"><br><br>
+            <button type="submit" style="margin-right: 10px;">Entrar</button><br><br>
+            <a href="#" id="forgotPassword">Esqueci minha senha</a><br>
+            <div id="mensagemLogin"></div>
+        </form>
+        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+    </section>
 
-    <section id="forgotPasswordSection" style="display:none;">
-        <h2>Recuperar Senha</h2>
-        <form id="forgotPasswordForm">
-            <label for="emailForgotPassword">Email:</label><br><br>
-            <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
-            <button type="submit">Enviar link de recuperação</button><br><br>
-            <div id="mensagemForgotPassword"></div>
-        </form>
-    <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
-    </section>
+    <section id="forgotPasswordSection" style="display:none;">
+        <h2>Recuperar Senha</h2>
+        <form id="forgotPasswordForm">
+            <label for="emailForgotPassword">Email:</label><br><br>
+            <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
+            <button type="submit">Enviar link de recuperação</button><br><br>
+            <div id="mensagemForgotPassword"></div>
+        </form>
+    <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
+    </section>
 
-    <section id="cadastro" style="display:none;">
-        <h2>Cadastro</h2>
-        <form id="formularioCadastro">
-            <label for="emailCadastro">Email:</label><br>
-            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
-            <label for="senhaCadastro">Senha:</label><br>
-            <input type="password" id="senhaCadastro" name="senhaCadastro" maxlength="6" inputmode="numeric"><br><br>
-            <label for="codigoAcesso">Código de Acesso:</label><br>
-            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
-            <button type="submit">Cadastrar</button>
-            <div id="mensagemCadastro"></div>
-        </form>
-        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
-    </section>
+    <section id="cadastro" style="display:none;">
+        <h2>Cadastro</h2>
+        <form id="formularioCadastro">
+            <label for="emailCadastro">Email:</label><br>
+            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+            <label for="senhaCadastro">Senha:</label><br>
+            <input type="password" id="senhaCadastro" name="senhaCadastro" maxlength="6" inputmode="numeric"><br><br>
+            <label for="codigoAcesso">Código de Acesso:</label><br>
+            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+            <button type="submit">Cadastrar</button>
+            <div id="mensagemCadastro"></div>
+        </form>
+        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+    </section>
 
-    <footer>
-        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em; text-align: center;">Solução desenvolvida por Unidade 301.</p>
-    </footer>
-  
+    <footer>
+        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
+        <p style="font-size: 0.8em; text-align: center;">Solução desenvolvida por Unidade 301.</p>
+    </footer>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const senhaCadastroInput = document.getElementById('senhaCadastro');
-      const senhaLoginInput = document.getElementById('senhaLogin');
+      const senhaCadastroInput = document.getElementById('senhaCadastro');
+      const senhaLoginInput = document.getElementById('senhaLogin');
 
-      if (senhaCadastroInput) {
-        senhaCadastroInput.addEventListener('input', function() {
-          this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
-          if (this.value.length > this.maxLength) {
-            this.value = this.value.slice(0, this.maxLength);
-          }
-        });
-      }
+      if (senhaCadastroInput) {
+        senhaCadastroInput.addEventListener('input', function() {
+          this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
+          if (this.value.length > this.maxLength) {
+            this.value = this.value.slice(0, this.maxLength);
+          }
+        });
+      }
 
-      if (senhaLoginInput) {
-        senhaLoginInput.addEventListener('input', function() {
-          this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
-          if (this.value.length > this.maxLength) {
-            this.value = this.value.slice(0, this.maxLength);
-          }
-        });
-      }
+      if (senhaLoginInput) {
+        senhaLoginInput.addEventListener('input', function() {
+          this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
+          if (this.value.length > this.maxLength) {
+            this.value = this.value.slice(0, this.maxLength);
+          }
+        });
+      }
     });
-        
-    </script>
-    
+
+    </script>
+    <script src="script.js" defer type="module"></script>
 </body>
 </html>
