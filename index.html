@@ -154,7 +154,7 @@
                         const userDetailsRef = ref(db, 'userApartments/' + user.uid);
                         const userSnapshot = await get(userDetailsRef);
 
-                        const userDetailsRef = ref(db, 'userApartments/' + user.uid);
+                        // const userDetailsRef = ref(db, 'userApartments/' + user.uid);
                             get(userDetailsRef)
                                 .then((snapshot) => {
                                     if (snapshot.exists()) {
