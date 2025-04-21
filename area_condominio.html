@@ -3,9 +3,42 @@
 <head>
     <script type="module">
         // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+            authDomain: "logsite-d81dd.firebaseapp.com",
+            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+            projectId: "logsite-d81dd",
+            storageBucket: "logsite-d81dd.firebasestorage.app",
+            messagingSenderId: "285508603780",
+            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+            measurementId: "G-B0JHRHTNKF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+        const authFirebase = getFirebaseAuth();
+        const auth = getAuth(); // Moved getAuth() here
+
+        // Registra o evento de visualização da página
+        logEvent(analytics, 'page_view');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Usuário está logado, pode continuar na página
+                console.log("Usuário autenticado:", user.uid);
+            } else {
+                // Usuário não está logado, redirecione para a página de login
+                console.log("Usuário não autenticado, redirecionando para login...");
+                window.location.href = 'index.html';
+            }
+        });
 
         // Função para registrar acessos no Firebase com horário correto (UTC-3)
         function logAccess(userCode, userName, apartment, accessedDocument) {
@@ -29,8 +62,12 @@
         window.logAccess = logAccess;
 
         function sair() {
-          console.log('Usuário solicitou sair.');
-          window.location.href = 'index.html';
+            signOut(authFirebase).then(() => {
+                console.log('Usuário desconectado');
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Erro ao fazer logout:', error);
+            });
         }
         window.sair = sair;
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
@@ -71,6 +108,7 @@
         <h1>Condomínio T Lacerda</h1>
         <p id="welcome-message">Portal do Condomínio T Lacerda.</p>
         
+
         <div class="apartment-section">
             <button class="apartment-button" id="apto1" disabled onclick="loadFiles('apto1')">Apartamento 1</button>
             <button class="apartment-button" id="apto101" disabled onclick="loadFiles('apto101')">Apartamento 101</button>
@@ -176,11 +214,11 @@
 
     <footer>
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em;">Solução desenvolvida por Unidade 301.</p>
+        <p style="font-size: 0.8em;">Solução desenvolvida por João, Unidade 301.</p>
     </footer>
 
     <script type="module">
-      import { showFiles, logAccess } from './script.js';
+      import { showFiles } from './script.js';
 
       document.addEventListener('DOMContentLoaded', function() {
         const apartmentId = localStorage.getItem('apartmentId');
