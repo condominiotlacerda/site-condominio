@@ -384,6 +384,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Salvar informações em userApartments
                 const userApartmentRef = ref(db, 'userApartments/' + user.uid);
                 await set(userApartmentRef, {
+                  email: emailCadastro,
+                  accessCode: codigoAcesso,
                   apartmentId: apartmentId
                 });
 
