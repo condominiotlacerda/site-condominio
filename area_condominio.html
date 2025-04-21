@@ -82,8 +82,8 @@
         } else {
           console.log('apartmentId encontrado no carregamento da página:', apartmentId);
           // Lógica para habilitar o botão do apartamento
-          //const aptoNumber = apartmentId.replace('apto', '');
-          const apartmentButton = document.getElementById('apto' + apartmentId);
+          const aptoNumber = apartmentId.replace('apto', '');
+          const apartmentButton = document.getElementById('apto' + aptoNumber);
           if (apartmentButton) {
             apartmentButton.disabled = false;
           }
