@@ -149,27 +149,27 @@ export function showFiles(apartment) {
       }
     });
 
-  const documentosList = document.getElementById('documentos-list');
-    if (documentosList && apartment) {
-      const previsaoLink = document.createElement('a');
-      previsaoLink.textContent = 'Previsão de despesas';
-      previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
-      previsaoLink.href = '#'; // Mantenha o href para indicar que é um link
-      previsaoLink.addEventListener('click', function(event) {
-      event.preventDefault();
-      const filePath = 'previsao_despesas/previsao_despesas.pdf';
-      const apartmentId = localStorage.getItem('apartmentId'); // Obtém o ID do apartamento
-      logAccess(null, 'Visualização de Previsão de despesas', apartmentId); // Adiciona o log de acesso
-      openFileViewer(filePath);
-    });
+    const documentosList = document.getElementById('documentos-list');
+      if (documentosList && apartment) {
+        const previsaoLink = document.createElement('a');
+        previsaoLink.textContent = 'Previsão de despesas';
+        previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
+        previsaoLink.href = '#'; // Mantenha o href para indicar que é um link
+        previsaoLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        const filePath = 'previsao_despesas/previsao_despesas.pdf';
+        const apartmentId = localStorage.getItem('apartmentId'); // Obtém o ID do apartamento
+        logAccess(null, 'Visualização de Previsão de despesas', apartmentId); // Adiciona o log de acesso
+        openFileViewer(filePath);
+      });
 
-      const listItem = document.createElement('li');
-      listItem.appendChild(previsaoLink);
-      listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
+        const listItem = document.createElement('li');
+        listItem.appendChild(previsaoLink);
+        listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
 
-      documentosList.appendChild(listItem);
-    }
-
+        documentosList.appendChild(listItem);
+      }
+  
 }
 
 function openFileViewer(filePath) {
@@ -219,9 +219,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (anoConta) {
     anoConta.addEventListener('change', function() {
-
+        
       const listaContas = document.getElementById('contas-list');
-
+    
       const anoSelecionado = this.value;
       const mesSelecionado = mesConta.value;
       console.log('Ano selecionado:', anoSelecionado);
@@ -232,38 +232,38 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log('Caminho da Prestação de Contas (após mudança de ano):', caminhoPrestacaoContas);
 
       // Limpa a lista de contas
-      listaContas.innerHTML = '';
+  listaContas.innerHTML = '';
 
-    // Cria um novo item de lista
-    const listItem = document.createElement('li');
+  // Cria um novo item de lista
+  const listItem = document.createElement('li');
 
-    // Cria um link para o arquivo
-    const link = document.createElement('a');
-    link.href = "#"; // Alteramos o href para "#"
+  // Cria um link para o arquivo
+  const link = document.createElement('a');
+  link.href = "#"; // Alteramos o href para "#"
+  const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+
+  // Adiciona um evento de clique para chamar a função openFileViewer
+  link.addEventListener('click', function(event) {
+    event.preventDefault();
+    console.log('Link da Prestação de Contas clicado!');
+    const anoSelecionado = anoConta.value;
+    const mesSelecionado = mesConta.value;
     const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-    link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+    const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
+    try {
+      logAccess(null, documento, localStorage.getItem('apartmentId'));
+    } catch (error) {
+      console.error('Erro ao executar logAccess:', error);
+    }
+    openFileViewer(caminhoPrestacaoContas);
+  });
 
-    // Adiciona um evento de clique para chamar a função openFileViewer
-    link.addEventListener('click', function(event) {
-      event.preventDefault();
-      console.log('Link da Prestação de Contas clicado!');
-      const anoSelecionado = anoConta.value;
-      const mesSelecionado = mesConta.value;
-      const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-      const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
-      try {
-        logAccess(null, documento, localStorage.getItem('apartmentId'));
-      } catch (error) {
-        console.error('Erro ao executar logAccess:', error);
-      }
-      openFileViewer(caminhoPrestacaoContas);
-    });
+  // Adiciona o link ao item de lista
+  listItem.appendChild(link);
 
-    // Adiciona o link ao item de lista
-    listItem.appendChild(link);
-
-    // Adiciona o item de lista à lista de contas
-    listaContas.appendChild(listItem);
+  // Adiciona o item de lista à lista de contas
+  listaContas.appendChild(listItem);
       // Próximos passos virão aqui...
     });
   }
@@ -319,10 +319,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function obterAbreviacaoMes(numeroMes) {
-    const meses = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
-    return meses[numeroMes] || ""; // Retorna a abreviação ou vazio se o número do mês for inválido
-  }
-
+  const meses = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  return meses[numeroMes] || ""; // Retorna a abreviação ou vazio se o número do mês for inválido
+}
+  
   const formularioCadastro = document.getElementById('formularioCadastro');
   if (formularioCadastro) {
     formularioCadastro.addEventListener('submit', async function(event) {
@@ -469,30 +469,30 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ajuste para horário de Brasília (UTC-3)
-export function logAccess(userCode, downloadedFile, apartment) {
-  const logData = {
-    userCode: userCode,
-    downloadedFile: downloadedFile, // Mantendo o nome 'downloadedFile' como está
-    apartment: apartment,
-    accessDateTime: new Date().toISOString()
-  };
+      export function logAccess(userCode, downloadedFile, apartment) {
+        const logData = {
+          userCode: userCode,
+          downloadedFile: downloadedFile, // Mantendo o nome 'downloadedFile' como está
+          apartment: apartment,
+          accessDateTime: new Date().toISOString()
+        };
 
-  fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/log-access', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(logData)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      console.log('Log de acesso registrado com sucesso através da função.');
-    } else {
-      console.error('Erro ao registrar log de acesso:', data.error);
-    }
-  })
-  .catch(error => {
-    console.error('Erro ao enviar dados de log para a função:', error);
-  });
-};
+        fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/log-access', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(logData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('Log de acesso registrado com sucesso através da função.');
+          } else {
+            console.error('Erro ao registrar log de acesso:', data.error);
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao enviar dados de log para a função:', error);
+        });
+      };
