@@ -1,3 +1,4 @@
+console.log('Arquivo script.js foi carregado.');
 import { fetchDatabaseURL } from './utils.js';
 let nomesTaxas = {};
 
