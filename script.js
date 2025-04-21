@@ -1,4 +1,4 @@
-import { fetchDatabaseURL } from './index.html'; // Ajuste o caminho se necessário
+import { fetchDatabaseURL } from './utils.js';
 let nomesTaxas = {};
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
