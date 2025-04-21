@@ -140,6 +140,7 @@
                         if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
                             const apartmentId = userSnapshot.val().apartmentId;
                             const userNameFromDB = userSnapshot.val().userName; // 👈 ADICIONE ESTA LINHA PARA OBTER O userName
+                            console.log("userNameFromDB (Realtime Database):", userNameFromDB); // 👈 ADICIONE ESTA LINHA PARA LOGAR O userName
                             console.log('Apartment ID from DB (before storage):', apartmentId);
                             localStorage.setItem('apartmentId', apartmentId);
                             localStorage.setItem('userName', userNameFromDB); // 👈 ADICIONE ESTA LINHA PARA ARMAZENAR O userName
