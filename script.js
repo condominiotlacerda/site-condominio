@@ -3,7 +3,22 @@ let nomesTaxas = {};
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set, get, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import { getAuth as getFirebaseAuth } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+
+// Your Firebase configuration (replace with your actual config)
+const firebaseConfig = {
+  apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+  authDomain: "logsite-d81dd.firebaseapp.com",
+  databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+  projectId: "logsite-d81dd",
+  storageBucket: "logsite-d81dd.firebasestorage.app",
+  messagingSenderId: "285508603780",
+  appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+  measurementId: "G-B0JHRHTNKF"
+};
+
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
 
 let activeApartmentButtonId = null;
 
@@ -185,6 +200,10 @@ function openFileViewer(filePath) {
 
   // Adiciona a classe 'active' ao viewerContainer
   viewerContainer.classList.add('active');
+
+  // Não precisamos remover a classe 'active' aqui, pois ela será adicionada agora
+  // viewerContainer.classList.remove('active');
+  // setTimeout(() => viewerContainer.classList.add('active'), 50);
 }
 
 function getFilesForApartment(apartment) {
@@ -196,6 +215,7 @@ function getFilesForApartment(apartment) {
     { name: nomesTaxas.taxa2Name, path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` },
     { name: nomesTaxas.taxa3Name, path: `${baseUrl}boleto_tx_3_apto_${aptoNumber}.pdf` } // 👈 Adicionamos esta linha
   ];
+
   return files;
 }
 
@@ -469,30 +489,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Ajuste para horário de Brasília (UTC-3)
-      export function logAccess(userCode, downloadedFile, apartment) {
-        const logData = {
-          userCode: userCode,
-          downloadedFile: downloadedFile, // Mantendo o nome 'downloadedFile' como está
-          apartment: apartment,
-          accessDateTime: new Date().toISOString()
-        };
+window.logAccess = function (userCode, downloadedFile, apartment) {
+  const db = getDatabase();
+  let now = new Date();
+  now.setHours(now.getHours() - 3);
+  const accessLog = {
+    apartment: apartment, // Invertido (como solicitado)
+    downloadedFile: downloadedFile,  // Invertido (como solicitado)
+    userCode: userCode,
+    accessDateTime: now.toISOString()
+  };
 
-        fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/log-access', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(logData)
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            console.log('Log de acesso registrado com sucesso através da função.');
-          } else {
-            console.error('Erro ao registrar log de acesso:', data.error);
-          }
-        })
-        .catch(error => {
-          console.error('Erro ao enviar dados de log para a função:', error);
-        });
-      };
+  const aptoNumber = apartment.replace('apto', '');
+  const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
+  const safeFileName = downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_');
+  const logKey = `${aptoNumber}_${formattedDateTime}_${safeFileName}`;
+  console.log('Log Key gerada:', logKey);
+  const logRef = ref(db, `logs/${logKey}`);
+  set(logRef, accessLog)
+    .then(() => console.log('Log registrado com sucesso:', accessLog))
+    .catch(error => console.error('Erro ao registrar o log:', error));
+};
