@@ -24,7 +24,7 @@
         };
         */
 
-        const app = initializeApp(firebaseConfig);
+        // const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getDatabase(app); // ✅ Correção: Passe 'app' como argumento
         const authFirebase = getFirebaseAuth(app); // ✅ Correção: Passe 'app' como argumento (embora você já tenha feito isso corretamente)
