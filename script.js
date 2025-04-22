@@ -5,19 +5,22 @@ import { getDatabase, ref, set, get, push } from "https://www.gstatic.com/fireba
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 
-// Your Firebase configuration (replace with your actual config)
-const firebaseConfig = {
-  apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-  authDomain: "logsite-d81dd.firebaseapp.com",
-  databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-  projectId: "logsite-d81dd",
-  // storageBucket: "logsite-d81dd.firebasestorage.app",
-  // messagingSenderId: "285508603780",
-  appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-  // measurementId: "G-B0JHRHTNKF"
-};
+import { app } from './firebase.js';
 
-const app = initializeApp(firebaseConfig);
+/*
+const firebaseConfig = {
+apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
+authDomain: "logsite-d81dd.firebaseapp.com",
+databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
+projectId: "logsite-d81dd",
+// storageBucket: "logsite-d81dd.firebasestorage.app",
+// messagingSenderId: "285508603780",
+appId: "1:285508603780:web:dba70ace036ee8a37297d1",
+// measurementId: "G-B0JHRHTNKF"
+};
+*/
+
+// const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 
 let activeApartmentButtonId = null;
