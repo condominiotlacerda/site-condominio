@@ -522,6 +522,7 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
   });
 };
 
+/*
   const aptoNumber = apartment.replace('apto', '');
   const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
   const safeFileName = downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -532,3 +533,4 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
     .then(() => console.log('Log registrado com sucesso:', accessLog))
     .catch(error => console.error('Erro ao registrar o log:', error));
 };
+*/
