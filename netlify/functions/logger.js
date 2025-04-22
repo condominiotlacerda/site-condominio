@@ -1,6 +1,5 @@
 const admin = require('firebase-admin');
 
-// Inicialize o Firebase Admin SDK fora do handler para reutilização
 if (!admin.apps.length) {
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
   admin.initializeApp({
@@ -30,17 +29,16 @@ exports.handler = async (event) => {
       const logsRef = db.ref('logs');
 
       const now = new Date();
-      now.setHours(now.getHours() - 3); // Ajusta para o horário local (GMT-3)
+      now.setHours(now.getHours() - 3);
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
       const aptoNumber = logData.apartment.replace('apto', '');
       const safeFileName = logData.downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_');
-      const logKey = `${aptoNumber}_${formattedDateTime}_${safeFileName}`;
+      const userName = logData.userName ? logData.userName.replace(/[^a-zA-Z0-9_-]/g, '_') : 'SemNome'; // Sanitize userName
+      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${safeFileName}`;
 
-      // Remove o campo serverTimestamp
-      // delete logData.serverTimestamp;
-
-      // Adiciona o accessDateTime com o horário local
       logData.accessDateTime = now.toISOString();
+      // Se você quiser o userName como um campo separado (além da chave), deixe a próxima linha descomentada
+      logData.userName = userName;
 
       await logsRef.child(logKey).set(logData);
       console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
@@ -51,7 +49,7 @@ exports.handler = async (event) => {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: "Log registrado com sucesso no Realtime Database com chave e horário local!" }),
+        body: JSON.stringify({ message: "Log registrado com sucesso no Realtime Database com chave e nome de usuário!" }),
       };
     } catch (error) {
       console.error("Erro ao processar a função logger:", error);
