@@ -503,7 +503,7 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
       apartment: apartment,
       downloadedFile: downloadedFile,
       userCode: userCode,
-      accessDateTime: new Date().toISOString() // Deixe a data e hora serem geradas aqui
+      // accessDateTime: new Date().toISOString() // Deixe a data e hora serem geradas aqui
     }),
   })
   .then(response => {
