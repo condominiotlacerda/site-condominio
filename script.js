@@ -10,7 +10,12 @@ const firestore = getFirestore(app);
 
 let activeApartmentButtonId = null;
 
-// =========================================================================================================
+function enableApartment() {
+  const code = document.getElementById('accessCode').value.trim();
+  alert('Esta funcionalidade foi substituída pelo cadastro.');
+}
+
+/* // =========================================================================================================
 function enableApartment() {
   const code = document.getElementById('accessCode').value.trim();
   console.log('Função enableApartment foi acionada!'); // Aqui pode apagar depois
@@ -31,6 +36,7 @@ function enableApartment() {
     });
 }
 //==========================================================================================================
+*/
 
 export function showFiles(apartment) {
   console.log('Função showFiles chamada para o apartamento:', apartment);
