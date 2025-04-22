@@ -30,13 +30,17 @@ exports.handler = async (event) => {
       const logsRef = db.ref('logs');
 
       const now = new Date();
+      now.setHours(now.getHours() - 3); // Ajusta para o horário local (GMT-3)
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
       const aptoNumber = logData.apartment.replace('apto', '');
       const safeFileName = logData.downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_');
       const logKey = `${aptoNumber}_${formattedDateTime}_${safeFileName}`;
 
-      // Adiciona um timestamp do servidor aos dados do log
-      logData.serverTimestamp = admin.database.ServerValue.TIMESTAMP;
+      // Remove o campo serverTimestamp
+      // delete logData.serverTimestamp;
+
+      // Adiciona o accessDateTime com o horário local
+      logData.accessDateTime = now.toISOString();
 
       await logsRef.child(logKey).set(logData);
       console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
@@ -47,7 +51,7 @@ exports.handler = async (event) => {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: "Log registrado com sucesso no Realtime Database com chave personalizada!" }),
+        body: JSON.stringify({ message: "Log registrado com sucesso no Realtime Database com chave e horário local!" }),
       };
     } catch (error) {
       console.error("Erro ao processar a função logger:", error);
