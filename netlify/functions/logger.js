@@ -5,7 +5,7 @@ if (!admin.apps.length) {
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://logsite-d81dd-default-rtdb.firebaseio.com' // Substitua pela sua URL do Realtime Database
+    databaseURL: process.env.FIREBASE_DATABASE_URL
   });
 }
 
