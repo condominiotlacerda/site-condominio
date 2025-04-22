@@ -3,24 +3,9 @@ let nomesTaxas = {};
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 import { getDatabase, ref, set, get, push } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 
 import { app } from './firebase.js';
 
-/*
-const firebaseConfig = {
-apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-authDomain: "logsite-d81dd.firebaseapp.com",
-databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-projectId: "logsite-d81dd",
-// storageBucket: "logsite-d81dd.firebasestorage.app",
-// messagingSenderId: "285508603780",
-appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-// measurementId: "G-B0JHRHTNKF"
-};
-*/
-
-// const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 
 let activeApartmentButtonId = null;
@@ -54,17 +39,17 @@ export function showFiles(apartment) {
   document.getElementById('apartment-number').textContent = apartment;
   fileContainer.style.display = 'block';
   contasContainer.style.display = 'block';
-  notificationsContainer.style.display = 'block'; // Mostra a caixa de notificações
+  notificationsContainer.style.display = 'block';
   documentosContainer.style.display = 'block';
 
   fileContainer.classList.remove('active');
   contasContainer.classList.remove('active');
-  notificationsContainer.classList.remove('active'); // Remove a classe active da caixa de notificações
+  notificationsContainer.classList.remove('active');
   documentosContainer.classList.remove('active');
   setTimeout(() => {
     fileContainer.classList.add('active');
     contasContainer.classList.add('active');
-    notificationsContainer.classList.add('active'); // Adiciona a classe active para a transição na caixa de notificações
+    notificationsContainer.classList.add('active');
     documentosContainer.classList.add('active');
   }, 50);
 
@@ -96,7 +81,7 @@ export function showFiles(apartment) {
     };
 
     listItem.appendChild(link);
-    listItem.appendChild(document.createElement('br')); // A TAG <br> É ADICIONADA AQUI
+    listItem.appendChild(document.createElement('br'));
     fileList.appendChild(listItem);
   });
 
@@ -105,19 +90,19 @@ export function showFiles(apartment) {
     .then(response => response.json())
     .then(notificacoesData => {
       const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-      console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage); // 👈 Adicione esta linha
+      console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage);
       let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\d+)/)?.[1] : null;
       const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
       const notificationsList = document.getElementById('notifications-list');
-      console.log('Valor de apartmentId para buscar notificações:', apartmentId); // 👈 Adicione esta linha aqui
-      notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
+      console.log('Valor de apartmentId para buscar notificações:', apartmentId);
+      notificationsList.innerHTML = '';
 
       if (apartmentId && notificacoesData[apartmentId]) {
         const notificationText = notificacoesData[apartmentId];
         const lines = notificationText.split('\n');
         let notificationCount = 0;
 
-        for (let i = 1; i < lines.length; i++) { // Começa da segunda linha (após "Notificações")
+        for (let i = 1; i < lines.length; i++) {
           const line = lines[i].trim();
           if (line.startsWith(String(notificationCount + 1) + '.')) {
             notificationCount++;
@@ -129,8 +114,8 @@ export function showFiles(apartment) {
 
               const listItem = document.createElement('li');
               const link = document.createElement('a');
-              link.href = '#'; // Alteramos o href para "#"
-              link.textContent = line; // Usando a linha completa para exibir o número também
+              link.href = '#';
+              link.textContent = line;
 
               link.addEventListener('click', function(event) {
                 event.preventDefault();
@@ -171,19 +156,19 @@ export function showFiles(apartment) {
       if (documentosList && apartment) {
         const previsaoLink = document.createElement('a');
         previsaoLink.textContent = 'Previsão de despesas';
-        previsaoLink.style.color = 'blue'; // Opcional: define a cor do link
-        previsaoLink.href = '#'; // Mantenha o href para indicar que é um link
+        previsaoLink.style.color = 'blue';
+        previsaoLink.href = '#';
         previsaoLink.addEventListener('click', function(event) {
         event.preventDefault();
         const filePath = 'previsao_despesas/previsao_despesas.pdf';
-        const apartmentId = localStorage.getItem('apartmentId'); // Obtém o ID do apartamento
-        logAccess(null, 'Visualização de Previsão de despesas', apartmentId); // Adiciona o log de acesso
+        const apartmentId = localStorage.getItem('apartmentId');
+        logAccess(null, 'Visualização de Previsão de despesas', apartmentId);
         openFileViewer(filePath);
       });
 
         const listItem = document.createElement('li');
         listItem.appendChild(previsaoLink);
-        listItem.appendChild(document.createElement('br')); // Opcional: para adicionar espaço
+        listItem.appendChild(document.createElement('br'));
 
         documentosList.appendChild(listItem);
       }
@@ -203,10 +188,6 @@ function openFileViewer(filePath) {
 
   // Adiciona a classe 'active' ao viewerContainer
   viewerContainer.classList.add('active');
-
-  // Não precisamos remover a classe 'active' aqui, pois ela será adicionada agora
-  // viewerContainer.classList.remove('active');
-  // setTimeout(() => viewerContainer.classList.add('active'), 50);
 }
 
 function getFilesForApartment(apartment) {
@@ -216,7 +197,7 @@ function getFilesForApartment(apartment) {
     { name: nomesTaxas.taxaCondominio, path: `${baseUrl}boleto_tx_condominio_apto_${aptoNumber}.pdf` },
     { name: nomesTaxas.taxa1Name, path: `${baseUrl}boleto_tx_1_apto_${aptoNumber}.pdf` },
     { name: nomesTaxas.taxa2Name, path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` },
-    { name: nomesTaxas.taxa3Name, path: `${baseUrl}boleto_tx_3_apto_${aptoNumber}.pdf` } // 👈 Adicionamos esta linha
+    { name: nomesTaxas.taxa3Name, path: `${baseUrl}boleto_tx_3_apto_${aptoNumber}.pdf` }
   ];
 
   return files;
@@ -230,11 +211,10 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
       nomesTaxas = data;
       console.log('Nomes das taxas carregados:', nomesTaxas);
-      // Qualquer código que dependa de nomesTaxas pode ser colocado aqui ou em funções chamadas aqui
+
     })
     .catch(error => {
       console.error('Erro ao carregar nomes das taxas:', error);
-      // Defina nomes padrão aqui se necessário
     });
 
   const anoConta = document.getElementById('ano-conta');
@@ -264,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const link = document.createElement('a');
   link.href = "#"; // Alteramos o href para "#"
   const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`;
 
   // Adiciona um evento de clique para chamar a função openFileViewer
   link.addEventListener('click', function(event) {
@@ -287,7 +267,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Adiciona o item de lista à lista de contas
   listaContas.appendChild(listItem);
-      // Próximos passos virão aqui...
     });
   }
 
@@ -310,10 +289,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const listItem = document.createElement('li');
 
       // Cria um link para o arquivo
-      const link = document.createElement('a'); // 👈 DECLARAÇÃO DA VARIÁVEL LINK
-      link.href = "#"; // Alteramos o href para "#"
+      const link = document.createElement('a');
+      link.href = "#";
       const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-      link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`; // Define o texto do link
+      link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`;
 
       // Adiciona um evento de clique para chamar a função openFileViewer
       link.addEventListener('click', function(event) {
@@ -336,14 +315,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Adiciona o item de lista à lista de contas
       listaContas.appendChild(listItem);
-
-      // Próximos passos virão aqui...
     });
   }
 
   function obterAbreviacaoMes(numeroMes) {
   const meses = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
-  return meses[numeroMes] || ""; // Retorna a abreviação ou vazio se o número do mês for inválido
+  return meses[numeroMes] || "";
 }
   
   const formularioCadastro = document.getElementById('formularioCadastro');
@@ -359,10 +336,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const auth = getAuth();
       const db = getDatabase();
       const invitesCollection = collection(firestore, 'invites');
-      const inviteDocRef = doc(firestore, 'invites', codigoAcesso); // Obtém a referência ao documento pelo ID
+      const inviteDocRef = doc(firestore, 'invites', codigoAcesso);
 
       try {
-        const docSnap = await getDoc(inviteDocRef); // Busca o documento pelo ID
+        const docSnap = await getDoc(inviteDocRef);
 
         if (docSnap.exists()) {
           const inviteData = docSnap.data();
@@ -486,7 +463,6 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
         }
-
         console.error("Erro ao fazer login:", errorCode, errorMessage);
       }
     });
@@ -499,8 +475,8 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
   let now = new Date();
   now.setHours(now.getHours() - 3);
   const accessLog = {
-    apartment: apartment, // Invertido (como solicitado)
-    downloadedFile: downloadedFile,  // Invertido (como solicitado)
+    apartment: apartment,
+    downloadedFile: downloadedFile,
     userCode: userCode,
     accessDateTime: now.toISOString()
   };
