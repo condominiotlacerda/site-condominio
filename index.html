@@ -16,19 +16,6 @@
 
         import { app } from './firebase.js';
 
-        /*
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-            authDomain: "logsite-d81dd.firebaseapp.com",
-            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-            projectId: "logsite-d81dd",
-            // storageBucket: "logsite-d81dd.firebasestorage.app",
-            // messagingSenderId: "285508603780",
-            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-            // measurementId: "G-B0JHRHTNKF"
-        };
-        */
-
         const forgotPasswordLink = document.getElementById('forgotPassword');
         const forgotPasswordSection = document.getElementById('forgotPasswordSection');
         const forgotPasswordForm = document.getElementById('forgotPasswordForm');
@@ -75,7 +62,6 @@
         }
 
         // Initialize Firebase
-        // const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getDatabase(app);
         const auth = getAuth(app);
@@ -148,30 +134,7 @@
                             console.log('Apartment ID from DB (before storage):', apartmentId);
                             localStorage.setItem('apartmentId', apartmentId);
                             localStorage.setItem('userName', userNameFromDB); // 👈 ADICIONE ESTA LINHA PARA ARMAZENAR O userName
-/*
-                            const invitesRef = collection(firestore, 'invites');
-                            const q = query(invitesRef, where('apartment', '==', apartmentId));
-                            getDocs(q)
-                                .then((querySnapshot) => {
-                                    console.log('QuerySnapshot size:', querySnapshot.size); // Adicione esta linha
-                                    if (!querySnapshot.empty) {
-                                        querySnapshot.forEach((doc) => {
-                                            const userData = doc.data();
-                                            const userName = userData.name;
-                                            localStorage.setItem('userName', userName);
-                                            console.log('User Name (fetched from Firestore in index.html):', userName);
-                                            window.location.href = 'area_condominio.html';
-                                        });
-                                    } else {
-                                        console.log("No user found in invites for apartment:", apartmentId);
-                                        window.location.href = 'area_condominio.html';
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.error("Error fetching user name from Firestore in index.html:", error);
-                                    window.location.href = 'area_condominio.html';
-                                });
-*/
+
                         } else {
                             console.error("apartmentId não encontrado para o usuário:", user.uid);
                             mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
@@ -190,7 +153,6 @@
                         mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
                     }
 
-                    // console.error("Erro ao fazer login:", errorCode, errorMessage);
                 }
             });
         }
@@ -242,7 +204,7 @@
 
     <footer>
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em; text-align: center;">Solução desenvolvida por João Marcelo, Unidade 301.</p>
+        <p style="font-size: 0.8em; text-align: center;">Solução desenvolvida por Unidade 301.</p>
     </footer>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -268,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
         
-    </script>
+</script>
 <script src="script.js" defer type="module"></script>
 </body>
 </html>
