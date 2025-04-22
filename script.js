@@ -13,6 +13,7 @@ let activeApartmentButtonId = null;
 // =========================================================================================================
 function enableApartment() {
   const code = document.getElementById('accessCode').value.trim();
+  console.log('Função enableApartment foi acionada!'); // Aqui pode apagar depois
   fetch('/.netlify/functions/log-access')
     .then(response => {
       if (!response.ok) {
