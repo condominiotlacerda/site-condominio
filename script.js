@@ -15,29 +15,6 @@ function enableApartment() {
   alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
-/* // =========================================================================================================
-function enableApartment() {
-  const code = document.getElementById('accessCode').value.trim();
-  console.log('Função enableApartment foi acionada!'); // Aqui pode apagar depois
-  fetch('/.netlify/functions/log-access')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Resposta da função log-access:', data);
-      alert(data.message); // Exibe a mensagem de sucesso (simulada)
-    })
-    .catch(error => {
-      console.error('Erro ao chamar a função log-access:', error);
-      alert('Erro ao registrar o log');
-    });
-}
-//==========================================================================================================
-*/
-
 export function showFiles(apartment) {
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
@@ -494,6 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Ajuste para horário de Brasília (UTC-3)
 window.logAccess = function (userCode, downloadedFile, apartment) {
+  const userName = localStorage.getItem('userName'); // Recupera o nome do usuário do localStorage
   fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/logger', {
     method: 'POST',
     headers: {
@@ -503,7 +481,7 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
       apartment: apartment,
       downloadedFile: downloadedFile,
       userCode: userCode,
-      // accessDateTime: new Date().toISOString() // Deixe a data e hora serem geradas aqui
+      userName: userName // Envia o nome do usuário no corpo da requisição
     }),
   })
   .then(response => {
@@ -514,23 +492,8 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
   })
   .then(data => {
     console.log('Resposta da função de log do Netlify:', data);
-    // Aqui você pode adicionar alguma lógica para o caso de sucesso, se necessário
   })
   .catch(error => {
     console.error('Erro ao chamar a função de log do Netlify:', error);
-    // Aqui você pode adicionar alguma lógica para o caso de erro, se necessário
   });
 };
-
-/*
-  const aptoNumber = apartment.replace('apto', '');
-  const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
-  const safeFileName = downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_');
-  const logKey = `${aptoNumber}_${formattedDateTime}_${safeFileName}`;
-  console.log('Log Key gerada:', logKey);
-  const logRef = ref(db, `logs/${logKey}`);
-  set(logRef, accessLog)
-    .then(() => console.log('Log registrado com sucesso:', accessLog))
-    .catch(error => console.error('Erro ao registrar o log:', error));
-};
-*/
