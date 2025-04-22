@@ -494,7 +494,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Ajuste para horário de Brasília (UTC-3)
 window.logAccess = function (userCode, downloadedFile, apartment) {
-  fetch('/.netlify/functions/logger', {
+  fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/logger', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
