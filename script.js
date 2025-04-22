@@ -10,10 +10,26 @@ const firestore = getFirestore(app);
 
 let activeApartmentButtonId = null;
 
+// =========================================================================================================
 function enableApartment() {
   const code = document.getElementById('accessCode').value.trim();
-  alert('Esta funcionalidade foi substituída pelo cadastro.');
+  fetch('/.netlify/functions/log-access')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Resposta da função log-access:', data);
+      alert(data.message); // Exibe a mensagem de sucesso (simulada)
+    })
+    .catch(error => {
+      console.error('Erro ao chamar a função log-access:', error);
+      alert('Erro ao registrar o log');
+    });
 }
+//==========================================================================================================
 
 export function showFiles(apartment) {
   console.log('Função showFiles chamada para o apartamento:', apartment);
