@@ -11,24 +11,10 @@
 
         import { app } from './firebase.js';
 
-        /*
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzgHcrZNvCQEunq-d3LeDm0u4LDhwjDgM",
-            authDomain: "logsite-d81dd.firebaseapp.com",
-            databaseURL: "https://logsite-d81dd-default-rtdb.firebaseio.com",
-            projectId: "logsite-d81dd",
-            // storageBucket: "logsite-d81dd.firebasestorage.app",
-            // messagingSenderId: "285508603780",
-            appId: "1:285508603780:web:dba70ace036ee8a37297d1",
-            // measurementId: "G-B0JHRHTNKF"
-        };
-        */
-
-        // const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-        const db = getDatabase(app); // ✅ Correção: Passe 'app' como argumento
-        const authFirebase = getFirebaseAuth(app); // ✅ Correção: Passe 'app' como argumento (embora você já tenha feito isso corretamente)
-        const auth = getAuth(app); // ✅ Correção: Passe 'app' como argumento
+        const db = getDatabase(app); 
+        const authFirebase = getFirebaseAuth(app); 
+        const auth = getAuth(app); 
 
         // Registra o evento de visualização da página
         logEvent(analytics, 'page_view');
@@ -112,7 +98,6 @@
         <h1>Condomínio T Lacerda</h1>
         <p id="welcome-message">Portal do Condomínio T Lacerda.</p>
         
-
         <div class="apartment-section">
             <button class="apartment-button" id="apto1" disabled onclick="loadFiles('apto1')">Apartamento 1</button>
             <button class="apartment-button" id="apto101" disabled onclick="loadFiles('apto101')">Apartamento 101</button>
@@ -218,7 +203,7 @@
 
     <footer>
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
-        <p style="font-size: 0.8em;">Solução desenvolvida por João, Unidade 301.</p>
+        <p style="font-size: 0.8em;">Solução desenvolvida por Unidade 301.</p>
     </footer>
 
     <script type="module">
