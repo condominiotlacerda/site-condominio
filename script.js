@@ -494,15 +494,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Ajuste para horário de Brasília (UTC-3)
 window.logAccess = function (userCode, downloadedFile, apartment) {
-  const db = getDatabase();
-  let now = new Date();
-  now.setHours(now.getHours() - 3);
-  const accessLog = {
-    apartment: apartment,
-    downloadedFile: downloadedFile,
-    userCode: userCode,
-    accessDateTime: now.toISOString()
-  };
+  fetch('/.netlify/functions/log-access', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      apartment: apartment,
+      downloadedFile: downloadedFile,
+      userCode: userCode,
+      accessDateTime: new Date().toISOString() // Deixe a data e hora serem geradas aqui
+    }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Erro na requisição para função de log: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Resposta da função de log do Netlify:', data);
+    // Aqui você pode adicionar alguma lógica para o caso de sucesso, se necessário
+  })
+  .catch(error => {
+    console.error('Erro ao chamar a função de log do Netlify:', error);
+    // Aqui você pode adicionar alguma lógica para o caso de erro, se necessário
+  });
+};
 
   const aptoNumber = apartment.replace('apto', '');
   const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
