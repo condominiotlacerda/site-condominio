@@ -91,7 +91,7 @@ exports.handler = async (event) => {
       await userApartmentRef.set({
         email: emailCadastro,
         accessCode: codigoAcesso,
-        apartmentId: apartmentId,,
+        apartmentId: apartmentId,
         userName: userNameFromInvite // <---- Use userNameFromInvite aqui
       });
 
