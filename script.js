@@ -441,6 +441,8 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Erro ao fazer login:", errorCode, errorMessage);
       }
     });
+}
+  }});    
 
 // Ajuste para horário de Brasília (UTC-3)
 window.logAccess = function (userCode, downloadedFile, apartment) {
