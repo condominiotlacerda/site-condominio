@@ -341,7 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Usuário cadastrado com sucesso:", user.uid);
         mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
 
-        const response = await fetch('/.netlify/functions/register-user', {
+        const response = await fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/register-user', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
