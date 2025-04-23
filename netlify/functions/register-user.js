@@ -60,6 +60,7 @@ exports.handler = async (event) => {
       }
 
       const apartmentId = inviteData.apartment;
+      const userNameFromInvite = inviteData.name; // <---- Adicione esta linha para pegar o nome
       if (!apartmentId) {
         return {
           statusCode: 200, // Mudando para 200 OK com mensagem de erro para o frontend tratar
@@ -81,7 +82,8 @@ exports.handler = async (event) => {
       await pendingRef.set({
         email: emailCadastro,
         accessCode: codigoAcesso,
-        apartmentId: apartmentId
+        apartmentId: apartmentId,
+        userName: userNameFromInvite // <---- Use userNameFromInvite aqui
       });
 
       // Salvar informações em userApartments
@@ -89,8 +91,8 @@ exports.handler = async (event) => {
       await userApartmentRef.set({
         email: emailCadastro,
         accessCode: codigoAcesso,
-        apartmentId: apartmentId,
-        userName: 'Novo Usuário' // Você pode adicionar o nome do usuário aqui se tiver essa informação
+        apartmentId: apartmentId,,
+        userName: userNameFromInvite // <---- Use userNameFromInvite aqui
       });
 
       console.log("Dados salvos com sucesso no Realtime Database");
