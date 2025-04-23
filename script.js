@@ -334,67 +334,42 @@ document.addEventListener("DOMContentLoaded", function () {
       const mensagemCadastro = document.getElementById('mensagemCadastro');
 
       const auth = getAuth();
-      const db = getDatabase();
-      const invitesCollection = collection(firestore, 'invites');
-      const inviteDocRef = doc(firestore, 'invites', codigoAcesso);
 
       try {
-        const docSnap = await getDoc(inviteDocRef);
+        const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
+        const user = userCredential.user;
+        console.log("Usuário cadastrado com sucesso:", user.uid);
+        mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
 
-        if (docSnap.exists()) {
-          const inviteData = docSnap.data();
-          if (inviteData.isUsed === false) {
-            const apartmentId = inviteData.apartment;
+        const response = await fetch('/.netlify/functions/register-user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uid: user.uid,
+            emailCadastro: emailCadastro,
+            codigoAcesso: codigoAcesso
+            // Você pode adicionar mais dados aqui se precisar
+          }),
+        });
 
-            if (apartmentId) {
-              try {
-                const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
-                const user = userCredential.user;
-                console.log("Usuário cadastrado com sucesso:", user.uid);
-                mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
+        const data = await response.json();
 
-                // Salvar informações em pendingApprovals
-                const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
-                await set(pendingRef, {
-                  email: emailCadastro,
-                  accessCode: codigoAcesso,
-                  apartmentId: apartmentId
-                });
-
-                // Salvar informações em userApartments
-                const userApartmentRef = ref(db, 'userApartments/' + user.uid);
-                await set(userApartmentRef, {
-                  email: emailCadastro,
-                  accessCode: codigoAcesso,
-                  apartmentId: apartmentId
-                });
-
-                // Marcar o código como usado no Firestore
-                await updateDoc(inviteDocRef, { isUsed: true });
-
-                console.log("Dados salvos com sucesso no Realtime Database");
-                formularioCadastro.reset();
-
-              } catch (error) {
-                console.error("Erro ao criar usuário:", error);
-                mensagemCadastro.textContent = 'Erro ao cadastrar: ' + error.message;
-              }
-            } else {
-              mensagemCadastro.textContent = 'Erro ao obter o apartamento associado ao código.';
-            }
-          } else {
-            mensagemCadastro.textContent = 'Código de acesso já utilizado.';
-          }
+        if (response.ok && data.message === 'Usuário registrado e dados salvos com sucesso!') {
+          console.log('Resposta da função register-user:', data);
+          mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
+          formularioCadastro.reset();
         } else {
-          mensagemCadastro.textContent = 'Código de acesso inválido.';
+          console.error('Erro ao registrar usuário via função:', data.error || 'Erro desconhecido');
+          mensagemCadastro.textContent = 'Erro ao registrar: ' + (data.error || 'Erro desconhecido');
         }
 
       } catch (error) {
-        console.error("Erro ao consultar o Firestore:", error);
-        mensagemCadastro.textContent = 'Erro ao verificar o código de acesso. Tente novamente mais tarde.';
+        console.error("Erro ao criar usuário:", error);
+        mensagemCadastro.textContent = 'Erro ao cadastrar: ' + error.message;
       }
     });
-  }
 
   const loginSection = document.getElementById('login');
   const cadastroSection = document.getElementById('cadastro');
