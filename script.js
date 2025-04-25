@@ -172,6 +172,8 @@ export function showFiles(apartment) {
 
         documentosList.appendChild(listItem);
       }
+  
+      documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
       const seuDinheiroLink = document.createElement('a');
         seuDinheiroLink.textContent = 'Seu Dinheiro';
