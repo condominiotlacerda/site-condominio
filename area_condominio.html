@@ -57,7 +57,7 @@
 
         if (nomeUsuario && botaoSair) {
           const spanNomeUsuario = document.createElement('span');
-          spanNomeUsuario.textContent = nomeUsuario + '\u00A0\u00A0'; // Adiciona o nome e dois espaços não quebráveis
+          spanNomeUsuario.textContent = 'Bem vindo(a): ' + nomeUsuario + '\u00A0\u00A0'; // Adiciona a saudação antes do nome
           botaoSair.parentNode.insertBefore(spanNomeUsuario, botaoSair);
         } // =====================================================================
 
