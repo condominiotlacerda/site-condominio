@@ -50,6 +50,16 @@
                 .catch(error => console.error("Erro ao registrar log:", error));
         }
         window.logAccess = logAccess;
+        
+        // Nome ao lado do botão Sair ============================================
+        const nomeUsuario = localStorage.getItem('userName');
+        const botaoSair = document.querySelector('.logout-button');
+
+        if (nomeUsuario && botaoSair) {
+          const spanNomeUsuario = document.createElement('span');
+          spanNomeUsuario.textContent = nomeUsuario + '\u00A0\u00A0'; // Adiciona o nome e dois espaços não quebráveis
+          botaoSair.parentNode.insertBefore(spanNomeUsuario, botaoSair);
+        } // =====================================================================
 
         function sair() {
             signOut(authFirebase).then(() => {
