@@ -172,6 +172,24 @@ export function showFiles(apartment) {
 
         documentosList.appendChild(listItem);
       }
+
+      const seuDinheiroLink = document.createElement('a');
+        seuDinheiroLink.textContent = 'Seu Dinheiro';
+        seuDinheiroLink.style.color = 'blue';
+        seuDinheiroLink.href = '#';
+        seuDinheiroLink.addEventListener('click', function(event) {
+          event.preventDefault();
+      const filePath = '/seu_dinheiro/seu_dinheiro_1.pdf';
+      const apartmentId = localStorage.getItem('apartmentId');
+      logAccess(null, 'Visualização de Seu Dinheiro', apartmentId);
+      openFileViewer(filePath);
+    }); // <--- Aqui fecha a função do evento de clique
+
+    const listItem2 = document.createElement('li');
+    listItem2.appendChild(seuDinheiroLink);
+    listItem2.appendChild(document.createElement('br'));
+
+    documentosList.appendChild(listItem2);
   
 }
 
