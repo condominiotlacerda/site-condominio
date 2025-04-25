@@ -179,7 +179,7 @@ export function showFiles(apartment) {
         seuDinheiroLink.href = '#';
         seuDinheiroLink.addEventListener('click', function(event) {
           event.preventDefault();
-      const filePath = '/seu_dinheiro/seu_dinheiro_1.pdf';
+      const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
       const apartmentId = localStorage.getItem('apartmentId');
       logAccess(null, 'Visualização de Seu Dinheiro', apartmentId);
       openFileViewer(filePath);
