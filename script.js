@@ -173,27 +173,47 @@ export function showFiles(apartment) {
         documentosList.appendChild(listItem);
       }
   
-      documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
+       documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
-      const seuDinheiroLink = document.createElement('a');
-        seuDinheiroLink.textContent = 'Seu Dinheiro';
-        seuDinheiroLink.style.color = 'blue';
-        seuDinheiroLink.href = '#';
-        seuDinheiroLink.addEventListener('click', function(event) {
-          event.preventDefault();
-      const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
-      const apartmentId = localStorage.getItem('apartmentId');
-      logAccess(null, 'Visualização de Seu Dinheiro', apartmentId);
-      openFileViewer(filePath);
-    }); // <--- Aqui fecha a função do evento de clique
+       const seuDinheiroLink = document.createElement('a');
+         seuDinheiroLink.textContent = 'Seu Dinheiro Nr 1';
+         seuDinheiroLink.style.color = 'blue';
+         seuDinheiroLink.href = '#';
+         seuDinheiroLink.addEventListener('click', function(event) {
+         event.preventDefault();
+           const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
+           const apartmentId = localStorage.getItem('apartmentId');
+           logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
+           openFileViewer(filePath);
+         }); // <--- Aqui fecha a função do evento de clique
 
-    const listItem2 = document.createElement('li');
-    listItem2.appendChild(seuDinheiroLink);
-    listItem2.appendChild(document.createElement('br'));
+         const listItem2 = document.createElement('li');
+         listItem2.appendChild(seuDinheiroLink);
+         listItem2.appendChild(document.createElement('br'));
 
-    documentosList.appendChild(listItem2);
-  
-}
+         documentosList.appendChild(listItem2);
+       }
+
+         documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
+
+           const seuDinheiroLink = document.createElement('a');
+           seuDinheiroLink.textContent = 'Seu Dinheiro Nr 2';
+           seuDinheiroLink.style.color = 'blue';
+           seuDinheiroLink.href = '#';
+           seuDinheiroLink.addEventListener('click', function(event) {
+           event.preventDefault();
+             const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
+             const apartmentId = localStorage.getItem('apartmentId');
+             logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
+             openFileViewer(filePath);
+           }); // <--- Aqui fecha a função do evento de clique
+
+           const listItem2 = document.createElement('li');
+           listItem2.appendChild(seuDinheiroLink);
+           listItem2.appendChild(document.createElement('br'));
+
+           documentosList.appendChild(listItem2);
+         }
 
 function openFileViewer(filePath) {
   const viewerContainer = document.getElementById('viewer-container');
