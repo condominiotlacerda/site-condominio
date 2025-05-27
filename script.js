@@ -192,7 +192,7 @@ export function showFiles(apartment) {
          listItem2.appendChild(document.createElement('br'));
 
          documentosList.appendChild(listItem2);
-       }
+       //}
 
          documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
