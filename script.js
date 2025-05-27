@@ -175,44 +175,44 @@ export function showFiles(apartment) {
   
        documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
-       const seuDinheiroLink = document.createElement('a');
-         seuDinheiroLink.textContent = 'Seu Dinheiro Nr 1';
-         seuDinheiroLink.style.color = 'blue';
-         seuDinheiroLink.href = '#';
-         seuDinheiroLink.addEventListener('click', function(event) {
-         event.preventDefault();
-           const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
-           const apartmentId = localStorage.getItem('apartmentId');
-           logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
-           openFileViewer(filePath);
-         }); // <--- Aqui fecha a função do evento de clique
+       const seuDinheiroLink = document.createElement('a');
+         seuDinheiroLink.textContent = 'Seu Dinheiro Nr 1';
+         seuDinheiroLink.style.color = 'blue';
+         seuDinheiroLink.href = '#';
+         seuDinheiroLink.addEventListener('click', function(event) {
+         event.preventDefault();
+           const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
+           const apartmentId = localStorage.getItem('apartmentId');
+           logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
+           openFileViewer(filePath);
+         }); // <--- Aqui fecha a função do evento de clique
 
-         const listItem2 = document.createElement('li');
-         listItem2.appendChild(seuDinheiroLink);
-         listItem2.appendChild(document.createElement('br'));
+         const listItem2 = document.createElement('li');
+         listItem2.appendChild(seuDinheiroLink);
+         listItem2.appendChild(document.createElement('br'));
 
-         documentosList.appendChild(listItem2);
-       //}
+         documentosList.appendChild(listItem2);
 
-         documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
-           const seuDinheiroLink = document.createElement('a');
-           seuDinheiroLink.textContent = 'Seu Dinheiro Nr 2';
-           seuDinheiroLink.style.color = 'blue';
-           seuDinheiroLink.href = '#';
-           seuDinheiroLink.addEventListener('click', function(event) {
-           event.preventDefault();
-             const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
-             const apartmentId = localStorage.getItem('apartmentId');
-             logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
-             openFileViewer(filePath);
-           }); // <--- Aqui fecha a função do evento de clique
+         documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
-           const listItem2 = document.createElement('li');
-           listItem2.appendChild(seuDinheiroLink);
-           listItem2.appendChild(document.createElement('br'));
+           const seuDinheiroLink2 = document.createElement('a'); // Use um nome de variável diferente ou let
+           seuDinheiroLink2.textContent = 'Seu Dinheiro Nr 2';
+           seuDinheiroLink2.style.color = 'blue';
+           seuDinheiroLink2.href = '#';
+           seuDinheiroLink2.addEventListener('click', function(event) {
+           event.preventDefault();
+             const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
+             const apartmentId = localStorage.getItem('apartmentId');
+             logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
+             openFileViewer(filePath);
+           }); // <--- Aqui fecha a função do evento de clique
 
-           documentosList.appendChild(listItem2);
+           const listItem3 = document.createElement('li'); // Use um nome de variável diferente
+           listItem3.appendChild(seuDinheiroLink2);
+           listItem3.appendChild(document.createElement('br'));
+
+           documentosList.appendChild(listItem3);
          }
 
 function openFileViewer(filePath) {
