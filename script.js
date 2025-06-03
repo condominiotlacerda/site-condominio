@@ -255,7 +255,7 @@ async function exibirAvisoSeNecessario() {
 
     // Passo 3: Verificar o Realtime Database
     const db = getDatabase();
-    const avisoRef = ref(db, `avisos/${apartamentoId}/${avisoAtualNr}`);
+    const avisoRef = ref(db, `avisos/seen/${apartamentoId}/${avisoAtualNr}`);
     const snapshot = await get(avisoRef);
     console.log('Snapshot do Firebase:', snapshot);
     console.log('Snapshot existe:', snapshot.exists());
