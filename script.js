@@ -232,26 +232,31 @@ async function exibirAvisoSeNecessario() {
       return;
     }
     const avisoNr = await responseNr.json();
-    const avisoAtualNr = avisoNr;
+    const avisoAtualNr = avisoNr; // Simplificamos aqui, assumindo que avisosNr.json contém diretamente o número
+    console.log('Número do aviso atual (avisosNr.json):', avisoAtualNr);
 
     const apartamentoId = localStorage.getItem('apartmentId');
+    console.log('apartmentId do localStorage:', apartamentoId);
     if (!apartamentoId) {
       console.error('apartmentId não encontrado no localStorage.');
       return;
     }
 
-    // Passo 2: Verificar o localStorage (mantemos esta verificação)
+    // Passo 2: Verificar o localStorage se o usuário já viu este aviso
     const avisoVistoLocalmente = localStorage.getItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`);
+    console.log('Valor de avisoVistoLocalmente:', avisoVistoLocalmente);
 
     if (avisoVistoLocalmente === 'true') {
       console.log(`Aviso ${avisoAtualNr} já foi visto localmente por este apartamento.`);
-      return;
+      return; // Se já viu, não precisa fazer mais nada
     }
 
     // Passo 3: Verificar o Realtime Database
     const db = getDatabase();
     const avisoRef = ref(db, `avisos/${apartamentoId}/${avisoAtualNr}`);
     const snapshot = await get(avisoRef);
+    console.log('Snapshot do Firebase:', snapshot);
+    console.log('Snapshot existe:', snapshot.exists());
 
     if (snapshot.exists()) {
       console.log(`Aviso ${avisoAtualNr} já foi registrado no banco de dados para o apartamento ${apartamentoId}.`);
@@ -266,23 +271,28 @@ async function exibirAvisoSeNecessario() {
       return;
     }
     const avisosData = await responseAvisos.json();
+    console.log('Dados de avisos.json:', avisosData);
     const textoAviso = avisosData[avisoAtualNr];
+    console.log('Texto do aviso para o número', avisoAtualNr, ':', textoAviso);
 
     if (textoAviso) {
       // Passo 5: Exibir o painel de aviso
       avisoTexto.textContent = textoAviso;
-      painelAviso.style.display = 'flex';
+      painelAviso.style.display = 'flex'; // Usamos 'flex' pois definimos assim no estilo inline
+      console.log('Painel de aviso exibido.');
 
       // Passo 6: Adicionar um event listener para o botão "Entendi"
       botaoEntendi.addEventListener('click', function() {
-        // Passo 6a: Registrar a ação no Realtime Database
-        marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso);
-
+        // Passo 6a: Registrar a ação no Realtime Database (vamos implementar isso depois)
+        const apartamentoId = localStorage.getItem('apartmentId');
+        logAccess(null, `Aviso ${avisoAtualNr} Entendido`, apartamentoId);
+        marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso); // Função para escrever no Realtime Database
         // Passo 6b: Marcar no localStorage que o aviso foi visto
         localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true');
 
         // Passo 6c: Esconder o painel
         painelAviso.style.display = 'none';
+        console.log('Botão "Entendi" clicado.');
       });
     } else {
       console.log(`Aviso ${avisoAtualNr} não encontrado no avisos.json.`);
