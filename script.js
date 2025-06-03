@@ -224,6 +224,7 @@ export function showFiles(apartment) {
 
 // Função que contém a lógica do painel de avisos
 async function exibirAvisoSeNecessario() {
+  console.log('exibirAvisoSeNecessario foi chamada!'); // Adicione esta linha
   try {
     // Passo 1: Buscar o número do aviso atual do avisosNr.json
     const responseNr = await fetch('avisos/avisosNr.json');
