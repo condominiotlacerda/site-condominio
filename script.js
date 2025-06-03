@@ -301,7 +301,9 @@ async function exibirAvisoSeNecessario() {
 function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
   const db = getDatabase();
   const now = new Date();
-  const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+  const dataLocal = now.toLocaleDateString('pt-BR').replace(/\//g, '-');
+  const horaLocal = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/:/g, '-');
+  const formattedDate = `${dataLocal}_${horaLocal}`;
   const logNome = `${apartamentoId}_${localStorage.getItem('userName')}_${formattedDate}_aviso_${avisoNr}`;
 
   // Escreve o log completo no nó avisos
