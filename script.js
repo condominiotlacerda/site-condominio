@@ -16,6 +16,7 @@ function enableApartment() {
 }
 
 export function showFiles(apartment) {
+  console.log('A função showFiles foi chamada para o apartamento:', apartment); // Adicione esta linha
   exibirAvisoSeNecessario(); // Chama a função para exibir o aviso
   
   // Obtém referências aos elementos do painel de aviso
