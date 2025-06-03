@@ -96,6 +96,15 @@
     </style>
 </head>
 <body>
+    <div id="painel-aviso" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1001; overflow: auto;">
+      <div style="background-color: #f9f9f9; max-width: 600px; margin: 15% auto; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); text-align: center;">
+        <h2>Aviso Importante</h2>
+        <hr>
+        <div id="aviso-texto" style="margin-bottom: 20px; text-align: left;">
+          </div>
+        <button id="entendi-aviso" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">Entendi</button>
+      </div>
+    </div>
     <button class="logout-button" onclick="sair()">Sair</button>
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
