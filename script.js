@@ -16,6 +16,12 @@ function enableApartment() {
 }
 
 export function showFiles(apartment) {
+
+  // Obtém referências aos elementos do painel de aviso
+  const painelAviso = document.getElementById('painel-aviso');
+  const avisoTexto = document.getElementById('aviso-texto');
+  const botaoEntendi = document.getElementById('entendi-aviso');
+  
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
   const fileContainer = document.getElementById('file-container');
