@@ -309,19 +309,24 @@ async function exibirAvisoSeNecessario() {
 // Marca se o aviso já foi lido
 function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
   const db = getDatabase();
-  const avisoRef = ref(db, `avisos/${apartamentoId}/${avisoNr}`);
   const now = new Date();
   const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
   const logNome = `${apartamentoId}_${localStorage.getItem('userName')}_${formattedDate}_aviso_${avisoNr}`;
 
+  // Escreve o log completo no nó avisos
   set(ref(db, `avisos/${logNome}`), {
     apartamentoId: apartamentoId,
     avisoNr: avisoNr,
     Texto: texto,
     entendidoEm: now.toISOString()
   })
-  .then(() => console.log(`Aviso ${avisoNr} marcado como entendido para o apartamento ${apartamentoId} no banco de dados.`))
-  .catch((error) => console.error("Erro ao marcar aviso como entendido:", error));
+  .then(() => console.log(`Log do aviso ${avisoNr} registrado como entendido para o apartamento ${apartamentoId} no banco de dados.`))
+  .catch((error) => console.error("Erro ao registrar log do aviso como entendido:", error));
+
+  // Escreve um sinalizador no nó avisos/seen para a verificação de leitura
+  set(ref(db, `avisos/seen/${apartamentoId}/${avisoNr}`), true)
+  .then(() => console.log(`Sinalizador de aviso ${avisoNr} visualizado gravado para o apartamento ${apartamentoId}.`))
+  .catch((error) => console.error("Erro ao gravar sinalizador de aviso visualizado:", error));
 }
 // fim de Marca se o aviso já foi lido
 
