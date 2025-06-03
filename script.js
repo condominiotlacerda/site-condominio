@@ -7,6 +7,12 @@ import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc
 import { app } from './firebase.js';
 
 const firestore = getFirestore(app);
+  
+// Obtém referências aos elementos do painel de aviso
+const painelAviso = document.getElementById('painel-aviso');
+const avisoTexto = document.getElementById('aviso-texto');
+const botaoEntendi = document.getElementById('entendi-aviso');
+// final de obtém referências aos elementos do painel de avisos
 
 let activeApartmentButtonId = null;
 
@@ -18,11 +24,6 @@ function enableApartment() {
 export function showFiles(apartment) {
   console.log('A função showFiles foi chamada para o apartamento:', apartment); // Adicione esta linha
   exibirAvisoSeNecessario(); // Chama a função para exibir o aviso
-  
-  // Obtém referências aos elementos do painel de aviso
-  const painelAviso = document.getElementById('painel-aviso');
-  const avisoTexto = document.getElementById('aviso-texto');
-  const botaoEntendi = document.getElementById('entendi-aviso');
   
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
