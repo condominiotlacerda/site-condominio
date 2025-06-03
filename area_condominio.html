@@ -62,12 +62,13 @@
         } // =====================================================================
 
         function sair() {
-            signOut(authFirebase).then(() => {
-                console.log('Usuário desconectado');
-                window.location.href = 'index.html';
-            }).catch((error) => {
-                console.error('Erro ao fazer logout:', error);
-            });
+          signOut(authFirebase).then(() => {
+            console.log('Usuário desconectado');
+            localStorage.clear(); // Adicionamos esta linha para limpar o localStorage
+            window.location.href = 'index.html';
+          }).catch((error) => {
+            console.error('Erro ao fazer logout:', error);
+          });
         }
         window.sair = sair;
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
