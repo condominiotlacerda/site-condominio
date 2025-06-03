@@ -23,7 +23,7 @@ function enableApartment() {
 
 export function showFiles(apartment) {
   console.log('A função showFiles foi chamada para o apartamento:', apartment); // Adicione esta linha
-  exibirAvisoSeNecessario(); // Chama a função para exibir o aviso
+  //exibirAvisoSeNecessario(); // Chama a função para exibir o aviso
   
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
@@ -319,7 +319,7 @@ function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
     apartamentoId: apartamentoId,
     avisoNr: avisoNr,
     Texto: texto,
-    entendidoEm: now.toISOString()
+    entendidoEm: now.toLocaleString()
   })
   .then(() => console.log(`Log do aviso ${avisoNr} registrado como entendido para o apartamento ${apartamentoId} no banco de dados.`))
   .catch((error) => console.error("Erro ao registrar log do aviso como entendido:", error));
@@ -360,6 +360,7 @@ function getFilesForApartment(apartment) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  exibirAvisoSeNecessario(); // Chama a função exibirAvisoSeNecessario assim que a página carrega
 
   // Código para buscar o arquivo name_taxas.json
   fetch('dados/name_taxas.json')
