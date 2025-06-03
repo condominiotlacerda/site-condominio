@@ -23,7 +23,6 @@ function enableApartment() {
 
 export function showFiles(apartment) {
   console.log('A função showFiles foi chamada para o apartamento:', apartment); // Adicione esta linha
-  //exibirAvisoSeNecessario(); // Chama a função para exibir o aviso
   
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
@@ -245,15 +244,6 @@ async function exibirAvisoSeNecessario() {
       return;
     }
 
-    // Passo 2: Verificar o localStorage se o usuário já viu este aviso
-    const avisoVistoLocalmente = localStorage.getItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`);
-    console.log('Valor de avisoVistoLocalmente:', avisoVistoLocalmente);
-
-    if (avisoVistoLocalmente === 'true') {
-      console.log(`Aviso ${avisoAtualNr} já foi visto localmente por este apartamento.`);
-      return; // Se já viu, não precisa fazer mais nada
-    }
-
     // Passo 3: Verificar o Realtime Database
     const db = getDatabase();
     const avisoRef = ref(db, `avisos/seen/${apartamentoId}/${avisoAtualNr}`);
@@ -291,7 +281,7 @@ async function exibirAvisoSeNecessario() {
         logAccess(null, `Aviso ${avisoAtualNr} Entendido`, apartamentoId);
         marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso); // Função para escrever no Realtime Database
         // Passo 6b: Marcar no localStorage que o aviso foi visto
-        localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true');
+        //localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true');
 
         // Passo 6c: Esconder o painel
         painelAviso.style.display = 'none';
