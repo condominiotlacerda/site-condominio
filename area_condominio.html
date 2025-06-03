@@ -64,7 +64,15 @@
         function sair() {
           signOut(authFirebase).then(() => {
             console.log('Usuário desconectado');
-            localStorage.clear(); // Adicionamos esta linha para limpar o localStorage
+            localStorage.removeItem('apartmentId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('firebase:host:logsite-d81dd-default-rtdb.firebaseio.com"s-usc1a-nss-2013.firebaseio.com"');
+            // Adicione a linha abaixo para remover a chave do aviso visto (use uma string template para incluir o número do aviso)
+            const apartamentoId = localStorage.getItem('apartmentId'); // Tentamos pegar o apartmentId novamente, caso já exista
+            const avisoNr = 1; // Assumindo que o número do aviso é sempre 1, ajuste se necessário
+            if (apartamentoId) {
+              localStorage.removeItem(`avisoVisto_${apartamentoId}_${avisoNr}`);
+            }
             window.location.href = 'index.html';
           }).catch((error) => {
             console.error('Erro ao fazer logout:', error);
