@@ -16,7 +16,8 @@ function enableApartment() {
 }
 
 export function showFiles(apartment) {
-
+  exibirAvisoSeNecessario(); // Chama a função para exibir o aviso
+  
   // Obtém referências aos elementos do painel de aviso
   const painelAviso = document.getElementById('painel-aviso');
   const avisoTexto = document.getElementById('aviso-texto');
@@ -219,7 +220,64 @@ export function showFiles(apartment) {
            listItem3.appendChild(document.createElement('br'));
 
            documentosList.appendChild(listItem3);
-         }
+} // fim da função showfiles
+
+// Função que contém a lógica do painel de avisos
+async function exibirAvisoSeNecessario() {
+  try {
+    // Passo 1: Buscar o número do aviso atual do avisosNr.json
+    const responseNr = await fetch('avisos/avisosNr.json');
+    if (!responseNr.ok) {
+      console.error('Erro ao carregar avisosNr.json:', responseNr.status);
+      return;
+    }
+    const avisoNr = await responseNr.json();
+    const avisoAtualNr = avisoNr; // Simplificamos aqui, assumindo que avisosNr.json contém diretamente o número
+
+    // Passo 2: Verificar o localStorage se o usuário já viu este aviso
+    const avisoVisto = localStorage.getItem(`avisoVisto_${localStorage.getItem('apartmentId')}_${avisoAtualNr}`);
+
+    if (avisoVisto === 'true') {
+      console.log(`Aviso ${avisoAtualNr} já foi visto por este apartamento.`);
+      return; // Se já viu, não precisa fazer mais nada
+    }
+
+    // Passo 3: Buscar o conteúdo do aviso do avisos.json
+    const responseAvisos = await fetch('avisos/avisos.json');
+    if (!responseAvisos.ok) {
+      console.error('Erro ao carregar avisos.json:', responseAvisos.status);
+      return;
+    }
+    const avisosData = await responseAvisos.json();
+    const textoAviso = avisosData[avisoAtualNr];
+
+    if (textoAviso) {
+      // Passo 4: Exibir o painel de aviso
+      avisoTexto.textContent = textoAviso;
+      painelAviso.style.display = 'flex'; // Usamos 'flex' pois definimos assim no estilo inline
+
+      // Passo 5: Adicionar um event listener para o botão "Entendi"
+      botaoEntendi.addEventListener('click', function() {
+        // Passo 5a: Registrar a ação no Realtime Database (vamos implementar isso depois)
+        const apartamentoId = localStorage.getItem('apartmentId');
+        logAccess(null, `Aviso ${avisoAtualNr} Entendido`, apartamentoId);
+        // marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso); // Função para escrever no Realtime Database
+
+        // Passo 5b: Marcar no localStorage que o aviso foi visto
+        localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true');
+
+        // Passo 5c: Esconder o painel
+        painelAviso.style.display = 'none';
+      });
+    } else {
+      console.log(`Aviso ${avisoAtualNr} não encontrado no avisos.json.`);
+    }
+
+  } catch (error) {
+    console.error('Erro ao processar aviso:', error);
+  }
+}
+// Fim da função que contém a lógica do peinel de avisos
 
 function openFileViewer(filePath) {
   const viewerContainer = document.getElementById('viewer-container');
