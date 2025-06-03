@@ -205,7 +205,7 @@ export function showFiles(apartment) {
          documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
            const seuDinheiroLink2 = document.createElement('a'); // Use um nome de variável diferente ou let
-           seuDinheiroLink2.textContent = 'Seu Dinheiro Nr 2-Novo';
+           seuDinheiroLink2.textContent = 'Seu Dinheiro Nr 2 - NOVO';
            seuDinheiroLink2.style.color = 'blue';
            seuDinheiroLink2.href = '#';
            seuDinheiroLink2.addEventListener('click', function(event) {
