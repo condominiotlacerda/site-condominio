@@ -67,13 +67,17 @@
             localStorage.removeItem('apartmentId');
             localStorage.removeItem('userName');
             localStorage.removeItem('firebase:host:logsite-d81dd-default-rtdb.firebaseio.com"s-usc1a-nss-2013.firebaseio.com"');
-            const apartamentoId = localStorage.getItem('apartmentId');
-            const avisoNr = 1;
-            if (apartamentoId) {
-              localStorage.removeItem(`avisoVisto_${apartamentoId}_${avisoNr}`);
+
+            // Itera por todas as chaves do localStorage e remove as chaves de aviso visto
+            for (let i = localStorage.length - 1; i >= 0; i--) {
+              const key = localStorage.key(i);
+              if (key && key.startsWith('avisoVisto_')) {
+                localStorage.removeItem(key);
+              }
             }
+
             window.location.href = 'index.html';
-            window.location.reload(); // Adicione esta linha para recarregar a página
+            window.location.reload(); // Recarrega a página de login
           }).catch((error) => {
             console.error('Erro ao fazer logout:', error);
           });
