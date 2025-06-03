@@ -232,17 +232,34 @@ async function exibirAvisoSeNecessario() {
       return;
     }
     const avisoNr = await responseNr.json();
-    const avisoAtualNr = avisoNr; // Simplificamos aqui, assumindo que avisosNr.json contém diretamente o número
+    const avisoAtualNr = avisoNr;
 
-    // Passo 2: Verificar o localStorage se o usuário já viu este aviso
-    const avisoVisto = localStorage.getItem(`avisoVisto_${localStorage.getItem('apartmentId')}_${avisoAtualNr}`);
-
-    if (avisoVisto === 'true') {
-      console.log(`Aviso ${avisoAtualNr} já foi visto por este apartamento.`);
-      return; // Se já viu, não precisa fazer mais nada
+    const apartamentoId = localStorage.getItem('apartmentId');
+    if (!apartamentoId) {
+      console.error('apartmentId não encontrado no localStorage.');
+      return;
     }
 
-    // Passo 3: Buscar o conteúdo do aviso do avisos.json
+    // Passo 2: Verificar o localStorage (mantemos esta verificação)
+    const avisoVistoLocalmente = localStorage.getItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`);
+
+    if (avisoVistoLocalmente === 'true') {
+      console.log(`Aviso ${avisoAtualNr} já foi visto localmente por este apartamento.`);
+      return;
+    }
+
+    // Passo 3: Verificar o Realtime Database
+    const db = getDatabase();
+    const avisoRef = ref(db, `avisos/${apartamentoId}/${avisoAtualNr}`);
+    const snapshot = await get(avisoRef);
+
+    if (snapshot.exists()) {
+      console.log(`Aviso ${avisoAtualNr} já foi registrado no banco de dados para o apartamento ${apartamentoId}.`);
+      localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true'); // Atualiza o localStorage
+      return; // Se já registrado no banco, não precisa exibir
+    }
+
+    // Passo 4: Buscar o conteúdo do aviso do avisos.json
     const responseAvisos = await fetch('avisos/avisos.json');
     if (!responseAvisos.ok) {
       console.error('Erro ao carregar avisos.json:', responseAvisos.status);
@@ -252,21 +269,19 @@ async function exibirAvisoSeNecessario() {
     const textoAviso = avisosData[avisoAtualNr];
 
     if (textoAviso) {
-      // Passo 4: Exibir o painel de aviso
+      // Passo 5: Exibir o painel de aviso
       avisoTexto.textContent = textoAviso;
-      painelAviso.style.display = 'flex'; // Usamos 'flex' pois definimos assim no estilo inline
+      painelAviso.style.display = 'flex';
 
-      // Passo 5: Adicionar um event listener para o botão "Entendi"
+      // Passo 6: Adicionar um event listener para o botão "Entendi"
       botaoEntendi.addEventListener('click', function() {
-        // Passo 5a: Registrar a ação no Realtime Database (vamos implementar isso depois)
-        const apartamentoId = localStorage.getItem('apartmentId');
-        logAccess(null, `Aviso ${avisoAtualNr} Entendido`, apartamentoId);
-        // marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso); // Função para escrever no Realtime Database
+        // Passo 6a: Registrar a ação no Realtime Database
+        marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso);
 
-        // Passo 5b: Marcar no localStorage que o aviso foi visto
+        // Passo 6b: Marcar no localStorage que o aviso foi visto
         localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true');
 
-        // Passo 5c: Esconder o painel
+        // Passo 6c: Esconder o painel
         painelAviso.style.display = 'none';
       });
     } else {
@@ -278,6 +293,25 @@ async function exibirAvisoSeNecessario() {
   }
 }
 // Fim da função que contém a lógica do peinel de avisos
+
+// Marca se o aviso já foi lido
+function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
+  const db = getDatabase();
+  const avisoRef = ref(db, `avisos/${apartamentoId}/${avisoNr}`);
+  const now = new Date();
+  const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+  const logNome = `${apartamentoId}_${localStorage.getItem('userName')}_${formattedDate}_aviso_${avisoNr}`;
+
+  set(ref(db, `avisos/${logNome}`), {
+    apartamentoId: apartamentoId,
+    avisoNr: avisoNr,
+    Texto: texto,
+    entendidoEm: now.toISOString()
+  })
+  .then(() => console.log(`Aviso ${avisoNr} marcado como entendido para o apartamento ${apartamentoId} no banco de dados.`))
+  .catch((error) => console.error("Erro ao marcar aviso como entendido:", error));
+}
+// fim de Marca se o aviso já foi lido
 
 function openFileViewer(filePath) {
   const viewerContainer = document.getElementById('viewer-container');
