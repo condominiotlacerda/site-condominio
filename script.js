@@ -44,7 +44,7 @@ export function showFiles(apartment) {
   documentosContainer.style.display = 'none';
   fileList.innerHTML = '';
 
-  document.getElementById('apartment-number').textContent = apartment;
+  document.getElementById('apartment-number').textContent = apartment.replace('apto', 'Apto ').replace(/(\D+)(\d)/, '$1 $2');
   fileContainer.style.display = 'block';
   contasContainer.style.display = 'block';
   notificationsContainer.style.display = 'block';
