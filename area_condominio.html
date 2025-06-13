@@ -192,6 +192,50 @@ window.sair = sair;
           <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
         </section>
 
+        <div style="text-align: center; margin-top: 20px;">
+          <h2>Política de Uso</h2>
+          <p><a id="politica-uso-link" href="#">Política de Uso</a></p>
+        </div>
+
+        <script>
+          fetch('/.netlify/functions/politica-uso')
+            .then(response => response.json())
+            .then(data => {
+              if (data && data.publicUrl) {
+                const fileViewer = document.getElementById('file-viewer');
+                if (fileViewer) {
+                  fileViewer.src = data.publicUrl;
+                } else {
+                  console.error('Elemento file-viewer não encontrado.');
+                  document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+                  document.getElementById('politica-uso-link').removeAttribute('href');
+                }
+                document.getElementById('politica-uso-link').addEventListener('click', function(event) {
+                  event.preventDefault(); // Evitar que o link padrão tente abrir uma nova página
+                  if (data && data.publicUrl) {
+                    const fileViewer = document.getElementById('file-viewer');
+                    if (fileViewer) {
+                      fileViewer.src = data.publicUrl;
+                    }
+                  }
+                });
+              } else if (data && data.error) {
+                console.error('Erro ao buscar a Política de Uso:', data.error);
+                document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+                document.getElementById('politica-uso-link').removeAttribute('href');
+              } else {
+                console.error('Resposta inválida ao buscar a Política de Uso:', data);
+                document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+                document.getElementById('politica-uso-link').removeAttribute('href');
+              }
+            })
+            .catch(error => {
+              console.error('Erro ao chamar a função da Política de Uso:', error);
+              document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+              document.getElementById('politica-uso-link').removeAttribute('href');
+            });
+        </script>
+
         <section id="login" style="display:none;">
             <h2>Login</h2>
             <form id="formularioLogin">
@@ -224,6 +268,7 @@ window.sair = sair;
     <footer>
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
         <p style="font-size: 0.8em;">Condomínio Edifício T Lacerda.</p>
+        
     </footer>
 
     <script type="module">
