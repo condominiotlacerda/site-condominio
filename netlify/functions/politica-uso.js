@@ -11,7 +11,7 @@ exports.handler = async (event) => {
     });
 
     if (response.status === 200) {
-      const publicUrl = `https://drive.google.com/viewerng/viewer?url=https://drive.google.com/uc?id=${fileId}&export=download`;
+      const publicUrl = `https://drive.google.com/viewer?url=https://drive.google.com/uc?id=${fileId}&export=download`;
 
       return {
         statusCode: 200,
