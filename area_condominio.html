@@ -236,17 +236,6 @@ window.sair = sair;
             });
         </script>
 
-        <script>
-          fetch('/.netlify/functions/hello')
-            .then(response => response.json())
-            .then(data => {
-              console.log('Resposta da função Hello:', data);
-            })
-            .catch(error => {
-              console.error('Erro ao chamar a função Hello:', error);
-            });
-        </script>
-
         <section id="login" style="display:none;">
             <h2>Login</h2>
             <form id="formularioLogin">
