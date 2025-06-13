@@ -2,18 +2,15 @@ const { google } = require('googleapis');
 
 exports.handler = async (event) => {
   const fileId = process.env.GOOGLE_DRIVE_POLITICA_USO_ID; // Usando variável de ambiente
-  const apiKey = 'AIzaSyCk4u_vtgsXFvw1BHjeeLQrNDXwHce77Kg'; // Substitua pela chave de API que você criou
+  const apiKey = process.env.GOOGLE_DRIVE_API_KEY; // Usando variável de ambiente
 
   try {
     const drive = google.drive({ version: 'v3', auth: apiKey });
     const response = await drive.files.get({
       fileId: fileId,
-      alt: 'media', // Para obter o conteúdo do arquivo
     });
 
     if (response.status === 200) {
-      // Como é um PDF, podemos tentar retornar um link direto de visualização.
-      // Uma maneira mais simples para este primeiro passo é usar um link público de visualização do Drive.
       const publicUrl = `https://drive.google.com/viewerng/viewer?url=https://drive.google.com/uc?id=${fileId}&export=download`;
 
       return {
