@@ -195,51 +195,53 @@ window.sair = sair;
         <!-- ==============================================================================================================================================   <p><a id="politica-uso-link" href="#">Política de Uso</a></p>  -->
         
         <div style="text-align: center; margin-top: 20px;">
-          
+  <p><a id="politica-uso-link" href="#">Política de Uso</a></p>
+</div>
 
-           <p><a id="politica-uso-link" href="https://drive.google.com/viewer?url=https://drive.google.com/uc?id=1PosswJQMyQsn5Ny3l2WxH0MJ9s77VB0c&export=download" target="_blank">Política de Uso</a></p>
-            
-        </div>
-<!-- 
-        <script>
-          fetch('/.netlify/functions/politica-uso')
-            .then(response => response.json())
-            .then(data => {
-              if (data && data.publicUrl) {
-                const fileViewer = document.getElementById('file-viewer');
-                if (fileViewer) {
-                  fileViewer.src = data.publicUrl;
-                } else {
-                  console.error('Elemento file-viewer não encontrado.');
-                  document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
-                  document.getElementById('politica-uso-link').removeAttribute('href');
-                }
-                document.getElementById('politica-uso-link').addEventListener('click', function(event) {
-                  event.preventDefault(); // Evitar que o link padrão tente abrir uma nova página
-                  if (data && data.publicUrl) {
-                    const fileViewer = document.getElementById('file-viewer');
-                    if (fileViewer) {
-                      fileViewer.src = data.publicUrl;
-                    }
-                  }
-                });
-              } else if (data && data.error) {
-                console.error('Erro ao buscar a Política de Uso:', data.error);
-                document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
-                document.getElementById('politica-uso-link').removeAttribute('href');
-              } else {
-                console.error('Resposta inválida ao buscar a Política de Uso:', data);
-                document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
-                document.getElementById('politica-uso-link').removeAttribute('href');
-              }
-            })
-            .catch(error => {
-              console.error('Erro ao chamar a função da Política de Uso:', error);
-              document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
-              document.getElementById('politica-uso-link').removeAttribute('href');
-            });
-        </script>
+<script>
+  fetch('/.netlify/functions/politica-uso')
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.publicUrl) {
+        const fileViewer = document.getElementById('file-viewer');
+        if (fileViewer) {
+          fileViewer.src = data.publicUrl;
+        } else {
+          console.error('Elemento file-viewer não encontrado.');
+          document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+          document.getElementById('politica-uso-link').removeAttribute('href');
+        }
+        document.getElementById('politica-uso-link').href = data.publicUrl;
+        // Remova ou comente esta linha (o evento de clique fará isso):
+        // document.getElementById('politica-uso-link').target = '_blank';
+      } else if (data && data.error) {
+        console.error('Erro ao buscar a Política de Uso:', data.error);
+        document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+        document.getElementById('politica-uso-link').removeAttribute('href');
+      } else {
+        console.error('Resposta inválida ao buscar a Política de Uso:', data);
+        document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+        document.getElementById('politica-uso-link').removeAttribute('href');
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao chamar a função da Política de Uso:', error);
+      document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
+      document.getElementById('politica-uso-link').removeAttribute('href');
+    });
 
+  document.getElementById('politica-uso-link').addEventListener('click', function(event) {
+    event.preventDefault(); // Evitar que o link padrão tente abrir uma nova página
+    const dataPublicUrl = this.href;
+    if (dataPublicUrl && dataPublicUrl !== '#') {
+      const fileViewer = document.getElementById('file-viewer');
+      if (fileViewer) {
+        fileViewer.src = dataPublicUrl;
+        document.getElementById('viewer-container').style.display = 'flex';
+      }
+    }
+  });
+</script>
          <!-- ============================================================================================================================================== -->
 
         <section id="login" style="display:none;">
