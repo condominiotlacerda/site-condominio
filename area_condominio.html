@@ -234,11 +234,12 @@ window.sair = sair;
     event.preventDefault(); // Evitar que o link padrão tente abrir uma nova página
     const dataPublicUrl = this.href;
     if (dataPublicUrl && dataPublicUrl !== '#') {
-      const fileViewer = document.getElementById('file-viewer');
-      if (fileViewer) {
-        fileViewer.src = dataPublicUrl;
-        document.getElementById('viewer-container').style.display = 'flex';
-      }
+      const largura = 800; // Largura desejada para a janela
+      const altura = 600; // Altura desejada para a janela
+      const esquerda = (window.innerWidth - largura) / 2; // Calcula a posição esquerda para centralizar
+      const topo = (window.innerHeight - altura) / 2; // Calcula a posição superior para centralizar
+
+      window.open(dataPublicUrl, '_blank', `width=${largura},height=${altura},left=${esquerda},top=${topo}`);
     }
   });
 </script>
