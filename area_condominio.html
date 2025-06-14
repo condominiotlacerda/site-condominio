@@ -200,29 +200,27 @@ window.sair = sair;
 
 <script>
   fetch('/.netlify/functions/politica-uso')
-    .then(response => response.json())
-    .then(data => {
-      if (data && data.publicUrl) {
-        const fileViewer = document.getElementById('file-viewer');
-        if (fileViewer) {
-          
-        } else {
-          console.error('Elemento file-viewer não encontrado.');
-          document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
-          document.getElementById('politica-uso-link').removeAttribute('href');
-        }
-        document.getElementById('politica-uso-link').href = data.publicUrl;
-        // Remova ou comente esta linha (o evento de clique fará isso):
-        // document.getElementById('politica-uso-link').target = '_blank';
-      } else if (data && data.error) {
-        console.error('Erro ao buscar a Política de Uso:', data.error);
-        document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
-        document.getElementById('politica-uso-link').removeAttribute('href');
-      } else {
-        console.error('Resposta inválida ao buscar a Política de Uso:', data);
-        document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
-        document.getElementById('politica-uso-link').removeAttribute('href');
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`);
       }
+      return response.arrayBuffer(); // Obtém a resposta como um ArrayBuffer
+    })
+    .then(buffer => {
+      const file = new Blob([buffer], { type: 'application/pdf' }); // Cria um Blob com o ArrayBuffer e o tipo MIME correto
+      const fileURL = URL.createObjectURL(file); // Cria o blob: URL
+
+      document.getElementById('politica-uso-link').href = fileURL; // Define o href do link para o blob: URL
+
+      document.getElementById('politica-uso-link').addEventListener('click', function(event) {
+        event.preventDefault();
+        const largura = 800;
+        const altura = 600;
+        const esquerda = (window.innerWidth - largura) / 2;
+        const topo = (window.innerHeight - altura) / 2;
+        window.open(fileURL, '_blank', `width=${largura},height=${altura},left=${esquerda},top=${topo}`);
+      });
+
     })
     .catch(error => {
       console.error('Erro ao chamar a função da Política de Uso:', error);
