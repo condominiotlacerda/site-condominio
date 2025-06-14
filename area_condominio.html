@@ -200,6 +200,8 @@ window.sair = sair;
 
 <script>
   const politicaUsoLink = document.getElementById('politica-uso-link');
+  const viewerContainer = document.getElementById('viewer-container');
+  const fileViewer = document.getElementById('file-viewer');
 
   fetch('/.netlify/functions/politica-uso')
     .then(response => {
@@ -212,7 +214,7 @@ window.sair = sair;
       const file = new Blob([buffer], { type: 'application/pdf' }); // Cria um Blob com o ArrayBuffer e o tipo MIME correto
       const fileURL = URL.createObjectURL(file); // Cria o blob: URL
 
-      politicaUsoLink.href = fileURL; // Define o href do link para o blob: URL
+      fileViewer.src = fileURL; // Define o src do iframe para o blob: URL
     })
     .catch(error => {
       console.error('Erro ao chamar a função da Política de Uso:', error);
@@ -222,15 +224,15 @@ window.sair = sair;
 
   politicaUsoLink.addEventListener('click', function(event) {
     event.preventDefault();
-    const dataPublicUrl = this.href;
-    if (dataPublicUrl && dataPublicUrl.startsWith('blob:')) {
-      const largura = 800;
-      const altura = 600;
-      const esquerda = (window.innerWidth - largura) / 2;
-      const topo = (window.innerHeight - altura) / 2;
-      window.open(dataPublicUrl, '_blank', `width=${largura},height=${altura},left=${esquerda},top=${topo}`);
-    }
+    viewerContainer.style.display = 'flex'; // Exibe o container do iframe
   });
+
+  const closeButton = viewerContainer.querySelector('button');
+  if (closeButton) {
+    closeButton.addEventListener('click', () => {
+      viewerContainer.style.display = 'none';
+    });
+  }
 </script>
          <!-- ============================================================================================================================================== -->
 
