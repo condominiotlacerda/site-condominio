@@ -199,6 +199,8 @@ window.sair = sair;
 </div>
 
 <script>
+  const politicaUsoLink = document.getElementById('politica-uso-link');
+
   fetch('/.netlify/functions/politica-uso')
     .then(response => {
       if (!response.ok) {
@@ -210,36 +212,25 @@ window.sair = sair;
       const file = new Blob([buffer], { type: 'application/pdf' }); // Cria um Blob com o ArrayBuffer e o tipo MIME correto
       const fileURL = URL.createObjectURL(file); // Cria o blob: URL
 
-      document.getElementById('politica-uso-link').href = fileURL; // Define o href do link para o blob: URL
-
-      document.getElementById('politica-uso-link').addEventListener('click', function(event) {
-        event.preventDefault();
-        const largura = 800;
-        const altura = 600;
-        const esquerda = (window.innerWidth - largura) / 2;
-        const topo = (window.innerHeight - altura) / 2;
-        window.open(fileURL, '_blank', `width=${largura},height=${altura},left=${esquerda},top=${topo}`);
-      });
-
+      politicaUsoLink.href = fileURL; // Define o href do link para o blob: URL
     })
     .catch(error => {
       console.error('Erro ao chamar a função da Política de Uso:', error);
-      document.getElementById('politica-uso-link').textContent = 'Condomínio Edifício T Lacerda.';
-      document.getElementById('politica-uso-link').removeAttribute('href');
+      politicaUsoLink.textContent = 'Erro ao carregar a Política de Uso';
+      politicaUsoLink.removeAttribute('href');
     });
 
-  document.getElementById('politica-uso-link').addEventListener('click', function(event) {
-  event.preventDefault(); // Evitar que o link padrão tente abrir uma nova página
-  const dataPublicUrl = this.href;
-  if (dataPublicUrl && dataPublicUrl !== '#') {
-    const largura = 800; // Largura desejada para a janela
-    const altura = 600; // Altura desejada para a janela
-    const esquerda = (window.innerWidth - largura) / 2; // Calcula a posição esquerda para centralizar
-    const topo = (window.innerHeight - altura) / 2; // Calcula a posição superior para centralizar
-
-    window.open(dataPublicUrl, '_blank', `width=<span class="math-inline">\{largura\},height\=</span>{altura},left=<span class="math-inline">\{esquerda\},top\=</span>{topo}`);
-  }
-});
+  politicaUsoLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    const dataPublicUrl = this.href;
+    if (dataPublicUrl && dataPublicUrl.startsWith('blob:')) {
+      const largura = 800;
+      const altura = 600;
+      const esquerda = (window.innerWidth - largura) / 2;
+      const topo = (window.innerHeight - altura) / 2;
+      window.open(dataPublicUrl, '_blank', `width=${largura},height=${altura},left=${esquerda},top=${topo}`);
+    }
+  });
 </script>
          <!-- ============================================================================================================================================== -->
 
