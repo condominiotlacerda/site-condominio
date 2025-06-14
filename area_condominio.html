@@ -205,7 +205,7 @@ window.sair = sair;
       if (data && data.publicUrl) {
         const fileViewer = document.getElementById('file-viewer');
         if (fileViewer) {
-          fileViewer.src = data.publicUrl;
+          
         } else {
           console.error('Elemento file-viewer não encontrado.');
           document.getElementById('politica-uso-link').textContent = 'Erro ao carregar a Política de Uso';
