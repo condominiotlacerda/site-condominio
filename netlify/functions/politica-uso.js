@@ -8,17 +8,23 @@ exports.handler = async (event) => {
     const drive = google.drive({ version: 'v3', auth: apiKey });
     const response = await drive.files.get({
       fileId: fileId,
+      alt: 'media', // Solicita o conteúdo real do arquivo
     });
 
     if (response.status === 200) {
-      const publicUrl = `https://drive.google.com/viewer?url=https://drive.google.com/uc?id=${fileId}&export=download`;
+      const buffer = Buffer.from(await response.data.arrayBuffer());
 
       return {
         statusCode: 200,
-        body: JSON.stringify({ publicUrl }),
+        headers: {
+          'Content-Type': 'application/pdf', // Define o tipo de conteúdo como PDF
+          'Content-Disposition': 'inline; filename="politica_de_uso.pdf"' // Sugere um nome de arquivo (opcional)
+        },
+        body: buffer.toString('base64'), // Retorna o conteúdo do PDF como uma string base64
+        isBase64Encoded: true, // Indica que o corpo da resposta está codificado em base64
       };
     } else {
-      console.error('Erro ao obter o arquivo:', response);
+      console.error('Erro ao obter o arquivo do Google Drive:', response);
       return {
         statusCode: response.status,
         body: JSON.stringify({ error: 'Erro ao obter o arquivo do Google Drive' }),
