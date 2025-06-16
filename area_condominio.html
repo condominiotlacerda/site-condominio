@@ -203,6 +203,8 @@ window.sair = sair;
   const viewerContainer = document.getElementById('viewer-container');
   const fileViewer = document.getElementById('file-viewer');
 
+  let politicaUsoURL; // Variável para armazenar o URL da Política de Uso
+
   fetch('/.netlify/functions/politica-uso')
     .then(response => {
       if (!response.ok) {
@@ -212,9 +214,7 @@ window.sair = sair;
     })
     .then(buffer => {
       const file = new Blob([buffer], { type: 'application/pdf' }); // Cria um Blob com o ArrayBuffer e o tipo MIME correto
-      const fileURL = URL.createObjectURL(file); // Cria o blob: URL
-
-      fileViewer.src = fileURL; // Define o src do iframe para o blob: URL
+      politicaUsoURL = URL.createObjectURL(file); // Armazena o URL na variável
     })
     .catch(error => {
       console.error('Erro ao chamar a função da Política de Uso:', error);
@@ -224,6 +224,7 @@ window.sair = sair;
 
   politicaUsoLink.addEventListener('click', function(event) {
     event.preventDefault();
+    fileViewer.src = politicaUsoURL; // Define o src do iframe com o URL armazenado
     viewerContainer.style.display = 'flex'; // Exibe o container do iframe
   });
 
