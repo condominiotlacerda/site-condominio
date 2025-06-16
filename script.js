@@ -75,6 +75,7 @@ export function showFiles(apartment) {
       ];
 
       if (boletosTexto) {
+        console.log('Conteúdo de nomesTaxas para o apartamento:', nomesTaxas[apartment]);
         const listaNomesBoletos = boletosTexto.split('\n');
         listaNomesBoletos.forEach((nomeBoleto, index) => {
           if (index < listaPrefixos.length && nomeBoleto.trim() !== '') {
