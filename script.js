@@ -21,9 +21,10 @@ function enableApartment() {
   alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
-export function showFiles(apartment) {
-  console.log('A função showFiles foi chamada para o apartamento:', apartment); // Adicione esta linha
-  
+// início de showFiles ======================================================================================================================================================================
+export function showFiles(apartment) { 
+  console.log('A função showFiles foi chamada para o apartamento:', apartment);
+
   console.log('Função showFiles chamada para o apartamento:', apartment);
 
   const fileContainer = document.getElementById('file-container');
@@ -61,118 +62,132 @@ export function showFiles(apartment) {
     documentosContainer.classList.add('active');
   }, 50);
 
-  let files = getFilesForApartment(apartment);
-
-  console.log('Arquivos obtidos:', files);
-
-  files.forEach(file => {
-    const listItem = document.createElement('li');
-    const link = document.createElement('a');
-    link.href = "#";
-    link.textContent = file.name;
-
-    const isMobile = window.innerWidth <= 768;
-
-    link.onclick = function (event) {
-      event.preventDefault();
-      const apartmentId = localStorage.getItem('apartmentId');
-      const documentName = file.name;
-      const now = new Date();
-
-      logAccess(null, documentName, apartmentId);
-
-      if (isMobile) {
-        window.open(file.path, "_blank");
-      } else {
-        openFileViewer(file.path);
-      }
-    };
-
-    listItem.appendChild(link);
-    listItem.appendChild(document.createElement('br'));
-    fileList.appendChild(listItem);
-  });
-
-  // Carrega as notificações aqui
-  fetch('dados/notificacoes.json')
+  fetch('dados/name_taxas.json')
     .then(response => response.json())
-    .then(notificacoesData => {
-      const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-      console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage);
-      let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\d+)/)?.[1] : null;
-      const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
-      const notificationsList = document.getElementById('notifications-list');
-      console.log('Valor de apartmentId para buscar notificações:', apartmentId);
-      notificationsList.innerHTML = '';
+    .then(nomesTaxas => {
+      const aptoNumber = apartment.replace('apto', '');
+      const boletosTexto = nomesTaxas[apartment];
+      const listaPrefixos = [
+        'boleto_tx_condominio_apto_',
+        'boleto_tx_1_apto_',
+        'boleto_tx_2_apto_',
+        'boleto_tx_3_apto_'
+      ];
 
-      if (apartmentId && notificacoesData[apartmentId]) {
-        const notificationText = notificacoesData[apartmentId];
-        const lines = notificationText.split('\n');
-        let notificationCount = 0;
-
-        for (let i = 1; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (line.startsWith(String(notificationCount + 1) + '.')) {
-            notificationCount++;
-            const parts = line.split('.');
-            if (parts.length > 1) {
-              const notificationId = parts[0].trim();
-              const notificationDescription = parts.slice(1).join('.').trim();
-              const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentId.replace('apto_', '')}.pdf`;
-
-              const listItem = document.createElement('li');
-              const link = document.createElement('a');
-              link.href = '#';
-              link.textContent = line;
-
-              link.addEventListener('click', function(event) {
-                event.preventDefault();
-                // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
-                const apartmentId = localStorage.getItem('apartmentId');
-                const notificationText = this.textContent;
-                logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentId);
-                openFileViewer(filename);
-              });
-
-              listItem.appendChild(link);
-              notificationsList.appendChild(listItem);
-            }
+      if (boletosTexto) {
+        const listaNomesBoletos = boletosTexto.split('\n');
+        listaNomesBoletos.forEach((nomeBoleto, index) => {
+          if (index < listaPrefixos.length && nomeBoleto.trim() !== '') {
+            const prefixoArquivo = listaPrefixos[index];
+            const arquivoBoleto = `${prefixoArquivo}${aptoNumber}.pdf`;
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = "#";
+            link.textContent = nomeBoleto.trim();
+            const isMobile = window.innerWidth <= 768;
+            link.onclick = function (event) {
+              event.preventDefault();
+              const apartmentId = localStorage.getItem('apartmentId');
+              const documentName = nomeBoleto.trim();
+              logAccess(null, documentName, apartmentId);
+              if (isMobile) {
+                window.open(`pdfs/boletos/${arquivoBoleto}`, "_blank");
+              } else {
+                openFileViewer(`pdfs/boletos/${arquivoBoleto}`);
+              }
+            };
+            listItem.appendChild(link);
+            listItem.appendChild(document.createElement('br'));
+            fileList.appendChild(listItem);
           }
-        }
-
-        if (notificationsList.innerHTML === '') {
-          const listItem = document.createElement('li');
-          listItem.textContent = 'Nenhuma notificação para este apartamento.';
-          notificationsList.appendChild(listItem);
-        }
-
+        });
       } else {
         const listItem = document.createElement('li');
-        listItem.textContent = 'Nenhuma notificação para este apartamento.';
-        notificationsList.appendChild(listItem);
+        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
+        fileList.appendChild(listItem);
       }
-    })
-    .catch(error => {
-      console.error('Erro ao carregar notificações:', error);
-      const notificationsList = document.getElementById('notifications-list');
-      if (notificationsList) {
-        notificationsList.textContent = 'Erro ao carregar notificações.';
-      }
-    });
 
-    const documentosList = document.getElementById('documentos-list');
+      // Carrega as notificações aqui (mantido como estava)
+      fetch('dados/notificacoes.json')
+        .then(response => response.json())
+        .then(notificacoesData => {
+          const apartmentIdFromStorage = localStorage.getItem('apartmentId');
+          console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage);
+          let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\\d+)/)?.[1] : null;
+          const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
+          const notificationsList = document.getElementById('notifications-list');
+          console.log('Valor de apartmentId para buscar notificações:', apartmentId);
+          notificationsList.innerHTML = '';
+
+          if (apartmentId && notificacoesData[apartmentId]) {
+            const notificationText = notificacoesData[apartmentId];
+            const lines = notificationText.split('\n');
+            let notificationCount = 0;
+
+            for (let i = 1; i < lines.length; i++) {
+              const line = lines[i].trim();
+              if (line.startsWith(String(notificationCount + 1) + '.')) {
+                notificationCount++;
+                const parts = line.split('.');
+                if (parts.length > 1) {
+                  const notificationId = parts[0].trim();
+                  const notificationDescription = parts.slice(1).join('.').trim();
+                  const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentId.replace('apto_', '')}.pdf`;
+
+                  const listItem = document.createElement('li');
+                  const link = document.createElement('a');
+                  link.href = '#';
+                  link.textContent = line;
+
+                  link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
+                    const apartmentId = localStorage.getItem('apartmentId');
+                    const notificationText = this.textContent;
+                    logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentId);
+                    openFileViewer(filename);
+                  });
+
+                  listItem.appendChild(link);
+                  notificationsList.appendChild(listItem);
+                }
+              }
+            }
+
+            if (notificationsList.innerHTML === '') {
+              const listItem = document.createElement('li');
+              listItem.textContent = 'Nenhuma notificação para este apartamento.';
+              notificationsList.appendChild(listItem);
+            }
+
+          } else {
+            const listItem = document.createElement('li');
+            listItem.textContent = 'Nenhuma notificação para este apartamento.';
+            notificationsList.appendChild(listItem);
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao carregar notificações:', error);
+          const notificationsList = document.getElementById('notifications-list');
+          if (notificationsList) {
+            notificationsList.textContent = 'Erro ao carregar notificações.';
+          }
+        });
+
+      // O código para carregar documentos aqui (mantido como estava)
+      const documentosList = document.getElementById('documentos-list');
       if (documentosList && apartment) {
         const previsaoLink = document.createElement('a');
         previsaoLink.textContent = 'Previsão de despesas';
         previsaoLink.style.color = 'blue';
         previsaoLink.href = '#';
-        previsaoLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        const filePath = 'previsao_despesas/previsao_despesas.pdf';
-        const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Previsão de despesas', apartmentId);
-        openFileViewer(filePath);
-      });
+        previsaoLink.addEventListener('click', function (event) {
+          event.preventDefault();
+          const filePath = 'previsao_despesas/previsao_despesas.pdf';
+          const apartmentId = localStorage.getItem('apartmentId');
+          logAccess(null, 'Visualização de Previsão de despesas', apartmentId);
+          openFileViewer(filePath);
+        });
 
         const listItem = document.createElement('li');
         listItem.appendChild(previsaoLink);
@@ -180,48 +195,52 @@ export function showFiles(apartment) {
 
         documentosList.appendChild(listItem);
       }
-  
-       documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
-       const seuDinheiroLink = document.createElement('a');
-         seuDinheiroLink.textContent = 'Seu Dinheiro Nr 1';
-         seuDinheiroLink.style.color = 'blue';
-         seuDinheiroLink.href = '#';
-         seuDinheiroLink.addEventListener('click', function(event) {
-         event.preventDefault();
-           const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
-           const apartmentId = localStorage.getItem('apartmentId');
-           logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
-           openFileViewer(filePath);
-         }); // <--- Aqui fecha a função do evento de clique
+      documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
-         const listItem2 = document.createElement('li');
-         listItem2.appendChild(seuDinheiroLink);
-         listItem2.appendChild(document.createElement('br'));
+      const seuDinheiroLink = document.createElement('a');
+      seuDinheiroLink.textContent = 'Seu Dinheiro Nr 1';
+      seuDinheiroLink.style.color = 'blue';
+      seuDinheiroLink.href = '#';
+      seuDinheiroLink.addEventListener('click', function (event) {
+        event.preventDefault();
+        const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
+        const apartmentId = localStorage.getItem('apartmentId');
+        logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
+        openFileViewer(filePath);
+      }); // <--- Aqui fecha a função do evento de clique
 
-         documentosList.appendChild(listItem2);
+      const listItem2 = document.createElement('li');
+      listItem2.appendChild(seuDinheiroLink);
+      listItem2.appendChild(document.createElement('br'));
+
+      documentosList.appendChild(listItem2);
 
 
-         documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
+      documentosList.appendChild(document.createElement('br')); // Para dar um espaço entre os links
 
-           const seuDinheiroLink2 = document.createElement('a'); // Use um nome de variável diferente ou let
-           seuDinheiroLink2.textContent = 'Seu Dinheiro Nr 2';
-           seuDinheiroLink2.style.color = 'blue';
-           seuDinheiroLink2.href = '#';
-           seuDinheiroLink2.addEventListener('click', function(event) {
-           event.preventDefault();
-             const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
-             const apartmentId = localStorage.getItem('apartmentId');
-             logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
-             openFileViewer(filePath);
-           }); // <--- Aqui fecha a função do evento de clique
+      const seuDinheiroLink2 = document.createElement('a'); // Use um nome de variável diferente ou let
+      seuDinheiroLink2.textContent = 'Seu Dinheiro Nr 2';
+      seuDinheiroLink2.style.color = 'blue';
+      seuDinheiroLink2.href = '#';
+      seuDinheiroLink2.addEventListener('click', function (event) {
+        event.preventDefault();
+        const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
+        const apartmentId = localStorage.getItem('apartmentId');
+        logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
+        openFileViewer(filePath);
+      }); // <--- Aqui fecha a função do evento de clique
 
-           const listItem3 = document.createElement('li'); // Use um nome de variável diferente
-           listItem3.appendChild(seuDinheiroLink2);
-           listItem3.appendChild(document.createElement('br'));
+      const listItem3 = document.createElement('li'); // Use um nome de variável diferente
+      listItem3.appendChild(seuDinheiroLink2);
+      listItem3.appendChild(document.createElement('br'));
 
-           documentosList.appendChild(listItem3);
-} // fim da função showfiles
+      documentosList.appendChild(listItem3);
+    })
+    .catch(error => {
+      console.error('Erro ao carregar nomes das taxas:', error);
+    });
+} // fim da função showfiles ===============================================================================================================
 
 // Função que contém a lógica do painel de avisos
 async function exibirAvisoSeNecessario() {
