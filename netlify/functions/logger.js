@@ -33,12 +33,11 @@ exports.handler = async (event) => {
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
       const aptoNumber = logData.apartment.replace('apto', '');
       const safeFileName = logData.downloadedFile.replace(/[^a-zA-Z0-9_-\u00C0-\uFFFF]/gu, '_');
-      const userName = logData.userName ? logData.userName.replace(/[^a-zA-Z0-9_-\u00C0-\uFFFF]/gu, '_') : 'SemNome';
+      const userName = logData.userName ? logData.userName : 'SemNome'; // Não sanitizar userName para logKey
       const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${safeFileName}`;
 
       logData.accessDateTime = now.toISOString();
-      // Se você quiser o userName como um campo separado (além da chave), deixe a próxima linha descomentada
-      logData.userName = userName;
+      logData.userName = userName; // Garantir que o userName original seja salvo nos dados
 
       await logsRef.child(logKey).set(logData);
       console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
