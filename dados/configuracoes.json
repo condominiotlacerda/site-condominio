@@ -1,0 +1,70 @@
+{
+  "avisosNr": 2,
+  "avisos": {
+    "1": "Aviso 1 (3/6/25): O canal oficial do Síndico para avisos urgentes aos condôminos como editais de assembleias, falta d'água, etc., é o Grupo do Condomínio no WhatsApp. O e-mail serve para os condôminos encaminharem suas demandas ao Síndico.",
+    "2": "Aviso 2 (11/6/25): Está disponível a prestação de contas referente ao mês de janeiro. Em um só arquivo ela reúne a prestação de contas dos dois síndicos: de 1º a 13 de janeiro e de 14 de janeiro a 4 de fevereiro.",
+    "3": "Aviso 3: "
+  },
+  "name_taxas": {
+    "apto_1": "Taxa Condominial \nTaxa Mnt Emergenciais",
+    "apto_101": "Taxa Condominial \nTaxa Mnt Emergenciais",
+    "apto_102": "Taxa Condominial \nTaxa Mnt Emergenciais",
+    "apto_201": "Taxa Condominial \nTaxa Mnt Emergenciais",
+    "apto_202": "Taxa Condominial \nTaxa Mnt Emergenciais",
+    "apto_301": "Taxa Condominial \nTaxa Mnt Emergenciais",
+    "apto_302": "Taxa Condominial \nTaxa Mnt Emergenciais",
+    "apto_401": "Taxa Condominial \nTaxa Mnt Emergenciais"
+  },
+  "notificacoes": {
+    "apto_1": "Notificações",
+    "apto_101": "Notificações",
+    "apto_102": "Notificações",
+    "apto_201": "Notificações",
+    "apto_202": "Notificações\n1. Notificação de 14/04/2025.",
+    "apto_301": "Notificações",
+    "apto_302": "Notificações",
+    "apto_401": "Notificações\n1. Notificação de 31/03/2025.\n2. Notificação de 04/06/2025."
+  },
+  "codigos_acesso": {
+    "aB9x-Yz!2W": {
+      "id": "apto1",
+      "name": "João Paulo"
+    },
+    "QrSt-Uv!W6": {
+      "id": "apto1",
+      "name": "José Rocha"
+    },
+    "cDe5_Fg#H7": {
+      "id": "apto101",
+      "name": "Lizandro"
+    },
+    "iJk1$Lm%N3": {
+      "id": "apto102",
+      "name": "Felipe Granja"
+    },
+    "oPq8^Rs&T4": {
+      "id": "apto201",
+      "name": "Jorge"
+    },
+    "xY7z!aB-cD": {
+      "id": "apto201",
+      "name": "Ângela"
+    },
+    "FgH7+iJk=1": {
+      "id": "apto302",
+      "name": "Suzane"
+    },
+    "LmN3[oPq]8": {
+      "id": "apto401",
+      "name": "Célia"
+    },
+    "uVw2*Xy(Z6": {
+      "id": "apto202",
+      "name": "Lígia"
+    },
+    "1aB3)cDe-5": {
+      "id": "apto301",
+      "name": "João Marcelo"
+    }
+  }
+}
