@@ -66,7 +66,7 @@ export function showFiles(apartment) {
     .then(response => response.json())
     .then(nomesTaxas => {
       const aptoNumber = apartment.replace('apto', '');
-      const boletosTexto = nomesTaxas[apartment];
+      const boletosTexto = nomesTaxas[`apto_${aptoNumber}`];
       const listaPrefixos = [
         'boleto_tx_condominio_apto_',
         'boleto_tx_1_apto_',
