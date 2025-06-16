@@ -230,6 +230,7 @@ window.sair = sair;
   const closeButton = viewerContainer.querySelector('button');
   if (closeButton) {
     closeButton.addEventListener('click', () => {
+      fileViewer.src = '';
       viewerContainer.style.display = 'none';
     });
   }
