@@ -32,12 +32,14 @@ exports.handler = async (event) => {
       now.setHours(now.getHours() - 3);
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
       const aptoNumber = logData.apartment.replace('apto', '');
-      const safeFileName = logData.downloadedFile.replace(/[^a-zA-Z0-9_-\u00C0-\uFFFF]/gu, '_');
-      const userName = logData.userName ? logData.userName : 'SemNome'; // Não sanitizar userName para logKey
-      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${safeFileName}`;
+      const userName = logData.userName ? logData.userName : 'SemNome';
+      const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome'; // Usar downloadedFile original
+      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/[^a-zA-Z0-9_-]/g, '_')}`; // Sanitize apenas caracteres problemáticos na chave
+      //const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile}`; // Usar downloadedFile original na chave
 
       logData.accessDateTime = now.toISOString();
-      logData.userName = userName; // Garantir que o userName original seja salvo nos dados
+      logData.userName = userName;
+      logData.downloadedFile = downloadedFile; // Garantir que o nome do arquivo original seja salvo nos dados
 
       await logsRef.child(logKey).set(logData);
       console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
