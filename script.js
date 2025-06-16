@@ -62,9 +62,12 @@ export function showFiles(apartment) {
     documentosContainer.classList.add('active');
   }, 50);
 
-  fetch('dados/name_taxas.json')
+  fetch('dados/configuracoes.json')
     .then(response => response.json())
-    .then(nomesTaxas => {
+    .then(configData => {
+      const nomesTaxas = configData.name_taxas;
+      const fileList = document.getElementById('file-list');
+      fileList.innerHTML = ''; // Limpa a lista anterior
       const aptoNumber = apartment.replace('apto', '');
       const boletosTexto = nomesTaxas[`apto_${aptoNumber}`];
       const listaPrefixos = [
