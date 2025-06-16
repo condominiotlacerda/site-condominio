@@ -32,8 +32,8 @@ exports.handler = async (event) => {
       now.setHours(now.getHours() - 3);
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
       const aptoNumber = logData.apartment.replace('apto', '');
-      const safeFileName = logData.downloadedFile.replace(/[^a-zA-Z0-9_-\u00C0-\u00FF]/g, '_');
-      const userName = logData.userName ? logData.userName.replace(/[^a-zA-Z0-9_-\u00C0-\u00FF]/g, '_') : 'SemNome'; // Sanitize userName
+      const safeFileName = logData.downloadedFile.replace(/[^a-zA-Z0-9_-\p{L}]/gu, '_');
+      const userName = logData.userName ? logData.userName.replace(/[^a-zA-Z0-9_-\p{L}]/gu, '_') : 'SemNome'; // Sanitize userName
       const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${safeFileName}`;
 
       logData.accessDateTime = now.toISOString();
