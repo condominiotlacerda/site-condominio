@@ -593,13 +593,13 @@ document.addEventListener("DOMContentLoaded", function () {
 }
   }});    
 
-// Ajuste para horário de Brasília (UTC-3)
+// Ajuste para horário de Brasília (UTC-3) ===================================================================================================================
 window.logAccess = function (userCode, downloadedFile, apartment) {
   const userName = localStorage.getItem('userName'); // Recupera o nome do usuário do localStorage
   fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/logger', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=UTF-8', // Adicionamos o charset UTF-8
     },
     body: JSON.stringify({
       apartment: apartment,
@@ -621,3 +621,4 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
     console.error('Erro ao chamar a função de log do Netlify:', error);
   });
 };
+// =============================================================================================================================================================
