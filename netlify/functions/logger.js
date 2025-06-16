@@ -34,7 +34,7 @@ exports.handler = async (event) => {
       const aptoNumber = logData.apartment.replace('apto', '');
       const userName = logData.userName ? logData.userName : 'SemNome';
       const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
-      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile}`; // Usar downloadedFile original na chave
+      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/ç/g, 'c')}`;
 
       logData.accessDateTime = now.toISOString();
       logData.userName = userName;
