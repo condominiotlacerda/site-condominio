@@ -62,12 +62,17 @@ export function showFiles(apartment) {
     documentosContainer.classList.add('active');
   }, 50);
 
+  let apartmentNumber = null; // Declare apartmentNumber aqui
+  let apartmentId = null;     // Declare apartmentId aqui
+
   fetch('dados/configuracoes.json')
     .then(response => response.json())
     .then(configData => {
       const nomesTaxas = configData.name_taxas;
-      const aptoNumber = apartment.replace('apto', '');
-      const boletosTexto = nomesTaxas[`apto_${aptoNumber}`];
+      const aptoNumberLocal = apartment.replace('apto', '');
+      apartmentNumber = aptoNumberLocal; // Assign value to the outer scope variable
+      apartmentId = `apto_${apartmentNumber}`; // Assign value to the outer scope variable
+      const boletosTexto = nomesTaxas[`apto_${aptoNumberLocal}`];
       const listaPrefixos = [
         'boleto_tx_condominio_apto_',
         'boleto_tx_1_apto_',
@@ -81,7 +86,7 @@ export function showFiles(apartment) {
         listaNomesBoletos.forEach((nomeBoleto, index) => {
           if (index < listaPrefixos.length && nomeBoleto.trim() !== '') {
             const prefixoArquivo = listaPrefixos[index];
-            const arquivoBoleto = `${prefixoArquivo}${aptoNumber}.pdf`;
+            const arquivoBoleto = `${prefixoArquivo}${aptoNumberLocal}.pdf`;
             const listItem = document.createElement('li');
             const link = document.createElement('a');
             link.href = "#";
@@ -89,9 +94,9 @@ export function showFiles(apartment) {
             const isMobile = window.innerWidth <= 768;
             link.onclick = function (event) {
               event.preventDefault();
-              const apartmentId = localStorage.getItem('apartmentId');
+              const apartmentIdLog = localStorage.getItem('apartmentId');
               const documentName = nomeBoleto.trim();
-              logAccess(null, documentName, apartmentId);
+              logAccess(null, documentName, apartmentIdLog);
               if (isMobile) {
                 window.open(`pdfs/boletos/${arquivoBoleto}`, "_blank");
               } else {
@@ -132,7 +137,7 @@ export function showFiles(apartment) {
             if (parts.length > 1) {
               const notificationId = parts[0].trim();
               const notificationDescription = parts.slice(1).join('.').trim();
-              const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentId.replace('apto_', '')}.pdf`;
+              const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`;
 
               const listItem = document.createElement('li');
               const link = document.createElement('a');
@@ -142,9 +147,9 @@ export function showFiles(apartment) {
               link.addEventListener('click', function (event) {
                 event.preventDefault();
                 // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
-                const apartmentId = localStorage.getItem('apartmentId');
+                const apartmentIdLog = localStorage.getItem('apartmentId');
                 const notificationText = this.textContent;
-                logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentId);
+                logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentIdLog);
                 openFileViewer(filename);
               });
 
@@ -175,8 +180,8 @@ export function showFiles(apartment) {
         previsaoLink.addEventListener('click', function (event) {
           event.preventDefault();
           const filePath = 'previsao_despesas/previsao_despesas.pdf';
-          const apartmentId = localStorage.getItem('apartmentId');
-          logAccess(null, 'Visualização de Previsão de despesas', apartmentId);
+          const apartmentIdLog = localStorage.getItem('apartmentId');
+          logAccess(null, 'Visualização de Previsão de despesas', apartmentIdLog);
           openFileViewer(filePath);
         });
 
@@ -196,8 +201,8 @@ export function showFiles(apartment) {
       seuDinheiroLink.addEventListener('click', function (event) {
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
-        const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
+        const apartmentIdLog = localStorage.getItem('apartmentId');
+        logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentIdLog);
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
@@ -217,8 +222,8 @@ export function showFiles(apartment) {
       seuDinheiroLink2.addEventListener('click', function (event) {
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
-        const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
+        const apartmentIdLog = localStorage.getItem('apartmentId');
+        logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentIdLog);
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
