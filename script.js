@@ -113,14 +113,14 @@ export function showFiles(apartment) {
       const notificacoesData = configData.notificacoes;
       const apartmentIdFromStorage = localStorage.getItem('apartmentId');
       console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage);
-      let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\\d+)/)?.[1] : null;
-      const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
+      const aptoNumberNotificacao = apartment.replace('apto', ''); // Use a mesma lógica de aptoNumber
+      const apartmentIdNotificacao = `apto_${aptoNumberNotificacao}`; // Crie a chave no formato correto
       const notificationsList = document.getElementById('notifications-list');
-      console.log('Valor de apartmentId para buscar notificações:', apartmentId);
+      console.log('Valor de apartmentId para buscar notificações:', apartmentIdNotificacao);
       notificationsList.innerHTML = '';
 
-      if (apartmentId && notificacoesData[apartmentId]) {
-        const notificationText = notificacoesData[apartmentId];
+      if (notificacoesData[apartmentIdNotificacao]) { // Use a chave construída corretamente
+        const notificationText = notificacoesData[apartmentIdNotificacao];
         const lines = notificationText.split('\n');
         let notificationCount = 0;
 
