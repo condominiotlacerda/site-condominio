@@ -22,7 +22,7 @@ function enableApartment() {
 }
 
 // início de showFiles ======================================================================================================================================================================
-export function showFiles(apartment) { 
+export function showFiles(apartment) {
   console.log('A função showFiles foi chamada para o apartamento:', apartment);
 
   console.log('Função showFiles chamada para o apartamento:', apartment);
@@ -66,8 +66,6 @@ export function showFiles(apartment) {
     .then(response => response.json())
     .then(configData => {
       const nomesTaxas = configData.name_taxas;
-      const fileList = document.getElementById('file-list');
-      fileList.innerHTML = ''; // Limpa a lista anterior
       const aptoNumber = apartment.replace('apto', '');
       const boletosTexto = nomesTaxas[`apto_${aptoNumber}`];
       const listaPrefixos = [
@@ -111,73 +109,62 @@ export function showFiles(apartment) {
         fileList.appendChild(listItem);
       }
 
-      // Carrega as notificações aqui (mantido como estava)
-      fetch('dados/notificacoes.json')
-        .then(response => response.json())
-        .then(notificacoesData => {
-          const apartmentIdFromStorage = localStorage.getItem('apartmentId');
-          console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage);
-          let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\\d+)/)?.[1] : null;
-          const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
-          const notificationsList = document.getElementById('notifications-list');
-          console.log('Valor de apartmentId para buscar notificações:', apartmentId);
-          notificationsList.innerHTML = '';
+      // Carrega as notificações aqui do configData
+      const notificacoesData = configData.notificacoes;
+      const apartmentIdFromStorage = localStorage.getItem('apartmentId');
+      console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage);
+      let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\\d+)/)?.[1] : null;
+      const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
+      const notificationsList = document.getElementById('notifications-list');
+      console.log('Valor de apartmentId para buscar notificações:', apartmentId);
+      notificationsList.innerHTML = '';
 
-          if (apartmentId && notificacoesData[apartmentId]) {
-            const notificationText = notificacoesData[apartmentId];
-            const lines = notificationText.split('\n');
-            let notificationCount = 0;
+      if (apartmentId && notificacoesData[apartmentId]) {
+        const notificationText = notificacoesData[apartmentId];
+        const lines = notificationText.split('\n');
+        let notificationCount = 0;
 
-            for (let i = 1; i < lines.length; i++) {
-              const line = lines[i].trim();
-              if (line.startsWith(String(notificationCount + 1) + '.')) {
-                notificationCount++;
-                const parts = line.split('.');
-                if (parts.length > 1) {
-                  const notificationId = parts[0].trim();
-                  const notificationDescription = parts.slice(1).join('.').trim();
-                  const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentId.replace('apto_', '')}.pdf`;
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith(String(notificationCount + 1) + '.')) {
+            notificationCount++;
+            const parts = line.split('.');
+            if (parts.length > 1) {
+              const notificationId = parts[0].trim();
+              const notificationDescription = parts.slice(1).join('.').trim();
+              const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentId.replace('apto_', '')}.pdf`;
 
-                  const listItem = document.createElement('li');
-                  const link = document.createElement('a');
-                  link.href = '#';
-                  link.textContent = line;
-
-                  link.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
-                    const apartmentId = localStorage.getItem('apartmentId');
-                    const notificationText = this.textContent;
-                    logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentId);
-                    openFileViewer(filename);
-                  });
-
-                  listItem.appendChild(link);
-                  notificationsList.appendChild(listItem);
-                }
-              }
-            }
-
-            if (notificationsList.innerHTML === '') {
               const listItem = document.createElement('li');
-              listItem.textContent = 'Nenhuma notificação para este apartamento.';
+              const link = document.createElement('a');
+              link.href = '#';
+              link.textContent = line;
+
+              link.addEventListener('click', function (event) {
+                event.preventDefault();
+                // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
+                const apartmentId = localStorage.getItem('apartmentId');
+                const notificationText = this.textContent;
+                logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentId);
+                openFileViewer(filename);
+              });
+
+              listItem.appendChild(link);
               notificationsList.appendChild(listItem);
             }
-
-          } else {
-            const listItem = document.createElement('li');
-            listItem.textContent = 'Nenhuma notificação para este apartamento.';
-            notificationsList.appendChild(listItem);
           }
-        })
-        .catch(error => {
-          console.error('Erro ao carregar notificações:', error);
-          const notificationsList = document.getElementById('notifications-list');
-          if (notificationsList) {
-            notificationsList.textContent = 'Erro ao carregar notificações.';
-          }
-        });
+        }
 
+        if (notificationsList.innerHTML === '') {
+          const listItem = document.createElement('li');
+          listItem.textContent = 'Nenhuma notificação para este apartamento.';
+          notificationsList.appendChild(listItem);
+        }
+
+      } else {
+        const listItem = document.createElement('li');
+        listItem.textContent = 'Nenhuma notificação para este apartamento.';
+        notificationsList.appendChild(listItem);
+      }
       // O código para carregar documentos aqui (mantido como estava)
       const documentosList = document.getElementById('documentos-list');
       if (documentosList && apartment) {
