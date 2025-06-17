@@ -117,7 +117,7 @@ export function showFiles(apartment) {
         .then(notificacoesData => {
           const apartmentIdFromStorage = localStorage.getItem('apartmentId');
           console.log('Valor de apartmentIdFromStorage:', apartmentIdFromStorage);
-          let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\\d+)/)?.[1] : null;
+          let apartmentNumber = apartmentIdFromStorage ? apartmentIdFromStorage.match(/^(\d+)/)?.[0] : null;
           const apartmentId = apartmentNumber ? `apto_${apartmentNumber}` : null;
           const notificationsList = document.getElementById('notifications-list');
           console.log('Valor de apartmentId para buscar notificações:', apartmentId);
