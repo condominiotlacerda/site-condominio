@@ -128,6 +128,7 @@ export function showFiles(apartment) {
         let notificationText = notificacoesData[apartmentIdNotificacao];
         notificationText = notificationText.replace(/\n/g, '_').replace(/\./g, '_'); // Substituição do newline e do ponto AQUI
 
+        console.log('Valor de notificationText após as substituições:', notificationText);
         const lines = notificationText.split('_'); // Ajuste para usar underscore como separador após a substituição
         let notificationCount = 0;
 
