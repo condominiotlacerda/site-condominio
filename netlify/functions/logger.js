@@ -38,7 +38,6 @@ exports.handler = async (event) => {
       const formattedTimeForAviso = `${formattedDateTime.split('_')[1]}`; // Formato HH-MM-SS (Aviso)
       const aptoNumber = logData.apartment.replace('apto', '');
       const userName = logData.userName ? logData.userName : 'SemNome';
-      const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
 
       let logKey = '';
       let logEntryData = {};
@@ -57,7 +56,8 @@ exports.handler = async (event) => {
           notificacaoId: notificationId,
           accessDateTime: now.toISOString()
         };
-      } else {
+      } else if (logData.downloadedFile) { // Mudança para else if
+        const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
         logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/\.pdf$/i, '')}`;
         logEntryData = {
           accessDateTime: now.toISOString(),
