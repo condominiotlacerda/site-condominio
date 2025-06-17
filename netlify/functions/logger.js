@@ -31,9 +31,9 @@ exports.handler = async (event) => {
       const now = new Date();
       now.setHours(now.getHours() - 3);
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
-      const dateParts = formattedDateTime.split('_');
-      const formattedDateForAviso = `${dateParts[2].slice(0, 2)}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Formato DD-MM-YY (Aviso)
-      const formattedTimeForAviso = `${dateParts[3]}`; // Formato HH-MM-SS (Aviso)
+      const dateParts = formattedDateTime.split('_')[0].split('-'); // Dividindo a parte da data por '-'
+      const formattedDateForAviso = `${dateParts[2]}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Formato DD-MM-YY (Aviso)
+      const formattedTimeForAviso = `${formattedDateTime.split('_')[1]}`; // Formato HH-MM-SS (Aviso)
       const aptoNumber = logData.apartment.replace('apto', '');
       const userName = logData.userName ? logData.userName : 'SemNome';
       const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
@@ -43,8 +43,8 @@ exports.handler = async (event) => {
 
       if (logData.type === 'notificacao') {
         const notificationId = logData.notificationId ? logData.notificationId : 'SemId';
-        const formattedDateNotificacao = `${dateParts[2].slice(0, 2)}-${dateParts[1]}-${dateParts[0].slice(-2)}`;
-        const formattedTimeNotificacao = `${dateParts[3]}`;
+        const formattedDateNotificacao = `${dateParts[2]}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Acessando corretamente as partes da data
+        const formattedTimeNotificacao = `${formattedDateTime.split('_')[1]}`;
         logKey = `${aptoNumber}_${userName}_${formattedDateNotificacao}_${formattedTimeNotificacao}_notificacao_${notificationId}`;
         logEntryData = {
           Texto: logData.downloadedFile, // Usamos downloadedFile para o conteúdo da notificação
