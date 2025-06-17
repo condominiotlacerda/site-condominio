@@ -22,7 +22,7 @@ function enableApartment() {
 }
 
 // início de showFiles ======================================================================================================================================================================
-export function showFiles(apartment) { 
+export function showFiles(apartment) {
   console.log('A função showFiles foi chamada para o apartamento:', apartment);
 
   console.log('Função showFiles chamada para o apartamento:', apartment);
@@ -91,9 +91,9 @@ export function showFiles(apartment) {
             const isMobile = window.innerWidth <= 768;
             link.onclick = function (event) {
               event.preventDefault();
-              const apartmentId = localStorage.getItem('apartmentId');
+              const apartmentIdLog = localStorage.getItem('apartmentId');
               const documentName = nomeBoleto.trim();
-              logAccess(null, documentName, apartmentId);
+              logAccess({ type: 'boleto', documentName: documentName, apartmentId: apartmentIdLog });
               if (isMobile) {
                 window.open(`pdfs/boletos/${arquivoBoleto}`, "_blank");
               } else {
@@ -146,10 +146,11 @@ export function showFiles(apartment) {
 
                   link.addEventListener('click', function (event) {
                     event.preventDefault();
-                    // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
-                    const apartmentId = localStorage.getItem('apartmentId');
+                    const apartmentIdLog = localStorage.getItem('apartmentId');
                     const notificationText = this.textContent.replace(/\./g, '_').replace(/\n/g, '_');
-                    logAccess('notificacao', `Visualização da notificação: ${notificationText}`, apartmentId, notificationId);
+                    const notificationIdMatch = line.match(/^\d+\./);
+                    const notificationId = notificationIdMatch ? notificationIdMatch[0].replace('.', '') : '';
+                    logAccess({ type: 'notificacao', downloadedFile: `Visualização da notificação: ${notificationText}`, apartmentId: apartmentIdLog, notificationId: notificationId });
                     openFileViewer(filename);
                   });
 
@@ -189,8 +190,8 @@ export function showFiles(apartment) {
         previsaoLink.addEventListener('click', function (event) {
           event.preventDefault();
           const filePath = 'previsao_despesas/previsao_despesas.pdf';
-          const apartmentId = localStorage.getItem('apartmentId');
-          logAccess(null, 'Visualização de Previsão de despesas', apartmentId);
+          const apartmentIdLog = localStorage.getItem('apartmentId');
+          logAccess({ type: 'documento', documentName: 'Visualização de Previsão de despesas', apartmentId: apartmentIdLog });
           openFileViewer(filePath);
         });
 
@@ -210,8 +211,8 @@ export function showFiles(apartment) {
       seuDinheiroLink.addEventListener('click', function (event) {
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
-        const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
+        const apartmentIdLog = localStorage.getItem('apartmentId');
+        logAccess({ type: 'documento', documentName: 'Visualização de Seu Dinheiro Nr 1', apartmentId: apartmentIdLog });
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
@@ -231,8 +232,8 @@ export function showFiles(apartment) {
       seuDinheiroLink2.addEventListener('click', function (event) {
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
-        const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
+        const apartmentIdLog = localStorage.getItem('apartmentId');
+        logAccess({ type: 'documento', documentName: 'Visualização de Seu Dinheiro Nr 2', apartmentId: apartmentIdLog });
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
