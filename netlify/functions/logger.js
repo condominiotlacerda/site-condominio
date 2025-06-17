@@ -43,7 +43,8 @@ exports.handler = async (event) => {
       let logKey = '';
       let logEntryData = {};
 
-      if (logData.userCode.type === 'notificacao') { // Acessando type corretamente
+      if (logData.userCode.type === 'notificacao') {
+        console.log("Log de notificação detectado!"); // Adicione esta linha
         const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
         const formattedDateNotificacao = `${dateParts[2]}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Acessando corretamente as partes da data
         const formattedTimeNotificacao = `${formattedDateTime.split('_')[1]}`;
