@@ -96,7 +96,7 @@ export function showFiles(apartment) {
               event.preventDefault();
               const apartmentIdLog = localStorage.getItem('apartmentId');
               const documentName = nomeBoleto.trim();
-              logAccess(null, documentName, apartmentIdLog);
+              logAccess({ type: 'boleto', documentName: documentName, apartmentId: apartmentIdLog });
               if (isMobile) {
                 window.open(`pdfs/boletos/${arquivoBoleto}`, "_blank");
               } else {
@@ -140,9 +140,16 @@ export function showFiles(apartment) {
             link.addEventListener('click', function (event) {
               event.preventDefault();
               const apartmentIdLog = localStorage.getItem('apartmentId');
-              const sanitizedText = line.replace(/\./g, '_').replace(/\n/g, '_');
-              logAccess(null, `Visualização da notificação: ${sanitizedText}`, apartmentIdLog);
-              openFileViewer(`notificacoes/notificacao_${i}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`);
+              const notificationIdMatch = line.match(/^\d+\./); // Extrai o número da notificação
+              const notificationId = notificationIdMatch ? notificationIdMatch[0].replace('.', '') : '';
+              const logData = {
+                type: 'notificacao',
+                apartmentId: apartmentIdLog,
+                notificationId: notificationId,
+                texto: line // Passa a linha completa da notificação para o logger
+              };
+              logAccess(logData);
+              openFileViewer(`notificacoes/notificacao_${notificationId}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`);
             });
             listItem.appendChild(link);
             notificationsList.appendChild(listItem);
@@ -171,7 +178,7 @@ export function showFiles(apartment) {
           event.preventDefault();
           const filePath = 'previsao_despesas/previsao_despesas.pdf';
           const apartmentIdLog = localStorage.getItem('apartmentId');
-          logAccess(null, 'Visualização de Previsão de despesas', apartmentIdLog);
+          logAccess({ type: 'documento', documentName: 'Visualização de Previsão de despesas', apartmentId: apartmentIdLog });
           openFileViewer(filePath);
         });
 
@@ -192,7 +199,7 @@ export function showFiles(apartment) {
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
         const apartmentIdLog = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentIdLog);
+        logAccess({ type: 'documento', documentName: 'Visualização de Seu Dinheiro Nr 1', apartmentId: apartmentIdLog });
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
@@ -213,7 +220,7 @@ export function showFiles(apartment) {
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
         const apartmentIdLog = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentIdLog);
+        logAccess({ type: 'documento', documentName: 'Visualização de Seu Dinheiro Nr 2', apartmentId: apartmentIdLog });
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
