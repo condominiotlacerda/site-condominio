@@ -138,19 +138,21 @@ export function showFiles(apartment) {
             link.href = '#';
             link.textContent = line;
             link.addEventListener('click', function (event) {
-              event.preventDefault();
-              const apartmentIdLog = localStorage.getItem('apartmentId');
-              const notificationIdMatch = line.match(/^\d+\./); // Extrai o número da notificação
-              const notificationId = notificationIdMatch ? notificationIdMatch[0].replace('.', '') : '';
-              const logData = {
-                type: 'notificacao',
-                apartmentId: apartmentIdLog,
-                notificationId: notificationId,
-                texto: line // Passa a linha completa da notificação para o logger
-              };
-              logAccess(logData);
-              openFileViewer(`notificacoes/notificacao_${notificationId}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`);
-            });
+            event.preventDefault();
+            const apartmentIdLog = localStorage.getItem('apartmentId');
+            const notificationIdMatch = line.match(/^\d+\./); // Extrai o número da notificação
+            const notificationId = notificationIdMatch ? notificationIdMatch[0].replace('.', '') : '';
+            const userName = localStorage.getItem('userName'); // Assumindo que você armazena o nome do usuário com a chave 'userName'
+            const logData = {
+              type: 'notificacao',
+              apartmentId: apartmentIdLog,
+              notificationId: notificationId,
+              texto: line, // Passa a linha completa da notificação para o logger
+              userName: userName // Adicione o nome do usuário aqui
+            };
+            logAccess(logData); // Modifique a chamada para aceitar um objeto de dados
+            openFileViewer(`notificacoes/notificacao_${notificationId}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`);
+          });
             listItem.appendChild(link);
             notificationsList.appendChild(listItem);
           }
