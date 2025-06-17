@@ -143,6 +143,7 @@ export function showFiles(apartment) {
             const notificationIdMatch = line.match(/^\d+\./); // Extrai o número da notificação
             const notificationId = notificationIdMatch ? notificationIdMatch[0].replace('.', '') : '';
             const userName = localStorage.getItem('userName'); // Assumindo que você armazena o nome do usuário com a chave 'userName'
+              console.log('Valor de notificationId:', notificationId);
             const logData = {
               type: 'notificacao',
               apartmentId: apartmentIdLog,
