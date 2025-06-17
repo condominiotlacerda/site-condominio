@@ -148,7 +148,7 @@ export function showFiles(apartment) {
                 event.preventDefault();
                 // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
                 const apartmentIdLog = localStorage.getItem('apartmentId');
-                const notificationText = this.textContent.replace(/\./g, '_').replace(/\n/g, '_'); // MODIFICAÇÃO AQUI
+                const notificationText = this.textContent.replace(/\./g, '_').replace(/\n/g, '_');
                 logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentIdLog);
                 openFileViewer(filename);
               });
