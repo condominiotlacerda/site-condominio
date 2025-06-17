@@ -125,31 +125,30 @@ export function showFiles(apartment) {
       notificationsList.innerHTML = '';
 
       if (notificacoesData[apartmentIdNotificacao]) { // Use a chave construída corretamente
-        const notificationText = notificacoesData[apartmentIdNotificacao];
-        const lines = notificationText.split('\n');
+        let notificationText = notificacoesData[apartmentIdNotificacao];
+        notificationText = notificationText.replace(/\n/g, '_').replace(/\./g, '_'); // Substituição do newline e do ponto AQUI
+
+        const lines = notificationText.split('_'); // Ajuste para usar underscore como separador após a substituição
         let notificationCount = 0;
 
-        for (let i = 1; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) { // Comece do índice 0 após dividir a string
           const line = lines[i].trim();
-          if (line.startsWith(String(notificationCount + 1) + '.')) {
+          if (line.startsWith(String(notificationCount + 1) + '_')) { // Ajuste a verificação para usar underscore
             notificationCount++;
-            const parts = line.split('.');
+            const parts = line.split('_');
             if (parts.length > 1) {
               const notificationId = parts[0].trim();
-              const notificationDescription = parts.slice(1).join('.').trim();
+              const notificationDescription = parts.slice(1).join('_').trim();
               const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`;
 
               const listItem = document.createElement('li');
               const link = document.createElement('a');
               link.href = '#';
-              link.textContent = line;
-
+              link.textContent = line.replace(/_/g, '.').replace(/_/g, '\n'); // Reverta a substituição para exibição
               link.addEventListener('click', function (event) {
                 event.preventDefault();
-                // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
                 const apartmentIdLog = localStorage.getItem('apartmentId');
-                const notificationText = this.textContent.replace(/\./g, '_').replace(/\n/g, '_');
-                logAccess(null, 'Teste_Notificacao', apartmentIdLog);
+                logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentIdLog);
                 openFileViewer(filename);
               });
 
