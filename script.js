@@ -138,22 +138,12 @@ export function showFiles(apartment) {
             link.href = '#';
             link.textContent = line;
             link.addEventListener('click', function (event) {
-            event.preventDefault();
-            const apartmentIdLog = localStorage.getItem('apartmentId');
-            const notificationIdMatch = line.match(/^\d+\./); // Extrai o número da notificação
-            const notificationId = notificationIdMatch ? notificationIdMatch[0].replace('.', '') : '';
-            const userName = localStorage.getItem('userName'); // Assumindo que você armazena o nome do usuário com a chave 'userName'
-              console.log('Valor de notificationId:', notificationId);
-            const logData = {
-              type: 'notificacao',
-              apartmentId: apartmentIdLog,
-              notificationId: notificationId,
-              texto: line, // Passa a linha completa da notificação para o logger
-              userName: userName // Adicione o nome do usuário aqui
-            };
-            logAccess(logData); // Modifique a chamada para aceitar um objeto de dados
-            openFileViewer(`notificacoes/notificacao_${notificationId}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`);
-          });
+              event.preventDefault();
+              const apartmentIdLog = localStorage.getItem('apartmentId');
+              const sanitizedText = line.replace(/\./g, '_').replace(/\n/g, '_');
+              logAccess({ type: 'notificacao', apartmentId: apartmentIdLog, notificationId: i, texto: line });
+              openFileViewer(`notificacoes/notificacao_${i}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`);
+            });
             listItem.appendChild(link);
             notificationsList.appendChild(listItem);
           }
