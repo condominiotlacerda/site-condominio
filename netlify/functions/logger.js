@@ -26,7 +26,7 @@ exports.handler = async (event) => {
       console.log("Função logger foi chamada com POST!");
       console.log("Conteúdo de event.body:", event.body);
       const logData = JSON.parse(event.body);
-      console.log("Valor de logData.type:", logData.userCode.type); // Acessando type corretamente
+      console.log("Valor de logData.type:", logData.userCode.type);
       const db = admin.database();
       const logsRef = db.ref('logs');
 
@@ -44,7 +44,9 @@ exports.handler = async (event) => {
       let logEntryData = {};
 
       if (logData.userCode.type === 'notificacao') {
-        console.log("Log de notificação detectado!"); // Adicione esta linha
+        console.log("Log de notificação detectado!");
+        console.log("Valor de logData.userCode.type:", logData.userCode.type);
+        console.log("String de comparação:", 'notificacao');
         const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
         const formattedDateNotificacao = `${dateParts[2]}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Acessando corretamente as partes da data
         const formattedTimeNotificacao = `${formattedDateTime.split('_')[1]}`;
