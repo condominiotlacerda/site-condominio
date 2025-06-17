@@ -22,6 +22,7 @@ exports.handler = async (event) => {
   }
 
   if (event.httpMethod === 'POST') {
+    console.log("Valor de logData.type:", logData.type);
     try {
       console.log("Função logger foi chamada com POST!");
       const logData = JSON.parse(event.body);
