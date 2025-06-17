@@ -124,6 +124,7 @@ export function showFiles(apartment) {
           notificationsList.innerHTML = '';
 
           if (apartmentId && notificacoesData[apartmentId]) {
+            console.log('Conteúdo de notificacoesData[apartmentId]:', notificacoesData[apartmentId]);
             const notificationText = notificacoesData[apartmentId];
             const lines = notificationText.split('\n');
             let notificationCount = 0;
