@@ -34,13 +34,30 @@ exports.handler = async (event) => {
       const aptoNumber = logData.apartment.replace('apto', '');
       const userName = logData.userName ? logData.userName : 'SemNome';
       const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
-      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/\.pdf$/i, '')}`;
 
-      logData.accessDateTime = now.toISOString();
-      logData.userName = userName;
-      logData.downloadedFile = downloadedFile; // Garantir que o nome do arquivo original seja salvo nos dados
+      let logKey = '';
+      let logEntryData = {};
 
-      await logsRef.child(logKey).set(logData);
+      if (logData.type === 'notificacao') {
+        const notificationId = logData.notificationId ? logData.notificationId : 'SemId';
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_notificacao_${notificationId}`;
+        logEntryData = {
+          Texto: logData.downloadedFile, // Usamos downloadedFile para o conteúdo da notificação
+          apartamentoId: logData.apartment,
+          notificacaoId: notificationId,
+          accessDateTime: now.toISOString()
+        };
+      } else {
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/\.pdf$/i, '')}`;
+        logEntryData = {
+          accessDateTime: now.toISOString(),
+          apartment: logData.apartment,
+          downloadedFile: downloadedFile,
+          userName: userName
+        };
+      }
+
+      await logsRef.child(logKey).set(logEntryData);
       console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
 
       return {
