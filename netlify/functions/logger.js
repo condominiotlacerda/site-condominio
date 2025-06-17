@@ -26,7 +26,7 @@ exports.handler = async (event) => {
       console.log("Função logger foi chamada com POST!");
       console.log("Conteúdo de event.body:", event.body);
       const logData = JSON.parse(event.body);
-      console.log("Valor de logData.type:", logData.type);
+      console.log("Valor de logData.type:", logData.userCode.type); // Acessando type corretamente
       const db = admin.database();
       const logsRef = db.ref('logs');
 
@@ -43,14 +43,14 @@ exports.handler = async (event) => {
       let logKey = '';
       let logEntryData = {};
 
-      if (logData.type === 'notificacao') {
-        const notificationId = logData.notificationId ? logData.notificationId : 'SemId';
+      if (logData.userCode.type === 'notificacao') { // Acessando type corretamente
+        const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
         const formattedDateNotificacao = `${dateParts[2]}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Acessando corretamente as partes da data
         const formattedTimeNotificacao = `${formattedDateTime.split('_')[1]}`;
         logKey = `${aptoNumber}_${userName}_${formattedDateNotificacao}_${formattedTimeNotificacao}_notificacao_${notificationId}`;
         logEntryData = {
-          Texto: logData.downloadedFile, // Usamos downloadedFile para o conteúdo da notificação
-          apartamentoId: logData.apartment,
+          Texto: logData.userCode.downloadedFile, // Acessando downloadedFile corretamente
+          apartamentoId: logData.userCode.apartmentId, // Acessando apartmentId corretamente
           notificacaoId: notificationId,
           accessDateTime: now.toISOString()
         };
