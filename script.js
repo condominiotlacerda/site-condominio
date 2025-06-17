@@ -125,37 +125,27 @@ export function showFiles(apartment) {
       notificationsList.innerHTML = '';
 
       if (notificacoesData[apartmentIdNotificacao]) { // Use a chave construída corretamente
-        let notificationText = notificacoesData[apartmentIdNotificacao];
-        notificationText = notificationText.replace(/\n/g, '_').replace(/\./g, '_'); // Substituição do newline e do ponto AQUI
+        const notificationText = notificacoesData[apartmentIdNotificacao];
+        const lines = notificationText.split('\n');
+        const notificationsList = document.getElementById('notifications-list');
+        notificationsList.innerHTML = '';
 
-        console.log('Valor de notificationText após as substituições:', notificationText);
-        const lines = notificationText.split('_'); // Ajuste para usar underscore como separador após a substituição
-        let notificationCount = 0;
-
-        for (let i = 0; i < lines.length; i++) { // Comece do índice 0 após dividir a string
+        for (let i = 1; i < lines.length; i++) {
           const line = lines[i].trim();
-          if (line.startsWith(String(notificationCount + 1) + '_')) { // Ajuste a verificação para usar underscore
-            notificationCount++;
-            const parts = line.split('_');
-            if (parts.length > 1) {
-              const notificationId = parts[0].trim();
-              const notificationDescription = parts.slice(1).join('_').trim();
-              const filename = `notificacoes/notificacao_${notificationId}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`;
-
-              const listItem = document.createElement('li');
-              const link = document.createElement('a');
-              link.href = '#';
-              link.textContent = line.replace(/_/g, '.').replace(/_/g, '\n'); // Reverta a substituição para exibição
-              link.addEventListener('click', function (event) {
-                event.preventDefault();
-                const apartmentIdLog = localStorage.getItem('apartmentId');
-                logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentIdLog);
-                openFileViewer(filename);
-              });
-
-              listItem.appendChild(link);
-              notificationsList.appendChild(listItem);
-            }
+          if (line) {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = line;
+            link.addEventListener('click', function (event) {
+              event.preventDefault();
+              const apartmentIdLog = localStorage.getItem('apartmentId');
+              const sanitizedText = line.replace(/\./g, '_').replace(/\n/g, '_');
+              logAccess(null, `Visualização da notificação: ${sanitizedText}`, apartmentIdLog);
+              openFileViewer(`notificacoes/notificacao_${i}_apto_${apartmentIdNotificacao.replace('apto_', '')}.pdf`);
+            });
+            listItem.appendChild(link);
+            notificationsList.appendChild(listItem);
           }
         }
 
