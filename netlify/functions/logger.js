@@ -22,11 +22,11 @@ exports.handler = async (event) => {
   }
 
   if (event.httpMethod === 'POST') {
-    console.log("Valor de logData.type:", logData.type);
     try {
       console.log("Função logger foi chamada com POST!");
       console.log("Conteúdo de event.body:", event.body);
       const logData = JSON.parse(event.body);
+      console.log("Valor de logData.type:", logData.type);
       const db = admin.database();
       const logsRef = db.ref('logs');
 
