@@ -385,20 +385,6 @@ function getFilesForApartment(apartment) {
 
 document.addEventListener("DOMContentLoaded", function () {
   exibirAvisoSeNecessario(); // Chama a função exibirAvisoSeNecessario assim que a página carrega
-
-  /*
-  // Código para buscar o arquivo name_taxas.json
-  fetch('dados/name_taxas.json')
-    .then(response => response.json())
-    .then(data => {
-      nomesTaxas = data;
-      console.log('Nomes das taxas carregados:', nomesTaxas);
-
-    })
-    .catch(error => {
-      console.error('Erro ao carregar nomes das taxas:', error);
-    });
-*/
   
   const anoConta = document.getElementById('ano-conta');
   const mesConta = document.getElementById('mes-conta');
