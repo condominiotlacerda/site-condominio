@@ -217,7 +217,7 @@ export function showFiles(apartment) { 
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
         const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualizada Seu Dinheiro Nr 1', apartmentId);
+        logAccess({ apartment: apartmentId, downloadedFile: 'Visualizada Seu Dinheiro Nr 1' });
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
@@ -238,7 +238,7 @@ export function showFiles(apartment) { 
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
         const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualizada Seu Dinheiro Nr 2', apartmentId);
+        logAccess({ apartment: apartmentId, downloadedFile: 'Visualizada Seu Dinheiro Nr 2' });
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
