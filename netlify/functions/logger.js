@@ -38,8 +38,8 @@ exports.handler = async (event) => {
       let logKey = '';
       let logEntryData = true; // Vamos apenas escrever 'true' dentro do nó
 
-      const visualizado = 'Visualizado';
-      const arquivo = 'arquivo_';
+      const visualizado = 'Visualizado_';
+      const arquivo = 'arquivo';
       let tipoDocumento = '';
 
       if (logData.userCode && logData.userCode.type === 'notificacao') {
