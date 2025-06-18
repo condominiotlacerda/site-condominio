@@ -682,7 +682,7 @@ politicaUsoLink.addEventListener('click', function(event) {
   fileViewer.src = politicaUsoURL; // Define o src do iframe com o URL armazenado
   viewerContainer.style.display = 'flex'; // Exibe o container do iframe
   const apartmentId = localStorage.getItem('apartmentId');
-  logAccess(null, 'Visualizada Política de Uso', apartmentId); // Adiciona a chamada para logAccess
+  logAccess({ apartment: apartmentId, downloadedFile: 'Visualizada Política de Uso' });
 });
 
 const closeButton = viewerContainer.querySelector('button');
