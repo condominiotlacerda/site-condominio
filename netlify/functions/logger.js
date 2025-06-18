@@ -25,6 +25,7 @@ exports.handler = async (event) => {
     try {
       console.log("Função logger foi chamada com POST!");
       const logData = JSON.parse(event.body);
+      console.log("Valor de logData.type:", logData.userCode ? logData.userCode.type : 'outro');
       const db = admin.database();
       const logsRef = db.ref('logs');
 
@@ -33,24 +34,76 @@ exports.handler = async (event) => {
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
       const aptoNumber = logData.apartment.replace('apto', '');
       const userName = logData.userName ? logData.userName : 'SemNome';
-      const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
-      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/\.pdf$/i, '')}`;
 
-      logData.accessDateTime = now.toISOString();
-      logData.userName = userName;
-      logData.downloadedFile = downloadedFile; // Garantir que o nome do arquivo original seja salvo nos dados
+      let logKey = '';
+      let logEntryData = {};
 
-      await logsRef.child(logKey).set(logData);
-      console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
+      const visualizadoArquivo = 'Visualizado_arquivo_';
 
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: "Log registrado com sucesso no Realtime Database com chave e nome de usuário!" }),
-      };
+      if (logData.userCode && logData.userCode.type === 'notificacao') {
+        const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}notificacao_${notificationId}_apto_${aptoNumber}_pdf`;
+        logEntryData = {
+          Texto: logData.userCode.downloadedFile,
+          apartamentoId: logData.userCode.apartmentId,
+          notificacaoId: notificationId,
+          accessDateTime: now.toISOString()
+        };
+      } else if (logData.downloadedFile) {
+        let tipoDocumento = 'arquivo';
+        let nomeArquivo = logData.downloadedFile.replace(/\.pdf$/i, '');
+        if (nomeArquivo.startsWith('boleto_')) {
+          tipoDocumento = 'boleto';
+        } else if (nomeArquivo === 'Visualização de Previsão de despesas' || nomeArquivo === 'Visualizada Previsão de despesas') {
+          tipoDocumento = 'previsao_despesas';
+        } else if (nomeArquivo === 'Visualização de Seu Dinheiro Nr 1' || nomeArquivo === 'Visualizada Seu Dinheiro Nr 1') {
+          tipoDocumento = 'seu_dinheiro_1';
+        } else if (nomeArquivo === 'Visualização de Seu Dinheiro Nr 2' || nomeArquivo === 'Visualizada Seu Dinheiro Nr 2') {
+          tipoDocumento = 'seu_dinheiro_2';
+        } else if (nomeArquivo === 'Visualização da Política de Uso' || nomeArquivo === 'Visualizada Política de Uso') {
+          tipoDocumento = 'politica_uso';
+        }
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}${tipoDocumento}_${nomeArquivo.replace(/ /g, '_')}_apto_${aptoNumber}_pdf`;
+        logEntryData = {
+          accessDateTime: now.toISOString(),
+          apartment: logData.apartment,
+          downloadedFile: logData.downloadedFile,
+          userName: userName
+        };
+      } else if (logData.avisoNr) { // Lógica para os avisos entendidos
+        const avisoNr = logData.avisoNr;
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_Visualizado_aviso_${avisoNr}_apto_${aptoNumber}_pdf`;
+        logEntryData = {
+          avisoNr: avisoNr,
+          Texto: logData.Texto,
+          entendidoEm: now.toLocaleString(),
+          apartamentoId: logData.apartment,
+        };
+      }
+
+      if (logKey) {
+        await logsRef.child(logKey).set(logEntryData);
+        console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
+
+        return {
+          statusCode: 200,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: "Log registrado com sucesso no Realtime Database com chave e nome de usuário!" }),
+        };
+      } else {
+        console.error("Não foi possível determinar o tipo de log ou construir a chave.");
+        return {
+          statusCode: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ error: "Erro ao registrar o log no Realtime Database: Não foi possível determinar o tipo de log." }),
+        };
+      }
     } catch (error) {
       console.error("Erro ao processar a função logger:", error);
       return {
