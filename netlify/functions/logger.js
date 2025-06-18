@@ -59,12 +59,10 @@ exports.handler = async (event) => {
           tipoDocumento = 'politica_uso';
         }
 
-        let documentoIdentificador = tipoDocumento ? tipoDocumento : 'arquivo';
+        let documentoIdentificador = tipoDocumento || 'arquivo';
+        const arquivoPrefix = documentoIdentificador === 'arquivo' ? arquivo : '';
 
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}${arquivo}${documentoIdentificador}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
-        if (documentoIdentificador !== 'arquivo') {
-            logKey = logKey.replace(`${arquivo}arquivo`, `${arquivo}${documentoIdentificador}`);
-        }
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}${arquivoPrefix}${documentoIdentificador}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
 
       } else if (logData.avisoNr) { // Lógica para os avisos entendidos
         const avisoNr = logData.avisoNr;
@@ -111,8 +109,8 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
-        body: JSON.stringify({ error: "Método não permitido" }),
-      };
-    }
+      },
+      body: JSON.stringify({ error: "Método não permitido" }),
+    };
   }
 };
