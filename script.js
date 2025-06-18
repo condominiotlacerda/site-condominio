@@ -135,9 +135,20 @@ export function showFiles(apartment) {
 
               const listItem = document.createElement('li');
               const link = document.createElement('a');
-              link.href = arquivoNotificacao;
+              link.href = '#'; // Alteramos o href para #
               link.textContent = textoNotificacao;
-              link.target = '_blank'; // Para abrir o PDF em uma nova aba
+              link.onclick = function(event) { // Adicionamos o evento onclick
+                event.preventDefault();
+                logAccess({
+                  userCode: {
+                    type: 'notificacao',
+                    downloadedFile: `Visualizada notificação: ${textoNotificacao}`,
+                    apartmentId: apartamentoIdStorage,
+                    notificationId: numeroNotificacao
+                  }
+                });
+                openFileViewer(arquivoNotificacao);
+              };
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
             }
