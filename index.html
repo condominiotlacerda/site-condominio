@@ -1,39 +1,214 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manutenção</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            text-align: center;
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #d9534f;
-        }
-        p {
-            color: #777;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <title>Condomínio T Lacerda - Login</title>
+
+    <script type="module">
+        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        import { app } from './firebase.js';
+
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const forgotPasswordSection = document.getElementById('forgotPasswordSection');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const mensagemForgotPassword = document.getElementById('mensagemForgotPassword');
+        const mostrarLoginFromForgotLink = document.getElementById('mostrarLoginFromForgot');
+        const loginSection = document.getElementById('login');
+        const cadastroSection = document.getElementById('cadastro');
+        const mostrarCadastroLink = document.getElementById('mostrarCadastro');
+        const mostrarLoginLink = document.getElementById('mostrarLogin');
+
+        if (forgotPasswordLink) {
+            forgotPasswordLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                loginSection.style.display = 'none';
+                forgotPasswordSection.style.display = 'block';
+            });
+        }
+
+        if (mostrarLoginFromForgotLink) {
+            mostrarLoginFromForgotLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                forgotPasswordSection.style.display = 'none';
+                loginSection.style.display = 'block';
+            });
+        }
+
+        if (forgotPasswordForm) {
+            forgotPasswordForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const emailForgotPassword = document.getElementById('emailForgotPassword').value;
+                const auth = getAuth();
+
+                sendPasswordResetEmail(auth, emailForgotPassword)
+                    .then(() => {
+                        mensagemForgotPassword.textContent = 'Um link para redefinir sua senha foi enviado para o seu e-mail.';
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        mensagemForgotPassword.textContent = 'Erro ao enviar o e-mail de recuperação: ' + errorMessage;
+                        console.error('Erro ao enviar e-mail de recuperação:', errorCode, errorMessage);
+                    });
+            });
+        }
+
+        // Initialize Firebase
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const firestore = getFirestore(app);
+
+        if (mostrarCadastroLink) {
+            mostrarCadastroLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                loginSection.style.display = 'none';
+                cadastroSection.style.display = 'block';
+            });
+        }
+
+        if (mostrarLoginLink) {
+            mostrarLoginLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                cadastroSection.style.display = 'none';
+                loginSection.style.display = 'block';
+            });
+        }
+
+        const formularioLogin = document.getElementById('formularioLogin');
+        if (formularioLogin) {
+            formularioLogin.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const emailLogin = document.getElementById('emailLogin').value;
+                const senhaLogin = document.getElementById('senhaLogin').value;
+                const mensagemLogin = document.getElementById('mensagemLogin');
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
+                    const user = userCredential.user;
+                    console.log("Usuário logado com sucesso:", user.uid);
+                    const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
+                    const snapshot = await get(pendingRef);
+
+                    if (snapshot.exists()) {
+                        mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
+                    } else {
+                        mensagemLogin.textContent = 'Login realizado com sucesso!';
+                        const userDetailsRef = ref(db, 'userApartments/' + user.uid);
+                        const userSnapshot = await get(userDetailsRef);
+
+                        if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
+                            const apartmentId = userSnapshot.val().apartmentId;
+                            const userNameFromDB = userSnapshot.val().userName; // 👈 ADICIONE ESTA LINHA PARA OBTER O userName
+                            console.log("userNameFromDB (Realtime Database):", userNameFromDB); // 👈 ADICIONE ESTA LINHA PARA LOGAR O userName
+                            console.log('Apartment ID from DB (before storage):', apartmentId);
+                            localStorage.setItem('apartmentId', apartmentId);
+                            localStorage.setItem('userName', userNameFromDB); // 👈 ADICIONE ESTA LINHA PARA ARMAZENAR O userName
+
+                        } else {
+                            console.error("apartmentId não encontrado para o usuário:", user.uid);
+                            mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
+                        }
+                    }
+                } catch (error) {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log("Código de erro:", errorCode);
+
+                    if (errorCode === 'auth/invalid-email') {
+                        mensagemLogin.textContent = 'O email digitado é inválido.';
+                    } else if (errorCode === 'auth/invalid-credential') {
+                        mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
+                    } else {
+                        mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
+                    }
+
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Página em Manutenção</h1>
-        <p>Desculpe pelo inconveniente, estamos realizando uma manutenção para melhorar sua experiência no site.</p>
-        <p>Até mais.</p>
-    </div>
+    <header>
+        <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
+    </header>
+    <section id="login">
+        <h2>Login</h2>
+        <form id="formularioLogin">
+            <label for="emailLogin">Email:</label><br>
+            <input type="email" id="emailLogin" name="emailLogin" required style="width: 270px;"><br><br>
+            <label for="senhaLogin">Senha:</label><br>
+            <input type="password" id="senhaLogin" name="senhaLogin" maxlength="6" inputmode="numeric"><br><br>
+            <button type="submit" style="margin-right: 10px;">Entrar</button><br><br>
+            <a href="#" id="forgotPassword">Esqueci minha senha</a><br>
+            <div id="mensagemLogin"></div>
+        </form>
+        <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+    </section>
+
+    <section id="forgotPasswordSection" style="display:none;">
+        <h2>Recuperar Senha</h2>
+        <form id="forgotPasswordForm">
+            <label for="emailForgotPassword">Email:</label><br><br>
+            <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
+            <button type="submit">Enviar link de recuperação</button><br><br>
+            <div id="mensagemForgotPassword"></div>
+        </form>
+    <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
+    </section>
+
+    <section id="cadastro" style="display:none;">
+        <h2>Cadastro</h2>
+        <form id="formularioCadastro">
+            <label for="emailCadastro">Email:</label><br>
+            <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+            <label for="senhaCadastro">Senha:</label><br>
+            <input type="password" id="senhaCadastro" name="senhaCadastro" maxlength="6" inputmode="numeric"><br><br>
+            <label for="codigoAcesso">Código de Acesso:</label><br>
+            <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+            <button type="submit">Cadastrar</button>
+            <div id="mensagemCadastro"></div>
+        </form>
+        <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
+        <p style="font-size: 0.8em; text-align: center;">Solução desenvolvida por Unidade 301.</p>
+    </footer>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const senhaCadastroInput = document.getElementById('senhaCadastro');
+  const senhaLoginInput = document.getElementById('senhaLogin');
+
+  if (senhaCadastroInput) {
+    senhaCadastroInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
+      if (this.value.length > this.maxLength) {
+        this.value = this.value.slice(0, this.maxLength);
+      }
+    });
+  }
+
+  if (senhaLoginInput) {
+    senhaLoginInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, ''); // Remove não numéricos
+      if (this.value.length > this.maxLength) {
+        this.value = this.value.slice(0, this.maxLength);
+      }
+    });
+  }
+});
+        
+</script>
+<script src="script.js" defer type="module"></script>
 </body>
 </html>
