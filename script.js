@@ -648,3 +648,44 @@ window.logAccess = function (userCode, downloadedFile, apartment) {
   });
 };
 // =============================================================================================================================================================
+
+// Início Código para gerir acesso e log a política de uso =============================================================================================================================================================
+const politicaUsoLink = document.getElementById('politica-uso-link');
+const viewerContainer = document.getElementById('viewer-container');
+const fileViewer = document.getElementById('file-viewer');
+
+let politicaUsoURL; // Variável para armazenar o URL da Política de Uso
+
+fetch('/.netlify/functions/politica-uso')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Erro na requisição: ${response.status}`);
+    }
+    return response.arrayBuffer(); // Obtém a resposta como um ArrayBuffer
+  })
+  .then(buffer => {
+    const file = new Blob([buffer], { type: 'application/pdf' }); // Cria um Blob com o ArrayBuffer e o tipo MIME correto
+    politicaUsoURL = URL.createObjectURL(file); // Armazena o URL na variável
+  })
+  .catch(error => {
+    console.error('Erro ao chamar a função da Política de Uso:', error);
+    politicaUsoLink.textContent = 'Erro ao carregar a Política de Uso';
+    politicaUsoLink.removeAttribute('href');
+  });
+
+politicaUsoLink.addEventListener('click', function(event) {
+  event.preventDefault();
+  fileViewer.src = politicaUsoURL; // Define o src do iframe com o URL armazenado
+  viewerContainer.style.display = 'flex'; // Exibe o container do iframe
+  const apartmentId = localStorage.getItem('apartmentId');
+  logAccess(null, 'Visualização da Política de Uso', apartmentId); // Adiciona a chamada para logAccess
+});
+
+const closeButton = viewerContainer.querySelector('button');
+if (closeButton) {
+  closeButton.addEventListener('click', () => {
+    fileViewer.src = '';
+    viewerContainer.style.display = 'none';
+  });
+}
+// Final  Código para gerir acesso e log a política de uso =============================================================================================================================================================
