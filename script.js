@@ -438,10 +438,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
     const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
     try {
-      logAccess(null, documento, localStorage.getItem('apartmentId'));
-    } catch (error) {
-      console.error('Erro ao executar logAccess:', error);
-    }
+      logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: documento });
+    } catch (error) {
+      console.error('Erro ao executar logAccess:', error);
+    }
     openFileViewer(caminhoPrestacaoContas);
   });
 
@@ -486,10 +486,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
         const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
         try {
-          logAccess(null, documento, localStorage.getItem('apartmentId'));
-        } catch (error) {
-          console.error('Erro ao executar logAccess:', error);
-        }
+          logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: documento });
+        } catch (error) {
+          console.error('Erro ao executar logAccess:', error);
+        }
         openFileViewer(caminhoPrestacaoContas);
       });
 
