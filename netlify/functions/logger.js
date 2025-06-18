@@ -46,26 +46,15 @@ exports.handler = async (event) => {
         const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
         logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}${arquivo}_notificacao_${notificationId}_apto_${aptoNumber}_pdf`;
       } else if (logData.downloadedFile) {
-        let nomeArquivo = logData.downloadedFile.replace(/\.pdf$/i, '').replace(/Visualizada /i, '').replace(/ /g, '_');
-        if (nomeArquivo.startsWith('boleto_')) {
-          tipoDocumento = 'boleto';
-        } else if (nomeArquivo === 'previsao_despesas') {
-          tipoDocumento = 'previsao_despesas';
-        } else if (nomeArquivo === 'seu_dinheiro_1') {
-          tipoDocumento = 'seu_dinheiro_1';
-        } else if (nomeArquivo === 'seu_dinheiro_2') {
-          tipoDocumento = 'seu_dinheiro_2';
-        } else if (nomeArquivo === 'politica_uso') {
-          tipoDocumento = 'politica_uso';
-        }
-
-        const prefixo = visualizado + (tipoDocumento ? '' : arquivo);
-        if (nomeArquivo === 'previsao_despesas' || nomeArquivo === 'seu_dinheiro_1' || nomeArquivo === 'seu_dinheiro_2' || nomeArquivo === 'politica_uso' || nomeArquivo.startsWith('Prestacao_de_Contas')) {
-          logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${prefixo}${tipoDocumento || ''}_${nomeArquivo}_pdf`;
-        } else {
-          logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${prefixo}${tipoDocumento || ''}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
-        }
-      }
+      let nomeArquivo = logData.downloadedFile.replace(/\.pdf$/i, '').replace(/Visualizada /i, '').replace(/ /g, '_');
+      if (nomeArquivo.startsWith('boleto_')) {
+        tipoDocumento = 'boleto';
+      } else if (nomeArquivo === 'previsao_despesas' || nomeArquivo === 'Previsão_de_despesas' || nomeArquivo === 'seu_dinheiro_1' || nomeArquivo === 'Seu_Dinheiro_Nr_1' || nomeArquivo === 'seu_dinheiro_2' || nomeArquivo === 'Seu_Dinheiro_Nr_2' || nomeArquivo === 'politica_uso' || nomeArquivo.startsWith('Prestacao_de_Contas')) {
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}${tipoDocumento || ''}_${nomeArquivo}_pdf`;
+      } else {
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}${tipoDocumento || ''}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
+      }
+    }
 
       if (logKey) {
         await logsRef.child(logKey).set(logEntryData);
