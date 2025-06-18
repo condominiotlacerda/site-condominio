@@ -32,7 +32,7 @@ exports.handler = async (event) => {
       const now = new Date();
       now.setHours(now.getHours() - 3);
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
-      const aptoNumber = logData.userCode.apartmentId.replace('apto', '');
+      const aptoNumber = logData.apartment ? logData.apartment.replace('apto', '') : (logData.userCode && logData.userCode.apartmentId ? logData.userCode.apartmentId.replace('apto', '') : '');
       const userName = logData.userName ? logData.userName : 'SemNome';
 
       let logKey = '';
