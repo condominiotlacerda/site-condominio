@@ -149,7 +149,7 @@ export function showFiles(apartment) { 
                     // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
                     const apartmentId = localStorage.getItem('apartmentId');
                     const notificationText = this.textContent.replace(/\./g, '_').replace(/\n/g, '_');
-                    logAccess(null, `Visualização da notificação: ${notificationText}`, apartmentId);
+                    logAccess(null, `Visualizada notificação: ${notificationText}`, apartmentId);
                     openFileViewer(filename);
                   });
 
@@ -190,7 +190,7 @@ export function showFiles(apartment) { 
           event.preventDefault();
           const filePath = 'previsao_despesas/previsao_despesas.pdf';
           const apartmentId = localStorage.getItem('apartmentId');
-          logAccess(null, 'Visualização de Previsão de despesas', apartmentId);
+          logAccess(null, 'Visualizada Previsão de despesas', apartmentId);
           openFileViewer(filePath);
         });
 
@@ -211,7 +211,7 @@ export function showFiles(apartment) { 
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_1.pdf';
         const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 1', apartmentId);
+        logAccess(null, 'Visualizada Seu Dinheiro Nr 1', apartmentId);
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
@@ -232,7 +232,7 @@ export function showFiles(apartment) { 
         event.preventDefault();
         const filePath = 'https://brilliant-gumption-dac373.netlify.app/seu_dinheiro/seu_dinheiro_2.pdf';
         const apartmentId = localStorage.getItem('apartmentId');
-        logAccess(null, 'Visualização de Seu Dinheiro Nr 2', apartmentId);
+        logAccess(null, 'Visualizada Seu Dinheiro Nr 2', apartmentId);
         openFileViewer(filePath);
       }); // <--- Aqui fecha a função do evento de clique
 
@@ -678,7 +678,7 @@ politicaUsoLink.addEventListener('click', function(event) {
   fileViewer.src = politicaUsoURL; // Define o src do iframe com o URL armazenado
   viewerContainer.style.display = 'flex'; // Exibe o container do iframe
   const apartmentId = localStorage.getItem('apartmentId');
-  logAccess(null, 'Visualização da Política de Uso', apartmentId); // Adiciona a chamada para logAccess
+  logAccess(null, 'Visualizada Política de Uso', apartmentId); // Adiciona a chamada para logAccess
 });
 
 const closeButton = viewerContainer.querySelector('button');
