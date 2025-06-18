@@ -60,7 +60,7 @@ exports.handler = async (event) => {
         }
 
         const prefixo = visualizado + (tipoDocumento ? '' : arquivo);
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${prefixo}${tipoDocumento || 'arquivo'}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${prefixo}${tipoDocumento || ''}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
       } else if (logData.avisoNr) { // Lógica para os avisos entendidos
         const avisoNr = logData.avisoNr;
         logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}aviso_${avisoNr}_apto_${aptoNumber}_pdf`;
