@@ -61,8 +61,8 @@ exports.handler = async (event) => {
           tipoDocumento = 'politica_uso';
           nomeArquivo = 'politica_uso';
         }
-        const prefixoArquivo = tipoDocumento === 'arquivo' ? visualizadoArquivo : visualizadoArquivo.replace('_arquivo_', '_');
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${prefixoArquivo}${tipoDocumento}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
+        const prefixo = visualizado + (tipoDocumento ? '' : arquivo);
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${prefixo}${tipoDocumento || 'arquivo'}_${nomeArquivo}_apto_${aptoNumber}_pdf`; // = ESSA LINHA =======================================================================================
       } else if (logData.avisoNr) { // Lógica para os avisos entendidos
         const avisoNr = logData.avisoNr;
         logKey = `${aptoNumber}_${userName}_${formattedDateTime}_Visualizado_aviso_${avisoNr}_apto_${aptoNumber}_pdf`;
