@@ -24,50 +24,23 @@ exports.handler = async (event) => {
   if (event.httpMethod === 'POST') {
     try {
       console.log("Função logger foi chamada com POST!");
-      console.log("Conteúdo de event.body:", event.body);
       const logData = JSON.parse(event.body);
-      console.log("Valor de logData.type:", logData.userCode.type);
       const db = admin.database();
       const logsRef = db.ref('logs');
 
       const now = new Date();
       now.setHours(now.getHours() - 3);
       const formattedDateTime = now.toISOString().replace('T', '_').replace(/:/g, '-').split('.')[0];
-      const dateParts = formattedDateTime.split('_')[0].split('-'); // Dividindo a parte da data por '-'
-      const formattedDateForAviso = `${dateParts[2]}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Formato DD-MM-YY (Aviso)
-      const formattedTimeForAviso = `${formattedDateTime.split('_')[1]}`; // Formato HH-MM-SS (Aviso)
       const aptoNumber = logData.apartment.replace('apto', '');
       const userName = logData.userName ? logData.userName : 'SemNome';
+      const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
+      const logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/\.pdf$/i, '')}`;
 
-      let logKey = '';
-      let logEntryData = {};
+      logData.accessDateTime = now.toISOString();
+      logData.userName = userName;
+      logData.downloadedFile = downloadedFile; // Garantir que o nome do arquivo original seja salvo nos dados
 
-      if (logData.userCode.type === 'notificacao') {
-        console.log("Log de notificação detectado!");
-        console.log("Valor de logData.userCode.type:", logData.userCode.type);
-        console.log("String de comparação:", 'notificacao');
-        const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
-        const formattedDateNotificacao = `${dateParts[2]}-${dateParts[1]}-${dateParts[0].slice(-2)}`; // Acessando corretamente as partes da data
-        const formattedTimeNotificacao = `${formattedDateTime.split('_')[1]}`;
-        logKey = `${aptoNumber}_${userName}_${formattedDateNotificacao}_${formattedTimeNotificacao}_notificacao_${notificationId}`;
-        logEntryData = {
-          Texto: logData.userCode.downloadedFile, // Acessando downloadedFile corretamente
-          apartamentoId: logData.userCode.apartmentId, // Acessando apartmentId corretamente
-          notificacaoId: notificationId,
-          accessDateTime: now.toISOString()
-        };
-      } else if (logData.downloadedFile) { // Mudança para else if
-        const downloadedFile = logData.downloadedFile ? logData.downloadedFile : 'ArquivoSemNome';
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${downloadedFile.replace(/\.pdf$/i, '')}`;
-        logEntryData = {
-          accessDateTime: now.toISOString(),
-          apartment: logData.apartment,
-          downloadedFile: downloadedFile,
-          userName: userName
-        };
-      }
-
-      await logsRef.child(logKey).set(logEntryData);
+      await logsRef.child(logKey).set(logData);
       console.log('Log registrado com sucesso no Realtime Database com chave:', logKey);
 
       return {
