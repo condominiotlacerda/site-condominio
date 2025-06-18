@@ -38,32 +38,37 @@ exports.handler = async (event) => {
       let logKey = '';
       let logEntryData = true; // Vamos apenas escrever 'true' dentro do nó
 
-      const visualizadoArquivo = 'Visualizado_arquivo_';
+      const visualizado = 'Visualizado_';
+      const arquivo = 'arquivo_';
 
       if (logData.userCode && logData.userCode.type === 'notificacao') {
         const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}notificacao_${notificationId}_apto_${aptoNumber}_pdf`;
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}${arquivo}notificacao_${notificationId}_apto_${aptoNumber}_pdf`;
       } else if (logData.downloadedFile) {
-      let tipoDocumento = '';
-      let nomeArquivo = logData.downloadedFile.replace(/\.pdf$/i, '').replace(/Visualizada /i, '').replace(/ /g, '_');
-      if (nomeArquivo.startsWith('boleto_')) {
-        tipoDocumento = 'boleto';
-      } else if (nomeArquivo === 'previsao_despesas') {
-        tipoDocumento = 'previsao_despesas';
-      } else if (nomeArquivo === 'seu_dinheiro_1') {
-        tipoDocumento = 'seu_dinheiro_1';
-      } else if (nomeArquivo === 'seu_dinheiro_2') {
-        tipoDocumento = 'seu_dinheiro_2';
-      } else if (nomeArquivo === 'politica_uso') {
-        tipoDocumento = 'politica_uso';
-      }
+        let tipoDocumento = '';
+        let nomeArquivo = logData.downloadedFile.replace(/\.pdf$/i, '').replace(/Visualizada /i, '').replace(/ /g, '_');
+        if (nomeArquivo.startsWith('boleto_')) {
+          tipoDocumento = 'boleto';
+        } else if (nomeArquivo === 'previsao_despesas') {
+          tipoDocumento = 'previsao_despesas';
+        } else if (nomeArquivo === 'seu_dinheiro_1') {
+          tipoDocumento = 'seu_dinheiro_1';
+        } else if (nomeArquivo === 'seu_dinheiro_2') {
+          tipoDocumento = 'seu_dinheiro_2';
+        } else if (nomeArquivo === 'politica_uso') {
+          tipoDocumento = 'politica_uso';
+        }
 
-      let documentoIdentificador = tipoDocumento ? tipoDocumento : 'arquivo';
+        let documentoIdentificador = tipoDocumento ? tipoDocumento : 'arquivo';
 
-      logKey = `${aptoNumber}_${userName}_${formattedDateTime}_Visualizado_arquivo_${documentoIdentificador}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
-    } else if (logData.avisoNr) { // Lógica para os avisos entendidos
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}${arquivo}${documentoIdentificador}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
+        if (documentoIdentificador !== 'arquivo') {
+            logKey = logKey.replace(`${arquivo}arquivo`, `${arquivo}${documentoIdentificador}`);
+        }
+
+      } else if (logData.avisoNr) { // Lógica para os avisos entendidos
         const avisoNr = logData.avisoNr;
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_Visualizado_aviso_${avisoNr}_apto_${aptoNumber}_pdf`;
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}aviso_${avisoNr}_apto_${aptoNumber}_pdf`;
       }
 
       if (logKey) {
@@ -96,9 +101,9 @@ exports.handler = async (event) => {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ error: `Erro ao registrar o log no Realtime Database: ${error}` }),
-      };
+          body: JSON.stringify({ error: `Erro ao registrar o log no Realtime Database: ${error}` }),
+        };
+      }
     }
   } else {
     return {
@@ -106,8 +111,8 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ error: "Método não permitido" }),
-    };
+        body: JSON.stringify({ error: "Método não permitido" }),
+      };
+    }
   }
 };
