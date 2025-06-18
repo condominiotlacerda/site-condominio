@@ -93,7 +93,9 @@ export function showFiles(apartment) { 
               event.preventDefault();
               const apartmentId = localStorage.getItem('apartmentId');
               const documentName = nomeBoleto.trim();
-              logAccess(null, documentName, apartmentId);
+              
+              logAccess({ apartment: apartmentId, downloadedFile: documentName });
+              
               if (isMobile) {
                 window.open(`pdfs/boletos/${arquivoBoleto}`, "_blank");
               } else {
@@ -149,7 +151,9 @@ export function showFiles(apartment) { 
                     // *** É AQUI QUE VOCÊ PRECISA ADICIONAR O LOG ***
                     const apartmentId = localStorage.getItem('apartmentId');
                     const notificationText = this.textContent.replace(/\./g, '_').replace(/\n/g, '_');
-                    logAccess(null, `Visualizada notificação: ${notificationText}`, apartmentId);
+                    
+                    logAccess({ userCode: { type: 'notificacao', downloadedFile: `Visualizada notificação: ${notificationText}`, apartmentId: apartmentId, notificationId: notificationId } });
+                    
                     openFileViewer(filename);
                   });
 
@@ -190,7 +194,9 @@ export function showFiles(apartment) { 
           event.preventDefault();
           const filePath = 'previsao_despesas/previsao_despesas.pdf';
           const apartmentId = localStorage.getItem('apartmentId');
-          logAccess(null, 'Visualizada Previsão de despesas', apartmentId);
+          
+          logAccess({ apartment: apartmentId, downloadedFile: 'Visualizada Previsão de despesas' });
+          
           openFileViewer(filePath);
         });
 
@@ -302,7 +308,9 @@ async function exibirAvisoSeNecessario() {
       botaoEntendi.addEventListener('click', function() {
         // Passo 6a: Registrar a ação no Realtime Database (vamos implementar isso depois)
         const apartamentoId = localStorage.getItem('apartmentId');
-        logAccess(null, `Aviso ${avisoAtualNr} Entendido`, apartamentoId);
+        
+        logAccess({ apartment: apartmentId, avisoNr: avisoAtualNr, Texto: textoAviso });
+        
         marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso); // Função para escrever no Realtime Database
         // Passo 6b: Marcar no localStorage que o aviso foi visto
         //localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true');
@@ -619,35 +627,31 @@ document.addEventListener("DOMContentLoaded", function () {
 }
   }});    
 
-// Ajuste para horário de Brasília (UTC-3) ===================================================================================================================
-window.logAccess = function (userCode, downloadedFile, apartment) {
-  const userName = localStorage.getItem('userName'); // Recupera o nome do usuário do localStorage
-  fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/logger', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8', // Adicionamos o charset UTF-8
-    },
-    body: JSON.stringify({
-      apartment: apartment,
-      downloadedFile: downloadedFile,
-      userCode: userCode,
-      userName: userName // Envia o nome do usuário no corpo da requisição
-    }),
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`Erro na requisição para função de log: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Resposta da função de log do Netlify:', data);
-  })
-  .catch(error => {
-    console.error('Erro ao chamar a função de log do Netlify:', error);
-  });
+// Início da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
+window.logAccess = function (logData) {
+  const userName = localStorage.getItem('userName');
+  logData.userName = userName; // Adiciona o userName ao objeto logData
+  fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/logger', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: JSON.stringify(logData), // Envia o objeto logData completo
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Erro na requisição para função de log: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Resposta da função de log do Netlify:', data);
+  })
+  .catch(error => {
+    console.error('Erro ao chamar a função de log do Netlify:', error);
+  });
 };
-// =============================================================================================================================================================
+// Final da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
 
 // Início Código para gerir acesso e log a política de uso =============================================================================================================================================================
 const politicaUsoLink = document.getElementById('politica-uso-link');
