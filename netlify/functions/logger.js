@@ -36,19 +36,13 @@ exports.handler = async (event) => {
       const userName = logData.userName ? logData.userName : 'SemNome';
 
       let logKey = '';
-      let logEntryData = {};
+      let logEntryData = true; // Vamos apenas escrever 'true' dentro do nó
 
       const visualizadoArquivo = 'Visualizado_arquivo_';
 
       if (logData.userCode && logData.userCode.type === 'notificacao') {
         const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
         logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}notificacao_${notificationId}_apto_${aptoNumber}_pdf`;
-        logEntryData = {
-          Texto: logData.userCode.downloadedFile,
-          apartamentoId: logData.userCode.apartmentId,
-          notificacaoId: notificationId,
-          accessDateTime: now.toISOString()
-        };
       } else if (logData.downloadedFile) {
         let tipoDocumento = 'arquivo';
         let nomeArquivo = logData.downloadedFile.replace(/\.pdf$/i, '');
@@ -56,29 +50,21 @@ exports.handler = async (event) => {
           tipoDocumento = 'boleto';
         } else if (nomeArquivo === 'Visualização de Previsão de despesas' || nomeArquivo === 'Visualizada Previsão de despesas') {
           tipoDocumento = 'previsao_despesas';
+          nomeArquivo = 'previsao_despesas';
         } else if (nomeArquivo === 'Visualização de Seu Dinheiro Nr 1' || nomeArquivo === 'Visualizada Seu Dinheiro Nr 1') {
           tipoDocumento = 'seu_dinheiro_1';
+          nomeArquivo = 'seu_dinheiro_1';
         } else if (nomeArquivo === 'Visualização de Seu Dinheiro Nr 2' || nomeArquivo === 'Visualizada Seu Dinheiro Nr 2') {
           tipoDocumento = 'seu_dinheiro_2';
+          nomeArquivo = 'seu_dinheiro_2';
         } else if (nomeArquivo === 'Visualização da Política de Uso' || nomeArquivo === 'Visualizada Política de Uso') {
           tipoDocumento = 'politica_uso';
+          nomeArquivo = 'politica_uso';
         }
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}${tipoDocumento}_${nomeArquivo.replace(/ /g, '_')}_apto_${aptoNumber}_pdf`;
-        logEntryData = {
-          accessDateTime: now.toISOString(),
-          apartment: logData.apartment,
-          downloadedFile: logData.downloadedFile,
-          userName: userName
-        };
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizadoArquivo}${tipoDocumento}_${nomeArquivo}_apto_${aptoNumber}_pdf`;
       } else if (logData.avisoNr) { // Lógica para os avisos entendidos
         const avisoNr = logData.avisoNr;
         logKey = `${aptoNumber}_${userName}_${formattedDateTime}_Visualizado_aviso_${avisoNr}_apto_${aptoNumber}_pdf`;
-        logEntryData = {
-          avisoNr: avisoNr,
-          Texto: logData.Texto,
-          entendidoEm: now.toLocaleString(),
-          apartamentoId: logData.apartment,
-        };
       }
 
       if (logKey) {
