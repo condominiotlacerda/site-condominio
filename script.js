@@ -309,7 +309,7 @@ async function exibirAvisoSeNecessario() {
         // Passo 6a: Registrar a ação no Realtime Database (vamos implementar isso depois)
         const apartamentoId = localStorage.getItem('apartmentId');
         
-        logAccess({ apartment: apartmentId, avisoNr: avisoAtualNr, Texto: textoAviso });
+        logAccess({ apartment: apartamentoId, avisoNr: avisoAtualNr, Texto: textoAviso });
         
         marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso); // Função para escrever no Realtime Database
         // Passo 6b: Marcar no localStorage que o aviso foi visto
