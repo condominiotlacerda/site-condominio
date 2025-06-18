@@ -38,7 +38,7 @@ exports.handler = async (event) => {
       let logKey = '';
       let logEntryData = true; // Vamos apenas escrever 'true' dentro do nó
 
-      const visualizado = 'Visualizado_';
+      const visualizado = 'Visualizado';
       const arquivo = 'arquivo_';
       let tipoDocumento = '';
 
