@@ -40,7 +40,7 @@ exports.handler = async (event) => {
 
       const visualizado = 'Visualizado_';
       const arquivo = 'arquivo';
-      const visualizadoArquivo = 'Visualizado_arquivo_'; // Movi a declaração para cá
+      const visualizadoArquivo = 'Visualizado_arquivo'; // Movi a declaração para cá
       let tipoDocumento = '';
 
       if (logData.userCode && logData.userCode.type === 'notificacao') {
