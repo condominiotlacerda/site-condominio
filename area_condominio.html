@@ -192,53 +192,13 @@ window.sair = sair;
           <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
         </section>
 
-        <!-- ==============================================================================================================================================   <p><a id="politica-uso-link" href="#">Política de Uso</a></p>  -->
+        <!-- Acesso a política de uso início ===============================================================================================================================================  -->
         
         <div style="text-align: center; margin-top: 20px;">
           <p><a id="politica-uso-link" href="#">Política de Uso</a></p>
         </div>
 
-        <script>
-          const politicaUsoLink = document.getElementById('politica-uso-link');
-          const viewerContainer = document.getElementById('viewer-container');
-          const fileViewer = document.getElementById('file-viewer');
-
-          let politicaUsoURL; // Variável para armazenar o URL da Política de Uso
-
-          fetch('/.netlify/functions/politica-uso')
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`Erro na requisição: ${response.status}`);
-              }
-              return response.arrayBuffer(); // Obtém a resposta como um ArrayBuffer
-            })
-            .then(buffer => {
-              const file = new Blob([buffer], { type: 'application/pdf' }); // Cria um Blob com o ArrayBuffer e o tipo MIME correto
-              politicaUsoURL = URL.createObjectURL(file); // Armazena o URL na variável
-            })
-            .catch(error => {
-              console.error('Erro ao chamar a função da Política de Uso:', error);
-              politicaUsoLink.textContent = 'Erro ao carregar a Política de Uso';
-              politicaUsoLink.removeAttribute('href');
-            });
-
-          politicaUsoLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            fileViewer.src = politicaUsoURL; // Define o src do iframe com o URL armazenado
-            viewerContainer.style.display = 'flex'; // Exibe o container do iframe
-            const apartmentId = localStorage.getItem('apartmentId');
-            logAccess(null, 'Visualização da Política de Uso', apartmentId); // Adiciona a chamada para logAccess
-          });
-
-          const closeButton = viewerContainer.querySelector('button');
-          if (closeButton) {
-            closeButton.addEventListener('click', () => {
-              fileViewer.src = '';
-              viewerContainer.style.display = 'none';
-            });
-          }
-        </script>
-         <!-- ============================================================================================================================================== -->
+         <!-- Acesso a política de uso final ============================================================================================================================================== -->
 
         <section id="login" style="display:none;">
             <h2>Login</h2>
