@@ -228,21 +228,21 @@ export function showFiles(apartment) {
     .catch(error => {
       console.error('Erro ao carregar nomes das taxas:', error);
     });
-} // fim da função showfiles ===============================================================================================================
+} // fim da função showfiles ===============================================================================================================================================================
 
-// Função que contém a lógica do painel de avisos
+// Início da Função que contém a lógica do painel de avisos ================================================================================================================================
 async function exibirAvisoSeNecessario() {
   console.log('exibirAvisoSeNecessario foi chamada!'); // Adicione esta linha
   try {
-    // Passo 1: Buscar o número do aviso atual do avisosNr.json
-    const responseNr = await fetch('avisos/avisosNr.json');
-    if (!responseNr.ok) {
-      console.error('Erro ao carregar avisosNr.json:', responseNr.status);
+    // Passo 1: Buscar o número do aviso atual do configuracoes.json
+    const responseConfig = await fetch('dados/configuracoes.json');
+    if (!responseConfig.ok) {
+      console.error('Erro ao carregar configuracoes.json:', responseConfig.status);
       return;
     }
-    const avisoNr = await responseNr.json();
-    const avisoAtualNr = avisoNr; // Simplificamos aqui, assumindo que avisosNr.json contém diretamente o número
-    console.log('Número do aviso atual (avisosNr.json):', avisoAtualNr);
+    const configData = await responseConfig.json();
+    const avisoAtualNr = configData.avisosNr;
+    console.log('Número do aviso atual (configuracoes.json):', avisoAtualNr);
 
     const apartamentoId = localStorage.getItem('apartmentId');
     console.log('apartmentId do localStorage:', apartamentoId);
@@ -264,14 +264,9 @@ async function exibirAvisoSeNecessario() {
       return; // Se já registrado no banco, não precisa exibir
     }
 
-    // Passo 4: Buscar o conteúdo do aviso do avisos.json
-    const responseAvisos = await fetch('avisos/avisos.json');
-    if (!responseAvisos.ok) {
-      console.error('Erro ao carregar avisos.json:', responseAvisos.status);
-      return;
-    }
-    const avisosData = await responseAvisos.json();
-    console.log('Dados de avisos.json:', avisosData);
+    // Passo 4: Buscar o conteúdo do aviso do configuracoes.json
+    const avisosData = configData.avisos;
+    console.log('Dados de avisos (configuracoes.json):', avisosData);
     const textoAviso = avisosData[avisoAtualNr];
     console.log('Texto do aviso para o número', avisoAtualNr, ':', textoAviso);
 
@@ -285,9 +280,9 @@ async function exibirAvisoSeNecessario() {
       botaoEntendi.addEventListener('click', function() {
         // Passo 6a: Registrar a ação no Realtime Database (vamos implementar isso depois)
         const apartamentoId = localStorage.getItem('apartmentId');
-        
+        
         logAccess({ apartment: apartamentoId, avisoNr: avisoAtualNr, Texto: textoAviso });
-        
+        
         marcarAvisoComoEntendido(apartamentoId, avisoAtualNr, textoAviso); // Função para escrever no Realtime Database
         // Passo 6b: Marcar no localStorage que o aviso foi visto
         //localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true');
@@ -297,16 +292,16 @@ async function exibirAvisoSeNecessario() {
         console.log('Botão "Entendi" clicado.');
       });
     } else {
-      console.log(`Aviso ${avisoAtualNr} não encontrado no avisos.json.`);
+      console.log(`Aviso ${avisoAtualNr} não encontrado no configuracoes.json.`);
     }
 
   } catch (error) {
     console.error('Erro ao processar aviso:', error);
   }
 }
-// Fim da função que contém a lógica do peinel de avisos
+// Final da Função que contém a lógica do painel de avisos =================================================================================================================================
 
-// Marca se o aviso já foi lido
+// Início da Função que Marca se o aviso já foi lido =======================================================================================================================================
 function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
   const db = getDatabase();
   const now = new Date();
@@ -330,7 +325,7 @@ function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
   .then(() => console.log(`Sinalizador de aviso ${avisoNr} visualizado gravado para o apartamento ${apartamentoId}.`))
   .catch((error) => console.error("Erro ao gravar sinalizador de aviso visualizado:", error));
 }
-// fim de Marca se o aviso já foi lido
+// Final da Função que Marca se o aviso já foi lido ========================================================================================================================================
 
 function openFileViewer(filePath) {
   const viewerContainer = document.getElementById('viewer-container');
