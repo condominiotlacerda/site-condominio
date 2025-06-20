@@ -143,23 +143,26 @@ export function showFiles(apartment) {
                 if (notificacoesTexto && notifications && notifications.length > 0) {
                   const listaNotificacoes = notificacoesTexto.split('\n').filter(n => n.trim() !== '');
 
-                  notifications.forEach((notification, index) => {
-                    if (index < listaNotificacoes.length) {
-                      const listItem = document.createElement('li');
-                      const link = document.createElement('a');
-                      link.href = '#';
-                      link.textContent = listaNotificacoes[index].trim(); // Use o texto específico da notificação
-                      link.onclick = function(event) {
-                        event.preventDefault();
-                        const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                        const fileURL = URL.createObjectURL(file);
-                        openFileViewer(fileURL);
-                        logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${listaNotificacoes[index].trim()}` });
-                      };
-                      listItem.appendChild(link);
-                      notificationsList.appendChild(listItem);
-                    }
-                  });
+                notifications.forEach((notification, index) => {
+                if (notification.name) {
+                  const numeroNotificacao = notification.name.split('_')[1]; // Extrai o número da notificação (ex: 1 de notificacao_1)
+                  if (numeroNotificacao && listaNotificacoes[parseInt(numeroNotificacao) - 1]) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.textContent = listaNotificacoes[parseInt(numeroNotificacao) - 1].trim(); // Use o texto específico da notificação
+                    link.onclick = function(event) {
+                      event.preventDefault();
+                      const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                      const fileURL = URL.createObjectURL(file);
+                      openFileViewer(fileURL);
+                      logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${listaNotificacoes[parseInt(numeroNotificacao) - 1].trim()}` });
+                    };
+                    listItem.appendChild(link);
+                    notificationsList.appendChild(listItem);
+                  }
+                }
+              });
                 } else {
                   const listItem = document.createElement('li');
                   listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
