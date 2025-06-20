@@ -127,29 +127,43 @@ export function showFiles(apartment) {
             }
             return response.json();
           })
+              // =======================================================================================================================================
           .then(notifications => {
-            console.log('Resposta da função load-notificacoes:', notifications); // Adicione esta linha
-            if (notifications && notifications.length > 0) {
-              notifications.forEach(notification => {
-                const listItem = document.createElement('li');
-                const link = document.createElement('a');
-                link.href = '#';
-                link.textContent = notification.name.replace(/_/g, ' ').replace('apto' + apartamentoIdStorage.replace('apto', ''), ''); // Ajusta o nome para exibição
-                link.onclick = function(event) {
-                  event.preventDefault();
-                  const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                  const fileURL = URL.createObjectURL(file);
-                  openFileViewer(fileURL);
-                  logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${notification.name.replace(/_/g, ' ')}` });
-                };
-                listItem.appendChild(link);
-                notificationsList.appendChild(listItem);
-              });
-            } else {
-              const listItem = document.createElement('li');
-              listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
-              notificationsList.appendChild(listItem);
-            }
+            console.log('Resposta da função load-notificacoes:', notifications);
+            fetch('dados/configuracoes.json') // Busque o configuracoes.json novamente
+              .then(response => response.json())
+              .then(configData => {
+                const notificacoesTexto = configData.notificacoes[apartamentoIdStorage];
+                const notificationsList = document.getElementById('notifications-list');
+                notificationsList.innerHTML = '';
+
+                if (notificacoesTexto && notifications && notifications.length > 0) {
+                  const listaNotificacoes = notificacoesTexto.split('\n').filter(n => n.trim() !== '');
+
+                  notifications.forEach((notification, index) => {
+                    if (index < listaNotificacoes.length) {
+                      const listItem = document.createElement('li');
+                      const link = document.createElement('a');
+                      link.href = '#';
+                      link.textContent = listaNotificacoes[index].trim(); // Use o texto específico da notificação
+                      link.onclick = function(event) {
+                        event.preventDefault();
+                        const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                        const fileURL = URL.createObjectURL(file);
+                        openFileViewer(fileURL);
+                        logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${listaNotificacoes[index].trim()}` });
+                      };
+                      listItem.appendChild(link);
+                      notificationsList.appendChild(listItem);
+                    }
+                  });
+                } else {
+                  const listItem = document.createElement('li');
+                  listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
+                  notificationsList.appendChild(listItem);
+                }
+              })
+              .catch(error => console.error('Erro ao carregar configuracoes.json:', error));
           })
           .catch(error => {
             console.error('Erro ao carregar notificações:', error);
@@ -157,6 +171,7 @@ export function showFiles(apartment) {
             listItem.textContent = 'Erro ao carregar notificações.';
             notificationsList.appendChild(listItem);
           });
+            //=======================================================================================================================================
       } else {
         const listItem = document.createElement('li');
         listItem.textContent = 'ID do apartamento não encontrado.';
