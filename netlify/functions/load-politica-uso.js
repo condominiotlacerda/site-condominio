@@ -11,7 +11,7 @@ exports.handler = async (event) => {
     const configResponse = await drive.files.get({
       fileId: configDriveId,
       alt: 'media'
-    });
+    }, { responseType: 'stream' }); // Request a stream
 
     if (configResponse.status !== 200) {
       console.error('Erro ao obter o arquivo configuracoes.json do Google Drive:', configResponse);
@@ -21,7 +21,17 @@ exports.handler = async (event) => {
       };
     }
 
-    const configData = await configResponse.data.json(); // Tentativa de acessar os dados diretamente como objeto JSON
+    let configString = '';
+    configResponse.data.on('data', chunk => {
+      configString += chunk;
+    });
+
+    await new Promise((resolve, reject) => {
+      configResponse.data.on('end', resolve);
+      configResponse.data.on('error', reject);
+    });
+
+    const configData = JSON.parse(configString);
 
     const fileId = configData.politicas.politica_uso; // Obtém o ID da Política de Uso do configuracoes.json
 
