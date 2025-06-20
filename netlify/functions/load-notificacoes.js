@@ -5,6 +5,8 @@ exports.handler = async (event) => {
   const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
   const apartmentId = event.queryStringParameters?.apartmentId;
 
+  console.log('Valor de apartmentId:', apartmentId); // Adicione esta linha
+
   if (!apartmentId) {
     return {
       statusCode: 400,
