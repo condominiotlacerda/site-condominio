@@ -137,6 +137,9 @@ export function showFiles(apartment) {
                 const notificationsList = document.getElementById('notifications-list');
                 notificationsList.innerHTML = '';
 
+                console.log('Texto das notificações da config:', notificacoesTexto); // Adicione esta linha
+                console.log('Dados das notificações da função:', notifications); // Adicione esta linha
+
                 if (notificacoesTexto && notifications && notifications.length > 0) {
                   const listaNotificacoes = notificacoesTexto.split('\n').filter(n => n.trim() !== '');
 
