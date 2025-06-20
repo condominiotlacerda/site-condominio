@@ -44,13 +44,13 @@ exports.handler = async (event) => {
     });
 
     const configData = JSON.parse(configString);
-    const hasNotifications = configData.notificacoes[apartmentId] !== '';
+    const hasNotifications = configData.notificacoes[fullApartmentId] !== '';
     const notificationsId = configData.notificacoes_id;
     console.log('Valor de hasNotifications:', hasNotifications); // Adicione esta linha
     const apartmentNotifications = [];
 
-    if (hasNotifications && notificationsId[apartmentId]) { // Check if apartment has notifications and an entry in notifications_id
-      const apartmentSpecificNotifications = Object.entries(notificationsId[apartmentId]);
+    if (hasNotifications && notificationsId[fullApartmentId]) { // Check if apartment has notifications and an entry in notifications_id
+      const apartmentSpecificNotifications = Object.entries(notificationsId[fullApartmentId]);
 
       console.log('Notificações encontradas para o apartamento (antes da busca):', apartmentSpecificNotifications); // Adicione esta linha
 
@@ -79,9 +79,9 @@ exports.handler = async (event) => {
       console.log('Notificações que serão retornadas:', apartmentNotifications); // Adicione esta linha
 
     } else if (!hasNotifications) {
-      console.log(`Apartamento ${apartmentId} não tem notificações ativas.`);
+      console.log(`Apartamento ${fullApartmentId} não tem notificações ativas.`);
     } else {
-      console.log(`Não foram encontradas notifications_id para o apartamento ${apartmentId}.`);
+      console.log(`Não foram encontradas notifications_id para o apartamento ${fullApartmentId}.`);
     }
 
     return {
