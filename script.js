@@ -128,6 +128,7 @@ export function showFiles(apartment) {
             return response.json();
           })
           .then(notifications => {
+            console.log('Resposta da função load-notificacoes:', notifications); // Adicione esta linha
             if (notifications && notifications.length > 0) {
               notifications.forEach(notification => {
                 const listItem = document.createElement('li');
