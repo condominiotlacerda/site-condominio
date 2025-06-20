@@ -21,10 +21,7 @@ exports.handler = async (event) => {
       };
     }
 
-    // Vamos tratar a resposta como um buffer e depois convertê-lo para JSON
-    const bufferConfig = Buffer.from(await configResponse.data.arrayBuffer());
-    const configString = bufferConfig.toString('utf-8');
-    const configData = JSON.parse(configString);
+    const configData = configResponse.data; // Tentativa de acessar os dados diretamente como objeto JSON
 
     const fileId = configData.politicas.politica_uso; // Obtém o ID da Política de Uso do configuracoes.json
 
