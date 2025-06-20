@@ -48,6 +48,7 @@ exports.handler = async (event) => {
       // Filter notifications for the specific apartment based on keys in notificacoes_id
       const relevantNotifications = Object.entries(notificationsId)
         .filter(([key, value]) => key.includes(`_apto_${apartmentId}`));
+        console.log('Notificações relevantes encontradas:', relevantNotifications); // Adicione esta linha
 
       // Fetch each relevant notification file
       for (const [name, fileId] of relevantNotifications) {
