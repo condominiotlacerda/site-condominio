@@ -158,7 +158,7 @@ export function showFiles(apartment) {
                     const fileURL = URL.createObjectURL(file);
                     openFileViewer(fileURL);
                     const nomeArquivoLog = listaNotificacoes[parseInt(numeroNotificacao) - 1].trim().replace(/\./g, '_').replace(/\//g, '-'); // Remova ou substitua os caracteres inválidos
-                    logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${nomeArquivoLog}` });
+                    logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${nomeArquivoLog}` });
                   };
                     listItem.appendChild(link);
                     notificationsList.appendChild(listItem);
