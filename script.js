@@ -133,6 +133,7 @@ export function showFiles(apartment) {
             fetch('dados/configuracoes.json') // Busque o configuracoes.json novamente
               .then(response => response.json())
               .then(configData => {
+                console.log('Dados completos do configuracoes.json no frontend:', configData); // Adicione esta linha  
                 const notificacoesTexto = configData.notificacoes[apartamentoIdStorage];
                 const notificationsList = document.getElementById('notifications-list');
                 notificationsList.innerHTML = '';
