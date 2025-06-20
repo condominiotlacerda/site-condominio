@@ -21,7 +21,11 @@ exports.handler = async (event) => {
       };
     }
 
-    const configData = await configResponse.data.json();
+    // Vamos tratar a resposta como um buffer e depois convertê-lo para JSON
+    const bufferConfig = Buffer.from(await configResponse.data.arrayBuffer());
+    const configString = bufferConfig.toString('utf-8');
+    const configData = JSON.parse(configString);
+
     const fileId = configData.politicas.politica_uso; // Obtém o ID da Política de Uso do configuracoes.json
 
     // Agora, vamos buscar o arquivo da Política de Uso usando o ID obtido
