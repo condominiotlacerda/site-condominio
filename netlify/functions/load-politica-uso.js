@@ -21,7 +21,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const configData = configResponse.data; // Tentativa de acessar os dados diretamente como objeto JSON
+    const configData = await configResponse.data.json(); // Tentativa de acessar os dados diretamente como objeto JSON
 
     const fileId = configData.politicas.politica_uso; // Obtém o ID da Política de Uso do configuracoes.json
 
