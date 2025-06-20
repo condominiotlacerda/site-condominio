@@ -42,17 +42,16 @@ exports.handler = async (event) => {
     const configData = JSON.parse(configString);
     const hasNotifications = configData.notificacoes[apartmentId] !== '';
     const notificationsId = configData.notificacoes_id;
-    console.log('Objeto notificationsId completo:', notificationsId); // Adicione esta linha
+    console.log('Valor de hasNotifications:', hasNotifications); // Adicione esta linha
     const apartmentNotifications = [];
 
-    if (hasNotifications) {
-      // Filter notifications for the specific apartment based on keys in notificacoes_id
-      const relevantNotifications = Object.entries(notificationsId)
-        .filter(([key, value]) => key.includes(`_apto_${apartmentId}`));
-        console.log('Notificações relevantes encontradas:', relevantNotifications); // Adicione esta linha
+    if (hasNotifications && notificationsId[apartmentId]) { // Check if apartment has notifications and an entry in notifications_id
+      const apartmentSpecificNotifications = Object.entries(notificationsId[apartmentId]);
 
-      // Fetch each relevant notification file
-      for (const [name, fileId] of relevantNotifications) {
+      console.log('Notificações encontradas para o apartamento (antes da busca):', apartmentSpecificNotifications); // Adicione esta linha
+
+      // Fetch each relevant notification file for the apartment
+      for (const [name, fileId] of apartmentSpecificNotifications) {
         try {
           const notificationResponse = await drive.files.get({
             fileId: fileId,
@@ -72,6 +71,13 @@ exports.handler = async (event) => {
           console.error(`Error processing notification ${name} (ID: ${fileId}):`, error);
         }
       }
+
+      console.log('Notificações que serão retornadas:', apartmentNotifications); // Adicione esta linha
+
+    } else if (!hasNotifications) {
+      console.log(`Apartamento ${apartmentId} não tem notificações ativas.`);
+    } else {
+      console.log(`Não foram encontradas notifications_id para o apartamento ${apartmentId}.`);
     }
 
     return {
