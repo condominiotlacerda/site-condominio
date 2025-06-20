@@ -42,6 +42,7 @@ exports.handler = async (event) => {
     const configData = JSON.parse(configString);
     const hasNotifications = configData.notificacoes[apartmentId] !== '';
     const notificationsId = configData.notificacoes_id;
+    console.log('Objeto notificationsId completo:', notificationsId); // Adicione esta linha
     const apartmentNotifications = [];
 
     if (hasNotifications) {
