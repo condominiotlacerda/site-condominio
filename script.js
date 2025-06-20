@@ -618,7 +618,7 @@ const fileViewer = document.getElementById('file-viewer');
 
 let politicaUsoURL; // Variável para armazenar o URL da Política de Uso
 
-fetch('/.netlify/functions/politica-uso')
+fetch('/.netlify/functions/load-politica-uso')
   .then(response => {
     if (!response.ok) {
       throw new Error(`Erro na requisição: ${response.status}`);
