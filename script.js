@@ -153,12 +153,13 @@ export function showFiles(apartment) {
                     link.href = '#';
                     link.textContent = listaNotificacoes[parseInt(numeroNotificacao) - 1].trim(); // Use o texto específico da notificação
                     link.onclick = function(event) {
-                      event.preventDefault();
-                      const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                      const fileURL = URL.createObjectURL(file);
-                      openFileViewer(fileURL);
-                      logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${listaNotificacoes[parseInt(numeroNotificacao) - 1].trim()}` });
-                    };
+                    event.preventDefault();
+                    const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                    const fileURL = URL.createObjectURL(file);
+                    openFileViewer(fileURL);
+                    const nomeArquivoLog = listaNotificacoes[parseInt(numeroNotificacao) - 1].trim().replace(/\./g, '_').replace(/\//g, '-'); // Remova ou substitua os caracteres inválidos
+                    logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${nomeArquivoLog}` });
+                  };
                     listItem.appendChild(link);
                     notificationsList.appendChild(listItem);
                   }
