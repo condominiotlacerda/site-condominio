@@ -45,7 +45,7 @@ exports.handler = async (event) => {
 
       if (logData.userCode && logData.userCode.type === 'notificacao') {
         const notificationId = logData.userCode.notificationId ? logData.userCode.notificationId : 'SemId';
-        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}${arquivo}_notificacao_${notificationId}_apto_${aptoNumber}_pdf`;
+        logKey = `${aptoNumber}_${userName}_${formattedDateTime}_${visualizado}arquivo_${logData.downloadedFile.replace(/Visualizada Notificação: /i, '').replace(/ /g, '_').replace(/_Notificação/i, '')}_${aptoNumber}_pdf`;
       } else if (logData.downloadedFile) {
       let nomeArquivo = logData.downloadedFile.replace(/\.pdf$/i, '').replace(/Visualizada /i, '').replace(/ /g, '_');
       if (nomeArquivo.startsWith('boleto_')) {
