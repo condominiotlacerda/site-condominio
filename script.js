@@ -113,53 +113,56 @@ export function showFiles(apartment) {
         fileList.appendChild(listItem);
       }
 
-      const notificacoesData = configData.notificacoes;
+      // Início da parte que carrega as notificações na area_condominio.html =============================================================================================================================
       const notificationsList = document.getElementById('notifications-list');
-      notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
+      notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
-      const apartamentoIdStorage = localStorage.getItem('apartmentId');
-      const aptoNumberNotificacao = apartamentoIdStorage ? apartamentoIdStorage.replace('apto', '') : null;
+      const apartamentoIdStorage = localStorage.getItem('apartmentId');
 
-      if (aptoNumberNotificacao && notificacoesData[`apto_${aptoNumberNotificacao}`]) {
-        const notificacoesTexto = notificacoesData[`apto_${aptoNumberNotificacao}`];
-        const listaNotificacoes = notificacoesTexto.split('\n');
-
-        listaNotificacoes.forEach(notificacao => {
-          const linha = notificacao.trim();
-          if (linha) {
-            const partes = linha.split('. ');
-            if (partes.length > 1) {
-              const numeroNotificacao = partes[0];
-              const textoNotificacao = partes[1];
-              const arquivoNotificacao = `notificacoes/notificacao_${numeroNotificacao}_apto_${aptoNumberNotificacao}.pdf`;
-
-              const listItem = document.createElement('li');
-              const link = document.createElement('a');
-              link.href = '#'; // Alteramos o href para #
-              link.textContent = textoNotificacao;
-              link.onclick = function(event) { // Adicionamos o evento onclick
-                event.preventDefault();
-                logAccess({
-                  userCode: {
-                    type: 'notificacao',
-                    downloadedFile: `Visualizada notificação: ${textoNotificacao}`,
-                    apartmentId: apartamentoIdStorage,
-                    notificationId: numeroNotificacao
-                  }
-                });
-                openFileViewer(arquivoNotificacao);
-              };
-              listItem.appendChild(link);
-              notificationsList.appendChild(listItem);
-            }
-          }
-        });
-      } else {
-        const listItem = document.createElement('li');
-        listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
-        notificationsList.appendChild(listItem);
-      }
-
+      if (apartamentoIdStorage) {
+        fetch(`/.netlify/functions/load-notificacoes?apartmentId=${apartamentoIdStorage}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Erro na requisição: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(notifications => {
+            if (notifications && notifications.length > 0) {
+              notifications.forEach(notification => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = notification.name.replace(/_/g, ' ').replace('apto' + apartamentoIdStorage.replace('apto', ''), ''); // Ajusta o nome para exibição
+                link.onclick = function(event) {
+                  event.preventDefault();
+                  const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                  const fileURL = URL.createObjectURL(file);
+                  openFileViewer(fileURL);
+                  logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada Notificação: ${notification.name.replace(/_/g, ' ')}` });
+                };
+                listItem.appendChild(link);
+                notificationsList.appendChild(listItem);
+              });
+            } else {
+              const listItem = document.createElement('li');
+              listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
+              notificationsList.appendChild(listItem);
+            }
+          })
+          .catch(error => {
+            console.error('Erro ao carregar notificações:', error);
+            const listItem = document.createElement('li');
+            listItem.textContent = 'Erro ao carregar notificações.';
+            notificationsList.appendChild(listItem);
+          });
+      } else {
+        const listItem = document.createElement('li');
+        listItem.textContent = 'ID do apartamento não encontrado.';
+        notificationsList.appendChild(listItem);
+      }
+      // Final da parte que carrega as notificações na area_condominio.html =============================================================================================================================
+          
       // O código para carregar documentos aqui (mantido como estava)
       const documentosList = document.getElementById('documentos-list');
       if (documentosList && apartment) {
