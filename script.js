@@ -134,7 +134,7 @@ export function showFiles(apartment) {
               .then(response => response.json())
               .then(configData => {
                 console.log('Dados completos do configuracoes.json no frontend:', configData); // Adicione esta linha  
-                const notificacoesTexto = configData.notificacoes[apartamentoIdStorage];
+                const notificacoesTexto = configData.notificacoes[`apto_${apartamentoIdStorage}`];
                 const notificationsList = document.getElementById('notifications-list');
                 notificationsList.innerHTML = '';
 
