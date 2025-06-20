@@ -7,6 +7,8 @@ exports.handler = async (event) => {
 
   console.log('Valor de apartmentId:', apartmentId); // Adicione esta linha
 
+  const fullApartmentId = `apto${apartmentId}`; // Adicione esta linha
+
   if (!apartmentId) {
     return {
       statusCode: 400,
