@@ -51,8 +51,8 @@ exports.handler = async (event) => {
       const apartmentNotificationsData = notificationsId[fullApartmentId];
 
       for (const notificationText in apartmentNotificationsData) {
-        const fileId = apartmentNotificationsData[notificationText];
-        if (notificationText !== "") {
+        if (notificationText !== "") { // Verifica se o texto da notificação não é vazio ANTES de obter o ID
+          const fileId = apartmentNotificationsData[notificationText];
           apartmentNotifications.push({
             name: notificationText.trim(),
             fileId: fileId,
