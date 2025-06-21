@@ -129,17 +129,14 @@ export function showFiles(apartment) {
           })
               // =======================================================================================================================================
           .then(notifications => {
-            console.log('Resposta da função load-notificacoes:', notifications);
+            
             fetch('dados/configuracoes.json') // Busque o configuracoes.json novamente
               .then(response => response.json())
               .then(configData => {
-                console.log('Dados completos do configuracoes.json no frontend:', configData); // Adicione esta linha  
+                
                 const notificacoesTexto = configData.notificacoes[`apto_${apartamentoIdStorage}`];
                 const notificationsList = document.getElementById('notifications-list');
                 notificationsList.innerHTML = '';
-
-                console.log('Texto das notificações da config:', notificacoesTexto); // Adicione esta linha
-                console.log('Dados das notificações da função:', notifications); // Adicione esta linha
 
                 if (notificacoesTexto && notifications && notifications.length > 0) {
                   const listaNotificacoes = notificacoesTexto.split('\n').filter(n => n.trim() !== '');
