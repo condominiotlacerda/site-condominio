@@ -124,18 +124,29 @@ export function showFiles(apartment) {
 
                 if (notifications && notifications.length > 0) {
                 notifications.forEach((notification) => {
-                if (notification.name) {
+                if (notification.name && notification.fileId) {
                 const listItem = document.createElement('li');
                 const link = document.createElement('a');
                 link.href = '#';
                 link.textContent = notification.name.trim();
                     link.onclick = function(event) {
                     event.preventDefault();
-                    const file = new Blob([Uint8Array.from(atob(notification.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                    const fileURL = URL.createObjectURL(file);
-                    openFileViewer(fileURL);
-                    const nomeArquivoLog = notification.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                    logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${nomeArquivoLog}` });
+                    const fileId = notification.fileId;
+
+                    fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
+                      .then(response => {
+                        if (!response.ok) {
+                          throw new Error(`Erro ao carregar o conteúdo da notificação (ID: ${fileId}): ${response.status}`);
+                        }
+                        return response.json();
+                      })
+                      .then(data => {
+                        const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                        const fileURL = URL.createObjectURL(file);
+                        openFileViewer(fileURL);
+                        logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+                      })
+                      .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
                   };
                     listItem.appendChild(link);
                     notificationsList.appendChild(listItem);
