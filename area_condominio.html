@@ -22,7 +22,6 @@
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // Usuário está logado, pode continuar na página
-                console.log("Usuário autenticado:", user.uid);
             } else {
                 // Usuário não está logado, redirecione para a página de login
                 console.log("Usuário não autenticado, redirecionando para login...");
