@@ -594,12 +594,6 @@ window.logAccess = function (logData) {
     }
     return response.json();
   })
-  .then(data => {
-    console.log('Resposta da função de log do Netlify:', data);
-  })
-  .catch(error => {
-    console.error('Erro ao chamar a função de log do Netlify:', error);
-  });
 };
 // Final da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
 window.openFileViewer = openFileViewer;
