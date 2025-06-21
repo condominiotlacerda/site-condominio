@@ -1,102 +1,95 @@
 const { google } = require('googleapis');
 
 exports.handler = async (event) => {
-  const configDriveId = process.env.GOOGLE_DRIVE_CONFIGURACOES_ID;
-  const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
-  const apartmentId = event.queryStringParameters?.apartmentId;
+  const configDriveId = process.env.GOOGLE_DRIVE_CONFIGURACOES_ID;
+  const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
+  const apartmentId = event.queryStringParameters?.apartmentId;
 
-  const fullApartmentId = `apto_${apartmentId}`; // Adicione esta linha
+  const fullApartmentId = `apto_${apartmentId}`;
 
-  if (!apartmentId) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Apartment ID is required.' }),
-    };
-  }
+  if (!apartmentId) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Apartment ID is required.' }),
+    };
+  }
 
-  try {
-    const drive = google.drive({ version: 'v3', auth: apiKey });
+  try {
+    const drive = google.drive({ version: 'v3', auth: apiKey });
 
-    // Fetch configuracoes.json
-    const configResponse = await drive.files.get({
-      fileId: configDriveId,
-      alt: 'media'
-    }, { responseType: 'stream' });
+    // Fetch configuracoes.json
+    const configResponse = await drive.files.get({
+      fileId: configDriveId,
+      alt: 'media',
+    }, { responseType: 'stream' });
 
-    if (configResponse.status !== 200) {
-      console.error('Error fetching configuracoes.json:', configResponse);
-      return {
-        statusCode: configResponse.status,
-        body: JSON.stringify({ error: 'Failed to fetch configuracoes.json from Google Drive.' }),
-      };
-    }
+    if (configResponse.status !== 200) {
+      console.error('Error fetching configuracoes.json:', configResponse);
+      return {
+        statusCode: configResponse.status,
+        body: JSON.stringify({ error: 'Failed to fetch configuracoes.json from Google Drive.' }),
+      };
+    }
 
-    let configString = '';
-    configResponse.data.on('data', chunk => {
-      configString += chunk;
-    });
+    let configString = '';
+    configResponse.data.on('data', chunk => {
+      configString += chunk;
+    });
 
-    await new Promise((resolve, reject) => {
-      configResponse.data.on('end', resolve);
-      configResponse.data.on('error', reject);
-    });
+    await new Promise((resolve, reject) => {
+      configResponse.data.on('end', resolve);
+      configResponse.data.on('error', reject);
+    });
 
-    const configData = JSON.parse(configString);
-    const hasNotifications = configData.notificacoes[fullApartmentId] !== '';
-    const notificationsId = configData.notificacoes_id;
-    
-    const apartmentNotifications = [];
+    const configData = JSON.parse(configString);
+    const hasNotifications = configData.notificacoes_id && configData.notificacoes_id[fullApartmentId];
+    const notificationsId = configData.notificacoes_id;
 
-    if (hasNotifications && notificationsId[fullApartmentId]) { // Check if apartment has notifications and an entry in notifications_id
-      const apartmentSpecificNotifications = Object.entries(notificationsId[fullApartmentId]);
-      const numberOfNotificationsToShow = configData.notificacoes[fullApartmentId].split('\n').filter(n => n.trim() !== '').length; // Determine how many notifications are listed
-      const numberOfIdsToFetch = Math.min(apartmentSpecificNotifications.length, numberOfNotificationsToShow);
+    const apartmentNotifications = [];
 
-      console.log('Número de notificações a mostrar:', numberOfNotificationsToShow);
-      console.log('Número de IDs a buscar:', numberOfIdsToFetch);
+    if (hasNotifications) {
+      const apartmentNotificationsData = notificationsId[fullApartmentId];
 
-      // Fetch only the relevant notification files for the apartment
-      for (let i = 0; i < numberOfIdsToFetch; i++) {
-        const [name, fileId] = apartmentSpecificNotifications[i];
-        try {
-          const notificationResponse = await drive.files.get({
-            fileId: fileId,
-            alt: 'media',
-          });
+      for (const notificationText in apartmentNotificationsData) {
+        const fileId = apartmentNotificationsData[notificationText];
+        if (notificationText !== "") {
+          try {
+            const notificationResponse = await drive.files.get({
+              fileId: fileId,
+              alt: 'media',
+            });
 
-          if (notificationResponse.status === 200) {
-            const buffer = Buffer.from(await notificationResponse.data.arrayBuffer());
-            apartmentNotifications.push({
-              name: name,
-              contentBase64: buffer.toString('base64'),
-            });
-          } else {
-            console.error(`Error fetching notification ${name} (ID: ${fileId}):`, notificationResponse);
-          }
-        } catch (error) {
-          console.error(`Error processing notification ${name} (ID: ${fileId}):`, error);
-        }
-      }
+            if (notificationResponse.status === 200) {
+              const buffer = Buffer.from(await notificationResponse.data.arrayBuffer());
+              apartmentNotifications.push({
+                name: notificationText.trim(),
+                contentBase64: buffer.toString('base64'),
+              });
+            } else {
+              console.error(`Error fetching notification "${notificationText}" (ID: ${fileId}):`, notificationResponse);
+            }
+          } catch (error) {
+            console.error(`Error processing notification "${notificationText}" (ID: ${fileId}):`, error);
+          }
+        }
+      }
+    } else {
+      console.log(`Não foram encontradas notificações para o apartamento ${fullApartmentId}.`);
+    }
 
-    } else if (!hasNotifications) {
-      console.log(`Apartamento ${fullApartmentId} não tem notificações ativas.`);
-    } else {
-      console.log(`Não foram encontradas notifications_id para o apartamento ${fullApartmentId}.`);
-    }
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(apartmentNotifications),
+    };
 
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(apartmentNotifications),
-    };
-
-  } catch (error) {
-    console.error('Error in load-notificacoes function:', error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to load notifications.' }),
-    };
-  }
+  } catch (error) {
+    console.error('Error in load-notificacoes function:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Failed to load notifications.' }),
+    };
+  }
 };
