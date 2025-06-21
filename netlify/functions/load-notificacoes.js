@@ -53,24 +53,10 @@ exports.handler = async (event) => {
       for (const notificationText in apartmentNotificationsData) {
         const fileId = apartmentNotificationsData[notificationText];
         if (notificationText !== "") {
-          try {
-            const notificationResponse = await drive.files.get({
-              fileId: fileId,
-              alt: 'media',
-            });
-
-            if (notificationResponse.status === 200) {
-              const buffer = Buffer.from(await notificationResponse.data.arrayBuffer());
-              apartmentNotifications.push({
-                name: notificationText.trim(),
-                contentBase64: buffer.toString('base64'),
-              });
-            } else {
-              console.error(`Error fetching notification "${notificationText}" (ID: ${fileId}):`, notificationResponse);
-            }
-          } catch (error) {
-            console.error(`Error processing notification "${notificationText}" (ID: ${fileId}):`, error);
-          }
+          apartmentNotifications.push({
+            name: notificationText.trim(),
+            fileId: fileId,
+          });
         }
       }
     } else {
