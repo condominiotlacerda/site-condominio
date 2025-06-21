@@ -48,31 +48,35 @@ exports.handler = async (event) => {
     const apartmentNotifications = [];
 
     if (hasNotifications && notificationsId[fullApartmentId]) { // Check if apartment has notifications and an entry in notifications_id
-      const apartmentSpecificNotifications = Object.entries(notificationsId[fullApartmentId]);
+      const apartmentSpecificNotifications = Object.entries(notificationsId[fullApartmentId]);
+      const numberOfNotificationsToShow = configData.notificacoes[fullApartmentId].split('\n').filter(n => n.trim() !== '').length; // Determine how many notifications are listed
 
-      // Fetch each relevant notification file for the apartment
-      for (const [name, fileId] of apartmentSpecificNotifications) {
-        try {
-          const notificationResponse = await drive.files.get({
-            fileId: fileId,
-            alt: 'media',
-          });
+      console.log('Número de notificações a mostrar:', numberOfNotificationsToShow);
 
-          if (notificationResponse.status === 200) {
-            const buffer = Buffer.from(await notificationResponse.data.arrayBuffer());
-            apartmentNotifications.push({
-              name: name,
-              contentBase64: buffer.toString('base64'),
-            });
-          } else {
-            console.error(`Error fetching notification ${name} (ID: ${fileId}):`, notificationResponse);
-          }
-        } catch (error) {
-          console.error(`Error processing notification ${name} (ID: ${fileId}):`, error);
-        }
-      }
+      // Fetch each relevant notification file for the apartment
+      for (let i = 0; i < Math.min(apartmentSpecificNotifications.length, numberOfNotificationsToShow); i++) {
+        const [name, fileId] = apartmentSpecificNotifications[i];
+        try {
+          const notificationResponse = await drive.files.get({
+            fileId: fileId,
+            alt: 'media',
+          });
 
-    } else if (!hasNotifications) {
+          if (notificationResponse.status === 200) {
+            const buffer = Buffer.from(await notificationResponse.data.arrayBuffer());
+            apartmentNotifications.push({
+              name: name,
+              contentBase64: buffer.toString('base64'),
+            });
+          } else {
+            console.error(`Error fetching notification ${name} (ID: ${fileId}):`, notificationResponse);
+          }
+        } catch (error) {
+          console.error(`Error processing notification ${name} (ID: ${fileId}):`, error);
+        }
+      }
+
+    } else if (!hasNotifications) {
       console.log(`Apartamento ${fullApartmentId} não tem notificações ativas.`);
     } else {
       console.log(`Não foram encontradas notifications_id para o apartamento ${fullApartmentId}.`);
