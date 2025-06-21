@@ -23,21 +23,12 @@ function enableApartment() {
 
 // início de showFiles ======================================================================================================================================================================
 export function showFiles(apartment) {
-  console.log('A função showFiles foi chamada para o apartamento:', apartment);
-
-  console.log('Função showFiles chamada para o apartamento:', apartment);
-
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
   const viewerContainer = document.getElementById('viewer-container');
   const contasContainer = document.getElementById('contas-container');
   const notificationsContainer = document.getElementById('notifications-container'); // Pega a referência para a caixa de notificações
   const documentosContainer = document.getElementById('documentos-container');
-
-  console.log('Elemento fileContainer:', fileContainer);
-  console.log('Elemento fileList:', fileList);
-  console.log('Elemento contasContainer:', contasContainer);
-  console.log('Elemento notificationsContainer:', notificationsContainer); // Log para verificar a referência
 
   fileContainer.style.display = 'none';
   contasContainer.style.display = 'none';
@@ -78,7 +69,6 @@ export function showFiles(apartment) {
       ];
 
       if (boletosTexto) {
-        console.log('Conteúdo de nomesTaxas para o apartamento:', nomesTaxas[apartment]);
         const listaNomesBoletos = boletosTexto.split('\n');
         listaNomesBoletos.forEach((nomeBoleto, index) => {
           if (index < listaPrefixos.length && nomeBoleto.trim() !== '') {
@@ -256,7 +246,6 @@ export function showFiles(apartment) {
 
 // Início da Função que contém a lógica do painel de avisos ================================================================================================================================
 async function exibirAvisoSeNecessario() {
-  console.log('exibirAvisoSeNecessario foi chamada!'); // Adicione esta linha
   try {
     // Passo 1: Buscar o número do aviso atual do configuracoes.json
     const responseConfig = await fetch('dados/configuracoes.json');
@@ -266,10 +255,8 @@ async function exibirAvisoSeNecessario() {
     }
     const configData = await responseConfig.json();
     const avisoAtualNr = configData.avisosNr;
-    console.log('Número do aviso atual (configuracoes.json):', avisoAtualNr);
 
     const apartamentoId = localStorage.getItem('apartmentId');
-    console.log('apartmentId do localStorage:', apartamentoId);
     if (!apartamentoId) {
       console.error('apartmentId não encontrado no localStorage.');
       return;
@@ -279,26 +266,20 @@ async function exibirAvisoSeNecessario() {
     const db = getDatabase();
     const avisoRef = ref(db, `avisos/seen/${apartamentoId}/${avisoAtualNr}`);
     const snapshot = await get(avisoRef);
-    console.log('Snapshot do Firebase:', snapshot);
-    console.log('Snapshot existe:', snapshot.exists());
 
     if (snapshot.exists()) {
-      console.log(`Aviso ${avisoAtualNr} já foi registrado no banco de dados para o apartamento ${apartamentoId}.`);
       localStorage.setItem(`avisoVisto_${apartamentoId}_${avisoAtualNr}`, 'true'); // Atualiza o localStorage
       return; // Se já registrado no banco, não precisa exibir
     }
 
     // Passo 4: Buscar o conteúdo do aviso do configuracoes.json
     const avisosData = configData.avisos;
-    console.log('Dados de avisos (configuracoes.json):', avisosData);
     const textoAviso = avisosData[avisoAtualNr];
-    console.log('Texto do aviso para o número', avisoAtualNr, ':', textoAviso);
 
     if (textoAviso) {
       // Passo 5: Exibir o painel de aviso
       avisoTexto.textContent = textoAviso;
       painelAviso.style.display = 'flex'; // Usamos 'flex' pois definimos assim no estilo inline
-      console.log('Painel de aviso exibido.');
 
       // Passo 6: Adicionar um event listener para o botão "Entendi"
       botaoEntendi.addEventListener('click', function() {
@@ -313,7 +294,6 @@ async function exibirAvisoSeNecessario() {
 
         // Passo 6c: Esconder o painel
         painelAviso.style.display = 'none';
-        console.log('Botão "Entendi" clicado.');
       });
     } else {
       console.log(`Aviso ${avisoAtualNr} não encontrado no configuracoes.json.`);
@@ -392,12 +372,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
       const anoSelecionado = this.value;
       const mesSelecionado = mesConta.value;
-      console.log('Ano selecionado:', anoSelecionado);
-      console.log('Mês selecionado (após mudança de ano):', mesSelecionado);
 
       // Construindo o caminho do arquivo
       const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.` + obterAbreviacaoMes(parseInt(mesSelecionado)) + `/prestacao_contas.pdf`;
-      console.log('Caminho da Prestação de Contas (após mudança de ano):', caminhoPrestacaoContas);
 
       // Limpa a lista de contas
   listaContas.innerHTML = '';
@@ -414,7 +391,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Adiciona um evento de clique para chamar a função openFileViewer
   link.addEventListener('click', function(event) {
     event.preventDefault();
-    console.log('Link da Prestação de Contas clicado!');
     const anoSelecionado = anoConta.value;
     const mesSelecionado = mesConta.value;
     const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
@@ -440,12 +416,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const listaContas = document.getElementById('contas-list');
       const mesSelecionado = this.value;
       const anoSelecionado = anoConta.value;
-      console.log('Mês selecionado:', mesSelecionado);
-      console.log('Ano selecionado (após mudança de mês):', anoSelecionado);
 
       // Construindo o caminho do arquivo
       const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.` + obterAbreviacaoMes(parseInt(mesSelecionado)) + `/prestacao_contas.pdf`;
-      console.log('Caminho da Prestação de Contas (após mudança de mês):', caminhoPrestacaoContas);
 
       // Limpa a lista de contas
       listaContas.innerHTML = '';
@@ -462,7 +435,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // Adiciona um evento de clique para chamar a função openFileViewer
       link.addEventListener('click', function(event) {
         event.preventDefault();
-        console.log('Link da Prestação de Contas clicado!');
         const anoSelecionado = anoConta.value;
         const mesSelecionado = mesConta.value;
         const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
@@ -503,7 +475,6 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
         const user = userCredential.user;
-        console.log("Usuário cadastrado com sucesso:", user.uid);
         mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
 
         const response = await fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/register-user', {
@@ -522,7 +493,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = await response.json();
 
         if (response.ok && data.message === 'Usuário registrado e dados salvos com sucesso!') {
-          console.log('Resposta da função register-user:', data);
           mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
           formularioCadastro.reset();
         } else {
@@ -571,7 +541,6 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
         const user = userCredential.user;
-        console.log("Usuário logado com sucesso:", user.uid);
         const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
         const snapshot = await get(pendingRef);
 
@@ -594,7 +563,6 @@ document.addEventListener("DOMContentLoaded", function () {
       } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("Código de erro:", errorCode);
 
         if (errorCode === 'auth/invalid-email') {
           mensagemLogin.textContent = 'O email digitado é inválido.';
