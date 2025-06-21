@@ -5,8 +5,6 @@ exports.handler = async (event) => {
   const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
   const apartmentId = event.queryStringParameters?.apartmentId;
 
-  console.log('Valor de apartmentId:', apartmentId); // Adicione esta linha
-
   const fullApartmentId = `apto_${apartmentId}`; // Adicione esta linha
 
   if (!apartmentId) {
@@ -46,13 +44,11 @@ exports.handler = async (event) => {
     const configData = JSON.parse(configString);
     const hasNotifications = configData.notificacoes[fullApartmentId] !== '';
     const notificationsId = configData.notificacoes_id;
-    console.log('Valor de hasNotifications:', hasNotifications); // Adicione esta linha
+    
     const apartmentNotifications = [];
 
     if (hasNotifications && notificationsId[fullApartmentId]) { // Check if apartment has notifications and an entry in notifications_id
       const apartmentSpecificNotifications = Object.entries(notificationsId[fullApartmentId]);
-
-      console.log('Notificações encontradas para o apartamento (antes da busca):', apartmentSpecificNotifications); // Adicione esta linha
 
       // Fetch each relevant notification file for the apartment
       for (const [name, fileId] of apartmentSpecificNotifications) {
@@ -75,8 +71,6 @@ exports.handler = async (event) => {
           console.error(`Error processing notification ${name} (ID: ${fileId}):`, error);
         }
       }
-
-      console.log('Notificações que serão retornadas:', apartmentNotifications); // Adicione esta linha
 
     } else if (!hasNotifications) {
       console.log(`Apartamento ${fullApartmentId} não tem notificações ativas.`);
