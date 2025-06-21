@@ -634,3 +634,4 @@ window.logAccess = function (logData) {
   });
 };
 // Final da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
+window.openFileViewer = openFileViewer;
