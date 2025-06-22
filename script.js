@@ -98,10 +98,13 @@ export function showFiles(apartment) {
                 event.preventDefault();
                 const fileId = notification.fileId;
                 const loadingPainel = document.getElementById('loading-painel');
+                console.log('showFiles (Notificações): Link clicado'); // Adicionado
                 if (loadingPainel) {
                   loadingPainel.style.display = 'block';
+                  console.log('showFiles (Notificações): Mostrar loadingPainel'); // Adicionado
                 }
                 openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
+                console.log('showFiles (Notificações): openFileViewer chamado'); // Adicionado
                 fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
                   .then(response => {
                     if (!response.ok) {
@@ -110,8 +113,10 @@ export function showFiles(apartment) {
                     return response.json();
                   })
                   .then(data => {
+                    console.log('showFiles (Notificações): Conteúdo da notificação carregado'); // Adicionado
                     if (loadingPainel) {
                       loadingPainel.style.display = 'none';
+                      console.log('showFiles (Notificações): Esconder loadingPainel'); // Adicionado
                     }
                     const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                     const fileURL = URL.createObjectURL(file);
@@ -119,12 +124,19 @@ export function showFiles(apartment) {
                     document.getElementById('download-button').href = fileURL;
                     logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                   })
-                .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
+                  .catch(error => {
+                    console.log('showFiles (Notificações): Erro ao carregar conteúdo da notificação'); // Adicionado
+                    if (loadingPainel) {
+                      loadingPainel.style.display = 'none';
+                      console.log('showFiles (Notificações): Esconder loadingPainel (erro)'); // Adicionado
+                    }
+                    console.error('Erro ao carregar o conteúdo da notificação:', error);
+                  });
               };
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
             }
-          });
+          }); // <<--- Chave de fechamento adicionada para o forEach
         } else {
           const listItem = document.createElement('li');
           listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
