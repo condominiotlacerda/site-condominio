@@ -62,14 +62,23 @@ export function showFiles(apartment) {
   const notificationsList = document.getElementById('notifications-list');
   notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
-  // Início da parte que diciona imagem de carregamento ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Início da parte que adiciona imagem de carregamento inicial da lista
   const loadingNotificacoesDiv = document.createElement('div');
   loadingNotificacoesDiv.id = 'loading-inicial-notificacoes';
   loadingNotificacoesDiv.style.textAlign = 'center';
   loadingNotificacoesDiv.style.padding = '20px';
   loadingNotificacoesDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando notificações...</p>';
   notificationsList.appendChild(loadingNotificacoesDiv);
-  // Final da parte que diciona imagem de carregamento +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Final da parte que adiciona imagem de carregamento inicial da lista
+
+  // Cria a div para o carregamento do arquivo da notificação
+  const loadingArquivoNotificacao = document.createElement('div');
+  loadingArquivoNotificacao.id = 'loading-arquivo-notificacao';
+  loadingArquivoNotificacao.style.display = 'none';
+  loadingArquivoNotificacao.style.textAlign = 'center';
+  loadingArquivoNotificacao.style.padding = '10px';
+  loadingArquivoNotificacao.innerHTML = '<img src="images/aguarde.gif" alt="Carregando..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
+  notificationsList.parentNode.insertBefore(loadingArquivoNotificacao, notificationsList.nextSibling); // Adiciona após a lista
 
   const apartamentoIdStorage = localStorage.getItem('apartmentId');
 
@@ -98,13 +107,20 @@ export function showFiles(apartment) {
                 event.preventDefault();
                 const fileId = notification.fileId;
                 const loadingPainel = document.getElementById('loading-painel');
-                console.log('showFiles (Notificações): Link clicado'); // Adicionado
+                const notificationsListContainer = document.getElementById('notifications-list');
+                const loadingArquivoNotificacao = document.getElementById('loading-arquivo-notificacao'); // Pega a referência da div criada dinamicamente
+
                 if (loadingPainel) {
                   loadingPainel.style.display = 'block';
-                  console.log('showFiles (Notificações): Mostrar loadingPainel'); // Adicionado
+                }
+                if (notificationsListContainer) {
+                  notificationsListContainer.style.opacity = '0.5';
+                  notificationsListContainer.style.pointerEvents = 'none';
+                }
+                if (loadingArquivoNotificacao) {
+                  loadingArquivoNotificacao.style.display = 'block';
                 }
                 openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
-                console.log('showFiles (Notificações): openFileViewer chamado'); // Adicionado
                 fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
                   .then(response => {
                     if (!response.ok) {
@@ -113,10 +129,15 @@ export function showFiles(apartment) {
                     return response.json();
                   })
                   .then(data => {
-                    console.log('showFiles (Notificações): Conteúdo da notificação carregado'); // Adicionado
                     if (loadingPainel) {
                       loadingPainel.style.display = 'none';
-                      console.log('showFiles (Notificações): Esconder loadingPainel'); // Adicionado
+                    }
+                    if (notificationsListContainer) {
+                      notificationsListContainer.style.opacity = '1';
+                      notificationsListContainer.style.pointerEvents = 'auto';
+                    }
+                    if (loadingArquivoNotificacao) {
+                      loadingArquivoNotificacao.style.display = 'none';
                     }
                     const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                     const fileURL = URL.createObjectURL(file);
@@ -124,19 +145,24 @@ export function showFiles(apartment) {
                     document.getElementById('download-button').href = fileURL;
                     logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                   })
-                  .catch(error => {
-                    console.log('showFiles (Notificações): Erro ao carregar conteúdo da notificação'); // Adicionado
-                    if (loadingPainel) {
-                      loadingPainel.style.display = 'none';
-                      console.log('showFiles (Notificações): Esconder loadingPainel (erro)'); // Adicionado
-                    }
-                    console.error('Erro ao carregar o conteúdo da notificação:', error);
-                  });
+                .catch(error => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  if (notificationsListContainer) {
+                    notificationsListContainer.style.opacity = '1';
+                    notificationsListContainer.style.pointerEvents = 'auto';
+                  }
+                  if (loadingArquivoNotificacao) {
+                    loadingArquivoNotificacao.style.display = 'none';
+                  }
+                  console.error('Erro ao carregar o conteúdo da notificação:', error);
+                });
               };
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
             }
-          }); // <<--- Chave de fechamento adicionada para o forEach
+          });
         } else {
           const listItem = document.createElement('li');
           listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
