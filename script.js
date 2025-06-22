@@ -204,7 +204,7 @@ function loadBoletos(apartmentId) {
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.style.padding = '20px';
-  loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 87px; height: 54px;"><p>Carregando boletos...</p>';
+  loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
   // *** FIM DA ADIÇÃO DO INDICADOR ***
 
