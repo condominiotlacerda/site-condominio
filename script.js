@@ -21,7 +21,7 @@ function enableApartment() {
   alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
-// Início da função showfiles ===============================================================================================================================================================
+// início de showFiles ======================================================================================================================================================================
 export function showFiles(apartment) {
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
@@ -57,19 +57,19 @@ export function showFiles(apartment) {
   console.log("showFiles foi chamada com o apartamento:", apartment);
   loadBoletos(apartment);
   // *** FIM DA INSERÇÃO ***
-
+  
   // Início da parte que carrega as notificações na area_condominio.html =============================================================================================================================
   const notificationsList = document.getElementById('notifications-list');
   notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
-  // Início da parte que diciona imagem de carregamento inicial da lista
+  // Início da parte que diciona imagem de carregamento ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const loadingNotificacoesDiv = document.createElement('div');
   loadingNotificacoesDiv.id = 'loading-inicial-notificacoes';
   loadingNotificacoesDiv.style.textAlign = 'center';
   loadingNotificacoesDiv.style.padding = '20px';
   loadingNotificacoesDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando notificações...</p>';
   notificationsList.appendChild(loadingNotificacoesDiv);
-  // Final da parte que adiciona imagem de carregamento inicial da lista
+  // Final da parte que diciona imagem de carregamento +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const apartamentoIdStorage = localStorage.getItem('apartmentId');
 
@@ -93,15 +93,10 @@ export function showFiles(apartment) {
               const link = document.createElement('a');
               link.href = '#';
               link.textContent = notification.name.trim();
-              // ====================================================))))))))))))))=====================================================)))))))))))))))))))))))))))
               link.onclick = function(event) {
                 event.preventDefault();
                 const fileId = notification.fileId;
-                const loadingPainel = document.getElementById('loading-painel');
-                if (loadingPainel) {
-                  loadingPainel.style.display = 'block';
-                }
-                openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
+
                 fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
                   .then(response => {
                     if (!response.ok) {
@@ -110,33 +105,23 @@ export function showFiles(apartment) {
                     return response.json();
                   })
                   .then(data => {
-                    if (loadingPainel) {
-                      loadingPainel.style.display = 'none';
-                    }
                     const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                     const fileURL = URL.createObjectURL(file);
-                    document.getElementById('file-viewer').src = fileURL;
-                    document.getElementById('download-button').href = fileURL;
+                    openFileViewer(fileURL);
                     logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                   })
-                .catch(error => {
-                  if (loadingPainel) {
-                    loadingPainel.style.display = 'none';
-                  }
-                  console.error('Erro ao carregar o conteúdo da notificação:', error);
-                });
+                  .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
               };
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
             }
-          }); // <<--- Chave de fechamento adicionada para o forEach
+          });
         } else {
           const listItem = document.createElement('li');
           listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
           notificationsList.appendChild(listItem);
         }
       })
-      // ====================================================))))))))))))))=====================================================)))))))))))))))))))))))))))
       .catch(error => {
         console.error('Erro ao carregar notificações:', error);
         const listItem = document.createElement('li');
@@ -223,14 +208,14 @@ function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
   boletosList.innerHTML = ''; // Limpa a lista anterior
 
-  // *** ADICIONA O INDICADOR DE CARREGAMENTO INICIAL DA LISTA ***
+  // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.style.padding = '20px';
   loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
-  // *** FIM DA ADIÇÃO DO INDICADOR INICIAL ***
+  // *** FIM DA ADIÇÃO DO INDICADOR ***
 
   fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
     .then(response => {
@@ -240,12 +225,12 @@ function loadBoletos(apartmentId) {
       return response.json();
     })
     .then(boletos => {
-      // *** REMOVE O INDICADOR DE CARREGAMENTO INICIAL APÓS CARREGAR OS BOLETOS ***
+      // *** REMOVE O INDICADOR DE CARREGAMENTO APÓS CARREGAR OS BOLETOS ***
       const loadingIndicator = document.getElementById('loading-inicial-boletos');
       if (loadingIndicator) {
         loadingIndicator.remove();
       }
-      // *** FIM DA REMOÇÃO DO INDICADOR INICIAL ***
+      // *** FIM DA REMOÇÃO DO INDICADOR ***
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
           if (boleto.name && boleto.fileId) {
@@ -256,11 +241,10 @@ function loadBoletos(apartmentId) {
             link.onclick = function(event) {
               event.preventDefault();
               const fileId = boleto.fileId;
-              const loadingPainel = document.getElementById('loading-painel');
+              const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
               if (loadingPainel) {
                 loadingPainel.style.display = 'block';
               }
-              openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
                 .then(response => {
                   if (!response.ok) {
@@ -274,9 +258,7 @@ function loadBoletos(apartmentId) {
                   }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
-                  document.getElementById('file-viewer').src = fileURL; // Define o src do iframe
-                  document.getElementById('download-button').href = fileURL; // Define o href do botão de download
-                  // Não precisamos chamar openFileViewer novamente aqui
+                  openFileViewer(fileURL);
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
                   logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
                 })
@@ -309,6 +291,7 @@ function loadBoletos(apartmentId) {
     });
 }
 // Final da função loadBoletos para carregar os boletos do G Drive =========================================================================================================================
+
 // Início da Função que contém a lógica do painel de avisos ================================================================================================================================
 async function exibirAvisoSeNecessario() {
   try {
