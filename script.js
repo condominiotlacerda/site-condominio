@@ -197,6 +197,11 @@ function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
   boletosList.innerHTML = ''; // Limpa a lista anterior
 
+  const loadingIndicator = document.getElementById('loading-inicial-boletos');
+  if (loadingIndicator) {
+    loadingIndicator.style.display = 'block'; // Garante que o indicador seja mostrado antes do carregamento
+  }
+
   fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
     .then(response => {
       if (!response.ok) {
@@ -205,7 +210,10 @@ function loadBoletos(apartmentId) {
       return response.json();
     })
     .then(boletos => {
-      document.getElementById('loading-inicial-boletos').style.display = 'none';
+      const loadingIndicator = document.getElementById('loading-inicial-boletos');
+      if (loadingIndicator) {
+        loadingIndicator.style.display = 'none'; // Tenta esconder novamente, caso a página tenha sido carregada rapidamente
+      }
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
           if (boleto.name && boleto.fileId) {
@@ -216,6 +224,10 @@ function loadBoletos(apartmentId) {
             link.onclick = function(event) {
               event.preventDefault();
               const fileId = boleto.fileId;
+              const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
+              if (loadingPainel) {
+                loadingPainel.style.display = 'block';
+              }
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
                 .then(response => {
                   if (!response.ok) {
@@ -224,13 +236,21 @@ function loadBoletos(apartmentId) {
                   return response.json();
                 })
                 .then(data => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
                   openFileViewer(fileURL);
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                  logAccess({ apartment: apartmentId, downloadedFile: `${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
                 })
-                .catch(error => console.error('Erro ao carregar o conteúdo do boleto:', error));
+                .catch(error => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  console.error('Erro ao carregar o conteúdo do boleto:', error);
+                });
             };
             listItem.appendChild(link);
             boletosList.appendChild(listItem);
