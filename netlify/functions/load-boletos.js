@@ -40,7 +40,8 @@ exports.handler = async (event) => {
     });
 
     const configData = JSON.parse(configString);
-    const boletosData = configData.boletos && configData.boletos[apartmentId]; // Usamos apartmentId diretamente
+    const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
+    const boletosData = configData.boletos && configData.boletos[fullApartmentId];
 
     const apartmentBoletos = [];
 
@@ -55,7 +56,7 @@ exports.handler = async (event) => {
         }
       }
     } else {
-      console.log(`Não foram encontrados boletos para o apartamento ${apartmentId}.`);
+      console.log(`Não foram encontrados boletos para o apartamento ${fullApartmentId}.`);
     }
 
     return {
