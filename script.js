@@ -208,14 +208,14 @@ function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
   boletosList.innerHTML = ''; // Limpa a lista anterior
 
-  // *** ADICIONA O INDICADOR DE CARREGAMENTO INICIAL DA LISTA ***
+  // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.style.padding = '20px';
   loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
-  // *** FIM DA ADIÇÃO DO INDICADOR INICIAL ***
+  // *** FIM DA ADIÇÃO DO INDICADOR ***
 
   fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
     .then(response => {
@@ -225,12 +225,12 @@ function loadBoletos(apartmentId) {
       return response.json();
     })
     .then(boletos => {
-      // *** REMOVE O INDICADOR DE CARREGAMENTO INICIAL APÓS CARREGAR OS BOLETOS ***
+      // *** REMOVE O INDICADOR DE CARREGAMENTO APÓS CARREGAR OS BOLETOS ***
       const loadingIndicator = document.getElementById('loading-inicial-boletos');
       if (loadingIndicator) {
         loadingIndicator.remove();
       }
-      // *** FIM DA REMOÇÃO DO INDICADOR INICIAL ***
+      // *** FIM DA REMOÇÃO DO INDICADOR ***
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
           if (boleto.name && boleto.fileId) {
@@ -241,19 +241,14 @@ function loadBoletos(apartmentId) {
             link.onclick = function(event) {
               event.preventDefault();
               const fileId = boleto.fileId;
-              const loadingPainel = document.getElementById('loading-painel');
-
-              // Altera o texto do link para indicar carregamento
-              link.textContent = 'Carregando... Aguarde.';
-
+              const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
               if (loadingPainel) {
                 loadingPainel.style.display = 'block';
               }
-              openFileViewer('#');
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
                 .then(response => {
                   if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
+                    throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
                   }
                   return response.json();
                 })
@@ -263,17 +258,14 @@ function loadBoletos(apartmentId) {
                   }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
-                  document.getElementById('file-viewer').src = fileURL;
-                  document.getElementById('download-button').href = fileURL;
+                  openFileViewer(fileURL);
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${nomeArquivoLog}` });
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
                 })
                 .catch(error => {
                   if (loadingPainel) {
                     loadingPainel.style.display = 'none';
                   }
-                  // Opcional: Aqui você pode reverter o texto do link para o original em caso de erro
-                  link.textContent = boleto.name.trim();
                   console.error('Erro ao carregar o conteúdo do boleto:', error);
                 });
             };
