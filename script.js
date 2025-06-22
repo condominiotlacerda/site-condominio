@@ -205,6 +205,7 @@ function loadBoletos(apartmentId) {
       return response.json();
     })
     .then(boletos => {
+      document.getElementById('loading-inicial-boletos').style.display = 'none';
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
           if (boleto.name && boleto.fileId) {
