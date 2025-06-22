@@ -242,6 +242,64 @@ export function showFiles(apartment) {
     });
 } // fim da função showfiles ===============================================================================================================================================================
 
+// Início da função loadBoletos para carregar os boletos do G Drive ========================================================================================================================
+function loadBoletos(apartmentId) {
+  const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
+  boletosList.innerHTML = ''; // Limpa a lista anterior
+
+  fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(boletos => {
+      if (boletos && boletos.length > 0) {
+        boletos.forEach(boleto => {
+          if (boleto.name && boleto.fileId) {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = boleto.name.trim();
+            link.onclick = function(event) {
+              event.preventDefault();
+              const fileId = boleto.fileId;
+              fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                  const fileURL = URL.createObjectURL(file);
+                  openFileViewer(fileURL);
+                  const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado Boleto ${nomeArquivoLog}` });
+                })
+                .catch(error => console.error('Erro ao carregar o conteúdo do boleto:', error));
+            };
+            listItem.appendChild(link);
+            boletosList.appendChild(listItem);
+          }
+        });
+      } else {
+        const listItem = document.createElement('li');
+        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
+        boletosList.appendChild(listItem);
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao carregar boletos:', error);
+      const listItem = document.createElement('li');
+      listItem.textContent = 'Erro ao carregar boletos.';
+      boletosList.appendChild(listItem);
+    });
+}
+// Final da função loadBoletos para carregar os boletos do G Drive =========================================================================================================================
+
 // Início da Função que contém a lógica do painel de avisos ================================================================================================================================
 async function exibirAvisoSeNecessario() {
   try {
