@@ -195,6 +195,7 @@ export function showFiles(apartment) {
 
 // Início da função loadBoletos para carregar os boletos do G Drive ========================================================================================================================
 function loadBoletos(apartmentId) {
+  console.log("loadBoletos foi chamada com o ID:", apartmentId);
   const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
   boletosList.innerHTML = ''; // Limpa a lista anterior
 
