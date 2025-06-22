@@ -379,19 +379,30 @@ function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
 }
 // Final da Função que Marca se o aviso já foi lido ========================================================================================================================================
 
-function openFileViewer(filePath) {
-  const viewerContainer = document.getElementById('viewer-container');
-  const fileViewer = document.getElementById('file-viewer');
-  const downloadButton = document.getElementById('download-button');
+function openFileViewer(fileURL) {
+  const viewerContainer = document.getElementById('viewer-container');
+  const fileViewer = document.getElementById('file-viewer');
+  const downloadButton = document.getElementById('download-button');
 
-  fileViewer.src = filePath;
-  downloadButton.href = filePath;
+  // Adiciona o indicador de carregamento ao painel
+  const loadingPainelDiv = document.createElement('div');
+  loadingPainelDiv.id = 'loading-painel';
+  loadingPainelDiv.style.position = 'absolute';
+  loadingPainelDiv.style.top = '50%';
+  loadingPainelDiv.style.left = '50%';
+  loadingPainelDiv.style.transform = 'translate(-50%, -50%)';
+  loadingPainelDiv.style.backgroundColor = 'white';
+  loadingPainelDiv.style.padding = '50px';
+  loadingPainelDiv.style.borderRadius = '8px';
+  loadingPainelDiv.style.textAlign = 'center';
+  loadingPainelDiv.innerHTML = '<img src="images/aguarde.gif" alt="Carregando..." style="width: 204px; height: 136px;"><p>Carregando o arquivo...</p>';
+  viewerContainer.appendChild(loadingPainelDiv);
+  loadingPainelDiv.style.display = 'block'; // Mostra o indicador imediatamente
 
-  // Remove o display none do estilo inline
-  viewerContainer.style.display = '';
-
-  // Adiciona a classe 'active' ao viewerContainer
-  viewerContainer.classList.add('active');
+  fileViewer.src = fileURL;
+  downloadButton.href = fileURL;
+  viewerContainer.style.display = 'block';
+  setTimeout(() => viewerContainer.classList.add('active'), 50);
 }
 
 function getFilesForApartment(apartment) {
