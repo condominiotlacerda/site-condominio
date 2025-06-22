@@ -5,8 +5,6 @@ exports.handler = async (event) => {
   const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
   const apartmentId = event.queryStringParameters?.apartmentId;
 
-  const fullApartmentId = `apto_${apartmentId}`;
-
   if (!apartmentId) {
     return {
       statusCode: 400,
@@ -42,7 +40,7 @@ exports.handler = async (event) => {
     });
 
     const configData = JSON.parse(configString);
-    const boletosData = configData.boletos && configData.boletos[fullApartmentId];
+    const boletosData = configData.boletos && configData.boletos[apartmentId]; // Usamos apartmentId diretamente
 
     const apartmentBoletos = [];
 
@@ -57,7 +55,7 @@ exports.handler = async (event) => {
         }
       }
     } else {
-      console.log(`Não foram encontrados boletos para o apartamento ${fullApartmentId}.`);
+      console.log(`Não foram encontrados boletos para o apartamento ${apartmentId}.`);
     }
 
     return {
