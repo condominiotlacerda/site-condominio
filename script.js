@@ -93,6 +93,7 @@ export function showFiles(apartment) {
               const link = document.createElement('a');
               link.href = '#';
               link.textContent = notification.name.trim();
+              // ====================================================))))))))))))))=====================================================)))))))))))))))))))))))))))
               link.onclick = function(event) {
               event.preventDefault();
               const fileId = notification.fileId;
@@ -118,12 +119,8 @@ export function showFiles(apartment) {
                   document.getElementById('download-button').href = fileURL;
                   logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                 })
-                .catch(error => {
-                  if (loadingPainel) {
-                    loadingPainel.style.display = 'none';
-                  }
-                  console.error('Erro ao carregar o conteúdo da notificação:', error);
-                });
+            .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
+        };
             };
         } else {
           const listItem = document.createElement('li');
@@ -131,6 +128,7 @@ export function showFiles(apartment) {
           notificationsList.appendChild(listItem);
         }
       })
+      // ====================================================))))))))))))))=====================================================)))))))))))))))))))))))))))      
       .catch(error => {
         console.error('Erro ao carregar notificações:', error);
         const listItem = document.createElement('li');
