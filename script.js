@@ -284,7 +284,7 @@ function loadBoletos(apartmentId) {
                   const fileURL = URL.createObjectURL(file);
                   openFileViewer(fileURL);
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado Boleto ${nomeArquivoLog}` });
+                  logAccess({ apartment: apartmentId, downloadedFile: `${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                 })
                 .catch(error => console.error('Erro ao carregar o conteúdo do boleto:', error));
             };
