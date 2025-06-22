@@ -54,6 +54,7 @@ export function showFiles(apartment) {
   }, 50);
 
   // *** INSERÇÃO DA CHAMADA PARA loadBoletos ***
+  console.log("showFiles foi chamada com o apartamento:", apartment);
   loadBoletos(apartment);
   // *** FIM DA INSERÇÃO ***
   
