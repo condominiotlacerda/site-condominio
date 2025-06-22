@@ -56,64 +56,7 @@ export function showFiles(apartment) {
   // *** INSERÇÃO DA CHAMADA PARA loadBoletos ***
   loadBoletos(apartment);
   // *** FIM DA INSERÇÃO ***
-
-  // Removendo a parte antiga de carregamento de boletos do arquivo configuracoes.json
-  /*
-  fetch('dados/configuracoes.json')
-    .then(response => response.json())
-    .then(configData => {
-      const nomesTaxas = configData.name_taxas;
-      const fileList = document.getElementById('file-list');
-      fileList.innerHTML = ''; // Limpa a lista anterior
-      const aptoNumber = apartment.replace('apto', '');
-      const boletosTexto = nomesTaxas[`apto_${aptoNumber}`];
-      const listaPrefixos = [
-        'boleto_tx_condominio_apto_',
-        'boleto_tx_1_apto_',
-        'boleto_tx_2_apto_',
-        'boleto_tx_3_apto_'
-      ];
-
-      if (boletosTexto) {
-        const listaNomesBoletos = boletosTexto.split('\n');
-        listaNomesBoletos.forEach((nomeBoleto, index) => {
-          if (index < listaPrefixos.length && nomeBoleto.trim() !== '') {
-            const prefixoArquivo = listaPrefixos[index];
-            const arquivoBoleto = `${prefixoArquivo}${aptoNumber}.pdf`;
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = "#";
-            link.textContent = nomeBoleto.trim();
-            const isMobile = window.innerWidth <= 768;
-            link.onclick = function (event) {
-              event.preventDefault();
-              const apartmentId = localStorage.getItem('apartmentId');
-              const documentName = nomeBoleto.trim();
-
-              logAccess({ apartment: apartmentId, downloadedFile: documentName });
-
-              if (isMobile) {
-                window.open(`pdfs/boletos/${arquivoBoleto}`, "_blank");
-              } else {
-                openFileViewer(`pdfs/boletos/${arquivoBoleto}`);
-              }
-            };
-            listItem.appendChild(link);
-            listItem.appendChild(document.createElement('br'));
-            fileList.appendChild(listItem);
-          }
-        });
-      } else {
-        const listItem = document.createElement('li');
-        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
-        fileList.appendChild(listItem);
-      }
-    })
-    .catch(error => {
-      console.error('Erro ao carregar nomes das taxas:', error);
-    });
-    */
-
+  
   // Início da parte que carrega as notificações na area_condominio.html =============================================================================================================================
   const notificationsList = document.getElementById('notifications-list');
   notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
@@ -183,7 +126,6 @@ export function showFiles(apartment) {
   }
   // Final da parte que carrega as notificações na area_condominio.html =============================================================================================================================
 
-
   // O código para carregar documentos aqui (mantido como estava)
   const documentosList = document.getElementById('documentos-list');
   if (documentosList && apartment) {
@@ -249,6 +191,7 @@ export function showFiles(apartment) {
 
   documentosList.appendChild(listItem3);
 } // fim da função showfiles ===============================================================================================================================================================
+
 // Início da função loadBoletos para carregar os boletos do G Drive ========================================================================================================================
 function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
