@@ -21,7 +21,6 @@ function enableApartment() {
   alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
-// início de showFiles ======================================================================================================================================================================
 export function showFiles(apartment) {
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
@@ -118,7 +117,9 @@ export function showFiles(apartment) {
                   notificationsListContainer.style.pointerEvents = 'none';
                 }
                 if (loadingArquivoNotificacao) {
+                  console.log('showFiles (Notificações): Antes de mostrar loadingArquivoNotificacao:', loadingArquivoNotificacao.style.display); // Adicionado
                   loadingArquivoNotificacao.style.display = 'block';
+                  console.log('showFiles (Notificações): Depois de mostrar loadingArquivoNotificacao:', loadingArquivoNotificacao.style.display); // Adicionado
                 }
                 openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
                 fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
@@ -129,6 +130,7 @@ export function showFiles(apartment) {
                     return response.json();
                   })
                   .then(data => {
+                    console.log('showFiles (Notificações): Conteúdo da notificação carregado'); // Adicionado
                     if (loadingPainel) {
                       loadingPainel.style.display = 'none';
                     }
@@ -137,7 +139,9 @@ export function showFiles(apartment) {
                       notificationsListContainer.style.pointerEvents = 'auto';
                     }
                     if (loadingArquivoNotificacao) {
+                      console.log('showFiles (Notificações): Antes de esconder loadingArquivoNotificacao:', loadingArquivoNotificacao.style.display); // Adicionado
                       loadingArquivoNotificacao.style.display = 'none';
+                      console.log('showFiles (Notificações): Depois de esconder loadingArquivoNotificacao:', loadingArquivoNotificacao.style.display); // Adicionado
                     }
                     const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                     const fileURL = URL.createObjectURL(file);
@@ -145,24 +149,27 @@ export function showFiles(apartment) {
                     document.getElementById('download-button').href = fileURL;
                     logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                   })
-                .catch(error => {
-                  if (loadingPainel) {
-                    loadingPainel.style.display = 'none';
-                  }
-                  if (notificationsListContainer) {
-                    notificationsListContainer.style.opacity = '1';
-                    notificationsListContainer.style.pointerEvents = 'auto';
-                  }
-                  if (loadingArquivoNotificacao) {
-                    loadingArquivoNotificacao.style.display = 'none';
-                  }
-                  console.error('Erro ao carregar o conteúdo da notificação:', error);
-                });
+                  .catch(error => {
+                    console.log('showFiles (Notificações): Erro ao carregar conteúdo da notificação'); // Adicionado
+                    if (loadingPainel) {
+                      loadingPainel.style.display = 'none';
+                    }
+                    if (notificationsListContainer) {
+                      notificationsListContainer.style.opacity = '1';
+                      notificationsListContainer.style.pointerEvents = 'auto';
+                    }
+                    if (loadingArquivoNotificacao) {
+                      console.log('showFiles (Notificações): Antes de esconder loadingArquivoNotificacao (erro):', loadingArquivoNotificacao.style.display); // Adicionado
+                      loadingArquivoNotificacao.style.display = 'none';
+                      console.log('showFiles (Notificações): Depois de esconder loadingArquivoNotificacao (erro):', loadingArquivoNotificacao.style.display); // Adicionado
+                    }
+                    console.error('Erro ao carregar o conteúdo da notificação:', error);
+                  });
               };
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
             }
-          });
+          }); // <<--- Chave de fechamento adicionada para o forEach
         } else {
           const listItem = document.createElement('li');
           listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
@@ -271,7 +278,7 @@ function loadBoletos(apartmentId) {
   loadingArquivoBoleto.style.display = 'none';
   loadingArquivoBoleto.style.textAlign = 'center';
   loadingArquivoBoleto.style.padding = '10px';
-  loadingArquivoBoleto.innerHTML = '<img src="images/aguarde.gif" alt="Carregando..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
+  loadingArquivoBoleto.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
   boletosList.parentNode.insertBefore(loadingArquivoBoleto, boletosList.nextSibling); // Adiciona após a lista
 
   fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
@@ -310,7 +317,9 @@ function loadBoletos(apartmentId) {
                 boletosListContainer.style.pointerEvents = 'none';
               }
               if (loadingArquivoBoleto) {
+                console.log('loadBoletos: Antes de mostrar loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
                 loadingArquivoBoleto.style.display = 'block';
+                console.log('loadBoletos: Depois de mostrar loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
               }
               openFileViewer('#');
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
@@ -329,7 +338,9 @@ function loadBoletos(apartmentId) {
                     boletosListContainer.style.pointerEvents = 'auto';
                   }
                   if (loadingArquivoBoleto) {
+                    console.log('loadBoletos: Antes de esconder loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
                     loadingArquivoBoleto.style.display = 'none';
+                    console.log('loadBoletos: Depois de esconder loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
                   }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
@@ -347,7 +358,9 @@ function loadBoletos(apartmentId) {
                     boletosListContainer.style.pointerEvents = 'auto';
                   }
                   if (loadingArquivoBoleto) {
+                    console.log('loadBoletos: Antes de esconder loadingArquivoBoleto (erro):', loadingArquivoBoleto.style.display); // Adicionado
                     loadingArquivoBoleto.style.display = 'none';
+                    console.log('loadBoletos: Depois de esconder loadingArquivoBoleto (erro):', loadingArquivoBoleto.style.display); // Adicionado
                   }
                   console.error('Erro ao carregar o conteúdo do boleto:', error);
                 });
