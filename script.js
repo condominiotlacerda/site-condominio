@@ -62,6 +62,15 @@ export function showFiles(apartment) {
   const notificationsList = document.getElementById('notifications-list');
   notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
+  // Início da parte que diciona imagem de carregamento ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  const loadingNotificacoesDiv = document.createElement('div');
+  loadingNotificacoesDiv.id = 'loading-inicial-notificacoes';
+  loadingNotificacoesDiv.style.textAlign = 'center';
+  loadingNotificacoesDiv.style.padding = '20px';
+  loadingNotificacoesDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando notificações...</p>';
+  notificationsList.appendChild(loadingNotificacoesDiv);
+  // Final da parte que diciona imagem de carregamento +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
   const apartamentoIdStorage = localStorage.getItem('apartmentId');
 
   if (apartamentoIdStorage) {
