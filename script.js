@@ -122,7 +122,7 @@ export function showFiles(apartment) {
                   if (loadingPainel) {
                     loadingPainel.style.display = 'none';
                   }
-                  console.error('Erro ao carregar o conteúdo da notificação:', error);
+                  console.error('Erro ao carregar o conteúdo da notificação:', error));
                 });
             };
         } else {
