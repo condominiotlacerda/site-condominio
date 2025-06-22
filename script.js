@@ -199,10 +199,14 @@ function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
   boletosList.innerHTML = ''; // Limpa a lista anterior
 
-  const loadingIndicator = document.getElementById('loading-inicial-boletos');
-  if (loadingIndicator) {
-    loadingIndicator.style.display = 'block'; // Garante que o indicador seja mostrado antes do carregamento
-  }
+  // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
+  const loadingDiv = document.createElement('div');
+  loadingDiv.id = 'loading-inicial-boletos';
+  loadingDiv.style.textAlign = 'center';
+  loadingDiv.style.padding = '20px';
+  loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 87px; height: 54px;"><p>Carregando boletos...</p>';
+  boletosList.appendChild(loadingDiv);
+  // *** FIM DA ADIÇÃO DO INDICADOR ***
 
   // *** ADICIONE ESTE BLOCO DE CÓDIGO PARA INTRODUZIR UM ATRASO ***
   // Início do aumento de tempo para testar a imagem de carregamento ******************************************************************************************************************************
@@ -215,10 +219,12 @@ function loadBoletos(apartmentId) {
         return response.json();
       })
       .then(boletos => {
+        // *** REMOVE O INDICADOR DE CARREGAMENTO APÓS CARREGAR OS BOLETOS ***
         const loadingIndicator = document.getElementById('loading-inicial-boletos');
         if (loadingIndicator) {
-          loadingIndicator.style.display = 'none'; // Tenta esconder novamente, caso a página tenha sido carregada rapidamente
+          loadingIndicator.remove();
         }
+        // *** FIM DA REMOÇÃO DO INDICADOR ***
         if (boletos && boletos.length > 0) {
           boletos.forEach(boleto => {
             if (boleto.name && boleto.fileId) {
@@ -268,6 +274,10 @@ function loadBoletos(apartmentId) {
         }
       })
       .catch(error => {
+        const loadingIndicator = document.getElementById('loading-inicial-boletos');
+        if (loadingIndicator) {
+          loadingIndicator.remove();
+        }
         console.error('Erro ao carregar boletos:', error);
         const listItem = document.createElement('li');
         listItem.textContent = 'Erro ao carregar boletos.';
