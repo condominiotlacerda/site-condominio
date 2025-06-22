@@ -119,9 +119,9 @@ export function showFiles(apartment) {
                   document.getElementById('download-button').href = fileURL;
                   logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                 })
-            .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error);
+            .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
         };
-            };
+              
         } else {
           const listItem = document.createElement('li');
           listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
