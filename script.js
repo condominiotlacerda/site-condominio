@@ -239,36 +239,36 @@ function loadBoletos(apartmentId) {
             link.href = '#';
             link.textContent = boleto.name.trim();
             link.onclick = function(event) {
-              event.preventDefault();
-              const fileId = boleto.fileId;
-              const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
-              if (loadingPainel) {
-                loadingPainel.style.display = 'block';
-              }
-              fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
-                .then(response => {
-                  if (!response.ok) {
-                    throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
-                  }
-                  return response.json();
-                })
-                .then(data => {
-                  if (loadingPainel) {
-                    loadingPainel.style.display = 'none';
-                  }
-                  const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                  const fileURL = URL.createObjectURL(file);
-                  openFileViewer(fileURL);
-                  const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
-                })
-                .catch(error => {
-                  if (loadingPainel) {
-                    loadingPainel.style.display = 'none';
-                  }
-                  console.error('Erro ao carregar o conteúdo do boleto:', error);
-                });
-            };
+  event.preventDefault();
+  const fileId = boleto.fileId;
+  const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
+  if (loadingPainel) {
+    loadingPainel.style.display = 'block';
+  }
+  fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (loadingPainel) {
+        loadingPainel.style.display = 'none';
+      }
+      const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      openFileViewer(fileURL);
+      const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
+      logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
+    })
+    .catch(error => {
+      if (loadingPainel) {
+        loadingPainel.style.display = 'none';
+      }
+      console.error('Erro ao carregar o conteúdo do boleto:', error);
+    });
+};
             listItem.appendChild(link);
             boletosList.appendChild(listItem);
           }
