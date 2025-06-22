@@ -251,10 +251,11 @@ function loadBoletos(apartmentId) {
             link.onclick = function(event) {
               event.preventDefault();
               const fileId = boleto.fileId;
-              const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
+              const loadingPainel = document.getElementById('loading-painel');
               if (loadingPainel) {
                 loadingPainel.style.display = 'block';
               }
+              openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
                 .then(response => {
                   if (!response.ok) {
@@ -268,7 +269,9 @@ function loadBoletos(apartmentId) {
                   }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
-                  openFileViewer(fileURL);
+                  document.getElementById('file-viewer').src = fileURL; // Define o src do iframe
+                  document.getElementById('download-button').href = fileURL; // Define o href do botão de download
+                  // Não precisamos chamar openFileViewer novamente aqui
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
                   logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
                 })
