@@ -21,6 +21,7 @@ function enableApartment() {
   alert('Esta funcionalidade foi substituída pelo cadastro.');
 }
 
+// Início da função showfiles ===============================================================================================================================================================
 export function showFiles(apartment) {
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
@@ -76,7 +77,7 @@ export function showFiles(apartment) {
   loadingArquivoNotificacao.style.display = 'none';
   loadingArquivoNotificacao.style.textAlign = 'center';
   loadingArquivoNotificacao.style.padding = '10px';
-  loadingArquivoNotificacao.innerHTML = '<img src="images/aguarde.gif" alt="Carregando..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
+  loadingArquivoNotificacao.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
   notificationsList.parentNode.insertBefore(loadingArquivoNotificacao, notificationsList.nextSibling); // Adiciona após a lista
 
   const apartamentoIdStorage = localStorage.getItem('apartmentId');
@@ -117,9 +118,8 @@ export function showFiles(apartment) {
                   notificationsListContainer.style.pointerEvents = 'none';
                 }
                 if (loadingArquivoNotificacao) {
-                  console.log('showFiles (Notificações): Antes de mostrar loadingArquivoNotificacao:', loadingArquivoNotificacao.style.display); // Adicionado
+                  console.log('showFiles (Notificações): Elemento loadingArquivoNotificacao encontrado:', loadingArquivoNotificacao); // Adicionado
                   loadingArquivoNotificacao.style.display = 'block';
-                  console.log('showFiles (Notificações): Depois de mostrar loadingArquivoNotificacao:', loadingArquivoNotificacao.style.display); // Adicionado
                 }
                 openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
                 fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
