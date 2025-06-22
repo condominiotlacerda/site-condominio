@@ -278,7 +278,7 @@ function loadBoletos(apartmentId) {
   loadingArquivoBoleto.style.display = 'none';
   loadingArquivoBoleto.style.textAlign = 'center';
   loadingArquivoBoleto.style.padding = '10px';
-  loadingArquivoBoleto.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
+  loadingArquivoBoleto.innerHTML = '<img src="images/aguarde.gif" alt="Carregando..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
   boletosList.parentNode.insertBefore(loadingArquivoBoleto, boletosList.nextSibling); // Adiciona após a lista
 
   fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
@@ -317,9 +317,8 @@ function loadBoletos(apartmentId) {
                 boletosListContainer.style.pointerEvents = 'none';
               }
               if (loadingArquivoBoleto) {
-                console.log('loadBoletos: Antes de mostrar loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
+                console.log('loadBoletos: Elemento loadingArquivoBoleto encontrado:', loadingArquivoBoleto); // Adicionado
                 loadingArquivoBoleto.style.display = 'block';
-                console.log('loadBoletos: Depois de mostrar loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
               }
               openFileViewer('#');
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
@@ -338,16 +337,14 @@ function loadBoletos(apartmentId) {
                     boletosListContainer.style.pointerEvents = 'auto';
                   }
                   if (loadingArquivoBoleto) {
-                    console.log('loadBoletos: Antes de esconder loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
                     loadingArquivoBoleto.style.display = 'none';
-                    console.log('loadBoletos: Depois de esconder loadingArquivoBoleto:', loadingArquivoBoleto.style.display); // Adicionado
                   }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
                   document.getElementById('file-viewer').src = fileURL;
                   document.getElementById('download-button').href = fileURL;
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${nomeArquivoLog}` });
                 })
                 .catch(error => {
                   if (loadingPainel) {
@@ -358,9 +355,7 @@ function loadBoletos(apartmentId) {
                     boletosListContainer.style.pointerEvents = 'auto';
                   }
                   if (loadingArquivoBoleto) {
-                    console.log('loadBoletos: Antes de esconder loadingArquivoBoleto (erro):', loadingArquivoBoleto.style.display); // Adicionado
                     loadingArquivoBoleto.style.display = 'none';
-                    console.log('loadBoletos: Depois de esconder loadingArquivoBoleto (erro):', loadingArquivoBoleto.style.display); // Adicionado
                   }
                   console.error('Erro ao carregar o conteúdo do boleto:', error);
                 });
