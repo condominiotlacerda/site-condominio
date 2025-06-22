@@ -94,28 +94,37 @@ export function showFiles(apartment) {
               link.href = '#';
               link.textContent = notification.name.trim();
               link.onclick = function(event) {
-                event.preventDefault();
-                const fileId = notification.fileId;
-
-                fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error(`Erro ao carregar o conteúdo da notificação (ID: ${fileId}): ${response.status}`);
-                    }
-                    return response.json();
-                  })
-                  .then(data => {
-                    const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                    const fileURL = URL.createObjectURL(file);
-                    openFileViewer(fileURL);
-                    logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
-                  })
-                  .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
-              };
-              listItem.appendChild(link);
-              notificationsList.appendChild(listItem);
-            }
-          });
+              event.preventDefault();
+              const fileId = notification.fileId;
+              const loadingPainel = document.getElementById('loading-painel');
+              if (loadingPainel) {
+                loadingPainel.style.display = 'block';
+              }
+              openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
+              fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error(`Erro ao carregar o conteúdo da notificação (ID: ${fileId}): ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                  const fileURL = URL.createObjectURL(file);
+                  document.getElementById('file-viewer').src = fileURL;
+                  document.getElementById('download-button').href = fileURL;
+                  logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+                })
+                .catch(error => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  console.error('Erro ao carregar o conteúdo da notificação:', error);
+                });
+            };
         } else {
           const listItem = document.createElement('li');
           listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
@@ -239,36 +248,39 @@ function loadBoletos(apartmentId) {
             link.href = '#';
             link.textContent = boleto.name.trim();
             link.onclick = function(event) {
-  event.preventDefault();
-  const fileId = boleto.fileId;
-  const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
-  if (loadingPainel) {
-    loadingPainel.style.display = 'block';
-  }
-  fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (loadingPainel) {
-        loadingPainel.style.display = 'none';
-      }
-      const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-      const fileURL = URL.createObjectURL(file);
-      openFileViewer(fileURL);
-      const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-      logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
-    })
-    .catch(error => {
-      if (loadingPainel) {
-        loadingPainel.style.display = 'none';
-      }
-      console.error('Erro ao carregar o conteúdo do boleto:', error);
-    });
-};
+            event.preventDefault();
+              const fileId = boleto.fileId;
+              const loadingPainel = document.getElementById('loading-painel');
+              if (loadingPainel) {
+                loadingPainel.style.display = 'block';
+              }
+              openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
+              fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                  const fileURL = URL.createObjectURL(file);
+                  document.getElementById('file-viewer').src = fileURL; // Define o src do iframe
+                  document.getElementById('download-button').href = fileURL; // Define o href do botão de download
+                  // Não precisamos chamar openFileViewer novamente aqui
+                  const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
+                })
+                .catch(error => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  console.error('Erro ao carregar o conteúdo do boleto:', error);
+                });
+            };
             listItem.appendChild(link);
             boletosList.appendChild(listItem);
           }
