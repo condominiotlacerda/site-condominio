@@ -204,87 +204,82 @@ function loadBoletos(apartmentId) {
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.style.padding = '20px';
-  loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
+  loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 87px; height: 54px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
   // *** FIM DA ADIÇÃO DO INDICADOR ***
 
-  // *** ADICIONE ESTE BLOCO DE CÓDIGO PARA INTRODUZIR UM ATRASO ***
-  // Início do aumento de tempo para testar a imagem de carregamento ******************************************************************************************************************************
-  setTimeout(() => {
-    fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(boletos => {
-        // *** REMOVE O INDICADOR DE CARREGAMENTO APÓS CARREGAR OS BOLETOS ***
-        const loadingIndicator = document.getElementById('loading-inicial-boletos');
-        if (loadingIndicator) {
-          loadingIndicator.remove();
-        }
-        // *** FIM DA REMOÇÃO DO INDICADOR ***
-        if (boletos && boletos.length > 0) {
-          boletos.forEach(boleto => {
-            if (boleto.name && boleto.fileId) {
-              const listItem = document.createElement('li');
-              const link = document.createElement('a');
-              link.href = '#';
-              link.textContent = boleto.name.trim();
-              link.onclick = function(event) {
-                event.preventDefault();
-                const fileId = boleto.fileId;
-                const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
-                if (loadingPainel) {
-                  loadingPainel.style.display = 'block';
-                }
-                fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
-                    }
-                    return response.json();
-                  })
-                  .then(data => {
-                    if (loadingPainel) {
-                      loadingPainel.style.display = 'none';
-                    }
-                    const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                    const fileURL = URL.createObjectURL(file);
-                    openFileViewer(fileURL);
-                    const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                    logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
-                  })
-                  .catch(error => {
-                    if (loadingPainel) {
-                      loadingPainel.style.display = 'none';
-                    }
-                    console.error('Erro ao carregar o conteúdo do boleto:', error);
-                  });
-              };
-              listItem.appendChild(link);
-              boletosList.appendChild(listItem);
-            }
-          });
-        } else {
-          const listItem = document.createElement('li');
-          listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
-          boletosList.appendChild(listItem);
-        }
-      })
-      .catch(error => {
-        const loadingIndicator = document.getElementById('loading-inicial-boletos');
-        if (loadingIndicator) {
-          loadingIndicator.remove();
-        }
-        console.error('Erro ao carregar boletos:', error);
+  fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(boletos => {
+      // *** REMOVE O INDICADOR DE CARREGAMENTO APÓS CARREGAR OS BOLETOS ***
+      const loadingIndicator = document.getElementById('loading-inicial-boletos');
+      if (loadingIndicator) {
+        loadingIndicator.remove();
+      }
+      // *** FIM DA REMOÇÃO DO INDICADOR ***
+      if (boletos && boletos.length > 0) {
+        boletos.forEach(boleto => {
+          if (boleto.name && boleto.fileId) {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = '#';
+            link.textContent = boleto.name.trim();
+            link.onclick = function(event) {
+              event.preventDefault();
+              const fileId = boleto.fileId;
+              const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
+              if (loadingPainel) {
+                loadingPainel.style.display = 'block';
+              }
+              fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                  const fileURL = URL.createObjectURL(file);
+                  openFileViewer(fileURL);
+                  const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
+                })
+                .catch(error => {
+                  if (loadingPainel) {
+                    loadingPainel.style.display = 'none';
+                  }
+                  console.error('Erro ao carregar o conteúdo do boleto:', error);
+                });
+            };
+            listItem.appendChild(link);
+            boletosList.appendChild(listItem);
+          }
+        });
+      } else {
         const listItem = document.createElement('li');
-        listItem.textContent = 'Erro ao carregar boletos.';
+        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
         boletosList.appendChild(listItem);
-      });
-  }, 2000); // 2000 milissegundos de atraso (2 segundos)
-  // *** FIM DA ADIÇÃO ***
+      }
+    })
+    .catch(error => {
+      const loadingIndicator = document.getElementById('loading-inicial-boletos');
+      if (loadingIndicator) {
+        loadingIndicator.remove();
+      }
+      console.error('Erro ao carregar boletos:', error);
+      const listItem = document.createElement('li');
+      listItem.textContent = 'Erro ao carregar boletos.';
+      boletosList.appendChild(listItem);
+    });
 }
 // Final da função loadBoletos para carregar os boletos do G Drive =========================================================================================================================
 
