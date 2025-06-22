@@ -208,14 +208,23 @@ function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list'); // Usamos o mesmo container da seção de boletos
   boletosList.innerHTML = ''; // Limpa a lista anterior
 
-  // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
+  // *** ADICIONA O INDICADOR DE CARREGAMENTO INICIAL DA LISTA ***
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.style.padding = '20px';
   loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
-  // *** FIM DA ADIÇÃO DO INDICADOR ***
+  // *** FIM DA ADIÇÃO DO INDICADOR INICIAL ***
+
+  // Cria a div para o carregamento do arquivo do boleto
+  const loadingArquivoBoleto = document.createElement('div');
+  loadingArquivoBoleto.id = 'loading-arquivo-boleto';
+  loadingArquivoBoleto.style.display = 'none';
+  loadingArquivoBoleto.style.textAlign = 'center';
+  loadingArquivoBoleto.style.padding = '10px';
+  loadingArquivoBoleto.innerHTML = '<img src="images/aguarde.gif" alt="Carregando..." style="width: 51px; height: 34px;"><p style="font-size: smaller;">Carregando arquivo...</p>';
+  boletosList.parentNode.insertBefore(loadingArquivoBoleto, boletosList.nextSibling); // Adiciona após a lista
 
   fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
     .then(response => {
@@ -225,12 +234,12 @@ function loadBoletos(apartmentId) {
       return response.json();
     })
     .then(boletos => {
-      // *** REMOVE O INDICADOR DE CARREGAMENTO APÓS CARREGAR OS BOLETOS ***
+      // *** REMOVE O INDICADOR DE CARREGAMENTO INICIAL APÓS CARREGAR OS BOLETOS ***
       const loadingIndicator = document.getElementById('loading-inicial-boletos');
       if (loadingIndicator) {
         loadingIndicator.remove();
       }
-      // *** FIM DA REMOÇÃO DO INDICADOR ***
+      // *** FIM DA REMOÇÃO DO INDICADOR INICIAL ***
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
           if (boleto.name && boleto.fileId) {
@@ -241,10 +250,21 @@ function loadBoletos(apartmentId) {
             link.onclick = function(event) {
               event.preventDefault();
               const fileId = boleto.fileId;
-              const loadingPainel = document.getElementById('loading-painel'); // Supondo que você tenha adicionado o indicador no painel
+              const loadingPainel = document.getElementById('loading-painel');
+              const boletosListContainer = document.getElementById('file-list');
+              const loadingArquivoBoleto = document.getElementById('loading-arquivo-boleto'); // Pega a referência da div criada dinamicamente
+
               if (loadingPainel) {
                 loadingPainel.style.display = 'block';
               }
+              if (boletosListContainer) {
+                boletosListContainer.style.opacity = '0.5';
+                boletosListContainer.style.pointerEvents = 'none';
+              }
+              if (loadingArquivoBoleto) {
+                loadingArquivoBoleto.style.display = 'block';
+              }
+              openFileViewer('#');
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
                 .then(response => {
                   if (!response.ok) {
@@ -256,15 +276,30 @@ function loadBoletos(apartmentId) {
                   if (loadingPainel) {
                     loadingPainel.style.display = 'none';
                   }
+                  if (boletosListContainer) {
+                    boletosListContainer.style.opacity = '1';
+                    boletosListContainer.style.pointerEvents = 'auto';
+                  }
+                  if (loadingArquivoBoleto) {
+                    loadingArquivoBoleto.style.display = 'none';
+                  }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
-                  openFileViewer(fileURL);
+                  document.getElementById('file-viewer').src = fileURL;
+                  document.getElementById('download-button').href = fileURL;
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${nomeArquivoLog}` });
                 })
                 .catch(error => {
                   if (loadingPainel) {
                     loadingPainel.style.display = 'none';
+                  }
+                  if (boletosListContainer) {
+                    boletosListContainer.style.opacity = '1';
+                    boletosListContainer.style.pointerEvents = 'auto';
+                  }
+                  if (loadingArquivoBoleto) {
+                    loadingArquivoBoleto.style.display = 'none';
                   }
                   console.error('Erro ao carregar o conteúdo do boleto:', error);
                 });
