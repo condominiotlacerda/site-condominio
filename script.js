@@ -57,7 +57,7 @@ export function showFiles(apartment) {
   console.log("showFiles foi chamada com o apartamento:", apartment);
   loadBoletos(apartment);
   // *** FIM DA INSERÇÃO ***
-  
+
   // Início da parte que carrega as notificações na area_condominio.html =============================================================================================================================
   const notificationsList = document.getElementById('notifications-list');
   notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
@@ -93,10 +93,15 @@ export function showFiles(apartment) {
               const link = document.createElement('a');
               link.href = '#';
               link.textContent = notification.name.trim();
+              // ====================================================))))))))))))))=====================================================)))))))))))))))))))))))))))
               link.onclick = function(event) {
                 event.preventDefault();
                 const fileId = notification.fileId;
-
+                const loadingPainel = document.getElementById('loading-painel');
+                if (loadingPainel) {
+                  loadingPainel.style.display = 'block';
+                }
+                openFileViewer('#'); // Abre o visualizador imediatamente com um URL temporário
                 fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
                   .then(response => {
                     if (!response.ok) {
@@ -105,23 +110,28 @@ export function showFiles(apartment) {
                     return response.json();
                   })
                   .then(data => {
+                    if (loadingPainel) {
+                      loadingPainel.style.display = 'none';
+                    }
                     const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                     const fileURL = URL.createObjectURL(file);
-                    openFileViewer(fileURL);
+                    document.getElementById('file-viewer').src = fileURL;
+                    document.getElementById('download-button').href = fileURL;
                     logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
                   })
-                  .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
-              };
+                .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
+              }; // Fechamento do onclick
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
             }
-          });
+          }); // <<--- Chave de fechamento adicionada para o forEach
         } else {
           const listItem = document.createElement('li');
           listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
           notificationsList.appendChild(listItem);
         }
       })
+      // ====================================================))))))))))))))=====================================================)))))))))))))))))))))))))))
       .catch(error => {
         console.error('Erro ao carregar notificações:', error);
         const listItem = document.createElement('li');
