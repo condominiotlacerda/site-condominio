@@ -389,7 +389,13 @@ function openFileViewer(filePath) {
   const fileViewer = document.getElementById('file-viewer');
   const downloadButton = document.getElementById('download-button');
 
-  fileViewer.src = filePath;
+  const tempLink = document.createElement('a');
+  tempLink.href = filePath;
+  tempLink.target = '_blank';
+  tempLink.style.display = 'none'; // Oculta o link visualmente
+  viewerContainer.appendChild(tempLink); // Adiciona o link ao container
+
+  fileViewer.src = tempLink.href; // Define o src do iframe para o href do link
   downloadButton.href = filePath;
 
   // Remove o display none do estilo inline
