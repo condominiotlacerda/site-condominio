@@ -385,31 +385,22 @@ function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
 // Final da Função que Marca se o aviso já foi lido ========================================================================================================================================
 
 function openFileViewer(filePath) {
-  const viewerContainer = document.getElementById('viewer-container');
-  const fileViewer = document.getElementById('file-viewer');
-  const downloadButton = document.getElementById('download-button');
+  const viewerContainer = document.getElementById('viewer-container');
+  const fileViewer = document.getElementById('file-viewer');
+  const downloadButton = document.getElementById('download-button');
 
-  fileViewer.src = filePath;
-  downloadButton.href = filePath;
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-  // Remove o display none do estilo inline
-  viewerContainer.style.display = '';
+  if (isMobile) {
+    window.open(filePath, '_blank'); // Abre o PDF em uma nova aba no mobile
+    viewerContainer.style.display = 'none'; // Oculta o painel
+  } else {
+    fileViewer.src = filePath;
+    downloadButton.href = filePath;
+    viewerContainer.style.display = ''; // Exibe o painel no desktop
+  }
 
-  // Adiciona a classe 'active' ao viewerContainer
-  viewerContainer.classList.add('active');
-}
-
-function getFilesForApartment(apartment) {
-  const baseUrl = 'pdfs/boletos/';
-  const aptoNumber = apartment.replace('apto', '');
-  let files = [
-    { name: nomesTaxas.taxaCondominio, path: `${baseUrl}boleto_tx_condominio_apto_${aptoNumber}.pdf` },
-    { name: nomesTaxas.taxa1Name, path: `${baseUrl}boleto_tx_1_apto_${aptoNumber}.pdf` },
-    { name: nomesTaxas.taxa2Name, path: `${baseUrl}boleto_tx_2_apto_${aptoNumber}.pdf` },
-    { name: nomesTaxas.taxa3Name, path: `${baseUrl}boleto_tx_3_apto_${aptoNumber}.pdf` }
-  ];
-
-  return files;
+  viewerContainer.classList.add('active');
 }
 
 document.addEventListener("DOMContentLoaded", function () {
