@@ -380,18 +380,52 @@ function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
 // Final da Função que Marca se o aviso já foi lido ========================================================================================================================================
 
 function openFileViewer(filePath) {
-  const viewerContainer = document.getElementById('viewer-container');
-  const fileViewer = document.getElementById('file-viewer');
-  const downloadButton = document.getElementById('download-button');
+  const viewerContainer = document.getElementById('viewer-container');
+  const fileViewer = document.getElementById('file-viewer');
+  const downloadButton = document.getElementById('download-button');
+  const loadingPainel = document.getElementById('loading-painel');
 
-  fileViewer.src = filePath;
-  downloadButton.href = filePath;
+  const fileIdMatch = filePath.match(/fileId=([^&]+)/);
+  let fileId = fileIdMatch ? fileIdMatch[1] : null;
+  let cachedContent;
 
-  // Remove o display none do estilo inline
-  viewerContainer.style.display = '';
+  if (fileId) {
+    cachedContent = localStorage.getItem(`boletoContent_${fileId}`) || localStorage.getItem(`notificationContent_${fileId}`);
+  }
 
-  // Adiciona a classe 'active' ao viewerContainer
-  viewerContainer.classList.add('active');
+  if (cachedContent) {
+    console.log(`Conteúdo do arquivo ${fileId} encontrado no localStorage.`);
+    if (loadingPainel) {
+      loadingPainel.style.display = 'none';
+    }
+    const file = new Blob([Uint8Array.from(atob(cachedContent), c => c.charCodeAt(0))], { type: 'application/pdf' });
+    const fileURL = URL.createObjectURL(file);
+    fileViewer.src = fileURL;
+    downloadButton.href = fileURL;
+    viewerContainer.style.display = '';
+    viewerContainer.classList.add('active');
+  } else {
+    console.log(`Conteúdo do arquivo ${fileId} não encontrado no localStorage. Carregando da rede.`);
+    if (loadingPainel) {
+      loadingPainel.style.display = 'block';
+    }
+    fileViewer.src = filePath;
+    downloadButton.href = filePath;
+    viewerContainer.style.display = '';
+    viewerContainer.classList.add('active');
+    // Oculta o painel de carregamento quando o iframe terminar de carregar (ou em caso de erro)
+    fileViewer.onload = () => {
+      if (loadingPainel) {
+        loadingPainel.style.display = 'none';
+      }
+    };
+    fileViewer.onerror = () => {
+      if (loadingPainel) {
+        loadingPainel.style.display = 'none';
+      }
+      console.error('Erro ao carregar o PDF no iframe.');
+    };
+  }
 }
 
 function getFilesForApartment(apartment) {
