@@ -645,3 +645,51 @@ window.logAccess = function (logData) {
 };
 // Final da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
 window.openFileViewer = openFileViewer;
+
+// Início do código de pré carregamento dos boletos e notificações ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+document.addEventListener('DOMContentLoaded', function() {
+  // Esta função será chamada quando a página area_condominio.html carregar completamente
+  preLoadBoletosAndNotifications();
+});
+
+function preLoadBoletosAndNotifications() {
+  const apartmentId = localStorage.getItem('apartmentId');
+  if (apartmentId) {
+    const fullApartmentId = apartmentId.replace('apto', 'apto_');
+
+    // Lógica para pré-carregar boletos
+    fetch(`/.netlify/functions/load-boletos?apartmentId=${fullApartmentId}`)
+      .then(response => response.json())
+      .then(boletos => {
+        boletos.forEach(boleto => {
+          if (boleto.fileId) {
+            fetch(`/.netlify/functions/load-boletos-content?fileId=${boleto.fileId}`)
+              .then(response => response.json())
+              .then(data => {
+                localStorage.setItem(`boletoContent_${boleto.fileId}`, data.contentBase64);
+                console.log(`Boleto ${boleto.name} pré-carregado para localStorage.`);
+              });
+          }
+        });
+      });
+
+    // Lógica para pré-carregar notificações
+    fetch(`/.netlify/functions/load-notificacoes?apartmentId=${fullApartmentId}`)
+      .then(response => response.json())
+      .then(notifications => {
+        notifications.forEach(notification => {
+          if (notification.fileId) {
+            fetch(`/.netlify/functions/load-notification-content?fileId=${notification.fileId}`)
+              .then(response => response.json())
+              .then(data => {
+                localStorage.setItem(`notificationContent_${notification.fileId}`, data.contentBase64);
+                console.log(`Notificação ${notification.name} pré-carregada para localStorage.`);
+              });
+          }
+        });
+      });
+  } else {
+    console.log("apartmentId não encontrado no localStorage. Pré-carregamento não iniciado.");
+  }
+}
+// Final do código de pré carregamento dos boletos e notificações ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
