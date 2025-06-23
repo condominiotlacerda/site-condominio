@@ -67,6 +67,7 @@ export async function showFiles(apartment) {
 
   let notificacoesConteudo = {};
   const promisesNotificacoes = [];
+  const notificacoesParaAdicionar = [];
 
   // Início da parte que adiciona imagem de carregamento ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const loadingNotificacoesDiv = document.createElement('div');
@@ -119,10 +120,11 @@ export async function showFiles(apartment) {
               }
             };
             listItem.appendChild(link);
-            notificationsList.appendChild(listItem);
+            notificacoesParaAdicionar.push(listItem);
           }
         });
         await Promise.all(promisesNotificacoes); // Espera que todos os conteúdos das notificações sejam carregados
+        notificacoesParaAdicionar.forEach(item => notificationsList.appendChild(item));
       } else {
         const listItem = document.createElement('li');
         listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
@@ -221,6 +223,7 @@ async function loadBoletos(apartmentId) {
 
   let boletosConteudo = {};
   const promisesBoletos = [];
+  const boletosParaAdicionar = []; // Array para armazenar os elementos de lista dos boletos
 
   // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
   const loadingDiv = document.createElement('div');
@@ -270,10 +273,11 @@ async function loadBoletos(apartmentId) {
             }
           };
           listItem.appendChild(link);
-          boletosList.appendChild(listItem);
+          boletosParaAdicionar.push(listItem); // Adiciona o elemento de lista ao array
         }
       });
       await Promise.all(promisesBoletos); // Espera que todos os conteúdos dos boletos sejam carregados
+      boletosParaAdicionar.forEach(item => boletosList.appendChild(item)); // Adiciona os links à lista SOMENTE APÓS o carregamento
     } else {
       const listItem = document.createElement('li');
       listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
