@@ -389,17 +389,13 @@ function openFileViewer(filePath) {
   const fileViewer = document.getElementById('file-viewer');
   const downloadButton = document.getElementById('download-button');
 
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  fileViewer.src = filePath;
+  downloadButton.href = filePath;
 
-  if (isMobile) {
-    window.location.href = filePath; // Tenta carregar o URL Blob na janela atual no mobile
-    viewerContainer.style.display = 'none'; // Oculta o painel
-  } else {
-    fileViewer.src = filePath;
-    downloadButton.href = filePath;
-    viewerContainer.style.display = ''; // Exibe o painel no desktop
-  }
+  // Remove o display none do estilo inline
+  viewerContainer.style.display = '';
 
+  // Adiciona a classe 'active' ao viewerContainer
   viewerContainer.classList.add('active');
 }
 
