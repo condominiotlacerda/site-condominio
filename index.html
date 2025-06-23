@@ -116,45 +116,47 @@
                             // *** INÍCIO DA LÓGICA DE PRÉ-CARREGAMENTO ***
 
                             // Função para buscar a lista de boletos e iniciar o pré-carregamento do conteúdo
-                            function preLoadBoletos(apartmentId) {
-                                fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
-                                    .then(response => response.json())
-                                    .then(boletos => {
-                                        boletos.forEach(boleto => {
-                                            if (boleto.fileId) {
-                                                fetch(`/.netlify/functions/load-boletos-content?fileId=${boleto.fileId}`)
-                                                    .then(response => response.json())
-                                                    .then(data => {
-                                                        // Armazena o conteúdo pré-carregado no localStorage (usando fileId como chave)
-                                                        localStorage.setItem(`boletoContent_${boleto.fileId}`, data.contentBase64);
-                                                    });
-                                            }
-                                        });
-                                    });
-                            }
+  function preLoadBoletos(apartmentId) {
+    const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
+    fetch(`/.netlify/functions/load-boletos?apartmentId=${fullApartmentId}`)
+      .then(response => response.json())
+      .then(boletos => {
+        boletos.forEach(boleto => {
+          if (boleto.fileId) {
+            fetch(`/.netlify/functions/load-boletos-content?fileId=${boleto.fileId}`)
+              .then(response => response.json())
+              .then(data => {
+                // Armazena o conteúdo pré-carregado no localStorage (usando fileId como chave)
+                localStorage.setItem(`boletoContent_${boleto.fileId}`, data.contentBase64);
+              });
+          }
+        });
+      });
+  }
 
-                            // Função para buscar a lista de notificações e iniciar o pré-carregamento do conteúdo
-                            function preLoadNotificacoes(apartmentId) {
-                                fetch(`/.netlify/functions/load-notificacoes?apartmentId=${apartmentId}`)
-                                    .then(response => response.json())
-                                    .then(notifications => {
-                                        notifications.forEach(notification => {
-                                            if (notification.fileId) {
-                                                fetch(`/.netlify/functions/load-notification-content?fileId=${notification.fileId}`)
-                                                    .then(response => response.json())
-                                                    .then(data => {
-                                                        // Armazena o conteúdo pré-carregado no localStorage (usando fileId como chave)
-                                                        localStorage.setItem(`notificationContent_${notification.fileId}`, data.contentBase64);
-                                                    });
-                                            }
-                                        });
-                                    });
-                            }
+  // Função para buscar a lista de notificações e iniciar o pré-carregamento do conteúdo
+  function preLoadNotificacoes(apartmentId) {
+    const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
+    fetch(`/.netlify/functions/load-notificacoes?apartmentId=${fullApartmentId}`)
+      .then(response => response.json())
+      .then(notifications => {
+        notifications.forEach(notification => {
+          if (notification.fileId) {
+            fetch(`/.netlify/functions/load-notification-content?fileId=${notification.fileId}`)
+              .then(response => response.json())
+              .then(data => {
+                // Armazena o conteúdo pré-carregado no localStorage (usando fileId como chave)
+                localStorage.setItem(`notificationContent_${notification.fileId}`, data.contentBase64);
+              });
+          }
+        });
+      });
+  }
 
-                            // Inicia o pré-carregamento
-                            preLoadBoletos(apartmentId);
-                            preLoadNotificacoes(apartmentId);
-
+  // Inicia o pré-carregamento
+  preLoadBoletos(apartmentId);
+  preLoadNotificacoes(apartmentId);
+                            
                             // *** FIM DA LÓGICA DE PRÉ-CARREGAMENTO ***
 
                             window.location.href = 'area_condominio.html';
