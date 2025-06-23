@@ -40,10 +40,15 @@ exports.handler = async (event) => {
     });
 
     const configData = JSON.parse(configString);
-    const fullApartmentId = `apto${apartmentId}`.replace('apto', 'apto_'); // Adiciona "apto" e depois substitui
+    const apartmentId = event.queryStringParameters?.apartmentId;
+    const fullApartmentId = `apto${apartmentId}`.replace('apto', 'apto_');
 
-    console.log("load-boletos: fullApartmentId:", fullApartmentId); // Mantenha esta linha
-    console.log("load-boletos: configData.boletos:", configData.boletos); // Mantenha esta linha
+    console.log("load-boletos: fullApartmentId:", fullApartmentId);
+    console.log("load-boletos: configData.boletos:", configData.boletos);
+
+    if (fullApartmentId === 'apto_202') {
+      console.log("load-boletos: CONTEÚDO COMPLETO DE configData:", configData);
+    }
 
     const boletosData = configData.boletos && configData.boletos[fullApartmentId];
 
