@@ -40,15 +40,21 @@ exports.handler = async (event) => {
     });
 
     const configData = JSON.parse(configString);
+    console.log("configData após parsing:", configData); // ADICIONE ESTA LINHA
+
     let fullApartmentId = apartmentId;
     if (!apartmentId.startsWith('apto_')) {
       fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore SE não começar com 'apto_'
     }
+
+    console.log("fullApartmentId:", fullApartmentId); // ADICIONE ESTA LINHA
     const boletosData = configData.boletos && configData.boletos[fullApartmentId];
+    console.log("boletosData:", boletosData); // ADICIONE ESTA LINHA
 
     const apartmentBoletos = [];
 
     if (boletosData) {
+      console.log(`Boletos encontrados para o apartamento ${fullApartmentId}:`, Object.keys(boletosData)); // ADICIONE ESTA LINHA
       for (const boletoName in boletosData) {
         if (boletoName !== "") {
           const fileId = boletosData[boletoName];
