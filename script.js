@@ -238,6 +238,7 @@ function loadBoletos(apartmentId) {
             const link = document.createElement('a');
             link.href = '#';
             link.textContent = boleto.name.trim();
+            link.dataset.fileid = boleto.fileId; // Adiciona o atributo data-fileid
             link.onclick = function(event) {
               event.preventDefault();
               const fileId = boleto.fileId;
@@ -245,6 +246,9 @@ function loadBoletos(apartmentId) {
               if (loadingPainel) {
                 loadingPainel.style.display = 'block';
               }
+              // Altera o texto do link para indicar carregamento
+              link.textContent = 'Carregando... Aguarde.';
+              openFileViewer(this); // Passa o elemento link para openFileViewer
               fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
                 .then(response => {
                   if (!response.ok) {
@@ -258,14 +262,17 @@ function loadBoletos(apartmentId) {
                   }
                   const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
                   const fileURL = URL.createObjectURL(file);
-                  openFileViewer(fileURL);
+                  document.getElementById('file-viewer').src = fileURL;
+                  document.getElementById('download-button').href = fileURL;
                   const nomeArquivoLog = boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-');
-                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizado ${nomeArquivoLog}` });
+                  logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${nomeArquivoLog}` });
                 })
                 .catch(error => {
                   if (loadingPainel) {
                     loadingPainel.style.display = 'none';
                   }
+                  // Opcional: Aqui você pode reverter o texto do link para o original em caso de erro
+                  link.textContent = boleto.name.trim();
                   console.error('Erro ao carregar o conteúdo do boleto:', error);
                 });
             };
@@ -379,14 +386,13 @@ function marcarAvisoComoEntendido(apartamentoId, avisoNr, texto) {
 }
 // Final da Função que Marca se o aviso já foi lido ========================================================================================================================================
 
-function openFileViewer(filePath) {
+function openFileViewer(linkElement) {
   const viewerContainer = document.getElementById('viewer-container');
   const fileViewer = document.getElementById('file-viewer');
   const downloadButton = document.getElementById('download-button');
   const loadingPainel = document.getElementById('loading-painel');
 
-  const fileIdMatch = filePath.match(/fileId=([^&]+)/);
-  let fileId = fileIdMatch ? fileIdMatch[1] : null;
+  const fileId = linkElement.dataset.fileid; // Recupera o fileId do atributo data-fileid
   let cachedContent;
 
   if (fileId) {
@@ -409,22 +415,33 @@ function openFileViewer(filePath) {
     if (loadingPainel) {
       loadingPainel.style.display = 'block';
     }
+    const filePath = '#'; // Mantém o filePath vazio aqui, pois já temos o fileId
     fileViewer.src = filePath;
     downloadButton.href = filePath;
     viewerContainer.style.display = '';
     viewerContainer.classList.add('active');
-    // Oculta o painel de carregamento quando o iframe terminar de carregar (ou em caso de erro)
-    fileViewer.onload = () => {
-      if (loadingPainel) {
-        loadingPainel.style.display = 'none';
-      }
-    };
-    fileViewer.onerror = () => {
-      if (loadingPainel) {
-        loadingPainel.style.display = 'none';
-      }
-      console.error('Erro ao carregar o PDF no iframe.');
-    };
+    fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`) // Use o fileId para buscar o conteúdo
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Erro ao carregar o conteúdo do boleto (ID: ${fileId}): ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (loadingPainel) {
+          loadingPainel.style.display = 'none';
+        }
+        const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+        const fileURL = URL.createObjectURL(file);
+        fileViewer.src = fileURL;
+        downloadButton.href = fileURL;
+      })
+      .catch(error => {
+        if (loadingPainel) {
+          loadingPainel.style.display = 'none';
+        }
+        console.error('Erro ao carregar o PDF:', error);
+      });
   }
 }
 
