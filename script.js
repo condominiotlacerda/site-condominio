@@ -211,64 +211,18 @@ function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list');
   boletosList.innerHTML = '';
 
-  const storedApartmentId = localStorage.getItem('apartmentId');
-  if (storedApartmentId) {
-    const fullStoredApartmentId = storedApartmentId.replace('apto', 'apto_');
-    const boletosPreCarregados = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key.startsWith('boletoContent_') && key.includes(fullStoredApartmentId)) {
-        const fileId = key.replace('boletoContent_', '');
-        // Para obter o nome, podemos tentar inferir da nossa lista original (isso pode precisar de ajuste)
-        // Ou, melhor ainda, armazenar o nome junto com o conteúdo no localStorage durante o pré-carregamento.
-        // Por enquanto, vamos tentar inferir.
-        const nomeInStorage = localStorage.getItem(`boletoName_${fileId}`); // Assumindo que salvamos o nome também
-        if (nomeInStorage) {
-          boletosPreCarregados.push({ name: nomeInStorage, fileId: fileId });
-        } else {
-          // Se não encontrarmos o nome, podemos tentar outra lógica ou simplesmente usar um nome padrão
-          boletosPreCarregados.push({ name: 'Boleto (Carregado)', fileId: fileId });
-        }
-      }
-    }
+  let boletosConteudo = {};
 
-    if (boletosPreCarregados.length > 0) {
-      console.log("Usando boletos pré-carregados do localStorage:", boletosPreCarregados);
-      boletosPreCarregados.forEach(boleto => {
-        const listItem = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = '#';
-        link.textContent = boleto.name.trim();
-        link.onclick = function(event) {
-          event.preventDefault();
-          const fileId = boleto.fileId;
-          const contentBase64 = localStorage.getItem(`boletoContent_${fileId}`);
-          if (contentBase64) {
-            const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-            const fileURL = URL.createObjectURL(file);
-            openFileViewer(fileURL);
-            logAccess({ apartment: storedApartmentId.replace('apto', 'apto_'), downloadedFile: `Visualizado ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
-          } else {
-            console.error("Conteúdo do boleto não encontrado no localStorage:", fileId);
-            // Fallback para buscar do servidor se necessário
-          }
-        };
-        listItem.appendChild(link);
-        boletosList.appendChild(listItem);
-      });
-      return; // Interrompe a função aqui se usamos os boletos pré-carregados
-    }
-  }
-
-  // Se não houver boletos pré-carregados ou ocorrer um erro, faz a requisição ao backend
+  // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.padding = '20px';
   loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
+  // *** FIM DA ADIÇÃO DO INDICADOR ***
 
-  fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`)
+  fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`) // Passa o apartmentId como está
     .then(response => {
       if (!response.ok) {
         throw new Error(`Erro na requisição: ${response.status}`);
@@ -276,13 +230,26 @@ function loadBoletos(apartmentId) {
       return response.json();
     })
     .then(boletos => {
+      // *** REMOVE O INDICADOR DE CARREGAMENTO APÓS CARREGAR OS BOLETOS ***
       const loadingIndicator = document.getElementById('loading-inicial-boletos');
       if (loadingIndicator) {
         loadingIndicator.remove();
       }
+      // *** FIM DA REMOÇÃO DO INDICADOR ***
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
           if (boleto.name && boleto.fileId) {
+            // *** INÍCIO DA NOVA LÓGICA PARA CARREGAR O CONTEÚDO ***
+            fetch(`/.netlify/functions/load-boletos-content?fileId=${boleto.fileId}`)
+              .then(response => response.json())
+              .then(data => {
+                boletosConteudo[boleto.fileId] = data.contentBase64;
+                console.log(`Conteúdo do boleto ${boleto.name} carregado.`);
+              })
+              .catch(error => console.error('Erro ao carregar conteúdo do boleto:', error));
+            // *** FIM DA NOVA LÓGICA ***
+
+            // *** SEU CÓDIGO EXISTENTE PARA CRIAR OS LINKS ***
             const listItem = document.createElement('li');
             const link = document.createElement('a');
             link.href = '#';
@@ -290,15 +257,16 @@ function loadBoletos(apartmentId) {
             link.onclick = function(event) {
               event.preventDefault();
               const fileId = boleto.fileId;
-              fetch(`/.netlify/functions/load-boletos-content?fileId=${fileId}`)
-                .then(response => response.json())
-                .then(data => {
-                  const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                  const fileURL = URL.createObjectURL(file);
-                  openFileViewer(fileURL);
-                  logAccess({ apartment: apartmentId.replace('apto', 'apto_'), downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
-                })
-                .catch(error => console.error('Erro ao carregar o conteúdo do boleto:', error));
+              const contentBase64 = boletosConteudo[fileId]; // Busca o conteúdo carregado
+              if (contentBase64) {
+                const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
+                openFileViewer(fileURL);
+                logAccess({ apartment: apartmentId.replace('apto', 'apto_'), downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+              } else {
+                console.error("Conteúdo do boleto não encontrado:", fileId);
+                // Você pode adicionar uma lógica de fallback aqui, se necessário
+              }
             };
             listItem.appendChild(link);
             boletosList.appendChild(listItem);
@@ -676,54 +644,3 @@ window.logAccess = function (logData) {
 };
 // Final da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
 window.openFileViewer = openFileViewer;
-
-// Início do código de pré carregamento dos boletos e notificações ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-document.addEventListener('DOMContentLoaded', function() {
-  // Esta função será chamada quando a página area_condominio.html carregar completamente
-  preLoadBoletosAndNotifications();
-});
-
-function preLoadBoletosAndNotifications() {
-  const apartmentId = localStorage.getItem('apartmentId');
-  if (apartmentId) {
-    const fullApartmentId = apartmentId.replace('apto', 'apto_');
-
-    // Lógica para pré-carregar boletos
-    fetch(`/.netlify/functions/load-boletos?apartmentId=${fullApartmentId}`)
-      .then(response => response.json())
-      .then(boletos => {
-        console.log("Lista de boletos retornada:", boletos); // ADICIONE ESTA LINHA
-        
-        boletos.forEach(boleto => {
-          if (boleto.fileId) {
-            fetch(`/.netlify/functions/load-boletos-content?fileId=${boleto.fileId}`)
-              .then(response => response.json())
-              .then(data => {
-                localStorage.setItem(`boletoContent_${boleto.fileId}`, data.contentBase64);
-                console.log(`Boleto ${boleto.name} pré-carregado para localStorage.`);
-                localStorage.setItem(`boletoName_${boleto.fileId}`, boleto.name);
-              });
-          }
-        });
-      });
-
-    // Lógica para pré-carregar notificações
-    fetch(`/.netlify/functions/load-notificacoes?apartmentId=${fullApartmentId}`)
-      .then(response => response.json())
-      .then(notifications => {
-        notifications.forEach(notification => {
-          if (notification.fileId) {
-            fetch(`/.netlify/functions/load-notification-content?fileId=${notification.fileId}`)
-              .then(response => response.json())
-              .then(data => {
-                localStorage.setItem(`notificationContent_${notification.fileId}`, data.contentBase64);
-                console.log(`Notificação ${notification.name} pré-carregada para localStorage.`);
-              });
-          }
-        });
-      });
-  } else {
-    console.log("apartmentId não encontrado no localStorage. Pré-carregamento não iniciado.");
-  }
-}
-// Final do código de pré carregamento dos boletos e notificações ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
