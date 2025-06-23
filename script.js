@@ -670,8 +670,6 @@ function preLoadBoletosAndNotifications() {
               .then(data => {
                 localStorage.setItem(`boletoContent_${boleto.fileId}`, data.contentBase64);
                 console.log(`Boleto ${boleto.name} pré-carregado para localStorage.`);
-              
-                console.log(`Boleto ${boleto.name} pré-carregado para localStorage.`);
               });
           }
         });
