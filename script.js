@@ -392,7 +392,13 @@ function openFileViewer(filePath) {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   if (isMobile) {
-    window.open(filePath, '_blank'); // Abre o PDF em uma nova aba no mobile
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.target = '_blank';
+    link.style.display = 'none'; // Não queremos que o link apareça visualmente
+    document.body.appendChild(link); // Adiciona o link ao corpo do documento
+    link.click(); // Simula um clique no link
+    document.body.removeChild(link); // Remove o link temporário
     viewerContainer.style.display = 'none'; // Oculta o painel
   } else {
     fileViewer.src = filePath;
