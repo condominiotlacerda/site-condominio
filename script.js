@@ -60,19 +60,21 @@ export function showFiles(apartment) {
   console.log("showFiles foi chamada com o apartamento:", apartment);
   loadBoletos(apartment);
   // *** FIM DA INSERÇÃO ***
-  
+
   // Início da parte que carrega as notificações na area_condominio.html =============================================================================================================================
   const notificationsList = document.getElementById('notifications-list');
   notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
-  // Início da parte que diciona imagem de carregamento ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  let notificacoesConteudo = {};
+
+  // Início da parte que adiciona imagem de carregamento ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   const loadingNotificacoesDiv = document.createElement('div');
   loadingNotificacoesDiv.id = 'loading-inicial-notificacoes';
   loadingNotificacoesDiv.style.textAlign = 'center';
   loadingNotificacoesDiv.style.padding = '20px';
   loadingNotificacoesDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando notificações...</p>';
   notificationsList.appendChild(loadingNotificacoesDiv);
-  // Final da parte que diciona imagem de carregamento +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Final da parte que adiciona imagem de carregamento +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const apartamentoIdStorage = localStorage.getItem('apartmentId');
 
@@ -92,6 +94,16 @@ export function showFiles(apartment) {
         if (notifications && notifications.length > 0) {
           notifications.forEach((notification) => {
             if (notification.name && notification.fileId) {
+              // *** INÍCIO DA NOVA LÓGICA PARA CARREGAR O CONTEÚDO DAS NOTIFICAÇÕES ***
+              fetch(`/.netlify/functions/load-notification-content?fileId=${notification.fileId}`)
+                .then(response => response.json())
+                .then(data => {
+                  notificacoesConteudo[notification.fileId] = data.contentBase64;
+                  console.log(`Conteúdo da notificação ${notification.name} carregado.`);
+                })
+                .catch(error => console.error('Erro ao carregar conteúdo da notificação:', error));
+              // *** FIM DA NOVA LÓGICA ***
+
               const listItem = document.createElement('li');
               const link = document.createElement('a');
               link.href = '#';
@@ -99,21 +111,16 @@ export function showFiles(apartment) {
               link.onclick = function(event) {
                 event.preventDefault();
                 const fileId = notification.fileId;
-
-                fetch(`/.netlify/functions/load-notification-content?fileId=${fileId}`)
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error(`Erro ao carregar o conteúdo da notificação (ID: ${fileId}): ${response.status}`);
-                    }
-                    return response.json();
-                  })
-                  .then(data => {
-                    const file = new Blob([Uint8Array.from(atob(data.contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                    const fileURL = URL.createObjectURL(file);
-                    openFileViewer(fileURL);
-                    logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
-                  })
-                  .catch(error => console.error('Erro ao carregar o conteúdo da notificação:', error));
+                const contentBase64 = notificacoesConteudo[fileId]; // Busca o conteúdo carregado
+                if (contentBase64) {
+                  const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                  const fileURL = URL.createObjectURL(file);
+                  openFileViewer(fileURL);
+                  logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+                } else {
+                  console.error("Conteúdo da notificação não encontrado:", fileId);
+                  // Você pode adicionar uma lógica de fallback aqui, se necessário
+                }
               };
               listItem.appendChild(link);
               notificationsList.appendChild(listItem);
@@ -131,7 +138,7 @@ export function showFiles(apartment) {
         listItem.textContent = 'Erro ao carregar notificações.';
         notificationsList.appendChild(listItem);
       });
-      //=======================================================================================================================================
+    //=======================================================================================================================================
   } else {
     const listItem = document.createElement('li');
     listItem.textContent = 'ID do apartamento não encontrado.';
