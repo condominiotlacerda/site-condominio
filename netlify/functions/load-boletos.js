@@ -40,10 +40,10 @@ exports.handler = async (event) => {
     });
 
     const configData = JSON.parse(configString);
-    const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
+    const fullApartmentId = `apto${apartmentId}`.replace('apto', 'apto_'); // Adiciona "apto" e depois substitui
 
-    console.log("load-boletos: fullApartmentId:", fullApartmentId); // ADICIONE ESTA LINHA
-    console.log("load-boletos: configData.boletos:", configData.boletos); // ADICIONE ESTA LINHA
+    console.log("load-boletos: fullApartmentId:", fullApartmentId); // Mantenha esta linha
+    console.log("load-boletos: configData.boletos:", configData.boletos); // Mantenha esta linha
 
     const boletosData = configData.boletos && configData.boletos[fullApartmentId];
 
