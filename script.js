@@ -266,6 +266,7 @@ async function loadBoletos(apartmentId) {
               const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
               const fileURL = URL.createObjectURL(file);
               openFileViewer(fileURL);
+              console.log("Dados de log para boleto:", { apartment: apartmentId.replace('apto', 'apto_'), downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` }); // ADICIONE ESTA LINHA
               logAccess({ apartment: apartmentId.replace('apto', 'apto_'), downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
             } else {
               console.error("Conteúdo do boleto não encontrado:", fileId);
