@@ -25,6 +25,9 @@ function enableApartment() {
 export function showFiles(apartment) {
   const fileContainer = document.getElementById('file-container');
   const fileList = document.getElementById('file-list');
+  const tempListItem = document.createElement('li');
+  tempListItem.textContent = 'Teste de lista';
+  fileList.appendChild(tempListItem);
   const viewerContainer = document.getElementById('viewer-container');
   const contasContainer = document.getElementById('contas-container');
   const notificationsContainer = document.getElementById('notifications-container'); // Pega a referência para a caixa de notificações
