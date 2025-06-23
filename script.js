@@ -233,6 +233,7 @@ function loadBoletos(apartmentId) {
       // *** FIM DA REMOÇÃO DO INDICADOR ***
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
+          console.log("Boleto encontrado:", boleto); // ADICIONE ESTA LINHA
           if (boleto.name && boleto.fileId) {
             const listItem = document.createElement('li');
             const link = document.createElement('a');
