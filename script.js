@@ -222,7 +222,7 @@ function loadBoletos(apartmentId) {
   boletosList.appendChild(loadingDiv);
   // *** FIM DA ADIÇÃO DO INDICADOR ***
 
-  fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId}`) // Passa o apartmentId como está
+  fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId.replace('apto', '')}`) // Passa o apartmentId como está
     .then(response => {
       if (!response.ok) {
         throw new Error(`Erro na requisição: ${response.status}`);
