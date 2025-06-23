@@ -118,7 +118,7 @@
                             // Função para buscar a lista de boletos e iniciar o pré-carregamento do conteúdo
   function preLoadBoletos(apartmentId) {
     const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
-      console.log("Pré-carregando boletos para:", fullApartmentId); // ADICIONE ESTA LINHA
+    console.log("Pré-carregando boletos para:", fullApartmentId); // ADICIONE ESTA LINHA
     fetch(`/.netlify/functions/load-boletos?apartmentId=${fullApartmentId}`)
       .then(response => response.json())
       .then(boletos => {
@@ -155,8 +155,9 @@
   }
 
   // Inicia o pré-carregamento
-  preLoadBoletos(apartmentId);
-  preLoadNotificacoes(apartmentId);
+  const storedApartmentId = localStorage.getItem('apartmentId');
+  preLoadBoletos("apto" + storedApartmentId);
+  preLoadNotificacoes("apto" + storedApartmentId);
                             
                             // *** FIM DA LÓGICA DE PRÉ-CARREGAMENTO ***
 
