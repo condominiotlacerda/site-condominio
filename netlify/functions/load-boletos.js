@@ -1,6 +1,8 @@
 const { google } = require('googleapis');
 
 exports.handler = async (event) => {
+  console.log("load-boletos function foi chamada com:", event.queryStringParameters); // ADICIONE ESTA LINHA
+  
   const configDriveId = process.env.GOOGLE_DRIVE_CONFIGURACOES_ID;
   const apiKey = process.env.GOOGLE_DRIVE_API_KEY;
   const apartmentId = event.queryStringParameters?.apartmentId;
