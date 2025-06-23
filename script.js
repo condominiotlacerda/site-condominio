@@ -234,6 +234,7 @@ function loadBoletos(apartmentId) {
         loadingIndicator.remove();
       }
       // *** FIM DA REMOÇÃO DO INDICADOR ***
+      console.log("Conteúdo da variável boletos ANTES da verificação:", boletos); // ADICIONE ESTA LINHA
       if (boletos && boletos.length > 0) {
         boletos.forEach(boleto => {
           console.log("Boleto encontrado:", boleto); // ADICIONE ESTA LINHA
