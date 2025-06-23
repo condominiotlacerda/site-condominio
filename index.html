@@ -117,8 +117,10 @@
 
                             // Função para buscar a lista de boletos e iniciar o pré-carregamento do conteúdo
   function preLoadBoletos(apartmentId) {
-    const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
-    console.log("Pré-carregando boletos para:", fullApartmentId); // ADICIONE ESTA LINHA
+  console.log("preLoadBoletos foi chamada para o apartamento:", apartmentId); // ADICIONE ESTA LINHA
+  const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
+  console.log("Pré-carregando boletos para:", fullApartmentId); // Esta linha já existe
+  
     fetch(`/.netlify/functions/load-boletos?apartmentId=${fullApartmentId}`)
       .then(response => response.json())
       .then(boletos => {
@@ -137,7 +139,9 @@
 
   // Função para buscar a lista de notificações e iniciar o pré-carregamento do conteúdo
   function preLoadNotificacoes(apartmentId) {
-    const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
+  console.log("preLoadNotificacoes foi chamada para o apartamento:", apartmentId); // ADICIONE ESTA LINHA
+  const fullApartmentId = apartmentId.replace('apto', 'apto_'); // Adiciona o underscore
+  
     fetch(`/.netlify/functions/load-notificacoes?apartmentId=${fullApartmentId}`)
       .then(response => response.json())
       .then(notifications => {
