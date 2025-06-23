@@ -389,19 +389,16 @@ function openFileViewer(filePath) {
   const fileViewer = document.getElementById('file-viewer');
   const downloadButton = document.getElementById('download-button');
 
-  const tempLink = document.createElement('a');
-  tempLink.href = filePath;
-  tempLink.target = '_blank';
-  tempLink.style.display = 'none'; // Oculta o link visualmente
-  viewerContainer.appendChild(tempLink); // Adiciona o link ao container
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-  fileViewer.src = tempLink.href; // Define o src do iframe para o href do link
-  downloadButton.href = filePath;
+  if (isMobile) {
+    window.location.href = filePath; // Abre o PDF na mesma janela no mobile
+  } else {
+    fileViewer.src = filePath;
+    downloadButton.href = filePath;
+    viewerContainer.style.display = ''; // Exibe o painel no desktop
+  }
 
-  // Remove o display none do estilo inline
-  viewerContainer.style.display = '';
-
-  // Adiciona a classe 'active' ao viewerContainer
   viewerContainer.classList.add('active');
 }
 
