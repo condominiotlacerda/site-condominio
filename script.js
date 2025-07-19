@@ -91,11 +91,12 @@ export async function showFiles(apartment) {
       if (notifications && notifications.length > 0) {
         notifications.forEach((notification) => {
           if (notification.name && notification.fileId) {
+            const googleDriveURL = `https://drive.google.com/uc?id=${notification.fileId}`;
             promisesNotificacoes.push(
-              fetch(`/.netlify/functions/load-notification-content?fileId=${notification.fileId}`)
-                .then(response => response.json())
-                .then(data => {
-                  notificacoesConteudo[notification.fileId] = data.contentBase64;
+              fetch(googleDriveURL)
+                .then(response => response.blob())
+                .then(blob => {
+                  notificacoesConteudo[notification.fileId] = URL.createObjectURL(blob);
                   console.log(`Conteúdo da notificação ${notification.name} carregado.`);
                 })
                 .catch(error => console.error('Erro ao carregar conteúdo da notificação:', error))
@@ -107,23 +108,19 @@ export async function showFiles(apartment) {
             link.textContent = notification.name.trim();
             link.onclick = function(event) {
               event.preventDefault();
-              const fileId = notification.fileId;
-              const contentBase64 = notificacoesConteudo[fileId]; // Busca o conteúdo carregado
-              if (contentBase64) {
-                const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-                const fileURL = URL.createObjectURL(file);
+              const fileURL = notificacoesConteudo[notification.fileId]; // Busca o URL Blob criado
+              if (fileURL) {
                 openFileViewer(fileURL);
                 logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
               } else {
-                console.error("Conteúdo da notificação não encontrado:", fileId);
-                // Você pode adicionar uma lógica de fallback aqui, se necessário
+                console.error("URL da notificação não encontrado:", notification.fileId);
               }
             };
             listItem.appendChild(link);
             notificacoesParaAdicionar.push(listItem);
           }
         });
-        await Promise.all(promisesNotificacoes); // Espera que todos os conteúdos das notificações sejam carregados
+        await Promise.all(promisesNotificacoes);
         notificacoesParaAdicionar.forEach(item => notificationsList.appendChild(item));
       } else {
         const listItem = document.createElement('li');
@@ -223,16 +220,14 @@ async function loadBoletos(apartmentId) {
 
   let boletosConteudo = {};
   const promisesBoletos = [];
-  const boletosParaAdicionar = []; // Array para armazenar os elementos de lista dos boletos
+  const boletosParaAdicionar = [];
 
-  // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.padding = '20px';
   loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
-  // *** FIM DA ADIÇÃO DO INDICADOR ***
 
   try {
     const response = await fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId.replace('apto', '')}`);
@@ -244,11 +239,12 @@ async function loadBoletos(apartmentId) {
     if (boletos && boletos.length > 0) {
       boletos.forEach(boleto => {
         if (boleto.name && boleto.fileId) {
+          const googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
           promisesBoletos.push(
-            fetch(`/.netlify/functions/load-boletos-content?fileId=${boleto.fileId}`)
-              .then(response => response.json())
-              .then(data => {
-                boletosConteudo[boleto.fileId] = data.contentBase64;
+            fetch(googleDriveURL)
+              .then(response => response.blob())
+              .then(blob => {
+                boletosConteudo[boleto.fileId] = URL.createObjectURL(blob);
                 console.log(`Conteúdo do boleto ${boleto.name} carregado.`);
               })
               .catch(error => console.error('Erro ao carregar conteúdo do boleto:', error))
@@ -260,24 +256,20 @@ async function loadBoletos(apartmentId) {
           link.textContent = boleto.name.trim();
           link.onclick = function(event) {
             event.preventDefault();
-            const fileId = boleto.fileId;
-            const contentBase64 = boletosConteudo[fileId]; // Busca o conteúdo carregado
-            if (contentBase64) {
-              const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
-              const fileURL = URL.createObjectURL(file);
+            const fileURL = boletosConteudo[boleto.fileId]; // Busca o URL Blob criado
+            if (fileURL) {
               openFileViewer(fileURL);
-              logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+              logAccess({ apartment: apartmentId.replace('apto', 'apto_'), downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
             } else {
-              console.error("Conteúdo do boleto não encontrado:", fileId);
-              // Você pode adicionar uma lógica de fallback aqui, se necessário
+              console.error("URL do boleto não encontrado:", boleto.fileId);
             }
           };
           listItem.appendChild(link);
-          boletosParaAdicionar.push(listItem); // Adiciona o elemento de lista ao array
+          boletosParaAdicionar.push(listItem);
         }
       });
-      await Promise.all(promisesBoletos); // Espera que todos os conteúdos dos boletos sejam carregados
-      boletosParaAdicionar.forEach(item => boletosList.appendChild(item)); // Adiciona os links à lista SOMENTE APÓS o carregamento
+      await Promise.all(promisesBoletos);
+      boletosParaAdicionar.forEach(item => boletosList.appendChild(item));
     } else {
       const listItem = document.createElement('li');
       listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
@@ -291,7 +283,7 @@ async function loadBoletos(apartmentId) {
   } finally {
     const loadingIndicator = document.getElementById('loading-inicial-boletos');
     if (loadingIndicator) {
-      loadingIndicator.remove(); // Remove o indicador de carregamento após a conclusão (com ou sem erro)
+      loadingIndicator.remove();
     }
   }
 }
