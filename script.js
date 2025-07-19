@@ -82,11 +82,12 @@ export async function showFiles(apartment) {
 
   if (apartamentoIdStorage) {
     try {
-      const response = await fetch(`/.netlify/functions/load-notificacoes?apartmentId=${apartamentoIdStorage}`);
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status}`);
-      }
-      const notifications = await response.json();
+      const responseConfigNotificacoes = await fetch('/dados/configuracoes.json');
+      const configDataNotificacoes = await responseConfigNotificacoes.json();
+      const notificacoesApartamento = configDataNotificacoes.notificacoes_id[`apto_${apartmentoIdStorage}`];
+      const notifications = Object.entries(notificacoesApartamento || {})
+        .filter(([name]) => name !== '') // Filtra a entrada vazia que você tinha
+        .map(([name, fileId]) => ({ name, fileId }));
 
       if (notifications && notifications.length > 0) {
         notifications.forEach((notification) => {
@@ -230,11 +231,10 @@ async function loadBoletos(apartmentId) {
   boletosList.appendChild(loadingDiv);
 
   try {
-    const response = await fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId.replace('apto', '')}`);
-    if (!response.ok) {
-      throw new Error(`Erro na requisição: ${response.status}`);
-    }
-    const boletos = await response.json();
+    const responseConfig = await fetch('/dados/configuracoes.json');
+    const configData = await responseConfig.json();
+    const boletosApartamento = configData.boletos[`apto_${apartmentId}`];
+    const boletos = Object.entries(boletosApartamento || {}).map(([name, fileId]) => ({ name, fileId }));
 
     if (boletos && boletos.length > 0) {
       boletos.forEach(boleto => {
