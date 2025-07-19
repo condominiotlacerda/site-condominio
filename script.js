@@ -23,27 +23,31 @@ function enableApartment() {
 
 // início de showFiles ======================================================================================================================================================================
 export async function showFiles(apartment) {
-  const fileContainer = document.getElementById('file-container');
-  const fileList = document.getElementById('file-list');
-  const tempListItem = document.createElement('li');
-  tempListItem.textContent = 'Teste de lista';
-  fileList.appendChild(tempListItem);
-  const viewerContainer = document.getElementById('viewer-container');
-  const contasContainer = document.getElementById('contas-container');
-  const notificationsContainer = document.getElementById('notifications-container'); // Pega a referência para a caixa de notificações
-  const documentosContainer = document.getElementById('documentos-container');
+  const fileContainer = document.getElementById('file-container');
+  const fileList = document.getElementById('file-list');
+  const tempListItem = document.createElement('li');
+  tempListItem.textContent = 'Teste de lista';
+  fileList.appendChild(tempListItem);
+  const viewerContainer = document.getElementById('viewer-container');
+  const contasContainer = document.getElementById('contas-container');
+  const notificationsContainer = document.getElementById('notifications-container'); // Pega a referência para a caixa de notificações
+  const documentosContainer = document.getElementById('documentos-container');
 
-  fileContainer.style.display = 'none';
-  contasContainer.style.display = 'none';
-  notificationsContainer.style.display = 'block'; // Garante que a caixa de notificações também esteja inicialmente visível
-  documentosContainer.style.display = 'none';
-  fileList.innerHTML = '';
+  const apartamentoIdStorage = localStorage.getItem('apartmentId'); // Mova a declaração para aqui
 
-  document.getElementById('apartment-number').textContent = apartment.replace('apto', 'Apto ').replace(/(\D+)(\d)/, '$1 $2');
-  fileContainer.style.display = 'block';
-  contasContainer.style.display = 'block';
-  notificationsContainer.style.display = 'block';
-  documentosContainer.style.display = 'block';
+  fileContainer.style.display = 'none';
+  contasContainer.style.display = 'none';
+  notificationsContainer.style.display = 'block'; // Garante que a caixa de notificações também esteja inicialmente visível
+  documentosContainer.style.display = 'none';
+  fileList.innerHTML = '';
+
+  document.getElementById('apartment-number').textContent = apartment.replace('apto', 'Apto ').replace(/(\D+)(\d)/, '$1 $2');
+  fileContainer.style.display = 'block';
+  contasContainer.style.display = 'block';
+  notificationsContainer.style.display = 'block';
+  documentosContainer.style.display = 'block';
+
+  // ... o restante do seu código da função showFiles ...
 
   fileContainer.classList.remove('active');
   contasContainer.classList.remove('active');
