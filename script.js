@@ -111,12 +111,16 @@ export async function showFiles(apartment) {
             const link = document.createElement('a');
             link.href = '#';
             link.textContent = notification.name.trim();
+
+            // Cria uma variável local para capturar o valor de apartamentoIdStorage
+            const aptoId = apartamentoIdStorage;
+
             link.onclick = function(event) {
               event.preventDefault();
               const fileURL = notificacoesConteudo[notification.fileId]; // Busca o URL Blob criado
               if (fileURL) {
                 openFileViewer(fileURL);
-                logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+                logAccess({ apartment: aptoId, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
               } else {
                 console.error("URL da notificação não encontrado:", notification.fileId);
               }
