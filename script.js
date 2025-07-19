@@ -242,7 +242,9 @@ async function loadBoletos(apartmentId) {
     const responseConfig = await fetch('/dados/configuracoes.json');
     const configData = await responseConfig.json();
     const boletosApartamento = configData.boletos[`apto_${apartmentId}`];
-    const boletos = Object.entries(boletosApartamento || {}).map(([name, fileId]) => ({ name, fileId }));
+    const boletos = Object.entries(boletosApartamento || {})
+      .filter(([name]) => name !== '')
+      .map(([name, fileId]) => ({ name, fileId }));
 
     if (boletos && boletos.length > 0) {
       boletos.forEach(boleto => {
