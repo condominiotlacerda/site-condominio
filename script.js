@@ -88,7 +88,7 @@ export async function showFiles(apartment) {
     try {
       const responseConfigNotificacoes = await fetch('/dados/configuracoes.json');
       const configDataNotificacoes = await responseConfigNotificacoes.json();
-      const notificacoesApartamento = configDataNotificacoes.notificacoes_id[`apto_${apartamentoIdStorage}`];
+      const notificacoesApartamento = configDataNotificacoes.notificacoes_id[`apto_${apartmentIdStorage}`];
       const notifications = Object.entries(notificacoesApartamento || {})
         .filter(([name]) => name !== '') // Filtra a entrada vazia que você tinha
         .map(([name, fileId]) => ({ name, fileId }));
