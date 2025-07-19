@@ -4,5 +4,131 @@
     "1": "Aviso 1 (3/6/25): O canal oficial do Síndico para avisos urgentes aos condôminos como editais de assembleias, falta d'água, etc., é o Grupo do Condomínio no WhatsApp. O e-mail serve para os condôminos encaminharem suas demandas ao Síndico.",
     "2": "Aviso 2 (11/6/25): Está disponível a prestação de contas referente ao mês de janeiro. Em um só arquivo ela reúne a prestação de contas dos dois síndicos: de 1º a 13 de janeiro e de 14 de janeiro a 4 de fevereiro.",
     "3": "Aviso 3: "
+  },
+  "boletos": {
+    "apto_1": {
+    "Taxa Condominial": "1z_zL82W6jGg7xu-4Jo1IR-JB0Nv30E1U",
+    "Taxa Mnt Emergenciais": "13p6FBQNLpZhz8fvekyV03BvvHbOaaU7r",
+    "": "1Nyz2ByDRQWKbPOEFSEg17jl4OrM1PoE2",
+    "": "1AItEHJbHYdq8pMtFqnwGt12pKNWRHTZf"
+    },
+    "apto_101": {
+    "Taxa Condominial": "1K4io5rska7VY589zJbrqO60TmaQ7HnV0",
+    "Taxa Mnt Emergenciais": "1qaKlOcsBBulkr2ySy_zGmaW1wP_XsMir",
+    "": "1GVxPlSUSd5BcmHrt2jnIU3kQijU9cyXx",
+    "": "1BiwI6Q8k_NS5HPGF6kByhnQXsPg3tK6t"
+    },
+    "apto_102": {
+    "Taxa Condominial": "1hq2dcHNVFeU8J7yMNPGmUQlPadHlenuL",
+    "Taxa Mnt Emergenciais": "1ZAQ7_MF-o38CeBQUc0Cu4IO93rEqTslY",
+    "": "1FPBxce5eH8FTkw8oAo3krWz9vfNRlk6q",
+    "": "109_UJVULbh62vkom1wg5qRItMyJafs2M"
+    },
+    "apto_201": {
+    "Taxa Condominial": "1BhgQvVGG34Y0sNhwGZ9HO-JU7j1S40YO",
+    "Taxa Mnt Emergenciais": "1zvV0MWgE9RCycWOhhWaN6zriwilLhSdk",
+    "": "1fdiRU0SzLtVBtZsJSEDt1qhUfGXAborp",
+    "": "1LouohVjFumcVZslTd0FKcd0p0nC_yOZT"
+    },
+    "apto_202": {
+    "Taxa Condominial": "1qPEL7Av_xKp5PELdch5dhqqpQdhSV-eS",
+    "Taxa Mnt Emergenciais": "1EzrJ4618Av4Wvdpo9nO1kZb_Yi2U5tim",
+    "Boleto Louco": "1FMYE4D3S6FhtWcl6_NrSsK1nMq-jgMpG",
+    "": "1KMlrjuFCxZ9NXc4jKhUW22AyHAsodPZe"
+    },
+    "apto_301": {
+    "Taxa Condominial": "1-S0f-yJYTelIKkhpjUsp_Tg9A4tG1qxc",
+    "Taxa Mnt Emergenciais": "163msgScE2_HWrMtBS0FlEJa81AMXfjN_",
+    "Boleto testando": "1PO9Fgpft6BS-qe192EsAB0VDjb1JqpRf",
+    "": "1lEYbRLdDcQEPwYnl-IOkT4mn6XLTAe8K"
+    },
+    "apto_302": {
+    "Taxa Condominial": "1gKyHbGEPt05y6MBj86j74ObmDRlwNDlK",
+    "Taxa Mnt Emergenciais": "1hNrYxDYeMTEGRU0SjbYHA1GoQ11TYnUH",
+    "": "1ISOYRZysGiovQMuCowjfy5fOYaLdCPNZ",
+    "": "13CDeLEs_chwKSiG9eY_rcF6JB8SByJ5i"
+    },
+    "apto_401": {
+    "Taxa Condominial": "1OzTet-ZVJe63vWJXKvxt8UnfDfIgYTWy",
+    "Taxa Mnt Emergenciais": "1oHurODVI8zsaiK8WRAi49_gTU8MCqQxJ",
+    "Ressarcimento Síndico": "1EgH6Uw-2d2QK7VtpZcIMIE0vscmZiDQc",
+    "": "1vU0lyWnlIa1agObuIAVvNhPh_e84UM3X"
+    }
+  },
+  "notificacoes_id": {
+	"apto_1": {
+    	"": "1s0dZIYAZvzn7ThFUM4u2Y_cDSsSW25wq",
+	"": "12tlMc7B8PVPlqSLwhArr67GtHxJjYIcJ",
+	"": "1H2qh2mz3gKUlh4uxMeKGHvL_nmKr_Ro7",
+	"": "1u5ESrVgESdUjRCB5hth5AuIfyjp2A5Gm"
+	},
+	"apto_101": {
+    	"": "13eBozy0WE-oHJN1qgi4Vdnbyi_cJfPcj",
+	"": "1tCuv4_rOwQ0XsgT3WIVUFHySRbPgYV9e",
+	"": "1lv7MZtFo-cjab6nbCL034KaCeVh1Qs2V",
+	"": "1qHVS7r3eq0VMfTEpYAXn4q3rCcvwUzQW"
+	},
+	"apto_102": {
+    	"": "1cCSzFVdCxbk-qSZTVQz-jbU4LLxXWw5H",
+	"": "11ZXFMEdrA19XuWA60LMydFJZNtssi94X",
+	"": "1MsPtSkSA--OaKRWxyylCivs_yrDuy-zo",
+	"": "1FUbgmSZVsu4he6IPqmJp61Z8h7dpYFYA"
+	},
+	"apto_201": {
+    	"": "1fjht5sVkUU2Ya3XG3E8hupN5B2rR5XEF",
+	"": "1e8nm0AQ5Ibucr3oUB8zwpIMVK7ENypMO",
+	"": "1WBOQ7CuFAqthqWM41XxBE9gpV7Njx_HY",
+	"": "1Jzi-pdHOlPnwaL7pMATS0BVbTqTFEe9t"
+	},
+	"apto_202": {
+    	"1. Notif de 14/04/2025": "1dqvezF_HID-hRoAhLQXKo1p5xTHTFsUR",
+	"": "1mbA5mWgnhEZFNyOzLnLCWegPuW_K0AX8",
+	"": "1jaa5Wl5H_QgiMJFcgwNROGeayLe2iM7Q",
+	"": "1O3QfipPMpyeifP727ysibBloSDz7SZ9k"
+	},
+	"apto_301": {
+    	"": "1LLEU1-92Us_A0rLpYqxbj-bYDBOmqomw",
+	"": "1awzyhqYnbMxvqDcnEtaROJglaF83ePTI",
+	"": "12qCDBxf5uuMYql1BdJy6IsM9LhAKLxzc",
+	"": "1vxGb2lNaCTqLVXreqfbdDy4jllYrwr1x"
+	},
+	"apto_302": {
+    	"": "1FfJ6Lr5xMedJT6e3BfYIj1P-x-aEhjBW",
+	"": "1jbQsZqOgVEp8tB9VvgtCKuapHnGiQa41",
+	"": "13MVj6-bjtJMLKFSusPsbQYSYe3o4bFS9",
+	"": "1gay9Ev3al_tmCNPCsOgVOKIF5Ucx2OQH"
+	},
+	"apto_401": {
+    	"1. Notif de 31/03/2025": "1sN7Uhp4RRVuZ64Rn_pvoG0Cc_fLmusY6",
+	"2. Notif de 04/06/2025": "1vtA7XjKKpXxsnp3tcCfo-8ZFVzPuQE7b",
+	"": "17s6_OswGZpahTaD1Qpr--j73367ILgre",
+	"": "1EVQOjaZWX5LiZhUzBaNo0s8FLv9bqEvW"
+	}
+    },
+    "contas": {
+      "2025": {
+        "1.jan": "1svhFp2Sjmy9wRd4I4jr1v4QhG9nLIVuG",
+        "2.fev": "1rjNyQA1zbZflRM49r1gJUxGLUdO6ZYBH",
+        "3.mar": "1TeTFRAOlcTFYVGVDTVdoCdtXNdOgxfFb",
+        "4.abr": "1w4zPAKkbyi3KdEdmH9cKAVlpvE06Jp5n",
+        "5.mai": "1opCmezeAg7kxHx0xdDT1_KOtQqFKZEIZ",
+        "6.jun": "1140xoJbfpxbqAOpLpIA8aj4qLqJkhZhY",
+        "7.jul": "1LEuRGQia9bTVBDMBBixmBnvbRB8435_G",
+        "8.ago": "1FzAvnS6VxAIBFLYo5gi7gKI8pGqnnwIB",
+        "9.set": "1brZ4bjp4uOT5LP2pa-zgmlVJtcdMB5kx",
+        "10.out": "1zoyxSjsFrDoO11ZOP0t5Dg6cDHOjS-Ev",
+        "11.nov": "1-9DW7vmWDoY1wwXPiHRPpj9iSCzbd-Hy",
+        "12.dez": "1s9B7IWhWgkCmgGAU_HDKTsayAzLLfd8S"
+      }
+    },
+  "previsao_despesas": {
+    "link": "1whuf2hUCHDFahqOozan_A_cOqsG0AFZg"
+  },
+  "seu_dinheiro": {
+    "seu_dinheiro_1": "1yTu8OfFnKlPKCE7xr7jAiIiraOAK2GTn",
+    "seu_dinheiro_2": "1qJsxUoBIf07v9YY4O2ej1SZRswhga-hk",
+    "seu_dinheiro_3": "",
+    "seu_dinheiro_4": "",
+    "seu_dinheiro_5": ""
   }
 }
