@@ -82,7 +82,7 @@ export async function showFiles(apartment) {
   notificationsList.appendChild(loadingNotificacoesDiv);
   // Final da parte que adiciona imagem de carregamento +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  const apartamentoIdStorage = localStorage.getItem('apartmentId');
+  //const apartamentoIdStorage = localStorage.getItem('apartmentId');
 
   if (apartamentoIdStorage) {
     try {
