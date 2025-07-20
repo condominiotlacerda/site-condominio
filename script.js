@@ -222,7 +222,7 @@ async function loadBoletos(apartmentId) {
             identifier = match ? match[0] : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
           }
           const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
-          const fileURL = `/pdfs/boletos/${fileName}`;
+          const fileURL = `pdfs/boletos/${fileName}`;
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
