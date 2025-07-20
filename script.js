@@ -214,6 +214,8 @@ async function loadBoletos(apartmentId) {
     if (boletosApartamento) {
       const boletoKeys = Object.keys(boletosApartamento); // Obtém as chaves do objeto na ordem em que foram definidas
 
+      console.log("Chaves encontradas no boletosApartamento:", boletoKeys); // ADICIONE ESTE LOG
+
       boletoKeys.forEach(boletoName => {
         if (boletoName !== "" && boletosApartamento.hasOwnProperty(boletoName)) {
           const identifier = boletoName.toLowerCase().includes('condominio') ? 'condominio' : boletoKeys.indexOf(boletoName) + 1;
@@ -225,6 +227,7 @@ async function loadBoletos(apartmentId) {
           const link = document.createElement('a');
           link.href = fileURL;
           link.textContent = boletoName.trim();
+          listItem.target = '_blank'; // Você pode remover esta linha se quiser abrir no painel
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
         }
