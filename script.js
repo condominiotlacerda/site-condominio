@@ -208,32 +208,34 @@ async function loadBoletos(apartmentId) {
 
   try {
     const responseConfig = await fetch('dados/configuracoes.json');
-    console.log("Resposta da busca do configuracoes.json (Boletos):", responseConfig.ok); // ADICIONAR ESTE LOG
     const configData = await responseConfig.json();
-    console.log("Dados do configuracoes.json (Boletos):", configData); // ADICIONAR ESTE LOG
-    const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
-    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento)); // ADICIONAR ESTE LOG
+    const boletosApartamento = configData.boletos[`${apartmentId}`];
 
     if (boletosApartamento) {
+      const apartmentNumber = apartmentId.replace('apto', '');
+      const filenamePatterns = [
+        { name: "Taxa Condominial", pattern: `boleto_tx_condominio_apto_${apartmentNumber}.pdf` },
+        { name: "Taxa Mnt Emergenciais", pattern: `boleto_tx_1_apto_${apartmentNumber}.pdf` },
+        { name: "", pattern: `boleto_tx_2_apto_${apartmentNumber}.pdf` },
+        { name: "", pattern: `boleto_tx_3_apto_${apartmentNumber}.pdf` }
+      ];
+
+      let index = 0;
       for (const boletoName in boletosApartamento) {
-        if (boletoName !== "" && boletosApartamento.hasOwnProperty(boletoName)) {
-          const identifier = boletoName.toLowerCase().includes('condominio') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
-          const apartmentNumber = apartmentId.replace('apto', '');
-          const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
+        if (boletosApartamento.hasOwnProperty(boletoName) && index < filenamePatterns.length) {
+          const patternInfo = filenamePatterns[index];
+          const fileName = patternInfo.pattern;
+          const linkName = boletoName.trim() !== "" ? boletoName.trim() : `Boleto ${index + 1}`; // Use boletoName do config ou um padrão
           const fileURL = `/pdfs/boletos/${fileName}`;
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
           link.href = fileURL;
-          link.textContent = boletoName.trim();
+          link.textContent = linkName;
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
+          index++;
         }
-      }
-      if (boletosList.children.length === 0) {
-        const listItem = document.createElement('li');
-        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
-        boletosList.appendChild(listItem);
       }
     } else {
       const listItem = document.createElement('li');
