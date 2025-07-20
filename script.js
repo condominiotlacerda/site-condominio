@@ -209,16 +209,12 @@ async function loadBoletos(apartmentId) {
   try {
     const responseConfig = await fetch('/dados/configuracoes.json');
     const configData = await responseConfig.json();
-    const boletosApartamento = configData.boletos[`${apartmentId}`];
+    const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
 
     if (boletosApartamento) {
-      const boletoKeys = Object.keys(boletosApartamento); // Obtém as chaves do objeto na ordem em que foram definidas
-
-      console.log("Chaves encontradas no boletosApartamento:", boletoKeys); // ADICIONE ESTE LOG
-
-      boletoKeys.forEach(boletoName => {
+      for (const boletoName in boletosApartamento) {
         if (boletoName !== "" && boletosApartamento.hasOwnProperty(boletoName)) {
-          const identifier = boletoName.toLowerCase().includes('condominio') ? 'condominio' : boletoKeys.indexOf(boletoName) + 1;
+          const identifier = boletoName.toLowerCase().includes('condominial') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
           const apartmentNumber = apartmentId.replace('apto', '');
           const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
           const fileURL = `/pdfs/boletos/${fileName}`;
@@ -227,11 +223,10 @@ async function loadBoletos(apartmentId) {
           const link = document.createElement('a');
           link.href = fileURL;
           link.textContent = boletoName.trim();
-          listItem.target = '_blank'; // Você pode remover esta linha se quiser abrir no painel
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
         }
-      });
+      }
       if (boletosList.children.length === 0) {
         const listItem = document.createElement('li');
         listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
