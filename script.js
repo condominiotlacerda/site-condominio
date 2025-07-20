@@ -235,12 +235,15 @@ async function loadBoletos(apartmentId) {
   try {
     const responseConfig = await fetch('/dados/configuracoes.json');
     const configData = await responseConfig.json();
-    const boletosApartamento = configData.boletos[`${apartmentId}`]; // Usando o ID do apartamento diretamente
+    console.log("Dados dos boletos do configData:", configData.boletos);
+    const boletosApartamento = configData.boletos[`${apartmentId}`]; // Usando o ID do apartamento diretamente (sem "apto_")
     const boletos = Object.entries(boletosApartamento || {})
       .filter(([name]) => name !== '')
       .map(([name, fileId]) => ({ name, fileId }));
+    console.log("Array de boletos processado:", boletos);
 
     if (boletos && boletos.length > 0) {
+      console.log("Condição de boletos atendida:", boletos.length);
       boletos.forEach(boleto => {
         if (boleto.name && boleto.fileId) {
           const googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
