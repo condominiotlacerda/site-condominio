@@ -78,7 +78,7 @@ export async function showFiles(apartment) {
       try {
         const responseConfigNotificacoes = await fetch('dados/configuracoes.json');
         const configDataNotificacoes = await responseConfigNotificacoes.json();
-        const aptoIdWithUnderScore = `apto_${apartmentoIdStorage}`;
+        const aptoIdWithUnderScore = `apto_${apartamentoIdStorage}`;
         const notificacoesApartamento = configDataNotificacoes.notificacoes_id[aptoIdWithUnderScore];
 
         if (notificacoesApartamento) {
