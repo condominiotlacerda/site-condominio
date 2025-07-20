@@ -238,7 +238,7 @@ window.sair = sair;
         const apartmentId = localStorage.getItem('apartmentId');
         if (apartmentId) {
           const aptoNumber = apartmentId.replace('apto', '');
-          const apartmentButton = document.getElementById('apto' + aptoNumber);
+          const apartmentButton = document.getElementById('apto_' + aptoNumber);
           if (apartmentButton) {
             apartmentButton.disabled = false;
           }
