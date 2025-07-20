@@ -214,27 +214,34 @@ async function loadBoletos(apartmentId) {
 
     if (boletosApartamento) {
       const apartmentNumber = apartmentId.replace('apto', '');
+      let index = 0;
       for (const boletoName in boletosApartamento) {
         if (boletosApartamento.hasOwnProperty(boletoName)) {
-          let identifier = boletoName.toLowerCase().includes('condominial') ? 'condominio' : '';
-          if (identifier === '') {
-            const match = boletoName.match(/\d+/);
-            identifier = match ? match[0] : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
+          let identifier = '';
+          if (boletoName.toLowerCase().includes('condominial')) {
+            identifier = 'condominio';
+          } else if (index === 1) {
+            identifier = '1';
+          } else if (index === 2) {
+            identifier = '2';
+          } else if (index === 3) {
+            identifier = '3';
           }
           const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
           const fileURL = `pdfs/boletos/${fileName}`;
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
-          link.href = '#'; // Alteramos o href para '#'
+          link.href = '#';
           link.textContent = boletoName.trim();
-          link.onclick = function(event) { // Adicionamos o evento de clique
+          link.onclick = function(event) {
             event.preventDefault();
             openFileViewer(fileURL);
             logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${boletoName.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
           };
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
+          index++;
         }
       }
     } else {
