@@ -234,20 +234,21 @@ async function loadBoletos(apartmentId) {
   try {
     const responseConfig = await fetch('/dados/configuracoes.json');
     const configData = await responseConfig.json();
-    console.log("Dados dos boletos do configData:", configData.boletos);
-    const apartmentNumber = apartmentId.replace('apto', '');
-    const boletosApartamento = configData.boletos[`apto_${apartmentNumber}`]; // Usando o ID do apartamento diretamente (sem "apto_")
-    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento, null, 2));
+    const boletosApartamento = configData.boletos[`${apartmentId}`];
     const boletos = Object.entries(boletosApartamento || {})
       .filter(([name]) => name !== '')
       .map(([name, fileId]) => ({ name, fileId }));
-    console.log("Array de boletos processado (JSON):", JSON.stringify(boletos, null, 2));
+    console.log("Dados dos boletos do configData:", configData.boletos);
+    console.log("Array de boletos processado:", boletos);
 
     if (boletos && boletos.length > 0) {
       console.log("Condição de boletos atendida:", boletos.length);
       boletos.forEach(boleto => {
         if (boleto.name && boleto.fileId) {
-          const googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
+          let googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
+          if (boleto.name === "Taxa Mnt Emergenciais") {
+            googleDriveURL = 'https://drive.google.com/file/d/1oHurODVI8zsaiK8WRAi49_gTU8MCqQxJ/view?usp=drive_link'; // LINK DIRETO PARA TESTE
+          }
           promisesBoletos.push(
             fetch(googleDriveURL)
               .then(response => response.blob())
@@ -264,7 +265,7 @@ async function loadBoletos(apartmentId) {
           link.textContent = boleto.name.trim();
           link.onclick = function(event) {
             event.preventDefault();
-            const fileURL = boletosConteudo[boleto.fileId]; // Busca o URL Blob criado
+            const fileURL = boletosConteudo[boleto.fileId];
             if (fileURL) {
               openFileViewer(fileURL);
               logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
