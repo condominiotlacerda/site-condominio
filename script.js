@@ -220,10 +220,6 @@ async function loadBoletos(apartmentId) {
   const boletosList = document.getElementById('file-list');
   boletosList.innerHTML = '';
 
-  let boletosConteudo = {};
-  const promisesBoletos = [];
-  const boletosParaAdicionar = [];
-
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
@@ -234,61 +230,39 @@ async function loadBoletos(apartmentId) {
   try {
     const responseConfig = await fetch('/dados/configuracoes.json');
     const configData = await responseConfig.json();
-    console.log("Valor de apartmentId antes de buscar boletos:", apartmentId);
-    const boletosApartamento = configData.boletos[`apto_${apartmentId}`];
-    console.log("Dados dos boletos do configData:", configData.boletos);
-    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento, null, 2));
-    const boletos = Object.entries(boletosApartamento || {})
-      .filter(([name, fileId]) => name !== '' && fileId !== '') // Filtro otimizado
-      .map(([name, fileId]) => ({ name, fileId }));
-    console.log("Array de boletos processado (JSON):", JSON.stringify(boletos, null, 2));
+    const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
 
-    if (boletos && boletos.length > 0) {
-      console.log("Condição de boletos atendida:", boletos.length);
-      boletos.forEach(boleto => {
-        console.log("Processando boleto:", boleto.name, boleto.fileId);
-        if (boleto.name && boleto.fileId) {
-          const googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
-          promisesBoletos.push(
-            fetch(googleDriveURL)
-              .then(response => response.blob())
-              .then(blob => {
-                boletosConteudo[boleto.fileId] = URL.createObjectURL(blob);
-                console.log(`Conteúdo do boleto ${boleto.name} carregado.`);
-              })
-              .catch(error => console.error('Erro ao carregar conteúdo do boleto:', error))
-          );
+    if (boletosApartamento) {
+      for (const boletoName in boletosApartamento) {
+        if (boletoName !== "" && boletosApartamento.hasOwnProperty(boletoName)) {
+          const identifier = boletosName.toLowerCase().includes('condominio') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
+          const apartmentNumber = apartmentId.replace('apto', '');
+          const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
+          const fileURL = `/pdfs/boletos/${fileName}`;
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
-          link.href = '#';
-          link.textContent = boleto.name.trim();
-          link.onclick = function(event) {
-            event.preventDefault();
-            const fileURL = boletosConteudo[boleto.fileId];
-            if (fileURL) {
-              openFileViewer(fileURL);
-              logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
-            } else {
-              console.error("URL do boleto não encontrado:", boleto.fileId);
-            }
-          };
+          link.href = fileURL;
+          link.textContent = boletoName.trim();
+          link.target = '_blank'; // Para abrir em uma nova aba
           listItem.appendChild(link);
-          boletosParaAdicionar.push(listItem);
+          boletosList.appendChild(listItem);
         }
-      });
-      await Promise.all(promisesBoletos);
-      boletosParaAdicionar.forEach(item => boletosList.appendChild(item));
+      }
+      if (boletosList.children.length === 0) {
+        const listItem = document.createElement('li');
+        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
+        boletosList.appendChild(listItem);
+      }
     } else {
       const listItem = document.createElement('li');
       listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
       boletosList.appendChild(listItem);
     }
+
   } catch (error) {
-    const listItem = document.createElement('li');
-    listItem.textContent = 'Erro ao carregar boletos.';
-    boletosList.appendChild(listItem);
     console.error('Erro ao carregar boletos:', error);
+    boletosList.innerHTML = '<li style="color: red;">Erro ao carregar boletos.</li>';
   } finally {
     const loadingIndicator = document.getElementById('loading-inicial-boletos');
     if (loadingIndicator) {
