@@ -208,16 +208,15 @@ async function loadBoletos(apartmentId) {
 
   try {
     const responseConfig = await fetch('/dados/configuracoes.json');
-    console.log("Resposta da busca do configuracoes.json (Boletos):", responseConfig.ok); // ADICIONAR ESTE LOG
     const configData = await responseConfig.json();
-    console.log("Dados do configuracoes.json (Boletos):", configData); // ADICIONAR ESTE LOG
-    const boletosApartamento = configData.boletos[`apto_${apartmentId.replace('apto', '')}`]; // Assumindo ID sem underscore no config
-    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento)); // ADICIONAR ESTE LOG
+    const boletosApartamento = configData.boletos[`${apartmentId}`];
 
     if (boletosApartamento) {
-      for (const boletoName in boletosApartamento) {
+      const boletoKeys = Object.keys(boletosApartamento); // Obtém as chaves do objeto na ordem em que foram definidas
+
+      boletoKeys.forEach(boletoName => {
         if (boletoName !== "" && boletosApartamento.hasOwnProperty(boletoName)) {
-          const identifier = boletoName.toLowerCase().includes('condominio') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
+          const identifier = boletoName.toLowerCase().includes('condominio') ? 'condominio' : boletoKeys.indexOf(boletoName) + 1;
           const apartmentNumber = apartmentId.replace('apto', '');
           const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
           const fileURL = `/pdfs/boletos/${fileName}`;
@@ -226,11 +225,10 @@ async function loadBoletos(apartmentId) {
           const link = document.createElement('a');
           link.href = fileURL;
           link.textContent = boletoName.trim();
-          link.target = '_blank'; // Para abrir em uma nova aba
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
         }
-      }
+      });
       if (boletosList.children.length === 0) {
         const listItem = document.createElement('li');
         listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
