@@ -235,20 +235,19 @@ async function loadBoletos(apartmentId) {
     const responseConfig = await fetch('/dados/configuracoes.json');
     const configData = await responseConfig.json();
     const boletosApartamento = configData.boletos[`${apartmentId}`];
+    console.log("Dados dos boletos do configData:", configData.boletos);
+    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento, null, 2));
     const boletos = Object.entries(boletosApartamento || {})
       .filter(([name]) => name !== '')
       .map(([name, fileId]) => ({ name, fileId }));
-    console.log("Dados dos boletos do configData:", configData.boletos);
-    console.log("Array de boletos processado:", boletos);
+    console.log("Array de boletos processado (JSON):", JSON.stringify(boletos, null, 2));
 
     if (boletos && boletos.length > 0) {
       console.log("Condição de boletos atendida:", boletos.length);
       boletos.forEach(boleto => {
+        console.log("Processando boleto:", boleto.name, boleto.fileId);
         if (boleto.name && boleto.fileId) {
-          let googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
-          if (boleto.name === "Taxa Mnt Emergenciais") {
-            googleDriveURL = 'https://drive.google.com/file/d/1oHurODVI8zsaiK8WRAi49_gTU8MCqQxJ/view?usp=drive_link'; // LINK DIRETO PARA TESTE
-          }
+          const googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
           promisesBoletos.push(
             fetch(googleDriveURL)
               .then(response => response.blob())
