@@ -234,6 +234,7 @@ async function loadBoletos(apartmentId) {
   try {
     const responseConfig = await fetch('/dados/configuracoes.json');
     const configData = await responseConfig.json();
+    console.log("Valor de apartmentId antes de buscar boletos:", apartmentId);
     const boletosApartamento = configData.boletos[`apto_${apartmentId}`];
     console.log("Dados dos boletos do configData:", configData.boletos);
     console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento, null, 2));
