@@ -226,8 +226,13 @@ async function loadBoletos(apartmentId) {
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
-          link.href = fileURL;
+          link.href = '#'; // Alteramos o href para '#'
           link.textContent = boletoName.trim();
+          link.onclick = function(event) { // Adicionamos o evento de clique
+            event.preventDefault();
+            openFileViewer(fileURL);
+            logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${boletoName.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+          };
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
         }
