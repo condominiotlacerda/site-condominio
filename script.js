@@ -208,13 +208,16 @@ async function loadBoletos(apartmentId) {
 
   try {
     const responseConfig = await fetch('/dados/configuracoes.json');
+    console.log("Resposta da busca do configuracoes.json (Boletos):", responseConfig.ok); // ADICIONAR ESTE LOG
     const configData = await responseConfig.json();
+    console.log("Dados do configuracoes.json (Boletos):", configData); // ADICIONAR ESTE LOG
     const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
+    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento)); // ADICIONAR ESTE LOG
 
     if (boletosApartamento) {
       for (const boletoName in boletosApartamento) {
         if (boletoName !== "" && boletosApartamento.hasOwnProperty(boletoName)) {
-          const identifier = boletosName.toLowerCase().includes('condominio') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
+          const identifier = boletoName.toLowerCase().includes('condominio') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
           const apartmentNumber = apartmentId.replace('apto', '');
           const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
           const fileURL = `/pdfs/boletos/${fileName}`;
