@@ -211,7 +211,7 @@ async function loadBoletos(apartmentId) {
     console.log("Resposta da busca do configuracoes.json (Boletos):", responseConfig.ok); // ADICIONE ESTE LOG
     const configData = await responseConfig.json();
     console.log("Dados do configuracoes.json (Boletos):", configData); // ADICIONAR ESTE LOG
-    const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
+    const boletosApartamento = configData.boletos[`apto_${apartmentId.replace('apto', '')}`]; // Assumindo ID sem underscore no config
     console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento)); // ADICIONAR ESTE LOG
 
     if (boletosApartamento) {
