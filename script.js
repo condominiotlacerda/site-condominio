@@ -78,7 +78,7 @@ export async function showFiles(apartment) {
 
   if (apartamentoIdStorage) {
     try {
-      const responseConfigNotificacoes = await fetch('/dados/configuracoes.json');
+      const responseConfigNotificacoes = await fetch('dados/configuracoes.json');
       const configDataNotificacoes = await responseConfigNotificacoes.json();
       const notificacoesApartamento = configDataNotificacoes.notificacoes_id[`apto_${apartamentoIdStorage}`];
 
@@ -207,7 +207,7 @@ async function loadBoletos(apartmentId) {
   boletosList.appendChild(loadingDiv);
 
   try {
-    const responseConfig = await fetch('/dados/configuracoes.json');
+    const responseConfig = await fetch('dados/configuracoes.json');
     const configData = await responseConfig.json();
     const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
 
