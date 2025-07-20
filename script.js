@@ -225,8 +225,10 @@ async function loadBoletos(apartmentId) {
         if (boletosApartamento.hasOwnProperty(boletoName) && index < filenamePatterns.length) {
           const patternInfo = filenamePatterns[index];
           const fileName = patternInfo.pattern;
-          const linkName = boletoName.trim() !== "" ? boletoName.trim() : `Boleto ${index + 1}`; // Use boletoName do config ou um padrão
+          const linkName = boletoName.trim() !== "" ? boletoName.trim() : `Boleto ${index + 1}`;
           const fileURL = `/pdfs/boletos/${fileName}`;
+
+          console.log(`Processando boleto: nome original="${boletoName}", nome do link="${linkName}", nome do arquivo="${fileName}", URL="${fileURL}"`); // ADICIONE ESTE LOG
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
@@ -235,6 +237,8 @@ async function loadBoletos(apartmentId) {
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
           index++;
+        } else {
+          console.log(`Pulando ou excedendo limite: nome original="${boletoName}", index="${index}"`); // ADICIONE ESTE LOG
         }
       }
     } else {
