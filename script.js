@@ -214,7 +214,7 @@ async function loadBoletos(apartmentId) {
     if (boletosApartamento) {
       for (const boletoName in boletosApartamento) {
         if (boletoName !== "" && boletosApartamento.hasOwnProperty(boletoName)) {
-          const identifier = boletoName.toLowerCase().includes('condominial') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
+          const identifier = boletoName.toLowerCase().includes('condominio') ? 'condominio' : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
           const apartmentNumber = apartmentId.replace('apto', '');
           const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
           const fileURL = `/pdfs/boletos/${fileName}`;
@@ -223,6 +223,7 @@ async function loadBoletos(apartmentId) {
           const link = document.createElement('a');
           link.href = fileURL;
           link.textContent = boletoName.trim();
+          link.target = '_blank'; // Para abrir em uma nova aba
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
         }
