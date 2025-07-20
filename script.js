@@ -67,10 +67,6 @@ export async function showFiles(apartment) {
   const notificationsList = document.getElementById('notifications-list');
   notificationsList.innerHTML = ''; // Limpa a lista de notificações anterior
 
-  let notificacoesConteudo = {};
-  const promisesNotificacoes = [];
-  const notificacoesParaAdicionar = [];
-
   // Início da parte que adiciona imagem de carregamento
   const loadingNotificacoesDiv = document.createElement('div');
   loadingNotificacoesDiv.id = 'loading-inicial-notificacoes';
@@ -85,44 +81,28 @@ export async function showFiles(apartment) {
       const responseConfigNotificacoes = await fetch('/dados/configuracoes.json');
       const configDataNotificacoes = await responseConfigNotificacoes.json();
       const notificacoesApartamento = configDataNotificacoes.notificacoes_id[`apto_${apartamentoIdStorage}`];
-      const notifications = Object.entries(notificacoesApartamento || {})
-        .filter(([name]) => name !== '')
-        .map(([name, fileId]) => ({ name, fileId }));
 
-      if (notifications && notifications.length > 0) {
-        notifications.forEach((notification) => {
-          if (notification.name && notification.fileId) {
-            const googleDriveURL = `https://drive.google.com/uc?id=${notification.fileId}`;
-            promisesNotificacoes.push(
-              fetch(googleDriveURL)
-                .then(response => response.blob())
-                .then(blob => {
-                  notificacoesConteudo[notification.fileId] = URL.createObjectURL(blob);
-                  console.log(`Conteúdo da notificação ${notification.name} carregado.`);
-                })
-                .catch(error => console.error('Erro ao carregar conteúdo da notificação:', error))
-            );
+      if (notificacoesApartamento) {
+        for (const notificacaoName in notificacoesApartamento) {
+          if (notificacaoName !== "" && notificacoesApartamento.hasOwnProperty(notificacaoName)) {
+            const identifier = Object.keys(notificacoesApartamento).indexOf(notificacaoName) + 1;
+            const apartmentNumber = apartamentoIdStorage.replace('apto_', '');
+            const fileName = `notificacao_${identifier}_apto_${apartmentNumber}.pdf`;
+            const fileURL = `/notificacoes/${fileName}`;
 
             const listItem = document.createElement('li');
             const link = document.createElement('a');
-            link.href = '#';
-            link.textContent = notification.name.trim();
-            link.onclick = function(event) {
-              event.preventDefault();
-              const fileURL = notificacoesConteudo[notification.fileId]; // Busca o URL Blob criado
-              if (fileURL) {
-                openFileViewer(fileURL);
-                logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
-              } else {
-                console.error("URL da notificação não encontrado:", notification.fileId);
-              }
-            };
-            listItem.appendChild(link);
-            notificacoesParaAdicionar.push(listItem);
+            link.href = fileURL;
+            link.textContent = notificacaoName.trim();
+            link.target = '_blank';
+            notificationsList.appendChild(listItem);
           }
-        });
-        await Promise.all(promisesNotificacoes);
-        notificacoesParaAdicionar.forEach(item => notificationsList.appendChild(item));
+        }
+        if (notificationsList.children.length === 0) {
+          const listItem = document.createElement('li');
+          listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
+          notificationsList.appendChild(listItem);
+        }
       } else {
         const listItem = document.createElement('li');
         listItem.textContent = 'Nenhuma notificação encontrada para este apartamento.';
@@ -139,7 +119,6 @@ export async function showFiles(apartment) {
         loadingIndicator.remove();
       }
     }
-    //=======================================================================================================================================
   } else {
     const listItem = document.createElement('li');
     listItem.textContent = 'ID do apartamento não encontrado.';
