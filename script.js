@@ -23,31 +23,27 @@ function enableApartment() {
 
 // início de showFiles ======================================================================================================================================================================
 export async function showFiles(apartment) {
-  const fileContainer = document.getElementById('file-container');
-  const fileList = document.getElementById('file-list');
-  const tempListItem = document.createElement('li');
-  tempListItem.textContent = 'Teste de lista';
-  fileList.appendChild(tempListItem);
-  const viewerContainer = document.getElementById('viewer-container');
-  const contasContainer = document.getElementById('contas-container');
-  const notificationsContainer = document.getElementById('notifications-container'); // Pega a referência para a caixa de notificações
-  const documentosContainer = document.getElementById('documentos-container');
+  const fileContainer = document.getElementById('file-container');
+  const fileList = document.getElementById('file-list');
+  const tempListItem = document.createElement('li');
+  tempListItem.textContent = 'Teste de lista';
+  fileList.appendChild(tempListItem);
+  const viewerContainer = document.getElementById('viewer-container');
+  const contasContainer = document.getElementById('contas-container');
+  const notificationsContainer = document.getElementById('notifications-container'); // Pega a referência para a caixa de notificações
+  const documentosContainer = document.getElementById('documentos-container');
 
-  const apartamentoIdStorage = localStorage.getItem('apartmentId'); // Mova a declaração para aqui
+  fileContainer.style.display = 'none';
+  contasContainer.style.display = 'none';
+  notificationsContainer.style.display = 'block'; // Garante que a caixa de notificações também esteja inicialmente visível
+  documentosContainer.style.display = 'none';
+  fileList.innerHTML = '';
 
-  fileContainer.style.display = 'none';
-  contasContainer.style.display = 'none';
-  notificationsContainer.style.display = 'block'; // Garante que a caixa de notificações também esteja inicialmente visível
-  documentosContainer.style.display = 'none';
-  fileList.innerHTML = '';
-
-  document.getElementById('apartment-number').textContent = apartment.replace('apto', 'Apto ').replace(/(\D+)(\d)/, '$1 $2');
-  fileContainer.style.display = 'block';
-  contasContainer.style.display = 'block';
-  notificationsContainer.style.display = 'block';
-  documentosContainer.style.display = 'block';
-
-  // ... o restante do seu código da função showFiles ...
+  document.getElementById('apartment-number').textContent = apartment.replace('apto', 'Apto ').replace(/(\D+)(\d)/, '$1 $2');
+  fileContainer.style.display = 'block';
+  contasContainer.style.display = 'block';
+  notificationsContainer.style.display = 'block';
+  documentosContainer.style.display = 'block';
 
   fileContainer.classList.remove('active');
   contasContainer.classList.remove('active');
@@ -82,26 +78,24 @@ export async function showFiles(apartment) {
   notificationsList.appendChild(loadingNotificacoesDiv);
   // Final da parte que adiciona imagem de carregamento +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  //const apartamentoIdStorage = localStorage.getItem('apartmentId');
+  const apartamentoIdStorage = localStorage.getItem('apartmentId');
 
   if (apartamentoIdStorage) {
     try {
-      const responseConfigNotificacoes = await fetch('/dados/configuracoes.json');
-      const configDataNotificacoes = await responseConfigNotificacoes.json();
-      const notificacoesApartamento = configDataNotificacoes.notificacoes_id[`apto_${apartmentIdStorage}`];
-      const notifications = Object.entries(notificacoesApartamento || {})
-        .filter(([name]) => name !== '') // Filtra a entrada vazia que você tinha
-        .map(([name, fileId]) => ({ name, fileId }));
+      const response = await fetch(`/.netlify/functions/load-notificacoes?apartmentId=${apartamentoIdStorage}`);
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`);
+      }
+      const notifications = await response.json();
 
       if (notifications && notifications.length > 0) {
         notifications.forEach((notification) => {
           if (notification.name && notification.fileId) {
-            const googleDriveURL = `https://drive.google.com/uc?id=${notification.fileId}`;
             promisesNotificacoes.push(
-              fetch(googleDriveURL)
-                .then(response => response.blob())
-                .then(blob => {
-                  notificacoesConteudo[notification.fileId] = URL.createObjectURL(blob);
+              fetch(`/.netlify/functions/load-notification-content?fileId=${notification.fileId}`)
+                .then(response => response.json())
+                .then(data => {
+                  notificacoesConteudo[notification.fileId] = data.contentBase64;
                   console.log(`Conteúdo da notificação ${notification.name} carregado.`);
                 })
                 .catch(error => console.error('Erro ao carregar conteúdo da notificação:', error))
@@ -111,25 +105,25 @@ export async function showFiles(apartment) {
             const link = document.createElement('a');
             link.href = '#';
             link.textContent = notification.name.trim();
-
-            // Cria uma variável local para capturar o valor de apartamentoIdStorage
-            const aptoId = apartamentoIdStorage;
-
             link.onclick = function(event) {
               event.preventDefault();
-              const fileURL = notificacoesConteudo[notification.fileId]; // Busca o URL Blob criado
-              if (fileURL) {
+              const fileId = notification.fileId;
+              const contentBase64 = notificacoesConteudo[fileId]; // Busca o conteúdo carregado
+              if (contentBase64) {
+                const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(file);
                 openFileViewer(fileURL);
-                logAccess({ apartment: aptoId, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+                logAccess({ apartment: apartamentoIdStorage, downloadedFile: `Visualizada ${notification.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
               } else {
-                console.error("URL da notificação não encontrado:", notification.fileId);
+                console.error("Conteúdo da notificação não encontrado:", fileId);
+                // Você pode adicionar uma lógica de fallback aqui, se necessário
               }
             };
             listItem.appendChild(link);
             notificacoesParaAdicionar.push(listItem);
           }
         });
-        await Promise.all(promisesNotificacoes);
+        await Promise.all(promisesNotificacoes); // Espera que todos os conteúdos das notificações sejam carregados
         notificacoesParaAdicionar.forEach(item => notificationsList.appendChild(item));
       } else {
         const listItem = document.createElement('li');
@@ -229,32 +223,32 @@ async function loadBoletos(apartmentId) {
 
   let boletosConteudo = {};
   const promisesBoletos = [];
-  const boletosParaAdicionar = [];
+  const boletosParaAdicionar = []; // Array para armazenar os elementos de lista dos boletos
 
+  // *** ADICIONA O INDICADOR DE CARREGAMENTO ***
   const loadingDiv = document.createElement('div');
   loadingDiv.id = 'loading-inicial-boletos';
   loadingDiv.style.textAlign = 'center';
   loadingDiv.padding = '20px';
   loadingDiv.innerHTML = '<img src="images/aguarde.gif" alt="Aguarde..." style="width: 102px; height: 68px;"><p>Carregando boletos...</p>';
   boletosList.appendChild(loadingDiv);
+  // *** FIM DA ADIÇÃO DO INDICADOR ***
 
   try {
-    const responseConfig = await fetch('/dados/configuracoes.json');
-    const configData = await responseConfig.json();
-    const boletosApartamento = configData.boletos[`apto_${apartmentId}`];
-    const boletos = Object.entries(boletosApartamento || {})
-      .filter(([name]) => name !== '')
-      .map(([name, fileId]) => ({ name, fileId }));
+    const response = await fetch(`/.netlify/functions/load-boletos?apartmentId=${apartmentId.replace('apto', '')}`);
+    if (!response.ok) {
+      throw new Error(`Erro na requisição: ${response.status}`);
+    }
+    const boletos = await response.json();
 
     if (boletos && boletos.length > 0) {
       boletos.forEach(boleto => {
         if (boleto.name && boleto.fileId) {
-          const googleDriveURL = `https://drive.google.com/uc?id=${boleto.fileId}`;
           promisesBoletos.push(
-            fetch(googleDriveURL)
-              .then(response => response.blob())
-              .then(blob => {
-                boletosConteudo[boleto.fileId] = URL.createObjectURL(blob);
+            fetch(`/.netlify/functions/load-boletos-content?fileId=${boleto.fileId}`)
+              .then(response => response.json())
+              .then(data => {
+                boletosConteudo[boleto.fileId] = data.contentBase64;
                 console.log(`Conteúdo do boleto ${boleto.name} carregado.`);
               })
               .catch(error => console.error('Erro ao carregar conteúdo do boleto:', error))
@@ -266,20 +260,24 @@ async function loadBoletos(apartmentId) {
           link.textContent = boleto.name.trim();
           link.onclick = function(event) {
             event.preventDefault();
-            const fileURL = boletosConteudo[boleto.fileId]; // Busca o URL Blob criado
-            if (fileURL) {
+            const fileId = boleto.fileId;
+            const contentBase64 = boletosConteudo[fileId]; // Busca o conteúdo carregado
+            if (contentBase64) {
+              const file = new Blob([Uint8Array.from(atob(contentBase64), c => c.charCodeAt(0))], { type: 'application/pdf' });
+              const fileURL = URL.createObjectURL(file);
               openFileViewer(fileURL);
-              logAccess({ apartment: apartmentId.replace('apto', 'apto_'), downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
+              logAccess({ apartment: apartmentId, downloadedFile: `Visualizada ${boleto.name.trim().replace(/\./g, '_').replace(/\//g, '-')}` });
             } else {
-              console.error("URL do boleto não encontrado:", boleto.fileId);
+              console.error("Conteúdo do boleto não encontrado:", fileId);
+              // Você pode adicionar uma lógica de fallback aqui, se necessário
             }
           };
           listItem.appendChild(link);
-          boletosParaAdicionar.push(listItem);
+          boletosParaAdicionar.push(listItem); // Adiciona o elemento de lista ao array
         }
       });
-      await Promise.all(promisesBoletos);
-      boletosParaAdicionar.forEach(item => boletosList.appendChild(item));
+      await Promise.all(promisesBoletos); // Espera que todos os conteúdos dos boletos sejam carregados
+      boletosParaAdicionar.forEach(item => boletosList.appendChild(item)); // Adiciona os links à lista SOMENTE APÓS o carregamento
     } else {
       const listItem = document.createElement('li');
       listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
@@ -293,7 +291,7 @@ async function loadBoletos(apartmentId) {
   } finally {
     const loadingIndicator = document.getElementById('loading-inicial-boletos');
     if (loadingIndicator) {
-      loadingIndicator.remove();
+      loadingIndicator.remove(); // Remove o indicador de carregamento após a conclusão (com ou sem erro)
     }
   }
 }
