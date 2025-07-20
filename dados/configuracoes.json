@@ -6,55 +6,55 @@
     "3": "Aviso 3: "
   },
   "boletos": {
-    "apto_1": {
-    "Taxa Condominial": "1z_zL82W6jGg7xu-4Jo1IR-JB0Nv30E1U",
-    "Taxa Mnt Emergenciais": "13p6FBQNLpZhz8fvekyV03BvvHbOaaU7r",
-    "": "1Nyz2ByDRQWKbPOEFSEg17jl4OrM1PoE2",
-    "": "1AItEHJbHYdq8pMtFqnwGt12pKNWRHTZf"
-    },
-    "apto_101": {
-    "Taxa Condominial": "1K4io5rska7VY589zJbrqO60TmaQ7HnV0",
-    "Taxa Mnt Emergenciais": "1qaKlOcsBBulkr2ySy_zGmaW1wP_XsMir",
-    "": "1GVxPlSUSd5BcmHrt2jnIU3kQijU9cyXx",
-    "": "1BiwI6Q8k_NS5HPGF6kByhnQXsPg3tK6t"
-    },
-    "apto_102": {
-    "Taxa Condominial": "1hq2dcHNVFeU8J7yMNPGmUQlPadHlenuL",
-    "Taxa Mnt Emergenciais": "1ZAQ7_MF-o38CeBQUc0Cu4IO93rEqTslY",
-    "": "1FPBxce5eH8FTkw8oAo3krWz9vfNRlk6q",
-    "": "109_UJVULbh62vkom1wg5qRItMyJafs2M"
-    },
-    "apto_201": {
-    "Taxa Condominial": "1BhgQvVGG34Y0sNhwGZ9HO-JU7j1S40YO",
-    "Taxa Mnt Emergenciais": "1zvV0MWgE9RCycWOhhWaN6zriwilLhSdk",
-    "": "1fdiRU0SzLtVBtZsJSEDt1qhUfGXAborp",
-    "": "1LouohVjFumcVZslTd0FKcd0p0nC_yOZT"
-    },
-    "apto_202": {
-    "Taxa Condominial": "1qPEL7Av_xKp5PELdch5dhqqpQdhSV-eS",
-    "Taxa Mnt Emergenciais": "1EzrJ4618Av4Wvdpo9nO1kZb_Yi2U5tim",
-    "Boleto Louco": "1FMYE4D3S6FhtWcl6_NrSsK1nMq-jgMpG",
-    "": "1KMlrjuFCxZ9NXc4jKhUW22AyHAsodPZe"
-    },
-    "apto_301": {
-    "Taxa Condominial": "1-S0f-yJYTelIKkhpjUsp_Tg9A4tG1qxc",
-    "Taxa Mnt Emergenciais": "163msgScE2_HWrMtBS0FlEJa81AMXfjN_",
-    "Boleto testando": "1PO9Fgpft6BS-qe192EsAB0VDjb1JqpRf",
-    "": "1lEYbRLdDcQEPwYnl-IOkT4mn6XLTAe8K"
-    },
-    "apto_302": {
-    "Taxa Condominial": "1gKyHbGEPt05y6MBj86j74ObmDRlwNDlK",
-    "Taxa Mnt Emergenciais": "1hNrYxDYeMTEGRU0SjbYHA1GoQ11TYnUH",
-    "": "1ISOYRZysGiovQMuCowjfy5fOYaLdCPNZ",
-    "": "13CDeLEs_chwKSiG9eY_rcF6JB8SByJ5i"
-    },
-    "apto_401": {
-    "Taxa Condominial": "1OzTet-ZVJe63vWJXKvxt8UnfDfIgYTWy",
-    "Taxa Mnt Emergenciais": "1oHurODVI8zsaiK8WRAi49_gTU8MCqQxJ",
-    "Ressarcimento Síndico": "1EgH6Uw-2d2QK7VtpZcIMIE0vscmZiDQc",
-    "": "1vU0lyWnlIa1agObuIAVvNhPh_e84UM3X"
-    }
+  "apto_1": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_1.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_1.pdf",
+    "": "boleto_tx_2_apto_1.pdf",
+    "": "boleto_tx_3_apto_1.pdf"
   },
+  "apto_101": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_101.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_101.pdf",
+    "": "boleto_tx_2_apto_101.pdf",
+    "": "boleto_tx_3_apto_101.pdf"
+  },
+  "apto_102": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_102.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_102.pdf",
+    "": "boleto_tx_2_apto_102.pdf",
+    "": "boleto_tx_3_apto_102.pdf"
+  },
+  "apto_201": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_201.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_201.pdf",
+    "": "boleto_tx_2_apto_201.pdf",
+    "": "boleto_tx_3_apto_201.pdf"
+  },
+  "apto_202": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_202.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_202.pdf",
+    "": "boleto_tx_2_apto_202.pdf",
+    "": "boleto_tx_3_apto_202.pdf"
+  },
+  "apto_301": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_301.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_301.pdf",
+    "": "boleto_tx_2_apto_301.pdf",
+    "": "boleto_tx_3_apto_301.pdf"
+  },
+  "apto_302": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_302.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_302.pdf",
+    "": "boleto_tx_2_apto_302.pdf",
+    "": "boleto_tx_3_apto_302.pdf"
+  },
+  "apto_401": {
+    "Taxa Condominial": "boleto_tx_condominio_apto_401.pdf",
+    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_401.pdf",
+    "": "boleto_tx_2_apto_401.pdf",
+    "": "boleto_tx_3_apto_401.pdf"
+  }
+},
   "notificacoes_id": {
 	"apto_1": {
     	"": "1s0dZIYAZvzn7ThFUM4u2Y_cDSsSW25wq",
