@@ -240,7 +240,7 @@ async function loadBoletos(apartmentId) {
     const boletos = Object.entries(boletosApartamento || {})
       .filter(([name]) => name !== '')
       .map(([name, fileId]) => ({ name, fileId }));
-    console.log("Array de boletos processado:", boletos);
+    console.log("Array de boletos processado (JSON):", JSON.stringify(boletos, null, 2));
 
     if (boletos && boletos.length > 0) {
       console.log("Condição de boletos atendida:", boletos.length);
