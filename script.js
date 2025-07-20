@@ -195,7 +195,7 @@ export async function showFiles(apartment) {
 
 // Início da função loadBoletos para carregar os boletos do G Drive ========================================================================================================================
 async function loadBoletos(apartmentId) {
-  console.log("loadBoletos foi chamada com o apartamento:", apartmentId);
+  console.log("loadBoletos foi chamada com o ID:", apartmentId);
   const boletosList = document.getElementById('file-list');
   boletosList.innerHTML = '';
 
@@ -209,32 +209,27 @@ async function loadBoletos(apartmentId) {
   try {
     const responseConfig = await fetch('dados/configuracoes.json');
     const configData = await responseConfig.json();
-    const boletosApartamento = configData.boletos[`${apartmentId}`];
+    const aptoIdWithUnderScore = `apto_${apartmentId.replace('apto', '')}`;
+    const boletosApartamento = configData.boletos[aptoIdWithUnderScore];
 
     if (boletosApartamento) {
       const apartmentNumber = apartmentId.replace('apto', '');
-      const filenamePatterns = [
-        { name: "Taxa Condominial", pattern: `boleto_tx_condominio_apto_${apartmentNumber}.pdf` },
-        { name: "Taxa Mnt Emergenciais", pattern: `boleto_tx_1_apto_${apartmentNumber}.pdf` },
-        { name: "", pattern: `boleto_tx_2_apto_${apartmentNumber}.pdf` },
-        { name: "", pattern: `boleto_tx_3_apto_${apartmentNumber}.pdf` }
-      ];
-
-      let index = 0;
       for (const boletoName in boletosApartamento) {
-        if (boletosApartamento.hasOwnProperty(boletoName) && index < filenamePatterns.length) {
-          const patternInfo = filenamePatterns[index];
-          const fileName = patternInfo.pattern;
-          const linkName = boletoName.trim() !== "" ? boletoName.trim() : `Boleto ${index + 1}`;
-          const fileURL = `pdfs/boletos/${fileName}`; // Caminho relativo mais direto
+        if (boletosApartamento.hasOwnProperty(boletoName)) {
+          let identifier = boletoName.toLowerCase().includes('condominial') ? 'condominio' : '';
+          if (identifier === '') {
+            const match = boletoName.match(/\d+/);
+            identifier = match ? match[0] : Object.keys(boletosApartamento).indexOf(boletoName) + 1;
+          }
+          const fileName = `boleto_tx_${identifier}_apto_${apartmentNumber}.pdf`;
+          const fileURL = `/pdfs/boletos/${fileName}`;
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
           link.href = fileURL;
-          link.textContent = linkName;
+          link.textContent = boletoName.trim();
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
-          index++;
         }
       }
     } else {
