@@ -239,7 +239,7 @@ async function loadBoletos(apartmentId) {
     console.log("Dados dos boletos do configData:", configData.boletos);
     console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento, null, 2));
     const boletos = Object.entries(boletosApartamento || {})
-      .filter(([name]) => name !== '')
+      .filter(([name, fileId]) => name !== '' && fileId !== '') // Filtro otimizado
       .map(([name, fileId]) => ({ name, fileId }));
     console.log("Array de boletos processado (JSON):", JSON.stringify(boletos, null, 2));
 
