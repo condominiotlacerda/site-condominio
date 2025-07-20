@@ -208,8 +208,11 @@ async function loadBoletos(apartmentId) {
 
   try {
     const responseConfig = await fetch('dados/configuracoes.json');
+    console.log("Resposta da busca do configuracoes.json (Boletos):", responseConfig.ok); // ADICIONAR ESTE LOG
     const configData = await responseConfig.json();
+    console.log("Dados do configuracoes.json (Boletos):", configData); // ADICIONAR ESTE LOG
     const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
+    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento)); // ADICIONAR ESTE LOG
 
     if (boletosApartamento) {
       for (const boletoName in boletosApartamento) {
@@ -223,7 +226,6 @@ async function loadBoletos(apartmentId) {
           const link = document.createElement('a');
           link.href = fileURL;
           link.textContent = boletoName.trim();
-          link.target = '_blank'; // Para abrir em uma nova aba
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
         }
