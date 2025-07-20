@@ -9,7 +9,7 @@
   "apto_1": {
     "Taxa Condominial": "boleto_tx_condominio_apto_1.pdf",
     "Taxa Mnt Emergenciais": "boleto_tx_1_apto_1.pdf",
-    "": "boleto_tx_2_apto_1.pdf",
+    "Ressarc. síndico": "boleto_tx_2_apto_1.pdf",
     "": "boleto_tx_3_apto_1.pdf"
   },
   "apto_101": {
@@ -21,31 +21,31 @@
   "apto_102": {
     "Taxa Condominial": "boleto_tx_condominio_apto_102.pdf",
     "Taxa Mnt Emergenciais": "boleto_tx_1_apto_102.pdf",
-    "": "boleto_tx_2_apto_102.pdf",
+    "Ressarc. síndico": "boleto_tx_2_apto_102.pdf",
     "": "boleto_tx_3_apto_102.pdf"
   },
   "apto_201": {
     "Taxa Condominial": "boleto_tx_condominio_apto_201.pdf",
     "Taxa Mnt Emergenciais": "boleto_tx_1_apto_201.pdf",
-    "": "boleto_tx_2_apto_201.pdf",
+    "Ressarc. síndico": "boleto_tx_2_apto_201.pdf",
     "": "boleto_tx_3_apto_201.pdf"
   },
   "apto_202": {
     "Taxa Condominial": "boleto_tx_condominio_apto_202.pdf",
     "Taxa Mnt Emergenciais": "boleto_tx_1_apto_202.pdf",
-    "": "boleto_tx_2_apto_202.pdf",
+    "Ressarc. síndico": "boleto_tx_2_apto_202.pdf",
     "": "boleto_tx_3_apto_202.pdf"
   },
   "apto_301": {
     "Taxa Condominial": "boleto_tx_condominio_apto_301.pdf",
     "Taxa Mnt Emergenciais": "boleto_tx_1_apto_301.pdf",
-    "": "boleto_tx_2_apto_301.pdf",
+    "Ressarc. síndico": "boleto_tx_2_apto_301.pdf",
     "": "boleto_tx_3_apto_301.pdf"
   },
   "apto_302": {
     "Taxa Condominial": "boleto_tx_condominio_apto_302.pdf",
     "Taxa Mnt Emergenciais": "boleto_tx_1_apto_302.pdf",
-    "": "boleto_tx_2_apto_302.pdf",
+    "Ressarc. síndico": "boleto_tx_2_apto_302.pdf",
     "": "boleto_tx_3_apto_302.pdf"
   },
   "apto_401": {
@@ -56,55 +56,55 @@
   }
 },
   "notificacoes_id": {
-	"apto_1": {
-    	"": "1s0dZIYAZvzn7ThFUM4u2Y_cDSsSW25wq",
-	"": "12tlMc7B8PVPlqSLwhArr67GtHxJjYIcJ",
-	"": "1H2qh2mz3gKUlh4uxMeKGHvL_nmKr_Ro7",
-	"": "1u5ESrVgESdUjRCB5hth5AuIfyjp2A5Gm"
-	},
-	"apto_101": {
-    	"": "13eBozy0WE-oHJN1qgi4Vdnbyi_cJfPcj",
-	"": "1tCuv4_rOwQ0XsgT3WIVUFHySRbPgYV9e",
-	"": "1lv7MZtFo-cjab6nbCL034KaCeVh1Qs2V",
-	"": "1qHVS7r3eq0VMfTEpYAXn4q3rCcvwUzQW"
-	},
-	"apto_102": {
-    	"": "1cCSzFVdCxbk-qSZTVQz-jbU4LLxXWw5H",
-	"": "11ZXFMEdrA19XuWA60LMydFJZNtssi94X",
-	"": "1MsPtSkSA--OaKRWxyylCivs_yrDuy-zo",
-	"": "1FUbgmSZVsu4he6IPqmJp61Z8h7dpYFYA"
-	},
-	"apto_201": {
-    	"": "1fjht5sVkUU2Ya3XG3E8hupN5B2rR5XEF",
-	"": "1e8nm0AQ5Ibucr3oUB8zwpIMVK7ENypMO",
-	"": "1WBOQ7CuFAqthqWM41XxBE9gpV7Njx_HY",
-	"": "1Jzi-pdHOlPnwaL7pMATS0BVbTqTFEe9t"
-	},
-	"apto_202": {
-    	"1. Notif de 14/04/2025": "1dqvezF_HID-hRoAhLQXKo1p5xTHTFsUR",
-	"": "1mbA5mWgnhEZFNyOzLnLCWegPuW_K0AX8",
-	"": "1jaa5Wl5H_QgiMJFcgwNROGeayLe2iM7Q",
-	"": "1O3QfipPMpyeifP727ysibBloSDz7SZ9k"
-	},
-	"apto_301": {
-    	"": "1LLEU1-92Us_A0rLpYqxbj-bYDBOmqomw",
-	"": "1awzyhqYnbMxvqDcnEtaROJglaF83ePTI",
-	"": "12qCDBxf5uuMYql1BdJy6IsM9LhAKLxzc",
-	"": "1vxGb2lNaCTqLVXreqfbdDy4jllYrwr1x"
-	},
-	"apto_302": {
-    	"": "1FfJ6Lr5xMedJT6e3BfYIj1P-x-aEhjBW",
-	"": "1jbQsZqOgVEp8tB9VvgtCKuapHnGiQa41",
-	"": "13MVj6-bjtJMLKFSusPsbQYSYe3o4bFS9",
-	"": "1gay9Ev3al_tmCNPCsOgVOKIF5Ucx2OQH"
-	},
-	"apto_401": {
-    	"1. Notif de 31/03/2025": "1sN7Uhp4RRVuZ64Rn_pvoG0Cc_fLmusY6",
-	"2. Notif de 04/06/2025": "1vtA7XjKKpXxsnp3tcCfo-8ZFVzPuQE7b",
-	"": "17s6_OswGZpahTaD1Qpr--j73367ILgre",
-	"": "1EVQOjaZWX5LiZhUzBaNo0s8FLv9bqEvW"
-	}
-    },
+  "apto_1": {
+    "": "notificacao_1_apto_1.pdf",
+    "": "notificacao_2_apto_1.pdf",
+    "": "notificacao_3_apto_1.pdf",
+    "": "notificacao_4_apto_1.pdf"
+  },
+  "apto_101": {
+    "": "notificacao_1_apto_101.pdf",
+    "": "notificacao_2_apto_101.pdf",
+    "": "notificacao_3_apto_101.pdf",
+    "": "notificacao_4_apto_101.pdf"
+  },
+  "apto_102": {
+    "": "notificacao_1_apto_102.pdf",
+    "": "notificacao_2_apto_102.pdf",
+    "": "notificacao_3_apto_102.pdf",
+    "": "notificacao_4_apto_102.pdf"
+  },
+  "apto_201": {
+    "": "notificacao_1_apto_201.pdf",
+    "": "notificacao_2_apto_201.pdf",
+    "": "notificacao_3_apto_201.pdf",
+    "": "notificacao_4_apto_201.pdf"
+  },
+  "apto_202": {
+    "1. Notif de 14/04/2025": "notificacao_1_apto_202.pdf",
+    "": "notificacao_2_apto_202.pdf",
+    "": "notificacao_3_apto_202.pdf",
+    "": "notificacao_4_apto_202.pdf"
+  },
+  "apto_301": {
+    "": "notificacao_1_apto_301.pdf",
+    "": "notificacao_2_apto_301.pdf",
+    "": "notificacao_3_apto_301.pdf",
+    "": "notificacao_4_apto_301.pdf"
+  },
+  "apto_302": {
+    "": "notificacao_1_apto_302.pdf",
+    "": "notificacao_2_apto_302.pdf",
+    "": "notificacao_3_apto_302.pdf",
+    "": "notificacao_4_apto_302.pdf"
+  },
+  "apto_401": {
+    "1. Notif de 31/03/2025": "notificacao_1_apto_401.pdf",
+    "2. Notif de 04/06/2025": "notificacao_2_apto_401.pdf",
+    "": "notificacao_3_apto_401.pdf",
+    "": "notificacao_4_apto_401.pdf"
+  }
+},
     "contas": {
       "2025": {
         "1.jan": "1svhFp2Sjmy9wRd4I4jr1v4QhG9nLIVuG",
