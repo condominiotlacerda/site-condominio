@@ -195,7 +195,7 @@ export async function showFiles(apartment) {
 
 // Início da função loadBoletos para carregar os boletos do G Drive ========================================================================================================================
 async function loadBoletos(apartmentId) {
-  console.log("loadBoletos foi chamada com o ID:", apartmentId);
+  console.log("loadBoletos foi chamada com o apartamento:", apartmentId);
   const boletosList = document.getElementById('file-list');
   boletosList.innerHTML = '';
 
@@ -208,11 +208,8 @@ async function loadBoletos(apartmentId) {
 
   try {
     const responseConfig = await fetch('dados/configuracoes.json');
-    console.log("Resposta da busca do configuracoes.json (Boletos):", responseConfig.ok); // ADICIONE ESTE LOG
     const configData = await responseConfig.json();
-    console.log("Dados do configuracoes.json (Boletos):", configData); // ADICIONAR ESTE LOG
-    const boletosApartamento = configData.boletos[`apto_${apartmentId.replace('apto', '')}`]; // Assumindo ID sem underscore no config
-    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento)); // ADICIONAR ESTE LOG
+    const boletosApartamento = configData.boletos[`${apartmentId}`];
 
     if (boletosApartamento) {
       const apartmentNumber = apartmentId.replace('apto', '');
@@ -229,7 +226,7 @@ async function loadBoletos(apartmentId) {
           const patternInfo = filenamePatterns[index];
           const fileName = patternInfo.pattern;
           const linkName = boletoName.trim() !== "" ? boletoName.trim() : `Boleto ${index + 1}`;
-          const fileURL = `/pdfs/boletos/${fileName}`;
+          const fileURL = `pdfs/boletos/${fileName}`; // Caminho relativo mais direto
 
           const listItem = document.createElement('li');
           const link = document.createElement('a');
@@ -239,11 +236,6 @@ async function loadBoletos(apartmentId) {
           boletosList.appendChild(listItem);
           index++;
         }
-      }
-      if (boletosList.children.length === 0) {
-        const listItem = document.createElement('li');
-        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
-        boletosList.appendChild(listItem);
       }
     } else {
       const listItem = document.createElement('li');
