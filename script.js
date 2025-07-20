@@ -208,8 +208,11 @@ async function loadBoletos(apartmentId) {
 
   try {
     const responseConfig = await fetch('dados/configuracoes.json');
+    console.log("Resposta da busca do configuracoes.json (Boletos):", responseConfig.ok); // ADICIONE ESTE LOG
     const configData = await responseConfig.json();
-    const boletosApartamento = configData.boletos[`${apartmentId}`];
+    console.log("Dados do configuracoes.json (Boletos):", configData); // ADICIONAR ESTE LOG
+    const boletosApartamento = configData.boletos[`${apartmentId}`]; // Assumindo ID sem underscore no config
+    console.log("Dados de boletosApartamento (JSON):", JSON.stringify(boletosApartamento)); // ADICIONAR ESTE LOG
 
     if (boletosApartamento) {
       const apartmentNumber = apartmentId.replace('apto', '');
@@ -228,8 +231,6 @@ async function loadBoletos(apartmentId) {
           const linkName = boletoName.trim() !== "" ? boletoName.trim() : `Boleto ${index + 1}`;
           const fileURL = `/pdfs/boletos/${fileName}`;
 
-          console.log(`Processando boleto: nome original="${boletoName}", nome do link="${linkName}", nome do arquivo="${fileName}", URL="${fileURL}"`); // ADICIONE ESTE LOG
-
           const listItem = document.createElement('li');
           const link = document.createElement('a');
           link.href = fileURL;
@@ -237,9 +238,12 @@ async function loadBoletos(apartmentId) {
           listItem.appendChild(link);
           boletosList.appendChild(listItem);
           index++;
-        } else {
-          console.log(`Pulando ou excedendo limite: nome original="${boletoName}", index="${index}"`); // ADICIONE ESTE LOG
         }
+      }
+      if (boletosList.children.length === 0) {
+        const listItem = document.createElement('li');
+        listItem.textContent = 'Nenhum boleto encontrado para este apartamento.';
+        boletosList.appendChild(listItem);
       }
     } else {
       const listItem = document.createElement('li');
