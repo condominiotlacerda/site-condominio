@@ -1,82 +1,69 @@
-/* 🌟 Layout principal */
+/* 🌟 Estrutura principal da página */
 body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    min-height: 100vh;
-    background-color: #f4f4f4;
-    position: relative;
-}
-
-/* 🔹 Área de fundo com imagem central */
-.hero {
-    background-image: url('images/barco_bg.jpg'); /* Ajuste o caminho da imagem */
-    background-size: cover;
-    background-position: center;
-    position: absolute;
-    top: 0;
-    left: 0;
     height: 100vh;
-    width: 100%;
-    z-index: 0;
+    width: 100vw;
+    background: url('images/barco_bg.jpg') center center / cover no-repeat;
+    position: relative;
+    overflow: hidden;
 }
 
-/* 🔹 Painel de autenticação no canto superior direito */
+/* 🔐 Painel de autenticação no topo direito */
 .auth-panel {
     position: absolute;
     top: 20px;
     right: 20px;
     width: 320px;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.96);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.auth-panel h2 {
-    text-align: center;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.auth-panel input,
-.auth-panel button {
-    margin-bottom: 10px;
-}
-
+/* 🔹 Logo centralizada dentro do painel */
 .logo {
     display: block;
     width: 100px;
     height: 100px;
-    border-radius: 50%;
     object-fit: cover;
+    border-radius: 50%;
     margin: 0 auto 20px;
     border: 2px solid red;
 }
 
-/* 🔹 Estilos dos formulários */
+/* 🔹 Título das seções */
+.auth-panel h2 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* 🔹 Formulários */
 form {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 10px;
+    align-items: stretch;
 }
 
 form input {
-    width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
 form button {
-    width: 100%;
     padding: 10px;
     background-color: #007BFF;
+    color: #fff;
     border: none;
-    color: white;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 form button:hover {
@@ -88,32 +75,41 @@ form button:hover {
 #mensagemCadastro,
 #mensagemForgotPassword {
     margin-top: 10px;
-    color: #d9534f;
     font-size: 0.9em;
+    color: #d9534f;
 }
 
-/* 🔹 Links e alternância */
+/* 🔹 Links de navegação */
 a {
     color: #007BFF;
     text-decoration: none;
     font-size: 0.9em;
+    text-align: center;
 }
 
 a:hover {
     text-decoration: underline;
 }
 
-/* 🔹 Responsividade para dispositivos menores */
+/* 🔹 Alinhamento dos títulos nas seções */
+#login h2,
+#forgotPasswordSection h2,
+#cadastro h2 {
+    width: 100%;
+    text-align: center;
+}
+
+/* 🔹 Responsivo para celulares */
 @media (max-width: 768px) {
     .auth-panel {
-        width: 95%;
-        right: 2.5%;
+        width: 90%;
+        right: 5%;
         top: 10px;
-        padding: 15px;
+        padding: 20px;
     }
 
     .auth-panel h2 {
-        font-size: 1.2em;
+        font-size: 1.3em;
     }
 
     form input {
@@ -123,5 +119,10 @@ a:hover {
     form button {
         font-size: 0.9em;
         padding: 8px;
+    }
+
+    .logo {
+        width: 80px;
+        height: 80px;
     }
 }
