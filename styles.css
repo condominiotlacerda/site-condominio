@@ -1,125 +1,249 @@
-/* Body and background */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  height: 100vh;
-  width: 100vw;
-  background: url('images/barco_bg.jpg') center center / cover no-repeat;
-  position: relative;
-  overflow: hidden;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
 }
 
-/* Authentication panel in top right */
-.auth-panel {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  width: 320px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  z-index: 10;
+h1 {
+    color: #333;
+    font-size: 1.8em;
 }
 
-/* Logo inside panel */
+.apartment-section {
+    margin-top: 30px;
+}
+
+.apartment-button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.file-list li {
+    margin: 5px 0;
+}
+
+#file-list li {
+  margin-bottom: 10px; /* Experimente diferentes valores como 5px, 15px, etc. */
+}
+
+.file-list a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+/* 🔹 Logo do Condomínio */
 .logo {
-  display: block;
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin: 0 auto 20px;
-  border: 2px solid red;
+    display: block;
+    width: 150px !important;
+    height: 150px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    top: 5px;  /* 🔹 Alterado de 15px para 5px */
+    left: 5px; /* 🔹 Alterado de 15px para 5px */
+    max-width: 150px !important;
+    max-height: 150px !important;
+    border: 2px solid red;
 }
 
-/* Panel headings */
-.auth-panel h2 {
-  text-align: center;
-  font-size: 1.4em;
-  margin-bottom: 15px;
-  color: #333;
+/* 🔹 Caixa da lista de arquivos */
+.file-box {
+    /* position: absolute; */
+    top: 250px;
+    left: 15px;
+    width: 250px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ddd;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
-/* Forms layout */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: stretch;
+.file-box.active {
+    opacity: 1;
+    transform: scale(1);
+    border-color: #555;
 }
 
-form input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* 🔹 Painel do visualizador de PDF */
+.viewer-box {
+    /*position: absolute;*/
+    top: 250px;
+    left: 280px;
+    width: 600px;
+    height: 400px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ddd;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
-form button {
-  padding: 10px;
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* 🔹 Painel do visualizador de PDF */
+/* ... outras regras para .viewer-box ... */
+#viewer-container.active {
+  opacity: 1;
+  transform: scale(1);
+  border-color: #555;
 }
 
-form button:hover {
-  background-color: #0056b3;
+/* 🔹 Ajuste do iframe */
+#file-viewer {
+    width: 100%;
+    height: 300px;
+    border: none;
 }
 
-/* Feedback messages */
-#mensagemLogin,
-#mensagemCadastro,
-#mensagemForgotPassword {
-  margin-top: 10px;
-  font-size: 0.9em;
-  color: #d9534f;
-  text-align: center;
+/* 🔹 Botão de download */
+.download-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-/* Links style */
-a {
-  color: #007BFF;
-  text-decoration: none;
-  font-size: 0.9em;
-  text-align: center;
+.download-btn:hover {
+    background-color: #0056b3;
 }
 
-a:hover {
-  text-decoration: underline;
+#login,
+#forgotPasswordSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Outras regras de estilo para as seções, se houver */
 }
 
-/* Ensure internal section titles are centered */
+#emailForgotPassword {
+  width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
+  /* Outros estilos que você possa ter para este campo */
+}
+/* Alinhamento das palavras Login, Recuperar Senha e Cadastro*/
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
-  width: 100%;
-  text-align: center;
+  text-align: center; /* Garante que o texto dentro do h2 esteja centralizado */
+  width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .auth-panel {
-    width: 90%;
-    right: 5%;
-    top: 10px;
-    padding: 20px;
-  }
-  .auth-panel h2 {
-    font-size: 1.2em;
-  }
-  form input {
-    padding: 6px;
-  }
-  form button {
-    font-size: 0.9em;
-    padding: 8px;
-  }
-  .logo {
-    width: 80px;
-    height: 80px;
+#file-list-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+@media (min-width: 769px) {
+  #contas-container {
+    width: 300px; /* Largura para desktop (igual ao inline) */
+    margin-left: 20px; /* Margem esquerda para desktop (igual ao inline) */
   }
 }
+
+.file-box h2 { /*Títulos dos contêineres nos desktops*/
+    font-size: 1.1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-block-start: 0; /* Resetando a margem superior padrão */
+    margin-block-end: 0;   /* Resetando a margem inferior padrão */
+}
+
+#documentos-list {
+  margin: 0;
+  padding: 0;
+}
+
+/* Cor do texto de aviso no início da página area_condominio.html */
+#welcome-message {
+  color: #d9534f;
+}
+
+/* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
+@media (max-width: 768px) {
+    /* 🔹 Reduzindo o logo para metade do tamanho atual */
+    .logo {
+        width: 50px !important;
+        height: 50px !important;
+        max-width: 50px !important;
+        max-height: 50px !important;
+        top: 1px;
+        left: 1px;
+    }
+
+    .apartment-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .apartment-button {
+        width: 90%;
+        font-size: 0.9em;
+        padding: 12px;
+    }
+
+    /* 🔹 Ajuste da lista de arquivos para caber corretamente na tela */
+    .file-box {
+        position: relative;
+        top: 10px;
+        left: 5px;
+        right: 5px;
+        width: auto; /* 🔹 Agora a largura se ajusta automaticamente */
+        margin: 0 auto;
+    }
+
+    .file-box h2 { /* Títulos dos contêineres nos celulares */
+    font-size: 0.9em; /* Experimente este valor ou outro de sua preferência para mobile */
+    margin-top: 8px; /* Ajustando as margens para mobile, se necessário */
+    margin-bottom: 8px;
+    }
+
+    /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
+    .viewer-box {
+        position: relative;
+        top: 0;
+        width: 100%;
+        left: 0;
+        margin: 10px 0;
+    }
+
+    #file-viewer {
+        height: 250px;
+        width: 100%;
+    }
+
+    #file-list-wrapper { /* regras para div que contém caixas lista arquivos, prestação contas */
+    display: flex;
+    flex-direction: column; /* Alteramos para column para que os itens fiquem um abaixo do outro */
+    align-items: center; /* Opcional: Centraliza os itens horizontalmente se desejar */
+    gap: 10px; /* Opcional: Adiciona um pequeno espaço entre as caixas */
+  }
+
+  #contas-container { /* regras para div que contém caixas lista arquivos, prestação contas */
+    width: 95%; /* Ajuste a largura conforme necessário */
+    margin: 0 auto; /* Centraliza a caixa horizontalmente */
+  }
+    
+} /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
