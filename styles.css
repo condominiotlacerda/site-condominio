@@ -1,128 +1,125 @@
-/* 🌟 Estrutura principal da página */
+/* Body and background */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-    height: 100vh;
-    width: 100vw;
-    background: url('images/barco_bg.jpg') center center / cover no-repeat;
-    position: relative;
-    overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  height: 100vh;
+  width: 100vw;
+  background: url('images/barco_bg.jpg') center center / cover no-repeat;
+  position: relative;
+  overflow: hidden;
 }
 
-/* 🔐 Painel de autenticação no topo direito */
+/* Authentication panel in top right */
 .auth-panel {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 320px;
-    background-color: rgba(255, 255, 255, 0.96);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    z-index: 10;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 320px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  z-index: 10;
 }
 
-/* 🔹 Logo centralizada dentro do painel */
+/* Logo inside panel */
 .logo {
-    display: block;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    border: 2px solid red;
+  display: block;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  border: 2px solid red;
 }
 
-/* 🔹 Título das seções */
+/* Panel headings */
 .auth-panel h2 {
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    color: #333;
+  text-align: center;
+  font-size: 1.4em;
+  margin-bottom: 15px;
+  color: #333;
 }
 
-/* 🔹 Formulários */
+/* Forms layout */
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
 }
 
 form input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 form button {
-    padding: 10px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 form button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
-/* 🔹 Mensagens de feedback */
+/* Feedback messages */
 #mensagemLogin,
 #mensagemCadastro,
 #mensagemForgotPassword {
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #d9534f;
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #d9534f;
+  text-align: center;
 }
 
-/* 🔹 Links de navegação */
+/* Links style */
 a {
-    color: #007BFF;
-    text-decoration: none;
-    font-size: 0.9em;
-    text-align: center;
+  color: #007BFF;
+  text-decoration: none;
+  font-size: 0.9em;
+  text-align: center;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-/* 🔹 Alinhamento dos títulos nas seções */
+/* Ensure internal section titles are centered */
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
-/* 🔹 Responsivo para celulares */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .auth-panel {
-        width: 90%;
-        right: 5%;
-        top: 10px;
-        padding: 20px;
-    }
-
-    .auth-panel h2 {
-        font-size: 1.3em;
-    }
-
-    form input {
-        padding: 6px;
-    }
-
-    form button {
-        font-size: 0.9em;
-        padding: 8px;
-    }
-
-    .logo {
-        width: 80px;
-        height: 80px;
-    }
+  .auth-panel {
+    width: 90%;
+    right: 5%;
+    top: 10px;
+    padding: 20px;
+  }
+  .auth-panel h2 {
+    font-size: 1.2em;
+  }
+  form input {
+    padding: 6px;
+  }
+  form button {
+    font-size: 0.9em;
+    padding: 8px;
+  }
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
 }
