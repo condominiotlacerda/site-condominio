@@ -231,7 +231,6 @@ h1 {
         align-items: flex-start; /* Alinha o conteúdo ao topo (início do eixo transversal) */
         top: 1px;           /* Posição do topo, se necessário um ajuste fino */
         margin-top: 1px;    /* Margem do topo, se necessário um ajuste fino */
-        margin-bottom: 40px; /* Cria o espaço de 40px abaixo */
         display: flex;      /* Garante que continue sendo um flex container */
         gap: 10px;          /* Mantém o espaço entre o nome e o botão */
         padding: 5px 10px;  /* Adicionado padding horizontal para não colar nas bordas */
@@ -241,6 +240,11 @@ h1 {
     /* Adicione este NOVO bloco para a mensagem de boas-vindas aqui: */
     #welcome-message {
         margin-bottom: 10px; /* Isso criará uma margem de 10px abaixo da mensagem, empurrando o h1 */
+    }
+
+    /* ADICIONE ESTE BLOCO PARA O H1: */
+    .container h1 {
+        margin-top: 10px; /* Isso criará um espaço de 40px acima do "Condomínio T Lacerda" */
     }
 
     .apartment-section {
