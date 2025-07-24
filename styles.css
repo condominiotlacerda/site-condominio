@@ -226,7 +226,7 @@ h1 {
     /* Adicione este NOVO bloco h1 aqui dentro, se ele não existir: */
     .container h1 {
         position: absolute; /* Define o posicionamento relativo */
-        top: 10px;
+        top: 20px;
     }
 
     .apartment-section {
