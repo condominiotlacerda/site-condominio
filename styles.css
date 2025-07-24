@@ -223,6 +223,11 @@ h1 {
         left: 1px;
     }
 
+    /* Adicione este NOVO bloco para a mensagem de boas-vindas aqui: */
+    #welcome-message {
+        margin-bottom: 10px; /* Isso criará uma margem de 10px abaixo da mensagem, empurrando o h1 */
+    }
+
     .apartment-section {
         display: flex;
         flex-direction: column;
