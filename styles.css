@@ -211,7 +211,7 @@ h1 {
     margin: 0 auto 15px auto; /* Centraliza o elemento horizontalmente e adiciona uma margem inferior para separar do texto "Login" */
 }
 
-/* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
+/* 🔹INÍCIO RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
     .logo {
@@ -225,7 +225,7 @@ h1 {
 
     /* Adicione este NOVO bloco h1 aqui dentro, se ele não existir: */
     h1 {
-        margin-top: 5px; /* Isso aplicará a margem superior APENAS em celulares */
+        margin-top: 10px; /* Isso aplicará a margem superior APENAS em celulares */
     }
 
     .apartment-section {
@@ -288,7 +288,7 @@ h1 {
         height: 100px; /* Altura da imagem no celular */
         margin: 0 auto 10px auto; /* Ajusta a margem para celular */
     }
-} /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
+} /* 🔹FINAL RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 
 /* Estilos para telas de computador (largura mínima de 769 pixels) */
 @media (min-width: 769px) {
