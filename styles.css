@@ -319,3 +319,16 @@ h1 {
     display: none;
   }
 }
+/* --- */
+/* Estilo para a imagem "anonymous.png" acima do Login */
+#login h2::before {
+  content: ""; /* É necessário para que o pseudo-elemento seja gerado */
+  display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
+  width: 100px; /* Ajuste a largura da imagem conforme sua necessidade */
+  height: 100px; /* Ajuste a altura da imagem conforme sua necessidade */
+  background-image: url('images/anonymous.png'); /* Caminho para a sua imagem */
+  background-size: contain; /* Garante que a imagem se ajuste dentro do espaço definido */
+  background-repeat: no-repeat;
+  background-position: center; /* Centraliza a imagem no espaço do pseudo-elemento */
+  margin: 0 auto 15px auto; /* Centraliza o elemento horizontalmente e adiciona uma margem inferior para separar do texto "Login" */
+}
