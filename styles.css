@@ -299,7 +299,7 @@ h1 {
   .image-column {
     width: 50%; /* Ocupa metade da largura */
     height: 100vh; /* Ocupa a altura total da tela */
-    background-image: url('caminho/para/sua/imagem.jpg'); /* Substitua pelo seu caminho */
+    background-image: url('images/fachada.jpg'); /* Substitua pelo seu caminho */
     background-size: cover;
     background-position: center;
   }
