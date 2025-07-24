@@ -34,7 +34,7 @@ h1 {
 }
 
 #file-list li {
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* Experimente diferentes valores como 5px, 15px, etc. */
 }
 
 .file-list a {
@@ -42,16 +42,16 @@ h1 {
     color: #007bff;
 }
 
-/* 🔹 Logo do Condomínio - Estilo Padrão (será sobrescrito em media queries se necessário) */
+/* 🔹 Logo do Condomínio */
 .logo {
     display: block;
     width: 150px !important;
     height: 150px !important;
     border-radius: 50%;
     object-fit: cover;
-    position: absolute; /* Posição absoluta para o logo original */
-    top: 5px;
-    left: 5px;
+    position: absolute;
+    top: 5px;  /* 🔹 Alterado de 15px para 5px */
+    left: 5px; /* 🔹 Alterado de 15px para 5px */
     max-width: 150px !important;
     max-height: 150px !important;
     border: 2px solid red;
@@ -59,6 +59,7 @@ h1 {
 
 /* 🔹 Caixa da lista de arquivos */
 .file-box {
+    /* position: absolute; */
     top: 250px;
     left: 15px;
     width: 250px;
@@ -80,6 +81,7 @@ h1 {
 
 /* 🔹 Painel do visualizador de PDF */
 .viewer-box {
+    /*position: absolute;*/
     top: 250px;
     left: 280px;
     width: 600px;
@@ -94,6 +96,8 @@ h1 {
     transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
+/* 🔹 Painel do visualizador de PDF */
+/* ... outras regras para .viewer-box ... */
 #viewer-container.active {
   opacity: 1;
   transform: scale(1);
@@ -124,25 +128,24 @@ h1 {
     background-color: #0056b3;
 }
 
-/* Estilos para formulários de login/cadastro/recuperação */
 #login,
-#forgotPasswordSection,
-#cadastro {
+#forgotPasswordSection {
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Outras regras de estilo para as seções, se houver */
 }
 
 #emailForgotPassword {
-  width: 270px;
+  width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
+  /* Outros estilos que você possa ter para este campo */
 }
-
-/* Alinhamento dos títulos */
+/* Alinhamento das palavras Login, Recuperar Senha e Cadastro*/
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
-  text-align: center;
-  width: 100%;
+  text-align: center; /* Garante que o texto dentro do h2 esteja centralizado */
+  width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
 }
 
 #file-list-wrapper {
@@ -154,17 +157,17 @@ h1 {
 
 @media (min-width: 769px) {
   #contas-container {
-    width: 300px;
-    margin-left: 20px;
+    width: 300px; /* Largura para desktop (igual ao inline) */
+    margin-left: 20px; /* Margem esquerda para desktop (igual ao inline) */
   }
 }
 
-.file-box h2 {
+.file-box h2 { /*Títulos dos contêineres nos desktops*/
     font-size: 1.1em;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-block-start: 0;
-    margin-block-end:   0;
+    margin-block-start: 0; /* Resetando a margem superior padrão */
+    margin-block-end:   0;    /* Resetando a margem inferior padrão */
 }
 
 #documentos-list {
@@ -177,72 +180,10 @@ h1 {
   color: #d9534f;
 }
 
-/* --- */
-/* Estilo para a imagem "anonymous.png" acima do Login (Global - será ajustada para mobile abaixo) */
-#login h2::before {
-  content: "";
-  display: block;
-  width: 200px; /* Tamanho padrão da imagem */
-  height: 200px; /* Tamanho padrão da imagem */
-  background-image: url('images/anonymous.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: 0 auto 15px auto;
-}
-
----
-## Responsividade para CELULAR (max-width: 768px) 📱
----
+/* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 @media (max-width: 768px) {
-    /* Novo layout para o body: itens empilhados verticalmente */
-    body {
-        display: flex;
-        flex-direction: column; /* Empilha os elementos verticalmente */
-        align-items: center; /* Centraliza horizontalmente */
-        justify-content: flex-start; /* Alinha ao topo */
-        min-height: 100vh; /* Garante altura total */
-        padding: 10px; /* Ajuste o padding para telas pequenas */
-    }
-
-    /* Oculta o cabeçalho original com o logo absoluto para evitar sobreposição
-       e para dar lugar à imagem da coluna */
-    header {
-        display: none;
-    }
-
-    /* Adaptação da coluna de imagem para ocupar 100% da largura em mobile */
-    .image-column {
-        width: 100%;
-        height: 200px; /* Altura da imagem em mobile - ajuste se necessário */
-        margin-bottom: 20px; /* Espaço entre a imagem e o formulário */
-        background-size: cover; /* Ajusta a imagem para cobrir o espaço */
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
-    /* Adaptação da coluna de formulário para ocupar a largura total em mobile */
-    .form-column {
-        width: 95%; /* Ocupa a maior parte da largura para o formulário */
-        min-height: auto; /* Remove a altura mínima para não forçar em mobile */
-        padding: 15px;
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px; /* Adiciona espaço abaixo do formulário */
-        /* Garante que o form-column seja flex para centralizar o conteúdo interno */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* Ajuste para a imagem anonymous.png em telas de celular */
-    #login h2::before {
-      width: 100px; /* Reduz o tamanho da imagem para mobile */
-      height: 100px; /* Reduz o tamanho da imagem para mobile */
-      margin: 0 auto 10px auto; /* Ajusta a margem para mobile */
-    }
-
-    /* --- Regras que você já tinha e que ainda se aplicam ao layout mobile --- */
-    .logo { /* Este estilo se aplicaria se o cabeçalho não fosse 'display: none;' */
+    /* 🔹 Reduzindo o logo para metade do tamanho atual */
+    .logo {
         width: 50px !important;
         height: 50px !important;
         max-width: 50px !important;
@@ -263,21 +204,23 @@ h1 {
         padding: 12px;
     }
 
+    /* 🔹 Ajuste da lista de arquivos para caber corretamente na tela */
     .file-box {
         position: relative;
         top: 10px;
         left: 5px;
         right: 5px;
-        width: auto;
+        width: auto; /* 🔹 Agora a largura se ajusta automaticamente */
         margin: 0 auto;
     }
 
-    .file-box h2 {
-        font-size: 0.9em;
-        margin-top: 8px;
-        margin-bottom: 8px;
+    .file-box h2 { /* Títulos dos contêineres nos celulares */
+    font-size: 0.9em; /* Experimente este valor ou outro de sua preferência para mobile */
+    margin-top: 8px; /* Ajustando as margens para mobile, se necessário */
+    margin-bottom: 8px;
     }
 
+    /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
     .viewer-box {
         position: relative;
         top: 0;
@@ -291,30 +234,21 @@ h1 {
         width: 100%;
     }
 
-    #file-list-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
+    #file-list-wrapper { /* regras para div que contém caixas lista arquivos, prestação contas */
+    display: flex;
+    flex-direction: column; /* Alteramos para column para que os itens fiquem um abaixo do outro */
+    align-items: center; /* Opcional: Centraliza os itens horizontalmente se desejar */
+    gap: 10px; /* Opcional: Adiciona um pequeno espaço entre as caixas */
+  }
 
-    #contas-container {
-        width: 95%;
-        margin: 0 auto;
-    }
+  #contas-container { /* regras para div que contém caixas lista arquivos, prestação contas */
+    width: 95%; /* Ajuste a largura conforme necessário */
+    margin: 0 auto; /* Centraliza a caixa horizontalmente */
+  }
 
-    /* Reativa o rodapé para mobile, caso ele esteja oculto no desktop */
-    footer {
-        display: block;
-        margin-top: 20px;
-        width: 100%; /* Garante que o rodapé ocupe a largura total */
-    }
+} /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 
-} /* Fim da Responsividade para CELULAR 📱 */
-
----
-## Estilos para DESKTOP (min-width: 769px) 💻
----
+/* Estilos para telas de computador (largura mínima de 769 pixels) */
 @media (min-width: 769px) {
   body {
     display: flex; /* Usamos Flexbox para o layout principal */
@@ -349,17 +283,16 @@ h1 {
     align-items: center;
   }
 
-  /* Garante que o formulário de login esteja visível e os outros dois ocultos */
   #login {
-    display: flex;
+    display: flex; /* Garante que esteja visível inicialmente */
   }
 
   #cadastro {
-    display: none;
+    display: none; /* Começa escondido */
   }
 
   #forgotPasswordSection {
-    display: none;
+    display: none; /* Começa escondido */
   }
 
   /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
@@ -385,4 +318,17 @@ h1 {
   footer {
     display: none;
   }
+}
+/* --- */
+/* Estilo para a imagem "anonymous.png" acima do Login */
+#login h2::before {
+  content: ""; /* É necessário para que o pseudo-elemento seja gerado */
+  display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
+  width: 200px; /* Ajuste a largura da imagem conforme sua necessidade */
+  height: 200px; /* Ajuste a altura da imagem conforme sua necessidade */
+  background-image: url('images/anonymous.png'); /* Caminho para a sua imagem */
+  background-size: contain; /* Garante que a imagem se ajuste dentro do espaço definido */
+  background-repeat: no-repeat;
+  background-position: center; /* Centraliza a imagem no espaço do pseudo-elemento */
+  margin: 0 auto 15px auto; /* Centraliza o elemento horizontalmente e adiciona uma margem inferior para separar do texto "Login" */
 }
