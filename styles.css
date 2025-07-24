@@ -277,18 +277,27 @@ h1 {
 ---
 @media (min-width: 769px) {
   body {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 20px;
+    /* Removidas propriedades flexbox para que o .main-content-wrapper as gerencie */
+    padding: 0; /* Ajuste para evitar barras de rolagem ou espaçamentos indesejados */
+    margin: 0;
     text-align: left;
     min-height: 100vh;
+  }
+
+  /* NOVO ESTILO PARA O CONTÊINER DAS COLUNAS */
+  .main-content-wrapper {
+    display: flex; /* Aplica o flexbox apenas a este contêiner */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    min-height: 100vh; /* Garante que ocupe a altura total da tela */
+    width: 100%; /* Ocupa a largura total */
   }
 
   header {
     position: fixed;
     top: 5px;
     left: 5px;
+    z-index: 1000; /* Garante que o cabeçalho fique por cima */
   }
 
   .logo {
@@ -321,23 +330,21 @@ h1 {
     display: none;
   }
 
-  /* RE-INSERIDO: Regras para a coluna da imagem da fachada */
   .image-column {
     width: 60%;
-    height: 70vh;
+    height: 100vh; /* Ajustado para ocupar 100% da altura do main-content-wrapper */
     background-image: url('images/fachada.JPG');
     background-size: cover;
     background-position: center;
   }
 
-  /* RE-INSERIDO: Regras para a coluna dos formulários */
   .form-column {
     width: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 100vh; /* Ajustado para ocupar 100% da altura do main-content-wrapper */
   }
 
   footer {
