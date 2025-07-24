@@ -312,7 +312,7 @@ h1 {
   /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
   .image-column {
     width: 60%; /* largura da imagem fachada.jpg */
-    height: 80vh; /*altura da imagem fachada.jpg */
+    height: 70vh; /*altura da imagem fachada.jpg */
     background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
     background-size: cover;
     background-position: center;
