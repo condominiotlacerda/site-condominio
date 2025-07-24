@@ -224,17 +224,18 @@ h1 {
     }
 
     /* Adicione ESTE NOVO BLOCO para o cabeçalho superior direito: */
-    #top-right-header {
+   #top-right-header {
         position: relative; /* Ajusta o posicionamento para o fluxo do documento */
         width: 100%;        /* Ocupa a largura total no celular */
-        justify-content: right; /* Centraliza o conteúdo horizontalmente */
-        top: 1px;          /* Remove o posicionamento fixo do topo */
-        margin-top: 1px;   /* Adiciona um espaço do topo da tela no celular */
-        margin-bottom: 40px; /* **ESSA É A LINHA QUE CRIA O ESPAÇO DESEJADO** */
-        display: flex;      /* Garante que continue sendo um flex container para centralizar */
-        align-items: top; /* Alinha verticalmente no centro */
+        justify-content: flex-end; /* Alinha o conteúdo à direita (final do eixo principal) */
+        align-items: flex-start; /* Alinha o conteúdo ao topo (início do eixo transversal) */
+        top: 1px;           /* Posição do topo, se necessário um ajuste fino */
+        margin-top: 1px;    /* Margem do topo, se necessário um ajuste fino */
+        margin-bottom: 40px; /* Cria o espaço de 40px abaixo */
+        display: flex;      /* Garante que continue sendo um flex container */
         gap: 10px;          /* Mantém o espaço entre o nome e o botão */
-        padding: 5px 0;     /* Adicione ou ajuste o padding conforme necessário */
+        padding: 5px 10px;  /* Adicionado padding horizontal para não colar nas bordas */
+        box-sizing: border-box; /* Garante que padding não aumente a largura total */
     }
 
     /* Adicione este NOVO bloco para a mensagem de boas-vindas aqui: */
