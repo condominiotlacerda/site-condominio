@@ -228,7 +228,7 @@ h1 {
         position: relative; /* Ajusta o posicionamento para o fluxo do documento */
         width: 100%;        /* Ocupa a largura total no celular */
         justify-content: center; /* Centraliza o conteúdo horizontalmente */
-        top: auto;          /* Remove o posicionamento fixo do topo */
+        top: 1px;          /* Remove o posicionamento fixo do topo */
         right: auto;        /* Remove o posicionamento fixo da direita */
         margin-top: 5px;   /* Adiciona um espaço do topo da tela no celular */
         margin-bottom: 40px; /* **ESSA É A LINHA QUE CRIA O ESPAÇO DESEJADO** */
