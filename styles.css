@@ -180,6 +180,37 @@ h1 {
   color: #d9534f;
 }
 
+/* ... (Seu CSS existente, incluindo o que você já tinha para o #welcome-message) ... */
+
+/* Centraliza o conteúdo principal da página area_condominio.html */
+.container {
+    text-align: center; /* Isso centralizará o h1 e o p#welcome-message */
+    margin-top: 20px; /* Adicione um espaçamento do topo se desejar */
+    padding: 20px; /* Um pouco de padding */
+}
+
+/* Ajustes específicos para o título, se precisar de mais controle */
+.container h1 {
+    margin-bottom: 10px; /* Espaço abaixo do título */
+    color: #333;
+    font-size: 2em; /* Um pouco maior para destaque */
+}
+
+/* Você já tinha um estilo para #welcome-message, vamos ajustá-lo */
+#welcome-message {
+    color: #333;
+    text-align: center; /* Garantia de centralização, mas o .container já faria isso */
+    width: 100%; /* Garante que ocupe a largura total para centralizar */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: block; /* Garante que se comporte como um bloco para centralizar */
+    line-height: 1.5; /* Espaçamento entre as linhas para melhor legibilidade */
+}
+
+/* ... (O restante do seu CSS abaixo) ... */
+
 /* --- */
 /* Estilo para a imagem "anonymous.png" acima do Login */
 #login h2::before {
