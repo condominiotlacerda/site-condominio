@@ -230,8 +230,8 @@ h1 {
         justify-content: center; /* Centraliza o conteúdo horizontalmente */
         top: auto;          /* Remove o posicionamento fixo do topo */
         right: auto;        /* Remove o posicionamento fixo da direita */
-        margin-top: 10px;   /* Adiciona um espaço do topo da tela no celular */
-        margin-bottom: 20px; /* **ESSA É A LINHA QUE CRIA O ESPAÇO DESEJADO** */
+        margin-top: 5px;   /* Adiciona um espaço do topo da tela no celular */
+        margin-bottom: 40px; /* **ESSA É A LINHA QUE CRIA O ESPAÇO DESEJADO** */
         display: flex;      /* Garante que continue sendo um flex container para centralizar */
         align-items: center; /* Alinha verticalmente no centro */
         gap: 10px;          /* Mantém o espaço entre o nome e o botão */
