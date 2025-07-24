@@ -371,3 +371,13 @@ h1 {
     display: none;
   }
 }
+.apartment-section {
+    font-size: 0; /* Remove o espaçamento causado pelos espaços em branco entre os botões */
+    text-align: center; /* Para centralizar os botões */
+}
+
+.apartment-button {
+    font-size: 1em; /* Restaura o tamanho da fonte para o botão */
+    display: inline-block; /* Garante que os botões se comportem como blocos em linha */
+    margin: 5px; /* Adiciona um espaçamento para separar os botões */
+}
