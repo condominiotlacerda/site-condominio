@@ -170,18 +170,16 @@ h1 {
 }
 
 /* Cor do texto de aviso no início da página area_condominio.html */
-/* --- INÍCIO DO AJUSTE PARA #welcome-message --- */
 #welcome-message {
-  color: #333; /* Cor padrão, pode ajustar se for diferente */
-  text-align: center; /* Centraliza o texto */
-  width: 100%; /* Ocupa a largura total disponível */
-  margin-top: 20px; /* Espaço do topo da página */
-  margin-bottom: 20px; /* Espaço abaixo da mensagem */
-  font-size: 1.2em; /* Tamanho da fonte */
-  font-weight: bold; /* Negrito */
-  display: block; /* Garante que se comporte como um bloco para ocupar sua própria linha */
+  color: #333;
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  display: block;
 }
-/* --- FIM DO AJUSTE PARA #welcome-message --- */
 
 /* --- */
 /* Estilo para a imagem "anonymous.png" acima do Login (Global - Desktop) */
@@ -323,6 +321,7 @@ h1 {
     display: none;
   }
 
+  /* RE-INSERIDO: Regras para a coluna da imagem da fachada */
   .image-column {
     width: 60%;
     height: 70vh;
@@ -331,6 +330,7 @@ h1 {
     background-position: center;
   }
 
+  /* RE-INSERIDO: Regras para a coluna dos formulários */
   .form-column {
     width: 40%;
     display: flex;
