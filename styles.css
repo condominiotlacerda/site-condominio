@@ -4,10 +4,15 @@ body {
     padding: 20px;
     text-align: center;
 }
-
+/* Comanda a posição de Condomínio T Lacerda na página área condomínio */
 h1 {
     color: #333;
     font-size: 1.8em;
+    text-align: center; /* Adiciona este para centralizar o texto */
+    width: 100%; /* Garante que ocupe a largura total para o centralizar */
+    margin-left: auto; /* Centraliza o bloco do h1 horizontalmente */
+    margin-right: auto; /* Centraliza o bloco do h1 horizontalmente */
+    display: block; /* Garante que o h1 se comporte como um bloco para centralizar com margin: auto */
 }
 
 /* --- NOVO: Estilos para o container dos botões de apartamento usando Flexbox --- */
