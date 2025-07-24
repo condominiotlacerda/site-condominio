@@ -224,14 +224,14 @@ h1 {
         top: 10px;
         left: 5px;
         right: 5px;
-        width: auto; /* 🔹 Agora a largura se ajusta automaticamente */
+        width: auto;
         margin: 0 auto;
     }
 
-    .file-box h2 { /* Títulos dos contêineres nos celulares */
-    font-size: 0.9em; /* Experimente este valor ou outro de sua preferência para mobile */
-    margin-top: 8px; /* Ajustando as margens para mobile, se necessário */
-    margin-bottom: 8px;
+    .file-box h2 {
+        font-size: 0.9em;
+        margin-top: 8px;
+        margin-bottom: 8px;
     }
 
     /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
@@ -248,17 +248,24 @@ h1 {
         width: 100%;
     }
 
-    #file-list-wrapper { /* regras para div que contém caixas lista arquivos, prestação contas */
-    display: flex;
-    flex-direction: column; /* Alteramos para column para que os itens fiquem um abaixo do outro */
-    align-items: center; /* Opcional: Centraliza os itens horizontalmente se desejar */
-    gap: 10px; /* Opcional: Adiciona um pequeno espaço entre as caixas */
-  }
+    #file-list-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
 
-  #contas-container { /* regras para div que contém caixas lista arquivos, prestação contas */
-    width: 95%; /* Ajuste a largura conforme necessário */
-    margin: 0 auto; /* Centraliza a caixa horizontalmente */
-  }
+    #contas-container {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    /* --- ADICIONADO: Estilo para anonymous.png em mobile (100x100) --- */
+    #login h2::before {
+      width: 100px; /* Largura da imagem no celular */
+      height: 100px; /* Altura da imagem no celular */
+      margin: 0 auto 10px auto; /* Ajusta a margem para celular */
+    }
 
 } /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 
