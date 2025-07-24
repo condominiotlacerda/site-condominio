@@ -225,7 +225,7 @@ h1 {
 
     /* Adicione ESTE NOVO BLOCO para o cabeçalho superior direito: */
    #top-right-header {
-        position: absolute; /* Ajusta o posicionamento para o fluxo do documento */
+        position: relative; /* Ajusta o posicionamento para o fluxo do documento */
         width: 100%;        /* Ocupa a largura total no celular */
         justify-content: flex-end; /* Alinha o conteúdo à direita (final do eixo principal) */
         align-items: flex-start; /* Alinha o conteúdo ao topo (início do eixo transversal) */
@@ -244,7 +244,7 @@ h1 {
 
     /* ADICIONE ESTE BLOCO PARA O H1: */
     .container h1 {
-        margin-top: 10px; /* Isso criará um espaço de 40px acima do "Condomínio T Lacerda" */
+        margin-top: 20px; /* Isso criará um espaço de 40px acima do "Condomínio T Lacerda" */
     }
 
     .apartment-section {
