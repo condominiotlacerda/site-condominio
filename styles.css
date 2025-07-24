@@ -297,8 +297,8 @@ h1 {
 
   /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
   .image-column {
-    width: 50%; /* Ocupa metade da largura */
-    height: 100vh; /* Ocupa a altura total da tela */
+    width: 60%; /* Ocupa metade da largura */
+    height: 90vh; /* Ocupa a altura total da tela */
     background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
     background-size: cover;
     background-position: center;
