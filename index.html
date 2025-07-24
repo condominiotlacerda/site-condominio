@@ -141,50 +141,51 @@
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
     </header>
 
-    <div class="image-column">
+    <div class="main-content-wrapper">
+        <div class="image-column">
+            </div>
+
+        <div class="form-column">
+            <section id="login">
+                <h2>Login</h2>
+                <form id="formularioLogin">
+                    <label for="emailLogin">Email:</label><br>
+                    <input type="email" id="emailLogin" name="emailLogin" required style="width: 270px;"><br><br>
+                    <label for="senhaLogin">Senha:</label><br>
+                    <input type="password" id="senhaLogin" name="senhaLogin" maxlength="6" inputmode="numeric"><br><br>
+                    <button type="submit" style="margin-right: 10px;">Entrar</button><br><br>
+                    <a href="#" id="forgotPassword">Esqueci minha senha</a><br>
+                    <div id="mensagemLogin"></div>
+                </form>
+                <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
+            </section>
+
+            <section id="forgotPasswordSection" style="display:none;">
+                <h2>Recuperar Senha</h2>
+                <form id="forgotPasswordForm">
+                    <label for="emailForgotPassword">Email:</label><br><br>
+                    <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
+                    <button type="submit">Enviar link de recuperação</button><br><br>
+                    <div id="mensagemForgotPassword"></div>
+                </form>
+                <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
+            </section>
+
+            <section id="cadastro" style="display:none;">
+                <h2>Cadastro</h2>
+                <form id="formularioCadastro">
+                    <label for="emailCadastro">Email:</label><br>
+                    <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
+                    <label for="senhaCadastro">Senha:</label><br>
+                    <input type="password" id="senhaCadastro" name="senhaCadastro" maxlength="6" inputmode="numeric"><br><br>
+                    <label for="codigoAcesso">Código de Acesso:</label><br>
+                    <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
+                    <button type="submit">Cadastrar</button>
+                    <div id="mensagemCadastro"></div>
+                </form>
+                <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
+            </section>
         </div>
-
-    <div class="form-column">
-        <section id="login">
-            <h2>Login</h2>
-            <form id="formularioLogin">
-                <label for="emailLogin">Email:</label><br>
-                <input type="email" id="emailLogin" name="emailLogin" required style="width: 270px;"><br><br>
-                <label for="senhaLogin">Senha:</label><br>
-                <input type="password" id="senhaLogin" name="senhaLogin" maxlength="6" inputmode="numeric"><br><br>
-                <button type="submit" style="margin-right: 10px;">Entrar</button><br><br>
-                <a href="#" id="forgotPassword">Esqueci minha senha</a><br>
-                <div id="mensagemLogin"></div>
-            </form>
-            <p>Não tem uma conta? <a href="#" id="mostrarCadastro">Cadastre-se</a></p>
-        </section>
-
-        <section id="forgotPasswordSection" style="display:none;">
-            <h2>Recuperar Senha</h2>
-            <form id="forgotPasswordForm">
-                <label for="emailForgotPassword">Email:</label><br><br>
-                <input type="email" id="emailForgotPassword" name="emailForgotPassword" required><br><br>
-                <button type="submit">Enviar link de recuperação</button><br><br>
-                <div id="mensagemForgotPassword"></div>
-            </form>
-            <p><a href="#" id="mostrarLoginFromForgot">Voltar para o Login</a></p>
-        </section>
-
-        <section id="cadastro" style="display:none;">
-            <h2>Cadastro</h2>
-            <form id="formularioCadastro">
-                <label for="emailCadastro">Email:</label><br>
-                <input type="email" id="emailCadastro" name="emailCadastro" required><br><br>
-                <label for="senhaCadastro">Senha:</label><br>
-                <input type="password" id="senhaCadastro" name="senhaCadastro" maxlength="6" inputmode="numeric"><br><br>
-                <label for="codigoAcesso">Código de Acesso:</label><br>
-                <input type="text" id="codigoAcesso" name="codigoAcesso" placeholder="Seu Código de Acesso"><br><br>
-                <button type="submit">Cadastrar</button>
-                <div id="mensagemCadastro"></div>
-            </form>
-            <p>Já tem uma conta? <a href="#" id="mostrarLogin">Faça login</a></p>
-        </section>
-
     </div>
     <footer>
         <p>&copy; 2025 Portal do Condomínio. Todos os direitos reservados.</p>
