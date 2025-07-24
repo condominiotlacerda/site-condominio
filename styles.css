@@ -10,13 +10,18 @@ h1 {
     font-size: 1.8em;
 }
 
+/* --- NOVO: Estilos para o container dos botões de apartamento usando Flexbox --- */
 .apartment-section {
     margin-top: 30px;
+    display: flex; /* Habilita Flexbox */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    gap: 10px; /* Adiciona um espaço de 10px entre os botões */
 }
 
 .apartment-button {
     padding: 10px 15px;
-    margin: 5px;
+    /* REMOVIDO: margin: 5px; - O 'gap' no .apartment-section já lida com o espaçamento */
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     cursor: pointer;
@@ -34,7 +39,7 @@ h1 {
 }
 
 #file-list li {
-  margin-bottom: 10px; /* Experimente diferentes valores como 5px, 15px, etc. */
+    margin-bottom: 10px; /* Experimente diferentes valores como 5px, 15px, etc. */
 }
 
 .file-list a {
@@ -97,11 +102,10 @@ h1 {
 }
 
 /* 🔹 Painel do visualizador de PDF */
-/* ... outras regras para .viewer-box ... */
 #viewer-container.active {
-  opacity: 1;
-  transform: scale(1);
-  border-color: #555;
+    opacity: 1;
+    transform: scale(1);
+    border-color: #555;
 }
 
 /* 🔹 Ajuste do iframe */
@@ -137,29 +141,29 @@ h1 {
 }
 
 #emailForgotPassword {
-  width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
-  /* Outros estilos que você possa ter para este campo */
+    width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
+    /* Outros estilos que você possa ter para este campo */
 }
 /* Alinhamento das palavras Login, Recuperar Senha e Cadastro*/
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
-  text-align: center; /* Garante que o texto dentro do h2 esteja centralizado */
-  width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
+    text-align: center; /* Garante que o texto dentro do h2 esteja centralizado */
+    width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
 }
 
 #file-list-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
 }
 
 @media (min-width: 769px) {
-  #contas-container {
-    width: 300px; /* Largura para desktop (igual ao inline) */
-    margin-left: 20px; /* Margem esquerda para desktop (igual ao inline) */
-  }
+    #contas-container {
+        width: 300px; /* Largura para desktop (igual ao inline) */
+        margin-left: 20px; /* Margem esquerda para desktop (igual ao inline) */
+    }
 }
 
 .file-box h2 { /*Títulos dos contêineres nos desktops*/
@@ -167,62 +171,39 @@ h1 {
     margin-top: 10px;
     margin-bottom: 10px;
     margin-block-start: 0; /* Resetando a margem superior padrão */
-    margin-block-end:   0;    /* Resetando a margem inferior padrão */
+    margin-block-end:    0;    /* Resetando a margem inferior padrão */
 }
 
 #documentos-list {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-/* Cor do texto de aviso no início da página area_condominio.html */
+/* --- NOVO: Estilo para a mensagem de manutenção, restaurando a cor vermelha e removendo negrito --- */
 #welcome-message {
-  color: #d9534f;
-}
-
-/* ... (Seu CSS existente, incluindo o que você já tinha para o #welcome-message) ... */
-
-/* Centraliza o conteúdo principal da página area_condominio.html */
-.container {
-    text-align: center; /* Isso centralizará o h1 e o p#welcome-message */
-    margin-top: 20px; /* Adicione um espaçamento do topo se desejar */
-    padding: 20px; /* Um pouco de padding */
-}
-
-/* Ajustes específicos para o título, se precisar de mais controle */
-.container h1 {
-    margin-bottom: 10px; /* Espaço abaixo do título */
-    color: #333;
-    font-size: 2em; /* Um pouco maior para destaque */
-}
-
-/* Você já tinha um estilo para #welcome-message, vamos ajustá-lo */
-#welcome-message {
-    color: #333;
-    text-align: center; /* Garantia de centralização, mas o .container já faria isso */
-    width: 100%; /* Garante que ocupe a largura total para centralizar */
+    color: #d9534f; /* Cor vermelha */
+    text-align: center;
+    width: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
     font-size: 1.2em;
-    font-weight: bold;
-    display: block; /* Garante que se comporte como um bloco para centralizar */
-    line-height: 1.5; /* Espaçamento entre as linhas para melhor legibilidade */
+    font-weight: normal; /* Garante que não esteja em negrito */
+    display: block;
+    line-height: 1.5;
 }
-
-/* ... (O restante do seu CSS abaixo) ... */
 
 /* --- */
 /* Estilo para a imagem "anonymous.png" acima do Login */
 #login h2::before {
-  content: ""; /* É necessário para que o pseudo-elemento seja gerado */
-  display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
-  width: 200px; /* Ajuste a largura da imagem conforme sua necessidade */
-  height: 200px; /* Ajuste a altura da imagem conforme sua necessidade */
-  background-image: url('images/anonymous.png'); /* Caminho para a sua imagem */
-  background-size: contain; /* Garante que a imagem se ajuste dentro do espaço definido */
-  background-repeat: no-repeat;
-  background-position: center; /* Centraliza a imagem no espaço do pseudo-elemento */
-  margin: 0 auto 15px auto; /* Centraliza o elemento horizontalmente e adiciona uma margem inferior para separar do texto "Login" */
+    content: ""; /* É necessário para que o pseudo-elemento seja gerado */
+    display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
+    width: 200px; /* Ajuste a largura da imagem conforme sua necessidade */
+    height: 200px; /* Ajuste a altura da imagem conforme sua necessidade */
+    background-image: url('images/anonymous.png'); /* Caminho para a sua imagem */
+    background-size: contain; /* Garante que a imagem se ajuste dentro do espaço definido */
+    background-repeat: no-repeat;
+    background-position: center; /* Centraliza a imagem no espaço do pseudo-elemento */
+    margin: 0 auto 15px auto; /* Centraliza o elemento horizontalmente e adiciona uma margem inferior para separar do texto "Login" */
 }
 
 /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
@@ -293,81 +274,81 @@ h1 {
 
     /* --- ADICIONADO: Estilo para anonymous.png em mobile (100x100) --- */
     #login h2::before {
-      width: 100px; /* Largura da imagem no celular */
-      height: 100px; /* Altura da imagem no celular */
-      margin: 0 auto 10px auto; /* Ajusta a margem para celular */
+        width: 100px; /* Largura da imagem no celular */
+        height: 100px; /* Altura da imagem no celular */
+        margin: 0 auto 10px auto; /* Ajusta a margem para celular */
     }
 
 } /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 
 /* Estilos para telas de computador (largura mínima de 769 pixels) */
 @media (min-width: 769px) {
-  body {
-    display: flex; /* Usamos Flexbox para o layout principal */
-    align-items: center; /* Alinha os itens verticalmente ao centro da tela */
-    justify-content: space-around; /* Espaça os itens de forma uniforme */
-    padding: 20px;
-    text-align: left; /* Alinha o texto à esquerda dentro dos contêineres */
-    min-height: 100vh; /* Garante que o body ocupe a altura total da tela */
-  }
+    body {
+        display: flex; /* Usamos Flexbox para o layout principal */
+        align-items: center; /* Alinha os itens verticalmente ao centro da tela */
+        justify-content: space-around; /* Espaça os itens de forma uniforme */
+        padding: 20px;
+        text-align: left; /* Alinha o texto à esquerda dentro dos contêineres */
+        min-height: 100vh; /* Garante que o body ocupe a altura total da tela */
+    }
 
-  header {
-    position: fixed; /* Mantém o logo fixo no topo */
-    top: 5px;
-    left: 5px;
-  }
+    header {
+        position: fixed; /* Mantém o logo fixo no topo */
+        top: 5px;
+        left: 5px;
+    }
 
-  .logo { /* Mantenha seus estilos para o logo */
-    width: 100px !important; /* Ajuste o tamanho conforme necessário para desktop */
-    height: 100px !important;
-  }
+    .logo { /* Mantenha seus estilos para o logo */
+        width: 100px !important; /* Ajuste o tamanho conforme necessário para desktop */
+        height: 100px !important;
+    }
 
-  #login,
-  #cadastro,
-  #forgotPasswordSection {
-    width: 400px; /* Largura para os formulários */
-    padding: 30px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    #login,
+    #cadastro,
+    #forgotPasswordSection {
+        width: 400px; /* Largura para os formulários */
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-  #login {
-    display: flex; /* Garante que esteja visível inicialmente */
-  }
+    #login {
+        display: flex; /* Garante que esteja visível inicialmente */
+    }
 
-  #cadastro {
-    display: none; /* Começa escondido */
-  }
+    #cadastro {
+        display: none; /* Começa escondido */
+    }
 
-  #forgotPasswordSection {
-    display: none; /* Começa escondido */
-  }
+    #forgotPasswordSection {
+        display: none; /* Começa escondido */
+    }
 
-  /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
-  .image-column {
-    width: 60%; /* largura da imagem fachada.jpg */
-    height: 70vh; /*altura da imagem fachada.jpg */
-    background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
-    background-size: cover;
-    background-position: center;
-  }
+    /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
+    .image-column {
+        width: 60%; /* largura da imagem fachada.jpg */
+        height: 70vh; /*altura da imagem fachada.jpg */
+        background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
+        background-size: cover;
+        background-position: center;
+    }
 
-  /* Para a coluna dos formulários */
-  .form-column {
-    width: 40%; /* Ocupa uma porção da largura para os formulários */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Alinha os formulários verticalmente */
-    min-height: 100vh;
-  }
+    /* Para a coluna dos formulários */
+    .form-column {
+        width: 40%; /* Ocupa uma porção da largura para os formulários */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Alinha os formulários verticalmente */
+        min-height: 100vh;
+    }
 
-  /* Esconda o rodapé da tela de login em desktops, se desejar */
-  footer {
-    display: none;
-  }
+    /* Esconda o rodapé da tela de login em desktops, se desejar */
+    footer {
+        display: none;
+    }
 }
