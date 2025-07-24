@@ -371,16 +371,3 @@ h1 {
     display: none;
   }
 }
-.apartment-section {
-    display: flex; /* Transforma o container em um flex container */
-    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
-    justify-content: center; /* Centraliza os botões horizontalmente */
-    gap: 10px; /* Adiciona um espaço de 10px entre os botões */
-    margin-top: 20px; /* Adiciona um pouco de espaço acima da seção */
-}
-
-.apartment-button {
-    /* Se você tinha algum estilo de margin ou float aqui, pode precisar ajustá-lo */
-    /* Por exemplo, se tiver 'margin-right', pode remover ou diminuir para o 'gap' fazer efeito */
-    margin: 5px; /* Um pequeno espaçamento individual para os botões, se necessário, ou remova */
-}
