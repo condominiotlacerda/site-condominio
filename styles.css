@@ -10,7 +10,6 @@ h1 {
     font-size: 1.8em;
     text-align: center; /* Adiciona este para centralizar o texto */
     width: 100%; /* Garante que ocupe a largura total para o centralizar */
-    margin-top: 5px; /* Adiciona uma margem superior de 5px */
     margin-left: auto; /* Centraliza o bloco do h1 horizontalmente */
     margin-right: auto; /* Centraliza o bloco do h1 horizontalmente */
     display: block; /* Garante que o h1 se comporte como um bloco para centralizar com margin: auto */
@@ -224,6 +223,11 @@ h1 {
         left: 1px;
     }
 
+    /* Adicione este NOVO bloco h1 aqui dentro, se ele não existir: */
+    h1 {
+        margin-top: 5px; /* Isso aplicará a margem superior APENAS em celulares */
+    }
+
     .apartment-section {
         display: flex;
         flex-direction: column;
@@ -284,7 +288,6 @@ h1 {
         height: 100px; /* Altura da imagem no celular */
         margin: 0 auto 10px auto; /* Ajusta a margem para celular */
     }
-
 } /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 
 /* Estilos para telas de computador (largura mínima de 769 pixels) */
