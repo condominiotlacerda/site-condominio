@@ -54,24 +54,21 @@
         // NOVO CÓDIGO: Manipula a exibição do nome do usuário e da mensagem de manutenção.
         const nomeUsuario = localStorage.getItem('userName');
         const tituloCondominio = document.querySelector('h1');
-        const mensagemBoasVindas = document.getElementById('welcome-message');
 
         if (nomeUsuario) {
             // Cria um novo parágrafo para o nome do usuário
             const pNomeUsuario = document.createElement('p');
             pNomeUsuario.textContent = 'Bem vindo(a): ' + nomeUsuario;
-            pNomeUsuario.id = 'user-welcome-display'; // Adiciona um ID para estilização futura, se necessário
-            pNomeUsuario.style.fontSize = '1.2em'; // Exemplo de estilo para o nome
-            pNomeUsuario.style.fontWeight = 'bold'; // Exemplo de estilo para o nome
-            pNomeUsuario.style.marginBottom = '5px'; // Espaço abaixo do nome
+            pNomeUsuario.id = 'user-welcome-display'; 
+            pNomeUsuario.style.fontSize = '1.2em'; 
+            pNomeUsuario.style.fontWeight = 'bold'; 
+            pNomeUsuario.style.marginBottom = '5px'; 
             
             // Insere o parágrafo com o nome do usuário antes do título H1
             if (tituloCondominio && tituloCondominio.parentNode) {
                 tituloCondominio.parentNode.insertBefore(pNomeUsuario, tituloCondominio);
             }
         }
-        // A mensagem original "Condomínio T Lacerda" e o parágrafo de manutenção
-        // permanecem no HTML, e o script os complementa com o nome do usuário.
         // =====================================================================
 
         function sair() {
@@ -92,10 +89,16 @@ window.sair = sair;
     <title>Condomínio T Lacerda - Boletos e Contas</title>
     <script src="script.js" defer type="module"></script>
     <style>
+        /* Novo estilo para o container do botão de sair */
+        .logout-button-container {
+            position: fixed; /* Fixa o container na tela */
+            top: 10px;
+            right: 10px;
+            z-index: 1002; /* Garante que fique acima de outros elementos */
+        }
+
         .logout-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            /* Removido position: absolute daqui, agora é controlado pelo container */
             padding: 10px 15px;
             background-color: #f44336;
             color: white;
@@ -119,7 +122,9 @@ window.sair = sair;
         <button id="entendi-aviso" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">Entendi</button>
       </div>
     </div>
-    <button class="logout-button" onclick="sair()">Sair</button>
+    <div class="logout-button-container">
+        <button class="logout-button" onclick="sair()">Sair</button>
+    </div>
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
     </header>
