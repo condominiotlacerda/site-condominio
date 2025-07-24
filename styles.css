@@ -223,12 +223,6 @@ h1 {
         left: 1px;
     }
 
-    /* Adicione este NOVO bloco h1 aqui dentro, se ele não existir: */
-    .container h1 {
-        position: absolute; /* Define o posicionamento relativo */
-        top: 20px;
-    }
-
     .apartment-section {
         display: flex;
         flex-direction: column;
