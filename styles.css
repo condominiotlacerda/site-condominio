@@ -324,8 +324,8 @@ h1 {
 #login h2::before {
   content: ""; /* É necessário para que o pseudo-elemento seja gerado */
   display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
-  width: 100px; /* Ajuste a largura da imagem conforme sua necessidade */
-  height: 100px; /* Ajuste a altura da imagem conforme sua necessidade */
+  width: 200px; /* Ajuste a largura da imagem conforme sua necessidade */
+  height: 200px; /* Ajuste a altura da imagem conforme sua necessidade */
   background-image: url('images/anonymous.png'); /* Caminho para a sua imagem */
   background-size: contain; /* Garante que a imagem se ajuste dentro do espaço definido */
   background-repeat: no-repeat;
