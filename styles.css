@@ -223,13 +223,6 @@ h1 {
         left: 1px;
     }
 
-    #top-right-header {
-        position: relative; /* Muda de fixed para relative para se ajustar ao fluxo normal */
-        width: 100%; /* Ocupa a largura total da tela */
-        justify-content: right; /* Alinha à direita os itens horizontalmente */
-        margin-top: 1px; /* Adiciona uma pequena margem superior para espaçamento */
-    }
-
     .apartment-section {
         display: flex;
         flex-direction: column;
