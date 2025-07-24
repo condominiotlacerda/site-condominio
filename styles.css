@@ -225,7 +225,7 @@ h1 {
 
     /* Adicione este NOVO bloco h1 aqui dentro, se ele não existir: */
     h1 {
-        margin-top: 10px; /* Isso aplicará a margem superior APENAS em celulares */
+        margin-top: 20px; /* Isso aplicará a margem superior APENAS em celulares */
     }
 
     .apartment-section {
