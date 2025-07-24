@@ -34,7 +34,7 @@ h1 {
 }
 
 #file-list li {
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* Experimente diferentes valores como 5px, 15px, etc. */
 }
 
 .file-list a {
@@ -50,8 +50,8 @@ h1 {
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 5px;  /* 🔹 Alterado de 15px para 5px */
+    left: 5px; /* 🔹 Alterado de 15px para 5px */
     max-width: 150px !important;
     max-height: 150px !important;
     border: 2px solid red;
@@ -59,6 +59,7 @@ h1 {
 
 /* 🔹 Caixa da lista de arquivos */
 .file-box {
+    /* position: absolute; */
     top: 250px;
     left: 15px;
     width: 250px;
@@ -80,6 +81,7 @@ h1 {
 
 /* 🔹 Painel do visualizador de PDF */
 .viewer-box {
+    /*position: absolute;*/
     top: 250px;
     left: 280px;
     width: 600px;
@@ -94,6 +96,8 @@ h1 {
     transition: opacity 0.4s ease, transform 0.3s ease, border-color 0.4s ease;
 }
 
+/* 🔹 Painel do visualizador de PDF */
+/* ... outras regras para .viewer-box ... */
 #viewer-container.active {
   opacity: 1;
   transform: scale(1);
@@ -129,17 +133,19 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Outras regras de estilo para as seções, se houver */
 }
 
 #emailForgotPassword {
-  width: 270px;
+  width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
+  /* Outros estilos que você possa ter para este campo */
 }
 /* Alinhamento das palavras Login, Recuperar Senha e Cadastro*/
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
-  text-align: center;
-  width: 100%;
+  text-align: center; /* Garante que o texto dentro do h2 esteja centralizado */
+  width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
 }
 
 #file-list-wrapper {
@@ -151,17 +157,17 @@ h1 {
 
 @media (min-width: 769px) {
   #contas-container {
-    width: 300px;
-    margin-left: 20px;
+    width: 300px; /* Largura para desktop (igual ao inline) */
+    margin-left: 20px; /* Margem esquerda para desktop (igual ao inline) */
   }
 }
 
-.file-box h2 {
+.file-box h2 { /*Títulos dos contêineres nos desktops*/
     font-size: 1.1em;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-block-start: 0;
-    margin-block-end:   0;
+    margin-block-start: 0; /* Resetando a margem superior padrão */
+    margin-block-end:   0;    /* Resetando a margem inferior padrão */
 }
 
 #documentos-list {
@@ -175,22 +181,20 @@ h1 {
 }
 
 /* --- */
-/* Estilo para a imagem "anonymous.png" acima do Login (Global - Desktop) */
+/* Estilo para a imagem "anonymous.png" acima do Login */
 #login h2::before {
-  content: "";
-  display: block;
-  width: 200px; /* Tamanho para desktop */
-  height: 200px; /* Tamanho para desktop */
-  background-image: url('images/anonymous.png');
-  background-size: contain;
+  content: ""; /* É necessário para que o pseudo-elemento seja gerado */
+  display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
+  width: 200px; /* Ajuste a largura da imagem conforme sua necessidade */
+  height: 200px; /* Ajuste a altura da imagem conforme sua necessidade */
+  background-image: url('images/anonymous.png'); /* Caminho para a sua imagem */
+  background-size: contain; /* Garante que a imagem se ajuste dentro do espaço definido */
   background-repeat: no-repeat;
-  background-position: center;
-  margin: 0 auto 15px auto;
+  background-position: center; /* Centraliza a imagem no espaço do pseudo-elemento */
+  margin: 0 auto 15px auto; /* Centraliza o elemento horizontalmente e adiciona uma margem inferior para separar do texto "Login" */
 }
 
----
-## Responsividade para CELULAR (max-width: 768px) 📱  ==================================================================================================
----
+/* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 @media (max-width: 768px) {
     /* 🔹 Reduzindo o logo para metade do tamanho atual */
     .logo {
@@ -220,14 +224,14 @@ h1 {
         top: 10px;
         left: 5px;
         right: 5px;
-        width: auto;
+        width: auto; /* 🔹 Agora a largura se ajusta automaticamente */
         margin: 0 auto;
     }
 
-    .file-box h2 {
-        font-size: 0.9em;
-        margin-top: 8px;
-        margin-bottom: 8px;
+    .file-box h2 { /* Títulos dos contêineres nos celulares */
+    font-size: 0.9em; /* Experimente este valor ou outro de sua preferência para mobile */
+    margin-top: 8px; /* Ajustando as margens para mobile, se necessário */
+    margin-bottom: 8px;
     }
 
     /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
@@ -244,55 +248,46 @@ h1 {
         width: 100%;
     }
 
-    #file-list-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
+    #file-list-wrapper { /* regras para div que contém caixas lista arquivos, prestação contas */
+    display: flex;
+    flex-direction: column; /* Alteramos para column para que os itens fiquem um abaixo do outro */
+    align-items: center; /* Opcional: Centraliza os itens horizontalmente se desejar */
+    gap: 10px; /* Opcional: Adiciona um pequeno espaço entre as caixas */
+  }
 
-    #contas-container {
-        width: 95%;
-        margin: 0 auto;
-    }
+  #contas-container { /* regras para div que contém caixas lista arquivos, prestação contas */
+    width: 95%; /* Ajuste a largura conforme necessário */
+    margin: 0 auto; /* Centraliza a caixa horizontalmente */
+  }
 
-    /* --- Adicionado: Estilo para anonymous.png em mobile (100x100) --- */
-    #login h2::before {
-      width: 100px; /* Largura da imagem no celular */
-      height: 100px; /* Altura da imagem no celular */
-      margin: 0 auto 10px auto; /* Ajusta a margem para celular */
-    }
+} /* 🔹 RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 
-} /* Fim da Responsividade para CELULAR 📱 ==================================================================================================*/
-
----
-## Estilos para DESKTOP (min-width: 769px) 💻
----
+/* Estilos para telas de computador (largura mínima de 769 pixels) */
 @media (min-width: 769px) {
   body {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+    display: flex; /* Usamos Flexbox para o layout principal */
+    align-items: center; /* Alinha os itens verticalmente ao centro da tela */
+    justify-content: space-around; /* Espaça os itens de forma uniforme */
     padding: 20px;
-    text-align: left;
-    min-height: 100vh;
+    text-align: left; /* Alinha o texto à esquerda dentro dos contêineres */
+    min-height: 100vh; /* Garante que o body ocupe a altura total da tela */
   }
 
   header {
-    position: fixed;
+    position: fixed; /* Mantém o logo fixo no topo */
     top: 5px;
     left: 5px;
   }
 
-  .logo {
-    width: 100px !important;
+  .logo { /* Mantenha seus estilos para o logo */
+    width: 100px !important; /* Ajuste o tamanho conforme necessário para desktop */
     height: 100px !important;
   }
 
   #login,
   #cadastro,
   #forgotPasswordSection {
-    width: 400px;
+    width: 400px; /* Largura para os formulários */
     padding: 30px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -303,34 +298,37 @@ h1 {
   }
 
   #login {
-    display: flex;
+    display: flex; /* Garante que esteja visível inicialmente */
   }
 
   #cadastro {
-    display: none;
+    display: none; /* Começa escondido */
   }
 
   #forgotPasswordSection {
-    display: none;
+    display: none; /* Começa escondido */
   }
 
+  /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
   .image-column {
-    width: 50%;
-    height: 100vh;
-    background-image: url('images/fachada.JPG');
+    width: 60%; /* largura da imagem fachada.jpg */
+    height: 80vh; /*altura da imagem fachada.jpg */
+    background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
     background-size: cover;
     background-position: center;
   }
 
+  /* Para a coluna dos formulários */
   .form-column {
-    width: 40%;
+    width: 40%; /* Ocupa uma porção da largura para os formulários */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Alinha os formulários verticalmente */
     min-height: 100vh;
   }
 
+  /* Esconda o rodapé da tela de login em desktops, se desejar */
   footer {
     display: none;
   }
