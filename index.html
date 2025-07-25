@@ -138,51 +138,6 @@
                 }
             });
         }
-
-        // --- Novo Script para abrir o histórico PDF ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const historicoLink = document.getElementById('historico-link');
-            const historicoViewer = document.getElementById('historico-viewer');
-            const historicoIframe = document.getElementById('historico-iframe');
-            const closeHistorico = document.getElementById('close-historico');
-            const mainContent = document.querySelector('.main-wrapper'); // Seu conteúdo principal
-            const loginSection = document.getElementById('login'); // Sua seção de login
-            const forgotPasswordSection = document.getElementById('forgotPasswordSection'); // Sua seção de recuperação
-            const cadastroSection = document.getElementById('cadastro'); // Sua seção de cadastro
-
-
-            historicoLink.addEventListener('click', (e) => {
-                e.preventDefault(); // Impede o comportamento padrão do link
-
-                // Oculta os formulários de login/cadastro/recuperação
-                if (loginSection) loginSection.style.display = 'none';
-                if (forgotPasswordSection) forgotPasswordSection.style.display = 'none';
-                if (cadastroSection) cadastroSection.style.display = 'none';
-                
-                // Oculta a fachada
-                const imageColumn = document.querySelector('.image-column');
-                if (imageColumn) imageColumn.style.display = 'none';
-
-
-                historicoIframe.src = 'historico/historico.pdf'; // Define o caminho do PDF
-                historicoViewer.style.display = 'block'; // Mostra o painel do visualizador
-                historicoViewer.classList.add('active'); // Adiciona classe para transição/estilo
-            });
-
-            closeHistorico.addEventListener('click', () => {
-                historicoViewer.style.display = 'none'; // Esconde o painel
-                historicoViewer.classList.remove('active'); // Remove a classe
-                historicoIframe.src = ''; // Limpa o iframe para parar o carregamento do PDF
-
-                // Reexibe os elementos originais (apenas o login, se os outros estiverem hidden)
-                if (loginSection) loginSection.style.display = 'block';
-                 // Reexibe a fachada se o login estiver visível (ou se for o estado padrão)
-                const imageColumn = document.querySelector('.image-column');
-                if (imageColumn && loginSection.style.display !== 'none') {
-                    imageColumn.style.display = 'block';
-                }
-            });
-        });
     </script>
 </head>
 <body>
@@ -197,12 +152,6 @@
     </nav>
 
     <div class="main-wrapper">
-        <div id="historico-viewer" class="viewer-box" style="display: none;">
-            <button id="close-historico" class="close-btn">&times;</button>
-            <h2>Histórico do Condomínio</h2>
-            <iframe id="historico-iframe" width="100%" height="500px" frameborder="0"></iframe>
-            <a id="download-historico" href="historico/historico.pdf" download="Historico_Condominio.pdf" class="download-btn">Baixar Histórico</a>
-        </div>
         <div class="image-column">
         </div>
 
@@ -273,6 +222,12 @@
         <p style="font-size: 0.8em; text-align: center;">U 301.</p>
     </footer>
 
+    <section id="viewer-historico-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; transition: opacity 0.5s;">
+        <iframe id="historico-iframe" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
+        <a id="download-historico-button" href="historico/historico.pdf" download="Historico_Condominio.pdf" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;">Baixar</a>
+        <button id="close-historico-button" style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button>
+    </section>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const senhaCadastroInput = document.getElementById('senhaCadastro');
@@ -295,6 +250,40 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Lógica para o overlay do Histórico
+    const historicoLink = document.getElementById('historico-link');
+    const viewerHistoricoContainer = document.getElementById('viewer-historico-container');
+    const historicoIframe = document.getElementById('historico-iframe');
+    const closeHistoricoButton = document.getElementById('close-historico-button');
+    
+    // Obter todos os elementos que devem ficar opacos e inativos
+    const bodyContent = document.body; // O corpo todo para efeito de opacidade
+
+    historicoLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Remove a opacidade do body para o overlay ser claro
+        bodyContent.style.filter = 'blur(5px) brightness(0.5)'; // Aplica blur e escurece
+        bodyContent.style.pointerEvents = 'none'; // Desabilita interações no fundo
+        
+        historicoIframe.src = 'historico/historico.pdf';
+        viewerHistoricoContainer.style.display = 'block';
+        setTimeout(() => viewerHistoricoContainer.style.opacity = '1', 10); // Transição suave
+    });
+
+    closeHistoricoButton.addEventListener('click', () => {
+        viewerHistoricoContainer.style.opacity = '0'; // Começa a transição de saída
+        setTimeout(() => {
+            viewerHistoricoContainer.style.display = 'none';
+            historicoIframe.src = ''; // Limpa o iframe
+            
+            // Restaura o body para o estado normal
+            bodyContent.style.filter = 'none';
+            bodyContent.style.pointerEvents = 'auto';
+        }, 500); // Tempo para a transição de opacidade (0.5s)
+    });
+
 });
 </script>
 <script src="script.js" defer type="module"></script>
