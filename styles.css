@@ -235,6 +235,8 @@ h1 {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
+        /* IMPORTANTE: Mantém o align-items: center aqui para centralizar os filhos */
+        align-items: center; /* Mantido para centralizar os elementos do formulário */
         border: 1px solid #e0e0e0;
         transition: all 0.3s ease;
         box-sizing: border-box;
@@ -253,8 +255,8 @@ h1 {
     #cadastro label,
     #forgotPasswordSection label {
         display: block;
-        width: 100%;
-        text-align: left;
+        width: 100%; /* Ocupa 100% da largura do pai */
+        text-align: left; /* Alinha o texto do label à esquerda */
         margin-bottom: 5px;
     }
 
@@ -289,9 +291,9 @@ h1 {
 
     /* Contêiner para agrupar label e input */
     .input-group {
-        width: 100%;
+        width: 100%; /* Ocupa 100% da largura do formulário */
         margin-bottom: 15px;
-        text-align: left;
+        text-align: left; /* Alinha o conteúdo do input-group à esquerda */
     }
 
     /* Estilo para o botão Entrar */
@@ -308,24 +310,39 @@ h1 {
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
         margin-top: 10px;
-        width: 100%;
-        max-width: 250px;
-        align-self: center;
+        width: 100%; /* Faz o botão ocupar 100% da largura disponível */
+        max-width: 250px; /* Limita a largura máxima para que não fique gigante */
+        /* `align-self: center` já está sendo aplicado pelo `#login` com `align-items: center` */
     }
 
-    /* Estilo para os links/botões de texto */
+    #login button:hover,
+    #forgotPasswordSection button:hover,
+    #cadastro button:hover {
+        background-color: #0056b3;
+        transform: translateY(-1px);
+    }
+
+    /* Estilo para os links de "Esqueci minha senha" e "Cadastre-se" e o parágrafo pai */
     #login a,
     #forgotPasswordSection a,
-    #login p a,
-    #cadastro p a {
+    #login p, /* Adicionado para controlar o parágrafo que contém o link de cadastro */
+    #cadastro p { /* Adicionado para controlar o parágrafo que contém o link de login */
+        display: block; /* Garante que cada um ocupe sua própria linha */
+        width: 100%; /* Faz com que ocupem a largura total para centralizar */
+        text-align: center; /* Centraliza o texto dentro da sua linha */
+        margin-top: 15px; /* Espaço para separar dos elementos acima */
         color: #007bff;
         text-decoration: none;
         font-size: 0.95em;
         transition: color 0.2s ease;
-        text-align: center; /* Centraliza o texto do link */
-        width: 100%; /* Garante que o link ocupe toda a largura */
-        display: block; /* Essencial para que ele quebre a linha e fique abaixo */
-        margin-top: 15px; /* Espaço maior para separar do botão */
+        /* `align-self: center` já está sendo aplicado pelo `#login` com `align-items: center` */
+    }
+    
+    /* Regra específica para o link de cadastro e login, se necessário, para sobrescrever a do parágrafo */
+    #login p a,
+    #cadastro p a {
+        display: inline; /* Volta o 'a' para inline dentro do 'p' */
+        text-decoration: none;
     }
 
     #login a:hover,
@@ -585,13 +602,19 @@ h1 {
     /* Estilo para os links de "Esqueci minha senha" e "Cadastre-se" */
     #login a,
     #forgotPasswordSection a,
-    #login p a,
-    #cadastro p a {
+    #login p, /* Também visado para garantir o bloco */
+    #cadastro p { /* Também visado para garantir o bloco */
         margin-top: 15px;
         font-size: 0.9em;
         text-align: center;
         width: 100%;
-        display: block; /* Garante que o link ocupe sua própria linha no mobile */
+        display: block; /* Garante que ocupe sua própria linha no mobile */
+    }
+
+    /* O link 'a' dentro do parágrafo 'p' deve ser inline para que o texto não se quebre */
+    #login p a,
+    #cadastro p a {
+        display: inline;
     }
 
     /* Esconde a coluna da imagem EM MOBILE */
