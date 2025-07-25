@@ -123,7 +123,6 @@ h1 {
     border: none;
 }
 
-/* 🔹 Botão de download */
 .download-btn {
     display: block;
     margin-top: 10px;
@@ -275,11 +274,13 @@ h1 {
     }
 
     .main-wrapper {
+        display: flex; /* Garante que é um flex container */
         flex-direction: row; /* Coloca a imagem e o formulário lado a lado */
         height: calc(100vh - 60px - 40px); /* 100vh - altura da barra - padding total do main-wrapper */
-        justify-content: space-around;
+        justify-content: center; /* Centraliza horizontalmente o grupo imagem+form */
         align-items: center; /* Centraliza verticalmente a imagem e o formulário */
         flex-wrap: nowrap; /* Impede quebras de linha */
+        gap: 40px; /* Adiciona um espaçamento entre a imagem e o formulário */
     }
 
     #login,
@@ -296,6 +297,8 @@ h1 {
         border: 1px solid #e0e0e0;
         transition: all 0.3s ease;
         box-sizing: border-box;
+        flex-shrink: 0; /* IMPEDE O ENCOLHIMENTO DO FORMULÁRIO */
+        flex-grow: 0; /* IMPEDE O CRESCIMENTO DO FORMULÁRIO */
     }
 
     /* Efeito de elevação ao passar o mouse */
@@ -434,7 +437,9 @@ h1 {
     /* Para a coluna da imagem (REATIVADA para desktop) */
     .image-column {
         display: block;
-        width: 60%;
+        /* Definimos width e flex-basis para que ela ocupe seu espaço corretamente */
+        width: 50%; /* Largura para a coluna da imagem */
+        flex-basis: 50%; /* Base para o Flexbox */
         height: 80vh; /* Mantém a altura para não descer muito */
         background-image: url('images/fachada.JPG');
         background-size: cover;
@@ -445,6 +450,7 @@ h1 {
         transition: all 0.3s ease;
         overflow: hidden;
         flex-shrink: 0; /* Impede que a imagem encolha */
+        flex-grow: 0; /* Impede que a imagem cresça */
     }
 
     .image-column:hover {
@@ -454,14 +460,17 @@ h1 {
 
     /* Para a coluna dos formulários (Desktop) */
     .form-column {
-        width: 40%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 0 20px;
         box-sizing: border-box;
-        flex-shrink: 0;
+        /* Definimos width e flex-basis para que ela ocupe seu espaço corretamente */
+        width: 50%; /* Largura para a coluna do formulário */
+        flex-basis: 50%; /* Base para o Flexbox */
+        flex-shrink: 0; /* Impede que o formulário encolha */
+        flex-grow: 0; /* Impede que o formulário cresça */
     }
 
     /* Esconda o rodapé da tela de login em desktops */
