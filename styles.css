@@ -365,35 +365,35 @@ h1 {
     }
 
     /* Estilo para os campos de input */
-    #login input[type="text"],
+    #login input[type="email"],
     #login input[type="password"],
-    #cadastro input[type="text"],
     #cadastro input[type="email"],
     #cadastro input[type="password"],
+    #cadastro input[type="text"], /* Adicionado para o campo de Código de Acesso */
     #forgotPasswordSection input[type="email"] {
-        width: 100%; /* Ajusta a largura para 100% */
+        width: 100%; /* Agora, todos terão 100% da largura do input-group */
         padding: 12px;
         margin-bottom: 15px; /* Espaço após o input */
         border: 1px solid #ccc;
         border-radius: 6px;
         font-size: 1em;
-        box-sizing: border-box; /* Inclui padding na largura total */
+        box-sizing: border-box; /* Inclui padding e borda na largura total */
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     /* Estilo de foco para os inputs */
-    #login input[type="text"]:focus,
+    #login input[type="email"]:focus,
     #login input[type="password"]:focus,
-    #cadastro input[type="text"]:focus,
     #cadastro input[type="email"]:focus,
     #cadastro input[type="password"]:focus,
+    #cadastro input[type="text"]:focus,
     #forgotPasswordSection input[type="email"]:focus {
         border-color: #007bff; /* Borda azul ao focar */
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* Sombra suave ao focar */
         outline: none; /* Remove o contorno padrão do navegador */
     }
 
-    /* Contêiner para agrupar label e input (se você adicionar no HTML) */
+    /* Contêiner para agrupar label e input */
     .input-group {
         width: 100%; /* Garante que o grupo ocupe a largura total */
         margin-bottom: 15px; /* Espaço entre grupos */
@@ -416,6 +416,7 @@ h1 {
         margin-top: 10px; /* Espaço acima do botão */
         width: 100%; /* Faz o botão ocupar a largura total do contêiner do formulário */
         max-width: 250px; /* Limita a largura máxima do botão */
+        align-self: center; /* Centraliza o botão dentro do flexbox */
     }
 
     #login button:hover,
@@ -435,7 +436,6 @@ h1 {
         margin-top: 15px; /* Espaçamento entre os botões */
         font-size: 0.95em;
         transition: color 0.2s ease;
-        /* Alinhamento para esses links */
         align-self: center; /* Centraliza o item dentro do flexbox pai */
     }
 
