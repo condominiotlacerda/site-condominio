@@ -222,8 +222,8 @@
         <p style="font-size: 0.8em; text-align: center;">U 301.</p>
     </footer>
 
-    <section id="viewer-historico-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; transition: opacity 0.5s;">
-        <iframe id="historico-iframe" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
+    <section id="viewer-historico-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; opacity: 0; transition: opacity 0.5s;">
+        <iframe id="historico-iframe" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; border: none; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);"></iframe>
         <a id="download-historico-button" href="historico/historico.pdf" download="Historico_Condominio.pdf" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;">Baixar</a>
         <button id="close-historico-button" style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button>
     </section>
@@ -257,30 +257,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const historicoIframe = document.getElementById('historico-iframe');
     const closeHistoricoButton = document.getElementById('close-historico-button');
     
-    // Obter todos os elementos que devem ficar opacos e inativos
-    const bodyContent = document.body; // O corpo todo para efeito de opacidade
+    // Seleciona o main-wrapper, que contém a fachada e os formulários
+    const backgroundContent = document.querySelector('.main-wrapper'); 
 
     historicoLink.addEventListener('click', (e) => {
         e.preventDefault();
         
-        // Remove a opacidade do body para o overlay ser claro
-        bodyContent.style.filter = 'blur(5px) brightness(0.5)'; // Aplica blur e escurece
-        bodyContent.style.pointerEvents = 'none'; // Desabilita interações no fundo
+        // Aplica a classe 'blurred-background' APENAS ao main-wrapper
+        backgroundContent.classList.add('blurred-background'); 
         
         historicoIframe.src = 'historico/historico.pdf';
         viewerHistoricoContainer.style.display = 'block';
-        setTimeout(() => viewerHistoricoContainer.style.opacity = '1', 10); // Transição suave
+        // Pequeno atraso para garantir que o display:block seja processado antes da transição de opacidade
+        setTimeout(() => viewerHistoricoContainer.style.opacity = '1', 10); 
     });
 
     closeHistoricoButton.addEventListener('click', () => {
-        viewerHistoricoContainer.style.opacity = '0'; // Começa a transição de saída
+        viewerHistoricoContainer.style.opacity = '0'; // Inicia a transição de saída
+        // Espera a transição de opacidade terminar antes de esconder o elemento e remover o blur
         setTimeout(() => {
             viewerHistoricoContainer.style.display = 'none';
-            historicoIframe.src = ''; // Limpa o iframe
+            historicoIframe.src = ''; // Limpa o iframe para liberar recursos
             
-            // Restaura o body para o estado normal
-            bodyContent.style.filter = 'none';
-            bodyContent.style.pointerEvents = 'auto';
+            // Remove a classe 'blurred-background' do main-wrapper
+            backgroundContent.classList.remove('blurred-background'); 
         }, 500); // Tempo para a transição de opacidade (0.5s)
     });
 
