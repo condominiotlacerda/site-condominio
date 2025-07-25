@@ -209,7 +209,7 @@ h1 {
         padding: 20px;
         text-align: left;
         min-height: 100vh;
-        overflow: hidden; /* Evita scroll desnecessário no body */
+        overflow: hidden;
     }
 
     header {
@@ -221,14 +221,14 @@ h1 {
     .logo {
         width: 100px !important;
         height: 100px !important;
-        max-width: 100px !important; /* Reforça o max-width */
-        max-height: 100px !important; /* Reforça o max-height */
+        max-width: 100px !important;
+        max-height: 100px !important;
     }
 
     #login,
     #cadastro,
     #forgotPasswordSection {
-        width: 400px; /* Largura fixa para desktop */
+        width: 400px;
         padding: 30px;
         background-color: #ffffff;
         border-radius: 12px;
@@ -237,8 +237,7 @@ h1 {
         flex-direction: column;
         border: 1px solid #e0e0e0;
         transition: all 0.3s ease;
-        box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura */
-        /* Removido `align-items: center;` daqui para permitir alinhamento à esquerda dos inputs */
+        box-sizing: border-box;
     }
 
     /* Efeito de elevação ao passar o mouse */
@@ -266,13 +265,13 @@ h1 {
     #cadastro input[type="password"],
     #cadastro input[type="text"],
     #forgotPasswordSection input[type="email"] {
-        width: 100%; /* Ocupa 100% da largura do input-group */
+        width: 100%;
         padding: 12px;
         margin-bottom: 15px;
         border: 1px solid #ccc;
         border-radius: 6px;
         font-size: 1em;
-        box-sizing: border-box; /* Inclui padding e borda na largura total */
+        box-sizing: border-box;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -293,8 +292,6 @@ h1 {
         width: 100%;
         margin-bottom: 15px;
         text-align: left;
-        /* Remover display: flex e flex-direction: column se estiver aqui, ele pode estar causando o problema. */
-        /* Deixar como block ou flow padrão é melhor para os labels/inputs */
     }
 
     /* Estilo para o botão Entrar */
@@ -311,16 +308,9 @@ h1 {
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
         margin-top: 10px;
-        width: 100%; /* Botão ocupa a largura total do contêiner do formulário */
-        max-width: 250px; /* Limita a largura máxima do botão */
-        align-self: center; /* Centraliza o botão dentro do flexbox */
-    }
-
-    #login button:hover,
-    #forgotPasswordSection button:hover,
-    #cadastro button:hover {
-        background-color: #0056b3;
-        transform: translateY(-1px);
+        width: 100%;
+        max-width: 250px;
+        align-self: center;
     }
 
     /* Estilo para os links/botões de texto */
@@ -330,10 +320,12 @@ h1 {
     #cadastro p a {
         color: #007bff;
         text-decoration: none;
-        margin-top: 15px;
         font-size: 0.95em;
         transition: color 0.2s ease;
-        align-self: center; /* Centraliza o item dentro do flexbox pai */
+        text-align: center; /* Centraliza o texto do link */
+        width: 100%; /* Garante que o link ocupe toda a largura */
+        display: block; /* Essencial para que ele quebre a linha e fique abaixo */
+        margin-top: 15px; /* Espaço maior para separar do botão */
     }
 
     #login a:hover,
@@ -356,7 +348,7 @@ h1 {
 
     /* Para a coluna da imagem (REATIVADA para desktop) */
     .image-column {
-        display: block; /* Garante que a imagem apareça no desktop */
+        display: block;
         width: 60%;
         height: 80vh;
         background-image: url('images/fachada.JPG');
@@ -376,13 +368,13 @@ h1 {
 
     /* Para a coluna dos formulários (Desktop) */
     .form-column {
-        width: 40%; /* Ocupa uma porção da largura para os formulários */
+        width: 40%;
         display: flex;
         flex-direction: column;
-        align-items: center; /* Centraliza a coluna dos formulários no body */
-        justify-content: center; /* Alinha os formulários verticalmente */
+        align-items: center;
+        justify-content: center;
         min-height: 100vh;
-        padding: 0; /* Remove padding extra que pode empurrar */
+        padding: 0;
         box-sizing: border-box;
     }
 
@@ -410,20 +402,19 @@ h1 {
 /* ************************************************************ */
 @media (max-width: 768px) {
     body {
-        /* Reset para o mobile, removendo flexbox do body para o layout ser mais fluido */
         display: block;
         align-items: unset;
         justify-content: unset;
         min-height: auto;
-        padding: 10px; /* Um pouco menos de padding total para o body no mobile */
+        padding: 10px;
     }
 
     header {
-        position: relative; /* Volta para o fluxo normal do documento no mobile */
+        position: relative;
         top: auto;
         left: auto;
-        text-align: left; /* Alinha o logo à esquerda no topo */
-        margin-bottom: 20px; /* Espaço abaixo do logo */
+        text-align: left;
+        margin-bottom: 20px;
     }
 
     /* 🔹 Reduzindo o logo para metade do tamanho atual em mobile */
@@ -432,10 +423,10 @@ h1 {
         height: 50px !important;
         max-width: 50px !important;
         max-height: 50px !important;
-        top: auto; /* Garante que não tenha posição absoluta */
-        left: auto; /* Garante que não tenha posição absoluta */
-        position: relative; /* Se precisar de pequenos ajustes */
-        margin-left: 5px; /* Pequena margem para não colar na borda */
+        top: auto;
+        left: auto;
+        position: relative;
+        margin-left: 5px;
     }
 
     /* Top right header - Pode não ser aplicável na tela de login, mas mantido por segurança */
@@ -455,13 +446,13 @@ h1 {
     /* Mensagem de boas-vindas */
     #welcome-message {
         margin-bottom: 10px;
-        font-size: 1em; /* Ajusta o tamanho da fonte para mobile */
+        font-size: 1em;
     }
 
     /* Título principal "Condomínio T Lacerda" no mobile */
-    .container h1 { /* Se você tiver um .container envolvendo o h1 */
-        margin-top: 20px; /* Reduz a margem para mobile */
-        font-size: 1.5em; /* Ajusta o tamanho da fonte */
+    .container h1 {
+        margin-top: 20px;
+        font-size: 1.5em;
     }
 
     .apartment-section {
@@ -481,8 +472,8 @@ h1 {
         top: auto;
         left: auto;
         right: auto;
-        width: 95%; /* Ocupa mais largura */
-        margin: 10px auto; /* Centraliza e adiciona margem */
+        width: 95%;
+        margin: 10px auto;
     }
 
     .file-box h2 {
@@ -518,9 +509,9 @@ h1 {
 
     /* --- Estilo para anonymous.png em mobile (menor) --- */
     #login h2::before {
-        width: 100px; /* Largura da imagem no celular */
-        height: 100px; /* Altura da imagem no celular */
-        margin: 0 auto 10px auto; /* Ajusta a margem para celular */
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 10px auto;
     }
 
     /* ************************************************************ */
@@ -530,18 +521,18 @@ h1 {
     #login,
     #cadastro,
     #forgotPasswordSection {
-        width: 90%; /* Ocupa 90% da largura da tela */
-        max-width: 400px; /* Limita a largura máxima para telas maiores que mobile */
-        margin: 20px auto; /* Centraliza o card e adiciona margem vertical */
-        padding: 25px; /* Aumenta o padding interno para um visual mais espaçoso */
+        width: 90%;
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 25px;
         background-color: #ffffff;
         border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra mais visível para o efeito "card" */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
-        align-items: center; /* Centraliza o conteúdo dentro do card */
+        align-items: center;
         border: 1px solid #e0e0e0;
-        box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+        box-sizing: border-box;
     }
 
     #login h2,
@@ -553,8 +544,8 @@ h1 {
 
     /* Alinhamento para os labels dentro dos input-groups em mobile */
     .input-group {
-        width: 100%; /* Garante que o grupo ocupe a largura total do card */
-        margin-bottom: 15px; /* Espaço entre os grupos de input */
+        width: 100%;
+        margin-bottom: 15px;
     }
 
     .input-group label {
@@ -600,6 +591,7 @@ h1 {
         font-size: 0.9em;
         text-align: center;
         width: 100%;
+        display: block; /* Garante que o link ocupe sua própria linha no mobile */
     }
 
     /* Esconde a coluna da imagem EM MOBILE */
@@ -610,18 +602,17 @@ h1 {
     /* Garante que o form-column ocupe a largura total para centralizar o conteúdo */
     .form-column {
         width: 100%;
-        padding: 0; /* O padding agora está no #login, #cadastro etc. */
+        padding: 0;
         box-sizing: border-box;
         min-height: auto;
-        /* Remover align-items e justify-content, deixar o container de login se centralizar */
         align-items: unset;
         justify-content: unset;
     }
 
     /* Rodapé no mobile */
     footer {
-        display: block; /* Volta a exibir o rodapé no mobile */
-        margin-top: 30px; /* Espaço acima do rodapé */
+        display: block;
+        margin-top: 30px;
         padding: 10px;
         background-color: #f8f8f8;
         border-top: 1px solid #eee;
