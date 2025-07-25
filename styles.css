@@ -1,12 +1,12 @@
 body {
     font-family: sans-serif;
     margin: 0;
-    padding: 0; /* Removendo padding do body para controle total */
+    padding: 0;
     text-align: center;
     min-height: 100vh;
-    display: flex; /* Usar flexbox para alinhar a barra e o conteúdo principal */
-    flex-direction: column; /* Organizar em coluna: barra no topo, depois o wrapper */
-    overflow-x: hidden; /* Evitar scroll horizontal indesejado */
+    display: flex; /* Mantém o body como flex container principal */
+    flex-direction: column; /* Organiza em coluna: barra, depois o conteúdo principal */
+    overflow-x: hidden; /* Evita scroll horizontal indesejado */
 }
 
 /* Comanda a posição de Condomínio T Lacerda na página área condomínio */
@@ -235,12 +235,14 @@ h1 {
 
 /* Novo wrapper para a imagem e formulário */
 .main-wrapper {
-    display: flex;
+    display: flex; /* Torna o wrapper um flex container */
     flex-grow: 1; /* Permite que este wrapper ocupe o espaço restante */
-    align-items: center; /* Centraliza verticalmente o conteúdo dentro dele */
+    align-items: center; /* Centraliza verticalmente o conteúdo dentro dele (imagem e form) */
     justify-content: center; /* Centraliza horizontalmente o conteúdo dentro dele */
     width: 100%;
     box-sizing: border-box;
+    padding-top: 20px; /* Adiciona um pequeno padding superior ao wrapper para não colar na barra */
+    padding-bottom: 20px; /* Adiciona um pequeno padding inferior ao wrapper */
 }
 
 
@@ -250,12 +252,7 @@ h1 {
 /* ************************************************************ */
 @media (min-width: 769px) {
     body {
-        /* Reset para o body, já que o flexbox está sendo usado no .main-wrapper */
-        display: flex; /* Mantém o body como flex container para a barra e o main-wrapper */
-        flex-direction: column;
-        align-items: center; /* Centraliza o conteúdo do body horizontalmente */
-        justify-content: flex-start; /* Alinha o conteúdo ao topo */
-        padding: 0; /* Removido padding, agora controlado internamente */
+        /* Já está configurado como flex column */
     }
 
     /* A logo já tem position: absolute, mantendo-a no canto */
@@ -268,25 +265,23 @@ h1 {
 
     /* Ajustes para a faixa de navegação no DESKTOP */
     .top-nav-bar {
-        position: absolute; /* Torna a barra absoluta dentro do body */
-        top: 0; /* Alinha ao topo do body */
-        left: 0; /* Alinha à esquerda do body */
+        position: relative; /* Volta a ser relativa para ocupar espaço no fluxo normal */
+        /* top: 0; */ /* Removido */
+        /* left: 0; */ /* Removido */
         width: 100%; /* Ocupa a largura total */
         height: 60px; /* Altura fixa */
         padding-left: 170px; /* Espaço para a logo */
         justify-content: flex-start; /* Alinha os itens à esquerda */
         box-sizing: border-box;
+        margin-top: 0; /* Garante que não tenha margem extra */
     }
 
     .main-wrapper {
-        width: 100%;
-        height: calc(100vh - 60px); /* Ocupa a altura restante após a barra */
-        margin-top: 60px; /* Desce o conteúdo principal para abaixo da barra */
-        display: flex; /* Torna-o um flex container para as colunas de imagem/form */
-        align-items: center; /* Centraliza verticalmente a imagem e o formulário */
+        flex-direction: row; /* Coloca a imagem e o formulário lado a lado */
+        height: calc(100vh - 60px - 40px); /* 100vh - altura da barra - padding total do main-wrapper */
+        /* margin-top: 60px; */ /* Removido, a barra agora ocupa espaço no fluxo */
         justify-content: space-around; /* Distribui espaço entre imagem e formulário */
-        padding: 20px; /* Adiciona um padding geral ao wrapper */
-        box-sizing: border-box;
+        flex-wrap: nowrap; /* Impede quebras de linha */
     }
 
     #login,
@@ -451,7 +446,7 @@ h1 {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         transition: all 0.3s ease;
         overflow: hidden;
-        /* margin-top: 60px; */ /* Removido daqui, agora controlado pelo main-wrapper */
+        flex-shrink: 0; /* Impede que a imagem encolha */
     }
 
     .image-column:hover {
@@ -466,10 +461,9 @@ h1 {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        /* min-height: 100vh; */ /* Removido, agora min-height é do main-wrapper */
         padding: 0 20px; /* Adiciona padding lateral para o formulário */
         box-sizing: border-box;
-        /* margin-top: 60px; */ /* Removido daqui, agora controlado pelo main-wrapper */
+        flex-shrink: 0; /* Impede que o formulário encolha */
     }
 
     /* Esconda o rodapé da tela de login em desktops */
@@ -496,15 +490,13 @@ h1 {
 /* ************************************************************ */
 @media (max-width: 768px) {
     body {
-        display: block; /* Volta para o comportamento de bloco padrão */
-        align-items: unset;
-        justify-content: unset;
-        min-height: auto;
+        display: flex; /* Mantém o body como flex para mobile também */
+        flex-direction: column; /* Colunas no mobile */
         padding: 10px; /* Mantém um padding básico para mobile */
     }
 
     header {
-        position: relative; /* Volta ao fluxo normal do documento */
+        position: relative;
         top: auto;
         left: auto;
         text-align: left;
