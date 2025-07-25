@@ -320,27 +320,40 @@ h1 {
         transform: translateY(-1px);
     }
 
-    /* Estilo para o parágrafo que contém o link de cadastro e o link de recuperação de senha */
-    #login p, /* "Não tem uma conta? Cadastre-se" */
-    #forgotPasswordSection a, /* "Voltar para o Login" */
-    #login a /* "Esqueci minha senha" */
-    {
-        display: block; /* Garante que cada um ocupe sua própria linha */
-        width: 100%; /* Faz com que ocupem a largura total para centralizar */
-        text-align: center; /* Centraliza o texto dentro da sua linha */
-        margin-top: 15px; /* Espaço para separar dos elementos acima */
+    /* Estilo para o parágrafo que contém o link de cadastro */
+    #login p,
+    #cadastro p {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 15px;
         font-size: 0.95em;
-        color: inherit; /* **NOVO:** Herda a cor do pai (geralmente preto). */
-        text-decoration: none; /* Remove sublinhado padrão, o link interno adicionará o seu */
+        color: inherit; /* Texto "Não tem uma conta?" herda a cor padrão (preta) */
+        text-decoration: none;
         transition: color 0.2s ease;
     }
+
+    /* Estilo para links diretos (como "Esqueci minha senha" e "Voltar para o Login") */
+    #login a, /* Esqueceu a senha */
+    #forgotPasswordSection a /* Voltar para o Login */
+    {
+        color: #007bff; /* Garante que esses links sejam azuis */
+        text-decoration: none;
+        display: block; /* Para que fiquem em sua própria linha */
+        width: 100%;
+        text-align: center;
+        margin-top: 15px;
+        font-size: 0.95em;
+        transition: color 0.2s ease;
+    }
+
 
     /* Estilo específico para os links (a) dentro dos parágrafos, para mantê-los azuis */
     #login p a, /* O link "Cadastre-se" */
     #cadastro p a /* O link "Faça login" */
     {
         color: #007bff; /* Garante que o link seja azul */
-        text-decoration: none; /* Remove sublinhado padrão */
+        text-decoration: none;
         display: inline; /* Faz o link se comportar como texto em linha */
     }
 
@@ -349,7 +362,7 @@ h1 {
     #login p a:hover,
     #cadastro p a:hover {
         color: #0056b3;
-        text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+        text-decoration: underline;
     }
 
     /* Garante que o H2 tenha um bom espaçamento e alinhamento */
@@ -614,7 +627,7 @@ h1 {
     #login p a,
     #cadastro p a {
         display: inline;
-        color: #007bff; /* Garante que o link seja azul no mobile também */
+        color: #007bff;
     }
 
     /* Esconde a coluna da imagem EM MOBILE */
