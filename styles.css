@@ -137,6 +137,7 @@ h1 {
     background-color: #0056b3;
 }
 
+/* Estes estilos serão sobrescritos para desktop pela Ideia 1 */
 #login,
 #forgotPasswordSection {
     display: flex;
@@ -335,26 +336,93 @@ h1 {
     #login,
     #cadastro,
     #forgotPasswordSection {
-        width: 400px; /* Largura para os formulários */
+        width: 400px;
         padding: 30px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff; /* Fundo branco puro para destaque */
+        border-radius: 12px; /* Cantos mais arredondados para um visual suave */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada mas suave */
         display: flex;
         flex-direction: column;
         align-items: center;
+        border: 1px solid #e0e0e0; /* Borda fina e discreta */
+        transition: all 0.3s ease; /* Transição para efeitos de hover */
     }
 
-    #login {
-        display: flex; /* Garante que esteja visível inicialmente */
+    /* Efeito de elevação ao passar o mouse */
+    #login:hover,
+    #cadastro:hover,
+    #forgotPasswordSection:hover {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transform: translateY(-3px); /* Leve levantamento */
     }
 
-    #cadastro {
-        display: none; /* Começa escondido */
+    /* Estilo para os campos de input */
+    #login input[type="text"],
+    #login input[type="password"],
+    #forgotPasswordSection input[type="email"] {
+        width: calc(100% - 20px); /* Ajusta a largura considerando o padding */
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1em;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    #forgotPasswordSection {
-        display: none; /* Começa escondido */
+    /* Estilo de foco para os inputs */
+    #login input[type="text"]:focus,
+    #login input[type="password"]:focus,
+    #forgotPasswordSection input[type="email"]:focus {
+        border-color: #007bff; /* Borda azul ao focar */
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* Sombra suave ao focar */
+        outline: none; /* Remove o contorno padrão do navegador */
+    }
+
+    /* Estilo para o botão Entrar */
+    #login button,
+    #forgotPasswordSection button {
+        background-color: #007bff; /* Cor primária */
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+    }
+
+    #login button:hover,
+    #forgotPasswordSection button:hover {
+        background-color: #0056b3; /* Cor mais escura ao passar o mouse */
+        transform: translateY(-1px); /* Pequeno efeito de elevação */
+    }
+
+    /* Estilo para os links/botões de texto (Esqueci minha senha, Cadastre-se) */
+    #login a,
+    #forgotPasswordSection a,
+    #login p a { /* Para o link "Não tem uma conta? Cadastre-se" */
+        color: #007bff;
+        text-decoration: none;
+        margin-top: 15px; /* Espaçamento entre os botões */
+        font-size: 0.95em;
+        transition: color 0.2s ease;
+    }
+
+    #login a:hover,
+    #forgotPasswordSection a:hover,
+    #login p a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    /* Garante que o H2 (Login, Recuperar Senha, Cadastro) tenha um bom espaçamento */
+    #login h2,
+    #forgotPasswordSection h2,
+    #cadastro h2 {
+        margin-bottom: 25px; /* Mais espaço abaixo do título */
+        color: #333;
     }
 
     /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
