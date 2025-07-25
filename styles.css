@@ -266,8 +266,6 @@ h1 {
     /* Ajustes para a faixa de navegação no DESKTOP */
     .top-nav-bar {
         position: relative; /* Volta a ser relativa para ocupar espaço no fluxo normal */
-        /* top: 0; */ /* Removido */
-        /* left: 0; */ /* Removido */
         width: 100%; /* Ocupa a largura total */
         height: 60px; /* Altura fixa */
         padding-left: 170px; /* Espaço para a logo */
@@ -279,8 +277,8 @@ h1 {
     .main-wrapper {
         flex-direction: row; /* Coloca a imagem e o formulário lado a lado */
         height: calc(100vh - 60px - 40px); /* 100vh - altura da barra - padding total do main-wrapper */
-        /* margin-top: 60px; */ /* Removido, a barra agora ocupa espaço no fluxo */
-        justify-content: space-around; /* Distribui espaço entre imagem e formulário */
+        justify-content: space-around;
+        align-items: center; /* Centraliza verticalmente a imagem e o formulário */
         flex-wrap: nowrap; /* Impede quebras de linha */
     }
 
@@ -461,9 +459,9 @@ h1 {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 0 20px; /* Adiciona padding lateral para o formulário */
+        padding: 0 20px;
         box-sizing: border-box;
-        flex-shrink: 0; /* Impede que o formulário encolha */
+        flex-shrink: 0;
     }
 
     /* Esconda o rodapé da tela de login em desktops */
@@ -490,9 +488,9 @@ h1 {
 /* ************************************************************ */
 @media (max-width: 768px) {
     body {
-        display: flex; /* Mantém o body como flex para mobile também */
-        flex-direction: column; /* Colunas no mobile */
-        padding: 10px; /* Mantém um padding básico para mobile */
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
     }
 
     header {
@@ -641,7 +639,6 @@ h1 {
         margin-bottom: 5px;
     }
 
-    /* Estilo para todos os campos de input de texto e senha */
     #login input[type="email"],
     #login input[type="password"],
     #cadastro input[type="email"],
@@ -675,7 +672,6 @@ h1 {
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    /* Efeito hover para botões no mobile (se o touchscreen permitir) */
     #login button:hover,
     #cadastro button:hover,
     #forgotPasswordSection button:hover {
@@ -716,7 +712,6 @@ h1 {
         justify-content: unset;
     }
 
-    /* Rodapé no mobile */
     footer {
         display: block;
         margin-top: 30px;
@@ -724,18 +719,14 @@ h1 {
         background-color: #f8f8f8;
         border-top: 1px solid #eee;
         color: #666;
-        font-size: 0.85em; /* Ajuste para caber melhor */
+        font-size: 0.85em;
         text-align: center;
     }
 
     .main-wrapper {
-        flex-direction: column; /* No mobile, empilha os elementos */
-        margin-top: 0; /* Remove a margem superior no mobile */
+        flex-direction: column;
+        margin-top: 0;
         height: auto;
-        padding: 10px; /* Padding para o wrapper no mobile */
+        padding: 10px;
     }
-
-    /* ************************************************************ */
-    /* FIM DOS NOVOS ESTILOS PARA O PAINEL DE LOGIN EM CELULAR    */
-    /* ************************************************************ */
 }
