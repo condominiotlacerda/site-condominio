@@ -4,29 +4,29 @@ body {
     padding: 20px;
     text-align: center;
 }
+
 /* Comanda a posição de Condomínio T Lacerda na página área condomínio */
 h1 {
     color: #333;
     font-size: 1.8em;
-    text-align: center; /* Adiciona este para centralizar o texto */
-    width: 100%; /* Garante que ocupe a largura total para o centralizar */
-    margin-left: auto; /* Centraliza o bloco do h1 horizontalmente */
-    margin-right: auto; /* Centraliza o bloco do h1 horizontalmente */
-    display: block; /* Garante que o h1 se comporte como um bloco para centralizar com margin: auto */
+    text-align: center;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
-/* --- NOVO: Estilos para o container dos botões de apartamento usando Flexbox --- */
+/* --- Estilos para o container dos botões de apartamento usando Flexbox --- */
 .apartment-section {
     margin-top: 30px;
-    display: flex; /* Habilita Flexbox */
-    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
-    justify-content: center; /* Centraliza os botões horizontalmente */
-    gap: 10px; /* Adiciona um espaço de 10px entre os botões */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 .apartment-button {
     padding: 10px 15px;
-    /* REMOVIDO: margin: 5px; - O 'gap' no .apartment-section já lida com o espaçamento */
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     cursor: pointer;
@@ -44,7 +44,7 @@ h1 {
 }
 
 #file-list li {
-    margin-bottom: 10px; /* Experimente diferentes valores como 5px, 15px, etc. */
+    margin-bottom: 10px;
 }
 
 .file-list a {
@@ -60,8 +60,8 @@ h1 {
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    top: 5px;  /* 🔹 Alterado de 15px para 5px */
-    left: 5px; /* 🔹 Alterado de 15px para 5px */
+    top: 5px;
+    left: 5px;
     max-width: 150px !important;
     max-height: 150px !important;
     border: 2px solid red;
@@ -69,7 +69,6 @@ h1 {
 
 /* 🔹 Caixa da lista de arquivos */
 .file-box {
-    /* position: absolute; */
     top: 250px;
     left: 15px;
     width: 250px;
@@ -91,7 +90,6 @@ h1 {
 
 /* 🔹 Painel do visualizador de PDF */
 .viewer-box {
-    /*position: absolute;*/
     top: 250px;
     left: 280px;
     width: 600px;
@@ -137,26 +135,12 @@ h1 {
     background-color: #0056b3;
 }
 
-/* Estes estilos serão sobrescritos para desktop pela Ideia 1 (para o alinhamento central em mobile) */
-/* Removido explicitamente para ser definido na media query de mobile */
-/* #login, #forgotPasswordSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-} */
-
-/* Removido inline width, agora controlado pelo CSS */
-/* #emailForgotPassword {
-    width: 270px;
-} */
-
-/* Alinhamento das palavras Login, Recuperar Senha e Cadastro (para mobile) */
-/* Mantido aqui para garantir centralização padrão para h2, será ajustado no desktop */
+/* Alinhamento das palavras Login, Recuperar Senha e Cadastro (regra base, pode ser sobrescrita)*/
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
-    text-align: center; /* Garante que o texto dentro do h2 esteja centralizado */
-    width: 100%; /* Faz o h2 ocupar a largura total do contêiner */
+    text-align: center;
+    width: 100%;
 }
 
 #file-list-wrapper {
@@ -168,17 +152,17 @@ h1 {
 
 @media (min-width: 769px) {
     #contas-container {
-        width: 300px; /* Largura para desktop (igual ao inline) */
-        margin-left: 20px; /* Margem esquerda para desktop (igual ao inline) */
+        width: 300px;
+        margin-left: 20px;
     }
 }
 
-.file-box h2 { /*Títulos dos contêineres nos desktops*/
+.file-box h2 {
     font-size: 1.1em;
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-block-start: 0; /* Resetando a margem superior padrão */
-    margin-block-end:     0;     /* Resetando a margem inferior padrão */
+    margin-block-start: 0;
+    margin-block-end: 0;
 }
 
 #documentos-list {
@@ -186,73 +170,301 @@ h1 {
     padding: 0;
 }
 
-/* --- NOVO: Estilo para a mensagem de manutenção, restaurando a cor vermelha e removendo negrito --- */
+/* --- Mensagem de manutenção --- */
 #welcome-message {
-    color: #d9534f; /* Cor vermelha */
+    color: #d9534f;
     text-align: center;
     width: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
     font-size: 1.2em;
-    font-weight: normal; /* Garante que não esteja em negrito */
+    font-weight: normal;
     display: block;
     line-height: 1.5;
 }
 
-/* --- */
-/* Estilo para a imagem "anonymous.png" acima do Login */
-/* Este estilo será sobrescrito em mobile abaixo */
+/* --- Estilo para a imagem "anonymous.png" acima do Login --- */
+/* Este estilo é a base e será sobrescrito em mobile abaixo */
 #login h2::before {
-    content: ""; /* É necessário para que o pseudo-elemento seja gerado */
-    display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
-    width: 150px; /* Ajuste a largura da imagem conforme sua necessidade */
-    height: 150px; /* Ajuste a altura da imagem conforme sua necessidade */
-    background-image: url('images/anonymous.png'); /* Caminho para a sua imagem */
-    background-size: contain; /* Garante que a imagem se ajuste dentro do espaço definido */
+    content: "";
+    display: block;
+    width: 150px;
+    height: 150px;
+    background-image: url('images/anonymous.png');
+    background-size: contain;
     background-repeat: no-repeat;
-    background-position: center; /* Centraliza a imagem no espaço do pseudo-elemento */
-    margin: 0 auto 15px auto; /* Centraliza o elemento horizontalmente e adiciona uma margem inferior para separar do texto "Login" */
+    background-position: center;
+    margin: 0 auto 15px auto;
 }
 
-/* 🔹INÍCIO RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
+/* ************************************************************ */
+/* INÍCIO DOS ESTILOS PARA TELAS DE COMPUTADOR (DESKTOP)       */
+/* (width mínima de 769 pixels)                                 */
+/* ************************************************************ */
+@media (min-width: 769px) {
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 20px;
+        text-align: left;
+        min-height: 100vh;
+        overflow: hidden; /* Evita scroll desnecessário no body */
+    }
+
+    header {
+        position: fixed;
+        top: 5px;
+        left: 5px;
+    }
+
+    .logo {
+        width: 100px !important;
+        height: 100px !important;
+        max-width: 100px !important; /* Reforça o max-width */
+        max-height: 100px !important; /* Reforça o max-height */
+    }
+
+    #login,
+    #cadastro,
+    #forgotPasswordSection {
+        width: 400px; /* Largura fixa para desktop */
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s ease;
+        box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura */
+        /* Removido `align-items: center;` daqui para permitir alinhamento à esquerda dos inputs */
+    }
+
+    /* Efeito de elevação ao passar o mouse */
+    #login:hover,
+    #cadastro:hover,
+    #forgotPasswordSection:hover {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transform: translateY(-3px);
+    }
+
+    /* Estilo para os labels */
+    #login label,
+    #cadastro label,
+    #forgotPasswordSection label {
+        display: block;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 5px;
+    }
+
+    /* Estilo para os campos de input */
+    #login input[type="email"],
+    #login input[type="password"],
+    #cadastro input[type="email"],
+    #cadastro input[type="password"],
+    #cadastro input[type="text"],
+    #forgotPasswordSection input[type="email"] {
+        width: 100%; /* Ocupa 100% da largura do input-group */
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1em;
+        box-sizing: border-box; /* Inclui padding e borda na largura total */
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Estilo de foco para os inputs */
+    #login input[type="email"]:focus,
+    #login input[type="password"]:focus,
+    #cadastro input[type="email"]:focus,
+    #cadastro input[type="password"]:focus,
+    #cadastro input[type="text"]:focus,
+    #forgotPasswordSection input[type="email"]:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        outline: none;
+    }
+
+    /* Contêiner para agrupar label e input */
+    .input-group {
+        width: 100%;
+        margin-bottom: 15px;
+        text-align: left;
+        /* Remover display: flex e flex-direction: column se estiver aqui, ele pode estar causando o problema. */
+        /* Deixar como block ou flow padrão é melhor para os labels/inputs */
+    }
+
+    /* Estilo para o botão Entrar */
+    #login button,
+    #forgotPasswordSection button,
+    #cadastro button {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+        width: 100%; /* Botão ocupa a largura total do contêiner do formulário */
+        max-width: 250px; /* Limita a largura máxima do botão */
+        align-self: center; /* Centraliza o botão dentro do flexbox */
+    }
+
+    #login button:hover,
+    #forgotPasswordSection button:hover,
+    #cadastro button:hover {
+        background-color: #0056b3;
+        transform: translateY(-1px);
+    }
+
+    /* Estilo para os links/botões de texto */
+    #login a,
+    #forgotPasswordSection a,
+    #login p a,
+    #cadastro p a {
+        color: #007bff;
+        text-decoration: none;
+        margin-top: 15px;
+        font-size: 0.95em;
+        transition: color 0.2s ease;
+        align-self: center; /* Centraliza o item dentro do flexbox pai */
+    }
+
+    #login a:hover,
+    #forgotPasswordSection a:hover,
+    #login p a:hover,
+    #cadastro p a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    /* Garante que o H2 tenha um bom espaçamento e alinhamento */
+    #login h2,
+    #forgotPasswordSection h2,
+    #cadastro h2 {
+        margin-bottom: 25px;
+        color: #333;
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Para a coluna da imagem (REATIVADA para desktop) */
+    .image-column {
+        display: block; /* Garante que a imagem apareça no desktop */
+        width: 60%;
+        height: 80vh;
+        background-image: url('images/fachada.JPG');
+        background-size: cover;
+        background-position: center;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .image-column:hover {
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        transform: translateY(-2px);
+    }
+
+    /* Para a coluna dos formulários (Desktop) */
+    .form-column {
+        width: 40%; /* Ocupa uma porção da largura para os formulários */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centraliza a coluna dos formulários no body */
+        justify-content: center; /* Alinha os formulários verticalmente */
+        min-height: 100vh;
+        padding: 0; /* Remove padding extra que pode empurrar */
+        box-sizing: border-box;
+    }
+
+    /* Esconda o rodapé da tela de login em desktops */
+    footer {
+        display: none;
+    }
+
+    /* Ajuste para a imagem do avatar no desktop (maior) */
+    #login h2::before {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 15px auto;
+    }
+}
+
+/* ************************************************************ */
+/* FIM DOS ESTILOS PARA TELAS DE COMPUTADOR (DESKTOP)           */
+/* ************************************************************ */
+
+
+/* ************************************************************ */
+/* INÍCIO RESPONSIVIDADE SOMENTE PARA CELULAR 📱              */
+/* (max-width de 768px)                                       */
+/* ************************************************************ */
 @media (max-width: 768px) {
-    /* 🔹 Reduzindo o logo para metade do tamanho atual */
+    body {
+        /* Reset para o mobile, removendo flexbox do body para o layout ser mais fluido */
+        display: block;
+        align-items: unset;
+        justify-content: unset;
+        min-height: auto;
+        padding: 10px; /* Um pouco menos de padding total para o body no mobile */
+    }
+
+    header {
+        position: relative; /* Volta para o fluxo normal do documento no mobile */
+        top: auto;
+        left: auto;
+        text-align: left; /* Alinha o logo à esquerda no topo */
+        margin-bottom: 20px; /* Espaço abaixo do logo */
+    }
+
+    /* 🔹 Reduzindo o logo para metade do tamanho atual em mobile */
     .logo {
         width: 50px !important;
         height: 50px !important;
         max-width: 50px !important;
         max-height: 50px !important;
-        top: 1px;
-        left: 1px;
+        top: auto; /* Garante que não tenha posição absoluta */
+        left: auto; /* Garante que não tenha posição absoluta */
+        position: relative; /* Se precisar de pequenos ajustes */
+        margin-left: 5px; /* Pequena margem para não colar na borda */
     }
 
-    /* Adicione ESTE NOVO BLOCO para o cabeçalho superior direito: */
+    /* Top right header - Pode não ser aplicável na tela de login, mas mantido por segurança */
     #top-right-header {
-        position: relative; /* Ajusta o posicionamento para o fluxo do documento */
-        width: 100%;        /* Ocupa a largura total no celular */
-        justify-content: flex-end; /* Alinha o conteúdo à direita (final do eixo principal) */
-        align-items: flex-start; /* Alinha o conteúdo ao topo (início do eixo transversal) */
-        top: 1px;           /* Posição do topo, se necessário um ajuste fino */
-        margin-top: 1px;    /* Margem do topo, se necessário um ajuste fino */
-        /* REMOVIDO: margin-bottom: 40px; */
-        display: flex;      /* Garante que continue sendo um flex container */
-        gap: 10px;          /* Mantém o espaço entre o nome e o botão */
-        padding: 5px 10px;  /* Adicionado padding horizontal para não colar nas bordas */
-        box-sizing: border-box; /* Garante que padding não aumente a largura total */
+        position: relative;
+        width: 100%;
+        justify-content: flex-end;
+        align-items: flex-start;
+        top: auto;
+        margin-top: 1px;
+        display: flex;
+        gap: 10px;
+        padding: 5px 10px;
+        box-sizing: border-box;
     }
 
-    /* Adicione este NOVO bloco para a mensagem de boas-vindas aqui: */
+    /* Mensagem de boas-vindas */
     #welcome-message {
-        margin-bottom: 10px; /* Isso criará uma margem de 10px abaixo da mensagem, empurrando o h1 */
+        margin-bottom: 10px;
+        font-size: 1em; /* Ajusta o tamanho da fonte para mobile */
     }
 
-    /* ADICIONE ESTE BLOCO PARA O H1: */
-    .container h1 {
-        margin-top: 40px; /* Isso criará um espaço de 40px acima do "Condomínio T Lacerda" */
+    /* Título principal "Condomínio T Lacerda" no mobile */
+    .container h1 { /* Se você tiver um .container envolvendo o h1 */
+        margin-top: 20px; /* Reduz a margem para mobile */
+        font-size: 1.5em; /* Ajusta o tamanho da fonte */
     }
 
     .apartment-section {
-        display: flex;
         flex-direction: column;
         align-items: center;
     }
@@ -266,11 +478,11 @@ h1 {
     /* 🔹 Ajuste da lista de arquivos para caber corretamente na tela */
     .file-box {
         position: relative;
-        top: 10px;
-        left: 5px;
-        right: 5px;
-        width: auto;
-        margin: 0 auto;
+        top: auto;
+        left: auto;
+        right: auto;
+        width: 95%; /* Ocupa mais largura */
+        margin: 10px auto; /* Centraliza e adiciona margem */
     }
 
     .file-box h2 {
@@ -282,10 +494,10 @@ h1 {
     /* 🔹 O visualizador agora aparece exatamente abaixo da lista e alinhado */
     .viewer-box {
         position: relative;
-        top: 0;
-        width: 100%;
-        left: 0;
-        margin: 10px 0;
+        top: auto;
+        width: 95%;
+        left: auto;
+        margin: 10px auto;
     }
 
     #file-viewer {
@@ -294,7 +506,6 @@ h1 {
     }
 
     #file-list-wrapper {
-        display: flex;
         flex-direction: column;
         align-items: center;
         gap: 10px;
@@ -305,7 +516,7 @@ h1 {
         margin: 0 auto;
     }
 
-    /* --- ADICIONADO: Estilo para anonymous.png em mobile (100x100) --- */
+    /* --- Estilo para anonymous.png em mobile (menor) --- */
     #login h2::before {
         width: 100px; /* Largura da imagem no celular */
         height: 100px; /* Altura da imagem no celular */
@@ -314,8 +525,8 @@ h1 {
 
     /* ************************************************************ */
     /* INÍCIO DOS NOVOS ESTILOS PARA O PAINEL DE LOGIN EM CELULAR */
+    /* (Reforçando o comportamento de "card")                     */
     /* ************************************************************ */
-
     #login,
     #cadastro,
     #forgotPasswordSection {
@@ -336,15 +547,20 @@ h1 {
     #login h2,
     #cadastro h2,
     #forgotPasswordSection h2 {
-        margin-bottom: 20px; /* Espaço abaixo do título */
-        font-size: 1.5em; /* Ajusta o tamanho da fonte do título para mobile */
+        margin-bottom: 20px;
+        font-size: 1.5em;
     }
 
     /* Alinhamento para os labels dentro dos input-groups em mobile */
+    .input-group {
+        width: 100%; /* Garante que o grupo ocupe a largura total do card */
+        margin-bottom: 15px; /* Espaço entre os grupos de input */
+    }
+
     .input-group label {
         display: block;
         width: 100%;
-        text-align: left; /* Garante que o texto do label esteja alinhado à esquerda */
+        text-align: left;
         margin-bottom: 5px;
     }
 
@@ -353,27 +569,26 @@ h1 {
     #login input[type="password"],
     #cadastro input[type="email"],
     #cadastro input[type="password"],
-    #cadastro input[type="text"], /* Para o campo Código de Acesso */
+    #cadastro input[type="text"],
     #forgotPasswordSection input[type="email"] {
-        width: 100%; /* Agora, todos os inputs ocuparão 100% da largura do input-group */
-        padding: 12px; /* Padding confortável para toque */
-        margin-bottom: 15px; /* Espaço entre os inputs */
+        width: 100%;
+        padding: 12px;
         border: 1px solid #ccc;
         border-radius: 6px;
         font-size: 1em;
-        box-sizing: border-box; /* Essencial para largura consistente */
+        box-sizing: border-box;
     }
 
     /* Estilo para os botões */
     #login button,
     #cadastro button,
     #forgotPasswordSection button {
-        width: 100%; /* Botões ocupam a largura total do card */
-        max-width: 250px; /* Mas com um limite para não ficarem gigantes */
+        width: 100%;
+        max-width: 250px;
         padding: 12px 20px;
-        margin-top: 15px; /* Espaço acima do botão */
+        margin-top: 15px;
         font-size: 1em;
-        align-self: center; /* Centraliza o botão */
+        align-self: center;
     }
 
     /* Estilo para os links de "Esqueci minha senha" e "Cadastre-se" */
@@ -381,13 +596,13 @@ h1 {
     #forgotPasswordSection a,
     #login p a,
     #cadastro p a {
-        margin-top: 15px; /* Espaço acima dos links */
+        margin-top: 15px;
         font-size: 0.9em;
         text-align: center;
-        width: 100%; /* Ocupa a largura total para ajudar no centralizamento */
+        width: 100%;
     }
 
-    /* Esconde a coluna da imagem em telas menores que 769px */
+    /* Esconde a coluna da imagem EM MOBILE */
     .image-column {
         display: none;
     }
@@ -395,12 +610,26 @@ h1 {
     /* Garante que o form-column ocupe a largura total para centralizar o conteúdo */
     .form-column {
         width: 100%;
-        padding: 0 10px; /* Pequeno padding para evitar que o card cole nas bordas da tela */
+        padding: 0; /* O padding agora está no #login, #cadastro etc. */
         box-sizing: border-box;
-        min-height: auto; /* Remove min-height fixo para celular */
+        min-height: auto;
+        /* Remover align-items e justify-content, deixar o container de login se centralizar */
+        align-items: unset;
+        justify-content: unset;
     }
 
+    /* Rodapé no mobile */
+    footer {
+        display: block; /* Volta a exibir o rodapé no mobile */
+        margin-top: 30px; /* Espaço acima do rodapé */
+        padding: 10px;
+        background-color: #f8f8f8;
+        border-top: 1px solid #eee;
+        color: #666;
+        font-size: 0.9em;
+        text-align: center;
+    }
     /* ************************************************************ */
-    /* FIM DOS NOVOS ESTILOS PARA O PAINEL DE LOGIN EM CELULAR */
+    /* FIM DOS NOVOS ESTILOS PARA O PAINEL DE LOGIN EM CELULAR    */
     /* ************************************************************ */
 }
