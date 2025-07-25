@@ -138,6 +138,51 @@
                 }
             });
         }
+
+        // --- Novo Script para abrir o histórico PDF ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const historicoLink = document.getElementById('historico-link');
+            const historicoViewer = document.getElementById('historico-viewer');
+            const historicoIframe = document.getElementById('historico-iframe');
+            const closeHistorico = document.getElementById('close-historico');
+            const mainContent = document.querySelector('.main-wrapper'); // Seu conteúdo principal
+            const loginSection = document.getElementById('login'); // Sua seção de login
+            const forgotPasswordSection = document.getElementById('forgotPasswordSection'); // Sua seção de recuperação
+            const cadastroSection = document.getElementById('cadastro'); // Sua seção de cadastro
+
+
+            historicoLink.addEventListener('click', (e) => {
+                e.preventDefault(); // Impede o comportamento padrão do link
+
+                // Oculta os formulários de login/cadastro/recuperação
+                if (loginSection) loginSection.style.display = 'none';
+                if (forgotPasswordSection) forgotPasswordSection.style.display = 'none';
+                if (cadastroSection) cadastroSection.style.display = 'none';
+                
+                // Oculta a fachada
+                const imageColumn = document.querySelector('.image-column');
+                if (imageColumn) imageColumn.style.display = 'none';
+
+
+                historicoIframe.src = 'historico/historico.pdf'; // Define o caminho do PDF
+                historicoViewer.style.display = 'block'; // Mostra o painel do visualizador
+                historicoViewer.classList.add('active'); // Adiciona classe para transição/estilo
+            });
+
+            closeHistorico.addEventListener('click', () => {
+                historicoViewer.style.display = 'none'; // Esconde o painel
+                historicoViewer.classList.remove('active'); // Remove a classe
+                historicoIframe.src = ''; // Limpa o iframe para parar o carregamento do PDF
+
+                // Reexibe os elementos originais (apenas o login, se os outros estiverem hidden)
+                if (loginSection) loginSection.style.display = 'block';
+                 // Reexibe a fachada se o login estiver visível (ou se for o estado padrão)
+                const imageColumn = document.querySelector('.image-column');
+                if (imageColumn && loginSection.style.display !== 'none') {
+                    imageColumn.style.display = 'block';
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -146,12 +191,18 @@
     </header>
 
     <nav class="top-nav-bar">
-        <a href="#" class="nav-item">Histórico</a>
+        <a href="#" class="nav-item" id="historico-link">Histórico</a>
         <a href="#" class="nav-item">Galeria</a>
         <a href="#" class="nav-item">Regulamento</a>
     </nav>
 
     <div class="main-wrapper">
+        <div id="historico-viewer" class="viewer-box" style="display: none;">
+            <button id="close-historico" class="close-btn">&times;</button>
+            <h2>Histórico do Condomínio</h2>
+            <iframe id="historico-iframe" width="100%" height="500px" frameborder="0"></iframe>
+            <a id="download-historico" href="historico/historico.pdf" download="Historico_Condominio.pdf" class="download-btn">Baixar Histórico</a>
+        </div>
         <div class="image-column">
         </div>
 
