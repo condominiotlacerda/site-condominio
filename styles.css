@@ -137,20 +137,18 @@ h1 {
     background-color: #0056b3;
 }
 
-/* Estes estilos serão sobrescritos para desktop pela Ideia 1 */
+/* Estes estilos serão sobrescritos para desktop pela Ideia 1 (para o alinhamento central em mobile) */
 #login,
 #forgotPasswordSection {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    /* Outras regras de estilo para as seções, se houver */
+    align-items: center; /* Mantido para centralizar em mobile */
 }
 
 #emailForgotPassword {
     width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
-    /* Outros estilos que você possa ter para este campo */
 }
-/* Alinhamento das palavras Login, Recuperar Senha e Cadastro*/
+/* Alinhamento das palavras Login, Recuperar Senha e Cadastro (para mobile) */
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
@@ -343,7 +341,7 @@ h1 {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada mas suave */
         display: flex;
         flex-direction: column;
-        align-items: center;
+        /* REMOVIDO: align-items: center; */ /* Removido para permitir alinhamento individual */
         border: 1px solid #e0e0e0; /* Borda fina e discreta */
         transition: all 0.3s ease; /* Transição para efeitos de hover */
     }
@@ -356,31 +354,56 @@ h1 {
         transform: translateY(-3px); /* Leve levantamento */
     }
 
+    /* Estilo para os labels */
+    #login label,
+    #cadastro label,
+    #forgotPasswordSection label {
+        display: block; /* Ocupa sua própria linha */
+        width: 100%; /* Ocupa a largura total para alinhamento */
+        text-align: left; /* Alinha o texto do label à esquerda */
+        margin-bottom: 5px; /* Espaço entre o label e o input */
+    }
+
     /* Estilo para os campos de input */
     #login input[type="text"],
     #login input[type="password"],
+    #cadastro input[type="text"],
+    #cadastro input[type="email"],
+    #cadastro input[type="password"],
     #forgotPasswordSection input[type="email"] {
-        width: calc(100% - 20px); /* Ajusta a largura considerando o padding */
+        width: 100%; /* Ajusta a largura para 100% */
         padding: 12px;
-        margin-bottom: 15px;
+        margin-bottom: 15px; /* Espaço após o input */
         border: 1px solid #ccc;
         border-radius: 6px;
         font-size: 1em;
+        box-sizing: border-box; /* Inclui padding na largura total */
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     /* Estilo de foco para os inputs */
     #login input[type="text"]:focus,
     #login input[type="password"]:focus,
+    #cadastro input[type="text"]:focus,
+    #cadastro input[type="email"]:focus,
+    #cadastro input[type="password"]:focus,
     #forgotPasswordSection input[type="email"]:focus {
         border-color: #007bff; /* Borda azul ao focar */
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* Sombra suave ao focar */
         outline: none; /* Remove o contorno padrão do navegador */
     }
 
+    /* Contêiner para agrupar label e input (se você adicionar no HTML) */
+    .input-group {
+        width: 100%; /* Garante que o grupo ocupe a largura total */
+        margin-bottom: 15px; /* Espaço entre grupos */
+        text-align: left; /* Garante que o conteúdo do grupo se alinhe à esquerda */
+    }
+
     /* Estilo para o botão Entrar */
     #login button,
-    #forgotPasswordSection button {
+    #forgotPasswordSection button,
+    #cadastro button { /* Adicionado o botão do cadastro */
         background-color: #007bff; /* Cor primária */
         color: white;
         padding: 12px 25px;
@@ -390,11 +413,14 @@ h1 {
         font-size: 1.1em;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
-        margin-top: 10px;
+        margin-top: 10px; /* Espaço acima do botão */
+        width: 100%; /* Faz o botão ocupar a largura total do contêiner do formulário */
+        max-width: 250px; /* Limita a largura máxima do botão */
     }
 
     #login button:hover,
-    #forgotPasswordSection button:hover {
+    #forgotPasswordSection button:hover,
+    #cadastro button:hover {
         background-color: #0056b3; /* Cor mais escura ao passar o mouse */
         transform: translateY(-1px); /* Pequeno efeito de elevação */
     }
@@ -402,56 +428,60 @@ h1 {
     /* Estilo para os links/botões de texto (Esqueci minha senha, Cadastre-se) */
     #login a,
     #forgotPasswordSection a,
-    #login p a { /* Para o link "Não tem uma conta? Cadastre-se" */
+    #login p a,
+    #cadastro p a { /* Adicionado o link do cadastro */
         color: #007bff;
         text-decoration: none;
         margin-top: 15px; /* Espaçamento entre os botões */
         font-size: 0.95em;
         transition: color 0.2s ease;
+        /* Alinhamento para esses links */
+        align-self: center; /* Centraliza o item dentro do flexbox pai */
     }
 
     #login a:hover,
     #forgotPasswordSection a:hover,
-    #login p a:hover {
+    #login p a:hover,
+    #cadastro p a:hover {
         color: #0056b3;
         text-decoration: underline;
     }
 
-    /* Garante que o H2 (Login, Recuperar Senha, Cadastro) tenha um bom espaçamento */
+    /* Garante que o H2 (Login, Recuperar Senha, Cadastro) tenha um bom espaçamento e alinhamento */
     #login h2,
     #forgotPasswordSection h2,
     #cadastro h2 {
         margin-bottom: 25px; /* Mais espaço abaixo do título */
         color: #333;
+        text-align: center; /* Centraliza o título */
+        width: 100%;
     }
 
-    /* Para a coluna da imagem (você precisará adicionar um elemento no seu HTML para isso) */
+    /* Para a coluna da imagem */
     .image-column {
         width: 60%; /* largura da imagem fachada.jpg */
         height: 80vh; /*altura da imagem fachada.jpg */
         background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
         background-size: cover;
         background-position: center;
-        /* --- NOVOS ESTILOS AQUI (IDEIA 1) --- */
-        border: 2px solid #ddd; /* Uma borda sutil cinza claro */
-        border-radius: 8px; /* Cantos levemente arredondados */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Uma sombra suave */
-        transition: all 0.3s ease; /* Efeito de transição para futuros hovers */
-        overflow: hidden; /* Garante que a imagem respeite o border-radius */
-        /* --- FIM DOS NOVOS ESTILOS --- */
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        overflow: hidden;
     }
 
     .image-column:hover {
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* Sombra um pouco mais forte ao passar o mouse */
-        transform: translateY(-2px); /* Efeito sutil de levantar */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        transform: translateY(-2px);
     }
 
     /* Para a coluna dos formulários */
     .form-column {
-        width: 40%; /* Ocupa uma porção da largura para os formulários */
+        width: 40%;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: center; /* Centraliza a coluna dos formulários no body */
         justify-content: center; /* Alinha os formulários verticalmente */
         min-height: 100vh;
     }
