@@ -295,11 +295,11 @@ h1 {
         text-align: left;
     }
 
-    /* Estilo para o botão Entrar */
+    /* Estilo para o botão Entrar (e outros botões de formulário) - NOVO: Movemos a cor para cá*/
     #login button,
     #forgotPasswordSection button,
     #cadastro button {
-        background-color: #007bff;
+        background-color: #007bff; /* Cor azul consistente */
         color: white;
         padding: 12px 25px;
         border: none;
@@ -328,7 +328,7 @@ h1 {
         text-align: center;
         margin-top: 15px;
         font-size: 0.95em;
-        color: inherit; /* Texto "Não tem uma conta?" herda a cor padrão (preta) */
+        color: inherit;
         text-decoration: none;
         transition: color 0.2s ease;
     }
@@ -339,7 +339,7 @@ h1 {
     {
         color: #007bff; /* Garante que esses links sejam azuis */
         text-decoration: none;
-        display: block; /* Para que fiquem em sua própria linha */
+        display: block;
         width: 100%;
         text-align: center;
         margin-top: 15px;
@@ -352,9 +352,9 @@ h1 {
     #login p a, /* O link "Cadastre-se" */
     #cadastro p a /* O link "Faça login" */
     {
-        color: #007bff; /* Garante que o link seja azul */
+        color: #007bff;
         text-decoration: none;
-        display: inline; /* Faz o link se comportar como texto em linha */
+        display: inline;
     }
 
     #login a:hover,
@@ -599,16 +599,30 @@ h1 {
         box-sizing: border-box;
     }
 
-    /* Estilo para os botões */
+    /* Estilo para os botões (mobile) - NOVO: Garante a cor azul */
     #login button,
     #cadastro button,
     #forgotPasswordSection button {
+        background-color: #007bff; /* Garante que o botão seja azul no mobile */
+        color: white;
         width: 100%;
         max-width: 250px;
         padding: 12px 20px;
         margin-top: 15px;
         font-size: 1em;
         align-self: center;
+        border: none; /* Garante que não tenha borda extra */
+        border-radius: 6px; /* Borda arredondada */
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Efeito hover para botões no mobile (se o touchscreen permitir) */
+    #login button:hover,
+    #cadastro button:hover,
+    #forgotPasswordSection button:hover {
+        background-color: #0056b3;
     }
 
     /* Estilo para os links de "Esqueci minha senha" e "Cadastre-se" */
