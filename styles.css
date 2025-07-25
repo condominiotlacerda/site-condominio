@@ -1,8 +1,12 @@
 body {
     font-family: sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0; /* Removendo padding do body para controle total */
     text-align: center;
+    min-height: 100vh;
+    display: flex; /* Usar flexbox para alinhar a barra e o conteúdo principal */
+    flex-direction: column; /* Organizar em coluna: barra no topo, depois o wrapper */
+    overflow-x: hidden; /* Evitar scroll horizontal indesejado */
 }
 
 /* Comanda a posição de Condomínio T Lacerda na página área condomínio */
@@ -59,12 +63,13 @@ h1 {
     height: 150px !important;
     border-radius: 50%;
     object-fit: cover;
-    position: absolute;
+    position: absolute; /* Posição absoluta para que não afete o fluxo */
     top: 5px;
     left: 5px;
     max-width: 150px !important;
     max-height: 150px !important;
     border: 2px solid red;
+    z-index: 20; /* Garante que fique acima de tudo */
 }
 
 /* 🔹 Caixa da lista de arquivos */
@@ -197,32 +202,91 @@ h1 {
     margin: 0 auto 15px auto;
 }
 
+/* --- NOVA SEÇÃO: Estilos para a Faixa de Navegação Superior (.top-nav-bar) --- */
+.top-nav-bar {
+    width: 100%;
+    background-color: #f8f8f8; /* Um cinza claro para a faixa */
+    border-bottom: 1px solid #e0e0e0; /* Uma linha fina na parte inferior */
+    padding: 10px 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center; /* Centraliza os itens de navegação por padrão */
+    align-items: center;
+    gap: 30px; /* Espaçamento entre os itens */
+    z-index: 10; /* Garante que fique acima de outros elementos */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Sombra suave */
+    flex-shrink: 0; /* Impede que a barra encolha */
+}
+
+.top-nav-bar .nav-item {
+    color: #007bff; /* Cor azul padrão para links */
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 5px 10px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.top-nav-bar .nav-item:hover {
+    color: #0056b3; /* Azul mais escuro no hover */
+    background-color: #e9ecef; /* Um fundo suave no hover */
+}
+
+/* Novo wrapper para a imagem e formulário */
+.main-wrapper {
+    display: flex;
+    flex-grow: 1; /* Permite que este wrapper ocupe o espaço restante */
+    align-items: center; /* Centraliza verticalmente o conteúdo dentro dele */
+    justify-content: center; /* Centraliza horizontalmente o conteúdo dentro dele */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
 /* ************************************************************ */
 /* INÍCIO DOS ESTILOS PARA TELAS DE COMPUTADOR (DESKTOP)       */
 /* (width mínima de 769 pixels)                                 */
 /* ************************************************************ */
 @media (min-width: 769px) {
     body {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        padding: 20px;
-        text-align: left;
-        min-height: 100vh;
-        overflow: hidden;
+        /* Reset para o body, já que o flexbox está sendo usado no .main-wrapper */
+        display: flex; /* Mantém o body como flex container para a barra e o main-wrapper */
+        flex-direction: column;
+        align-items: center; /* Centraliza o conteúdo do body horizontalmente */
+        justify-content: flex-start; /* Alinha o conteúdo ao topo */
+        padding: 0; /* Removido padding, agora controlado internamente */
     }
 
+    /* A logo já tem position: absolute, mantendo-a no canto */
     header {
-        position: fixed;
+        position: fixed; /* Mantém a logo fixa no canto */
         top: 5px;
         left: 5px;
+        z-index: 20;
     }
 
-    .logo {
-        width: 100px !important;
-        height: 100px !important;
-        max-width: 100px !important;
-        max-height: 100px !important;
+    /* Ajustes para a faixa de navegação no DESKTOP */
+    .top-nav-bar {
+        position: absolute; /* Torna a barra absoluta dentro do body */
+        top: 0; /* Alinha ao topo do body */
+        left: 0; /* Alinha à esquerda do body */
+        width: 100%; /* Ocupa a largura total */
+        height: 60px; /* Altura fixa */
+        padding-left: 170px; /* Espaço para a logo */
+        justify-content: flex-start; /* Alinha os itens à esquerda */
+        box-sizing: border-box;
+    }
+
+    .main-wrapper {
+        width: 100%;
+        height: calc(100vh - 60px); /* Ocupa a altura restante após a barra */
+        margin-top: 60px; /* Desce o conteúdo principal para abaixo da barra */
+        display: flex; /* Torna-o um flex container para as colunas de imagem/form */
+        align-items: center; /* Centraliza verticalmente a imagem e o formulário */
+        justify-content: space-around; /* Distribui espaço entre imagem e formulário */
+        padding: 20px; /* Adiciona um padding geral ao wrapper */
+        box-sizing: border-box;
     }
 
     #login,
@@ -295,7 +359,7 @@ h1 {
         text-align: left;
     }
 
-    /* Estilo para o botão Entrar (e outros botões de formulário) - NOVO: Movemos a cor para cá*/
+    /* Estilo para o botão Entrar (e outros botões de formulário) */
     #login button,
     #forgotPasswordSection button,
     #cadastro button {
@@ -347,7 +411,6 @@ h1 {
         transition: color 0.2s ease;
     }
 
-
     /* Estilo específico para os links (a) dentro dos parágrafos, para mantê-los azuis */
     #login p a, /* O link "Cadastre-se" */
     #cadastro p a /* O link "Faça login" */
@@ -379,7 +442,7 @@ h1 {
     .image-column {
         display: block;
         width: 60%;
-        height: 80vh;
+        height: 80vh; /* Mantém a altura para não descer muito */
         background-image: url('images/fachada.JPG');
         background-size: cover;
         background-position: center;
@@ -388,6 +451,7 @@ h1 {
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         transition: all 0.3s ease;
         overflow: hidden;
+        /* margin-top: 60px; */ /* Removido daqui, agora controlado pelo main-wrapper */
     }
 
     .image-column:hover {
@@ -402,9 +466,10 @@ h1 {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: 100vh;
-        padding: 0;
+        /* min-height: 100vh; */ /* Removido, agora min-height é do main-wrapper */
+        padding: 0 20px; /* Adiciona padding lateral para o formulário */
         box-sizing: border-box;
+        /* margin-top: 60px; */ /* Removido daqui, agora controlado pelo main-wrapper */
     }
 
     /* Esconda o rodapé da tela de login em desktops */
@@ -431,15 +496,15 @@ h1 {
 /* ************************************************************ */
 @media (max-width: 768px) {
     body {
-        display: block;
+        display: block; /* Volta para o comportamento de bloco padrão */
         align-items: unset;
         justify-content: unset;
         min-height: auto;
-        padding: 10px;
+        padding: 10px; /* Mantém um padding básico para mobile */
     }
 
     header {
-        position: relative;
+        position: relative; /* Volta ao fluxo normal do documento */
         top: auto;
         left: auto;
         text-align: left;
@@ -599,7 +664,7 @@ h1 {
         box-sizing: border-box;
     }
 
-    /* Estilo para os botões (mobile) - NOVO: Garante a cor azul */
+    /* Estilo para os botões (mobile) - Garante a cor azul */
     #login button,
     #cadastro button,
     #forgotPasswordSection button {
@@ -611,8 +676,8 @@ h1 {
         margin-top: 15px;
         font-size: 1em;
         align-self: center;
-        border: none; /* Garante que não tenha borda extra */
-        border-radius: 6px; /* Borda arredondada */
+        border: none;
+        border-radius: 6px;
         cursor: pointer;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
@@ -667,9 +732,17 @@ h1 {
         background-color: #f8f8f8;
         border-top: 1px solid #eee;
         color: #666;
-        font-size: 0.9em;
+        font-size: 0.85em; /* Ajuste para caber melhor */
         text-align: center;
     }
+
+    .main-wrapper {
+        flex-direction: column; /* No mobile, empilha os elementos */
+        margin-top: 0; /* Remove a margem superior no mobile */
+        height: auto;
+        padding: 10px; /* Padding para o wrapper no mobile */
+    }
+
     /* ************************************************************ */
     /* FIM DOS NOVOS ESTILOS PARA O PAINEL DE LOGIN EM CELULAR    */
     /* ************************************************************ */
