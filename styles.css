@@ -176,7 +176,7 @@ h1 {
     margin-top: 10px;
     margin-bottom: 10px;
     margin-block-start: 0; /* Resetando a margem superior padrão */
-    margin-block-end:    0;    /* Resetando a margem inferior padrão */
+    margin-block-end:     0;     /* Resetando a margem inferior padrão */
 }
 
 #documentos-list {
@@ -224,13 +224,14 @@ h1 {
     }
 
     /* Adicione ESTE NOVO BLOCO para o cabeçalho superior direito: */
-   #top-right-header {
+    #top-right-header {
         position: relative; /* Ajusta o posicionamento para o fluxo do documento */
         width: 100%;        /* Ocupa a largura total no celular */
         justify-content: flex-end; /* Alinha o conteúdo à direita (final do eixo principal) */
         align-items: flex-start; /* Alinha o conteúdo ao topo (início do eixo transversal) */
         top: 1px;           /* Posição do topo, se necessário um ajuste fino */
         margin-top: 1px;    /* Margem do topo, se necessário um ajuste fino */
+        /* REMOVIDO: margin-bottom: 40px; */
         display: flex;      /* Garante que continue sendo um flex container */
         gap: 10px;          /* Mantém o espaço entre o nome e o botão */
         padding: 5px 10px;  /* Adicionado padding horizontal para não colar nas bordas */
@@ -244,7 +245,7 @@ h1 {
 
     /* ADICIONE ESTE BLOCO PARA O H1: */
     .container h1 {
-        margin-top: 20px; /* Isso criará um espaço de 40px acima do "Condomínio T Lacerda" */
+        margin-top: 40px; /* Isso criará um espaço de 40px acima do "Condomínio T Lacerda" */
     }
 
     .apartment-section {
@@ -363,6 +364,18 @@ h1 {
         background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
         background-size: cover;
         background-position: center;
+        /* --- NOVOS ESTILOS AQUI (IDEIA 1) --- */
+        border: 2px solid #ddd; /* Uma borda sutil cinza claro */
+        border-radius: 8px; /* Cantos levemente arredondados */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Uma sombra suave */
+        transition: all 0.3s ease; /* Efeito de transição para futuros hovers */
+        overflow: hidden; /* Garante que a imagem respeite o border-radius */
+        /* --- FIM DOS NOVOS ESTILOS --- */
+    }
+
+    .image-column:hover {
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* Sombra um pouco mais forte ao passar o mouse */
+        transform: translateY(-2px); /* Efeito sutil de levantar */
     }
 
     /* Para a coluna dos formulários */
