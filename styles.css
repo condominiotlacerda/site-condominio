@@ -235,8 +235,7 @@ h1 {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
-        /* IMPORTANTE: Mantém o align-items: center aqui para centralizar os filhos */
-        align-items: center; /* Mantido para centralizar os elementos do formulário */
+        align-items: center;
         border: 1px solid #e0e0e0;
         transition: all 0.3s ease;
         box-sizing: border-box;
@@ -255,8 +254,8 @@ h1 {
     #cadastro label,
     #forgotPasswordSection label {
         display: block;
-        width: 100%; /* Ocupa 100% da largura do pai */
-        text-align: left; /* Alinha o texto do label à esquerda */
+        width: 100%;
+        text-align: left;
         margin-bottom: 5px;
     }
 
@@ -291,9 +290,9 @@ h1 {
 
     /* Contêiner para agrupar label e input */
     .input-group {
-        width: 100%; /* Ocupa 100% da largura do formulário */
+        width: 100%;
         margin-bottom: 15px;
-        text-align: left; /* Alinha o conteúdo do input-group à esquerda */
+        text-align: left;
     }
 
     /* Estilo para o botão Entrar */
@@ -310,9 +309,8 @@ h1 {
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
         margin-top: 10px;
-        width: 100%; /* Faz o botão ocupar 100% da largura disponível */
-        max-width: 250px; /* Limita a largura máxima para que não fique gigante */
-        /* `align-self: center` já está sendo aplicado pelo `#login` com `align-items: center` */
+        width: 100%;
+        max-width: 250px;
     }
 
     #login button:hover,
@@ -322,27 +320,28 @@ h1 {
         transform: translateY(-1px);
     }
 
-    /* Estilo para os links de "Esqueci minha senha" e "Cadastre-se" e o parágrafo pai */
-    #login a,
-    #forgotPasswordSection a,
-    #login p, /* Adicionado para controlar o parágrafo que contém o link de cadastro */
-    #cadastro p { /* Adicionado para controlar o parágrafo que contém o link de login */
+    /* Estilo para o parágrafo que contém o link de cadastro e o link de recuperação de senha */
+    #login p, /* "Não tem uma conta? Cadastre-se" */
+    #forgotPasswordSection a, /* "Voltar para o Login" */
+    #login a /* "Esqueci minha senha" */
+    {
         display: block; /* Garante que cada um ocupe sua própria linha */
         width: 100%; /* Faz com que ocupem a largura total para centralizar */
         text-align: center; /* Centraliza o texto dentro da sua linha */
         margin-top: 15px; /* Espaço para separar dos elementos acima */
-        color: #007bff;
-        text-decoration: none;
         font-size: 0.95em;
+        color: inherit; /* **NOVO:** Herda a cor do pai (geralmente preto). */
+        text-decoration: none; /* Remove sublinhado padrão, o link interno adicionará o seu */
         transition: color 0.2s ease;
-        /* `align-self: center` já está sendo aplicado pelo `#login` com `align-items: center` */
     }
-    
-    /* Regra específica para o link de cadastro e login, se necessário, para sobrescrever a do parágrafo */
-    #login p a,
-    #cadastro p a {
-        display: inline; /* Volta o 'a' para inline dentro do 'p' */
-        text-decoration: none;
+
+    /* Estilo específico para os links (a) dentro dos parágrafos, para mantê-los azuis */
+    #login p a, /* O link "Cadastre-se" */
+    #cadastro p a /* O link "Faça login" */
+    {
+        color: #007bff; /* Garante que o link seja azul */
+        text-decoration: none; /* Remove sublinhado padrão */
+        display: inline; /* Faz o link se comportar como texto em linha */
     }
 
     #login a:hover,
@@ -350,7 +349,7 @@ h1 {
     #login p a:hover,
     #cadastro p a:hover {
         color: #0056b3;
-        text-decoration: underline;
+        text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
     }
 
     /* Garante que o H2 tenha um bom espaçamento e alinhamento */
@@ -602,19 +601,20 @@ h1 {
     /* Estilo para os links de "Esqueci minha senha" e "Cadastre-se" */
     #login a,
     #forgotPasswordSection a,
-    #login p, /* Também visado para garantir o bloco */
-    #cadastro p { /* Também visado para garantir o bloco */
+    #login p,
+    #cadastro p {
         margin-top: 15px;
         font-size: 0.9em;
         text-align: center;
         width: 100%;
-        display: block; /* Garante que ocupe sua própria linha no mobile */
+        display: block;
     }
 
     /* O link 'a' dentro do parágrafo 'p' deve ser inline para que o texto não se quebre */
     #login p a,
     #cadastro p a {
         display: inline;
+        color: #007bff; /* Garante que o link seja azul no mobile também */
     }
 
     /* Esconde a coluna da imagem EM MOBILE */
