@@ -138,17 +138,20 @@ h1 {
 }
 
 /* Estes estilos serão sobrescritos para desktop pela Ideia 1 (para o alinhamento central em mobile) */
-#login,
-#forgotPasswordSection {
+/* Removido explicitamente para ser definido na media query de mobile */
+/* #login, #forgotPasswordSection {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Mantido para centralizar em mobile */
-}
+    align-items: center;
+} */
 
-#emailForgotPassword {
-    width: 270px; /* Você pode ajustar este valor para o tamanho desejado */
-}
+/* Removido inline width, agora controlado pelo CSS */
+/* #emailForgotPassword {
+    width: 270px;
+} */
+
 /* Alinhamento das palavras Login, Recuperar Senha e Cadastro (para mobile) */
+/* Mantido aqui para garantir centralização padrão para h2, será ajustado no desktop */
 #login h2,
 #forgotPasswordSection h2,
 #cadastro h2 {
@@ -198,6 +201,7 @@ h1 {
 
 /* --- */
 /* Estilo para a imagem "anonymous.png" acima do Login */
+/* Este estilo será sobrescrito em mobile abaixo */
 #login h2::before {
     content: ""; /* É necessário para que o pseudo-elemento seja gerado */
     display: block; /* Faz com que o pseudo-elemento se comporte como um bloco, ocupando sua própria linha */
@@ -307,187 +311,96 @@ h1 {
         height: 100px; /* Altura da imagem no celular */
         margin: 0 auto 10px auto; /* Ajusta a margem para celular */
     }
-} /* 🔹FINAL RESPONSIVIDADE SOMENTE PARA CELULAR 📱 =====================================================================*/
 
-/* Estilos para telas de computador (largura mínima de 769 pixels) */
-@media (min-width: 769px) {
-    body {
-        display: flex; /* Usamos Flexbox para o layout principal */
-        align-items: center; /* Alinha os itens verticalmente ao centro da tela */
-        justify-content: space-around; /* Espaça os itens de forma uniforme */
-        padding: 20px;
-        text-align: left; /* Alinha o texto à esquerda dentro dos contêineres */
-        min-height: 100vh; /* Garante que o body ocupe a altura total da tela */
-    }
-
-    header {
-        position: fixed; /* Mantém o logo fixo no topo */
-        top: 5px;
-        left: 5px;
-    }
-
-    .logo { /* Mantenha seus estilos para o logo */
-        width: 100px !important; /* Ajuste o tamanho conforme necessário para desktop */
-        height: 100px !important;
-    }
+    /* ************************************************************ */
+    /* INÍCIO DOS NOVOS ESTILOS PARA O PAINEL DE LOGIN EM CELULAR */
+    /* ************************************************************ */
 
     #login,
     #cadastro,
     #forgotPasswordSection {
-        width: 400px;
-        padding: 30px;
-        background-color: #ffffff; /* Fundo branco puro para destaque */
-        border-radius: 12px; /* Cantos mais arredondados para um visual suave */
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada mas suave */
+        width: 90%; /* Ocupa 90% da largura da tela */
+        max-width: 400px; /* Limita a largura máxima para telas maiores que mobile */
+        margin: 20px auto; /* Centraliza o card e adiciona margem vertical */
+        padding: 25px; /* Aumenta o padding interno para um visual mais espaçoso */
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra mais visível para o efeito "card" */
         display: flex;
         flex-direction: column;
-        /* REMOVIDO: align-items: center; */ /* Removido para permitir alinhamento individual */
-        border: 1px solid #e0e0e0; /* Borda fina e discreta */
-        transition: all 0.3s ease; /* Transição para efeitos de hover */
+        align-items: center; /* Centraliza o conteúdo dentro do card */
+        border: 1px solid #e0e0e0;
+        box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
     }
 
-    /* Efeito de elevação ao passar o mouse */
-    #login:hover,
-    #cadastro:hover,
-    #forgotPasswordSection:hover {
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        transform: translateY(-3px); /* Leve levantamento */
+    #login h2,
+    #cadastro h2,
+    #forgotPasswordSection h2 {
+        margin-bottom: 20px; /* Espaço abaixo do título */
+        font-size: 1.5em; /* Ajusta o tamanho da fonte do título para mobile */
     }
 
-    /* Estilo para os labels */
-    #login label,
-    #cadastro label,
-    #forgotPasswordSection label {
-        display: block; /* Ocupa sua própria linha */
-        width: 100%; /* Ocupa a largura total para alinhamento */
-        text-align: left; /* Alinha o texto do label à esquerda */
-        margin-bottom: 5px; /* Espaço entre o label e o input */
+    /* Alinhamento para os labels dentro dos input-groups em mobile */
+    .input-group label {
+        display: block;
+        width: 100%;
+        text-align: left; /* Garante que o texto do label esteja alinhado à esquerda */
+        margin-bottom: 5px;
     }
 
-    /* Estilo para os campos de input */
+    /* Estilo para todos os campos de input de texto e senha */
     #login input[type="email"],
     #login input[type="password"],
     #cadastro input[type="email"],
     #cadastro input[type="password"],
-    #cadastro input[type="text"], /* Adicionado para o campo de Código de Acesso */
+    #cadastro input[type="text"], /* Para o campo Código de Acesso */
     #forgotPasswordSection input[type="email"] {
-        width: 100%; /* Agora, todos terão 100% da largura do input-group */
-        padding: 12px;
-        margin-bottom: 15px; /* Espaço após o input */
+        width: 100%; /* Agora, todos os inputs ocuparão 100% da largura do input-group */
+        padding: 12px; /* Padding confortável para toque */
+        margin-bottom: 15px; /* Espaço entre os inputs */
         border: 1px solid #ccc;
         border-radius: 6px;
         font-size: 1em;
-        box-sizing: border-box; /* Inclui padding e borda na largura total */
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        box-sizing: border-box; /* Essencial para largura consistente */
     }
 
-    /* Estilo de foco para os inputs */
-    #login input[type="email"]:focus,
-    #login input[type="password"]:focus,
-    #cadastro input[type="email"]:focus,
-    #cadastro input[type="password"]:focus,
-    #cadastro input[type="text"]:focus,
-    #forgotPasswordSection input[type="email"]:focus {
-        border-color: #007bff; /* Borda azul ao focar */
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* Sombra suave ao focar */
-        outline: none; /* Remove o contorno padrão do navegador */
-    }
-
-    /* Contêiner para agrupar label e input */
-    .input-group {
-        width: 100%; /* Garante que o grupo ocupe a largura total */
-        margin-bottom: 15px; /* Espaço entre grupos */
-        text-align: left; /* Garante que o conteúdo do grupo se alinhe à esquerda */
-    }
-
-    /* Estilo para o botão Entrar */
+    /* Estilo para os botões */
     #login button,
-    #forgotPasswordSection button,
-    #cadastro button { /* Adicionado o botão do cadastro */
-        background-color: #007bff; /* Cor primária */
-        color: white;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1.1em;
-        font-weight: bold;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        margin-top: 10px; /* Espaço acima do botão */
-        width: 100%; /* Faz o botão ocupar a largura total do contêiner do formulário */
-        max-width: 250px; /* Limita a largura máxima do botão */
-        align-self: center; /* Centraliza o botão dentro do flexbox */
+    #cadastro button,
+    #forgotPasswordSection button {
+        width: 100%; /* Botões ocupam a largura total do card */
+        max-width: 250px; /* Mas com um limite para não ficarem gigantes */
+        padding: 12px 20px;
+        margin-top: 15px; /* Espaço acima do botão */
+        font-size: 1em;
+        align-self: center; /* Centraliza o botão */
     }
 
-    #login button:hover,
-    #forgotPasswordSection button:hover,
-    #cadastro button:hover {
-        background-color: #0056b3; /* Cor mais escura ao passar o mouse */
-        transform: translateY(-1px); /* Pequeno efeito de elevação */
-    }
-
-    /* Estilo para os links/botões de texto (Esqueci minha senha, Cadastre-se) */
+    /* Estilo para os links de "Esqueci minha senha" e "Cadastre-se" */
     #login a,
     #forgotPasswordSection a,
     #login p a,
-    #cadastro p a { /* Adicionado o link do cadastro */
-        color: #007bff;
-        text-decoration: none;
-        margin-top: 15px; /* Espaçamento entre os botões */
-        font-size: 0.95em;
-        transition: color 0.2s ease;
-        align-self: center; /* Centraliza o item dentro do flexbox pai */
+    #cadastro p a {
+        margin-top: 15px; /* Espaço acima dos links */
+        font-size: 0.9em;
+        text-align: center;
+        width: 100%; /* Ocupa a largura total para ajudar no centralizamento */
     }
 
-    #login a:hover,
-    #forgotPasswordSection a:hover,
-    #login p a:hover,
-    #cadastro p a:hover {
-        color: #0056b3;
-        text-decoration: underline;
-    }
-
-    /* Garante que o H2 (Login, Recuperar Senha, Cadastro) tenha um bom espaçamento e alinhamento */
-    #login h2,
-    #forgotPasswordSection h2,
-    #cadastro h2 {
-        margin-bottom: 25px; /* Mais espaço abaixo do título */
-        color: #333;
-        text-align: center; /* Centraliza o título */
-        width: 100%;
-    }
-
-    /* Para a coluna da imagem */
+    /* Esconde a coluna da imagem em telas menores que 769px */
     .image-column {
-        width: 60%; /* largura da imagem fachada.jpg */
-        height: 80vh; /*altura da imagem fachada.jpg */
-        background-image: url('images/fachada.JPG'); /* Substitua pelo seu caminho */
-        background-size: cover;
-        background-position: center;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
-        overflow: hidden;
-    }
-
-    .image-column:hover {
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
-        transform: translateY(-2px);
-    }
-
-    /* Para a coluna dos formulários */
-    .form-column {
-        width: 40%;
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centraliza a coluna dos formulários no body */
-        justify-content: center; /* Alinha os formulários verticalmente */
-        min-height: 100vh;
-    }
-
-    /* Esconda o rodapé da tela de login em desktops, se desejar */
-    footer {
         display: none;
     }
+
+    /* Garante que o form-column ocupe a largura total para centralizar o conteúdo */
+    .form-column {
+        width: 100%;
+        padding: 0 10px; /* Pequeno padding para evitar que o card cole nas bordas da tela */
+        box-sizing: border-box;
+        min-height: auto; /* Remove min-height fixo para celular */
+    }
+
+    /* ************************************************************ */
+    /* FIM DOS NOVOS ESTILOS PARA O PAINEL DE LOGIN EM CELULAR */
+    /* ************************************************************ */
 }
