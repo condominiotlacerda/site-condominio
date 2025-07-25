@@ -720,3 +720,22 @@ h1 {
         padding: 10px;
     }
 }
+/* Estilo para o botão de fechar o visualizador de PDF */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2em;
+    color: #555;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    z-index: 10; /* Garante que fique acima do iframe */
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #000;
+}
