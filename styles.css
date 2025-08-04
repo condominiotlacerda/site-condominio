@@ -476,7 +476,7 @@ h1 {
 
 
 /* ************************************************************ */
-/* INÍCIO RESPONSIVIDADE SOMENTE PARA CELULAR 📱              */
+/* INÍCIO RESPONSIVIDADE SOMENTE PARA CELULAR 📱               */
 /* (max-width de 768px)                                       */
 /* ************************************************************ */
 @media (max-width: 768px) {
@@ -786,15 +786,37 @@ h1 {
     background-color: #5a6268;
 }
 
-/* Regra para o corpo da página quando o overlay estiver ativo */
-body.overlay-active {
-    filter: blur(5px) brightness(0.5);
-    pointer-events: none;
-    transition: filter 0.5s ease; /* Transição para o efeito de blur/brightness */
-}
 /* Regra para o conteúdo de fundo quando o overlay estiver ativo */
 .main-wrapper.blurred-background {
     filter: blur(5px) brightness(0.5);
     pointer-events: none; /* Desabilita interações no fundo */
     transition: filter 0.5s ease; /* Transição suave para o efeito */
+}
+
+/* ************************************************************ */
+/* NOVOS ESTILOS PARA IMAGENS LADO A LADO (Tokio Marine e Cora) */
+/* ************************************************************ */
+
+.image-row {
+    display: flex; /* Transforma a div em um container flexível */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    gap: 20px; /* Adiciona um espaço de 20 pixels entre as imagens */
+    justify-content: center; /* Centraliza as imagens horizontalmente dentro da div */
+    padding: 10px 0; /* Adiciona um pouco de padding em cima e embaixo para não colar nas linhas */
+}
+
+.image-row img {
+    max-width: 100%; /* Garante que a imagem não ultrapasse a largura do seu contêiner pai */
+    height: auto; /* Mantém a proporção da imagem */
+}
+
+/* Se você quiser ajustar o tamanho das imagens especificamente, pode fazer: */
+.image-row img[alt="Imagem Tokio Marine"] {
+    width: 100px; /* Ou o tamanho que preferir */
+    height: auto; /* Mantém a proporção */
+}
+
+.image-row img[alt="Imagem Cora"] {
+    width: 150px; /* Ou o tamanho que preferir */
+    height: auto; /* Mantém a proporção */
 }
