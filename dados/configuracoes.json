@@ -125,12 +125,13 @@
     "link": "1whuf2hUCHDFahqOozan_A_cOqsG0AFZg"
   },
   "seu_dinheiro": {
-    "seu_dinheiro_1": "Seu dinheiro 1",
-    "seu_dinheiro_2": "Seu dinheiro 2",
-    "seu_dinheiro_3": "Breve: Seu dinheiro 3",
-    "": "",
-    "": ""
+    "Seu dinheiro Nº 1": "seu_dinheiro_1.pdf",
+    "Seu dinheiro Nº 2": "seu_dinheiro_2.pdf",
+    "Breve: Seu dinheiro 3": "seu_dinheiro_3.pdf",
+    "": "seu_dinheiro_4.pdf",
+    "": "seu_dinheiro_5.pdf"
   }
 }
+
 
 
