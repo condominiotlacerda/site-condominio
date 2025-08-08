@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transparência - Condomínio</title>
+    <title>Portal da Transparência</title>
     <!-- Inclui o Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -42,19 +42,29 @@
             </div>
         </div>
 
-        <!-- Seletor de Planilhas -->
+        <!-- Seletor de Planilhas e Título Dinâmico -->
         <div class="mb-4">
             <label for="sheetSelector" class="block text-sm font-medium text-gray-700 mb-2">Selecione a Planilha:</label>
             <select id="sheetSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                <option value="171621464">Planilha 7</option>
-                <option value="0">Planilha 1</option>
-                <option value="123456789">Planilha Exemplo</option>
+                <!-- As opções abaixo foram atualizadas com os GIDs e nomes que você forneceu. -->
+                <option value="171621464" data-title="Detalhamento Agosto" selected>Detalhamento Agosto</option>
+                <option value="642435072" data-title="Setembro">Setembro</option>
+                <option value="239291763" data-title="Detalhamento Setembro">Detalhamento Setembro</option>
+                <option value="1560765496" data-title="Outubro">Outubro</option>
+                <option value="1240090346" data-title="Detalhamento Outubro">Detalhamento Outubro</option>
+                <option value="214431443" data-title="Novembro">Novembro</option>
+                <option value="184640046" data-title="Detalhamento Novembro">Detalhamento Novembro</option>
+                <option value="1886205061" data-title="Dezembro">Dezembro</option>
+                <option value="658930077" data-title="Detalhamento Dezembro">Detalhamento Dezembro</option>
+                <option value="259774068" data-title="Relatório Anual">Relatório Anual</option>
             </select>
+            <!-- Título dinâmico para mostrar a planilha selecionada -->
+            <p class="mt-2 text-sm text-gray-600">Visualizando: <span id="sheetTitle" class="font-medium text-gray-800">Detalhamento Agosto</span></p>
         </div>
 
         <!-- Conteúdo central: Planilha incorporada -->
         <div class="w-full h-[600px] rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-            <iframe id="googleSheetIframe" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQBnAawdBPzzia0IjSqS64GzPZExsM2fKHybYQakov8dKwypU1zdcIHITF76XcY8w/pubhtml?gid=171621464&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            <iframe id="googleSheetIframe" src=""></iframe>
         </div>
 
     </div>
@@ -126,15 +136,32 @@
             // Lógica para o seletor de planilhas
             const sheetSelector = document.getElementById('sheetSelector');
             const googleSheetIframe = document.getElementById('googleSheetIframe');
+            const sheetTitleSpan = document.getElementById('sheetTitle');
 
-            if (sheetSelector && googleSheetIframe) {
-                sheetSelector.addEventListener('change', (event) => {
-                    // Substitui o gid na URL do iframe para carregar a nova planilha
-                    const newGid = event.target.value;
-                    const currentSrc = googleSheetIframe.src;
-                    const newSrc = currentSrc.replace(/gid=\d+/, `gid=${newGid}`);
-                    googleSheetIframe.src = newSrc;
-                });
+            if (sheetSelector && googleSheetIframe && sheetTitleSpan) {
+                // URL base da planilha, sem o GID
+                const sheetBaseUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBnAawdBPzzia0IjSqS64GzPZExsM2fKHybYQakov8dKwypU1zdcIHITF76XcY8w/pubhtml";
+                // Parâmetros adicionais para o iframe
+                const sheetParams = "&single=true&widget=true&headers=false";
+
+                // Função para atualizar o iframe e o título
+                function updateIframeAndTitle() {
+                    const newGid = sheetSelector.value;
+                    const selectedOption = sheetSelector.options[sheetSelector.selectedIndex];
+                    const newTitle = selectedOption.dataset.title;
+
+                    // Atualiza o iframe
+                    googleSheetIframe.src = `${sheetBaseUrl}?gid=${newGid}${sheetParams}`;
+                    
+                    // Atualiza o título dinâmico
+                    sheetTitleSpan.textContent = newTitle;
+                }
+
+                // Atualiza o iframe e o título imediatamente ao carregar a página
+                updateIframeAndTitle();
+                
+                // Adiciona o listener para atualizar quando a seleção mudar
+                sheetSelector.addEventListener('change', updateIframeAndTitle);
             }
         });
     </script>
