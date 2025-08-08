@@ -5,12 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transparência - Condomínio</title>
+    <!-- Inclui o Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         body {
             font-family: 'Inter', sans-serif;
+        }
+
+        /* Estilo para o iframe de forma responsiva */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
@@ -26,7 +34,7 @@
                     class="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
                     Voltar
                 </a>
-                <!-- Botão "Sair" agora com a função de logout -->
+                <!-- Botão "Sair" com a função de logout -->
                 <button id="signOutButton"
                     class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg shadow-md hover:bg-red-700 transition duration-300">
                     Sair
@@ -34,24 +42,33 @@
             </div>
         </div>
 
+        <!-- Seletor de Planilhas -->
+        <div class="mb-4">
+            <label for="sheetSelector" class="block text-sm font-medium text-gray-700 mb-2">Selecione a Planilha:</label>
+            <select id="sheetSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <option value="171621464">Planilha 7</option>
+                <option value="0">Planilha 1</option>
+                <option value="123456789">Planilha Exemplo</option>
+            </select>
+        </div>
+
         <!-- Conteúdo central: Planilha incorporada -->
         <div class="w-full h-[600px] rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQBnAawdBPzzia0IjSqS64GzPZExsM2fKHybYQakov8dKwypU1zdcIHITF76XcY8w/pubhtml?gid=171621464&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            <iframe id="googleSheetIframe" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQBnAawdBPzzia0IjSqS64GzPZExsM2fKHybYQakov8dKwypU1zdcIHITF76XcY8w/pubhtml?gid=171621464&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
         </div>
 
     </div>
 
-    <!-- Firebase Script -->
+    <!-- Firebase e Script para Manipulação do Iframe -->
     <script type="module">
         // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Declaração de variáveis locais para evitar o erro de referência
+        // Variáveis globais fornecidas pelo ambiente
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
+        
         let app;
         let auth;
 
@@ -105,6 +122,20 @@
             }
             // Autentica o usuário ao carregar a página
             authenticate();
+
+            // Lógica para o seletor de planilhas
+            const sheetSelector = document.getElementById('sheetSelector');
+            const googleSheetIframe = document.getElementById('googleSheetIframe');
+
+            if (sheetSelector && googleSheetIframe) {
+                sheetSelector.addEventListener('change', (event) => {
+                    // Substitui o gid na URL do iframe para carregar a nova planilha
+                    const newGid = event.target.value;
+                    const currentSrc = googleSheetIframe.src;
+                    const newSrc = currentSrc.replace(/gid=\d+/, `gid=${newGid}`);
+                    googleSheetIframe.src = newSrc;
+                });
+            }
         });
     </script>
 </body>
