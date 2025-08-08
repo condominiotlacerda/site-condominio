@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transparência - Condomínio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+    <div class="relative w-full max-w-4xl p-6 bg-white rounded-xl shadow-lg">
+
+        <!-- Topo da página: Título e Botões de Navegação -->
+        <div class="flex justify-between items-center mb-6 border-b pb-4">
+            <h1 class="text-2xl font-bold text-gray-800">Transparência do Condomínio</h1>
+            <div class="flex space-x-2">
+                <a href="area_condominio.html"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
+                    Voltar
+                </a>
+                <!-- Botão "Sair" agora com a função de logout -->
+                <button id="signOutButton"
+                    class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg shadow-md hover:bg-red-700 transition duration-300">
+                    Sair
+                </button>
+            </div>
+        </div>
+
+        <!-- Conteúdo central: Planilha incorporada -->
+        <div class="w-full h-[600px] rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+            <iframe
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQBnAawdBPzzia0IjSqS64GzPZExsM2fKHybYQakov8dKwypU1zdcIHITF76XcY8w/pubhtml?gid=171621464&amp;single=true&amp;widget=true&amp;headers=false"
+                class="w-full h-full" frameborder="0"></iframe>
+        </div>
+
+    </div>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        // Importações do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // Declaração de variáveis locais para evitar o erro de referência
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        let app;
+        let auth;
+
+        // Inicializa o Firebase somente se a configuração estiver disponível
+        if (firebaseConfig) {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+        }
+
+        // Função de login, caso o usuário não esteja autenticado
+        async function authenticate() {
+            if (!auth) {
+                console.error("Firebase Auth não foi inicializado.");
+                return;
+            }
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+            }
+        }
+
+        // Função para lidar com o logout
+        async function handleSignOut() {
+            if (!auth) {
+                console.error("Firebase Auth não foi inicializado. Redirecionando...");
+                window.location.href = "index.html";
+                return;
+            }
+            try {
+                // Tenta fazer o logout no Firebase
+                await signOut(auth);
+                // Redireciona para a página inicial (index.html)
+                window.location.href = "index.html";
+            } catch (error) {
+                console.error("Erro ao fazer logout:", error);
+                // Se houver erro, apenas redireciona para a página inicial como fallback
+                window.location.href = "index.html";
+            }
+        }
+        
+        window.addEventListener('load', () => {
+            // Adiciona um listener ao botão de Sair
+            const signOutButton = document.getElementById('signOutButton');
+            if (signOutButton) {
+                signOutButton.addEventListener('click', handleSignOut);
+            }
+            // Autentica o usuário ao carregar a página
+            authenticate();
+        });
+    </script>
+</body>
+
+</html>
