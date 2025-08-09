@@ -32,24 +32,8 @@
         <div class="mb-4">
             <label for="sheetSelector" class="block text-sm font-medium text-gray-700 mb-2">Selecione a Planilha:</label>
             <select id="sheetSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                <option value="2002207267" data-title="Detalhamento Fevereiro" selected>Detalhamento Fevereiro</option>
-                <option value="187844436" data-title="Detalhamento Março">Detalhamento Março</option>
-                <option value="219522419" data-title="Detalhamento Abril">Detalhamento Abril</option>
-                <option value="715512240" data-title="Detalhamento Maio">Detalhamento Maio</option>
-                <option value="517616751" data-title="Detalhamento Junho">Detalhamento Junho</option>
-                <option value="2069497331" data-title="Detalhamento Julho">Detalhamento Julho</option>
-                <option value="1253946188" data-title="Detalhamento Agosto">Detalhamento Agosto</option>
-                <option value="1456022122" data-title="Setembro">Setembro</option>
-                <option value="1123793841" data-title="Detalhamento Setembro">Contas Setembro</option>
-                <option value="804011755" data-title="Outubro">Outubro</option>
-                <option value="1135396226" data-title="Detalhamento Outubro">Detalhamento Outubro</option>
-                <option value="1338025134" data-title="Novembro">Novembro</option>
-                <option value="68210221" data-title="Detalhamento Novembro">Detalhamento Novembro</option>
-                <option value="1559638504" data-title="Dezembro">Dezembro</option>
-                <option value="461117062" data-title="Detalhamento Dezembro">Detalhamento Dezembro</option>
-                <option value="1398152587" data-title="Relatório Anual">Relatório Anual</option>
-            </select>
-            <p class="mt-2 text-sm text-gray-600">Visualizando: <span id="sheetTitle" class="font-medium text-gray-800">Detalhamento Fevereiro</span></p>
+                </select>
+            <p class="mt-2 text-sm text-gray-600">Visualizando: <span id="sheetTitle" class="font-medium text-gray-800">Carregando...</span></p>
         </div>
 
         <div class="w-full h-[600px] rounded-lg overflow-hidden border border-gray-200 shadow-sm">
@@ -61,7 +45,7 @@
     <script type="module">
         // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // Variáveis globais fornecidas pelo ambiente
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
@@ -92,13 +76,8 @@
                 console.error("Erro na autenticação:", error);
             }
         }
-
-        // A função handleSignOut e o listener do botão 'signOutButton' foram removidos,
-        // pois o botão 'Sair' foi removido do HTML.
-
-        window.addEventListener('load', () => {
-            // O listener para o botão de Sair foi removido
-            
+        
+        window.addEventListener('load', async () => {
             // Autentica o usuário ao carregar a página
             authenticate();
 
@@ -108,29 +87,59 @@
             const sheetTitleSpan = document.getElementById('sheetTitle');
 
             if (sheetSelector && googleSheetIframe && sheetTitleSpan) {
-                // URL base da planilha, sem o GID
                 const sheetBaseUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBnAawdBPzzia0IjSqS64GzPZExsM2fKHybYQakov8dKwypU1zdcIHITF76XcY8w/pubhtml";
-                // Parâmetros adicionais para o iframe
                 const sheetParams = "&single=true&widget=true&headers=false";
 
-                // Função para atualizar o iframe e o título
-                function updateIframeAndTitle() {
-                    const newGid = sheetSelector.value;
-                    const selectedOption = sheetSelector.options[sheetSelector.selectedIndex];
-                    const newTitle = selectedOption.dataset.title;
+                try {
+                    const response = await fetch('gids.json');
+                    const gidsData = await response.json();
 
-                    // Atualiza o iframe
-                    googleSheetIframe.src = `${sheetBaseUrl}?gid=${newGid}${sheetParams}`;
+                    // Popula o seletor com as opções do JSON (agora com grupos de anos)
+                    gidsData.forEach(yearGroup => {
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = yearGroup.year; // O label do grupo será o ano
+
+                        yearGroup.months.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.gid || ''; // Use '' se o GID for null
+                            option.textContent = item.title;
+                            option.disabled = (item.gid === null); // Desabilita se o GID for null
+
+                            // Define a primeira opção com GID não nulo como selecionada por padrão
+                            // Isso garante que um link válido seja carregado inicialmente
+                            if (!sheetSelector.hasChildNodes() && item.gid !== null) {
+                                option.selected = true;
+                            }
+                            optgroup.appendChild(option);
+                        });
+                        sheetSelector.appendChild(optgroup);
+                    });
+
+                    // Função para atualizar o iframe e o título
+                    function updateIframeAndTitle() {
+                        const newGid = sheetSelector.value;
+                        const selectedOption = sheetSelector.options[sheetSelector.selectedIndex];
+                        const newTitle = selectedOption.textContent;
+
+                        if (newGid) { // Só atualiza o iframe se um GID válido for selecionado
+                            googleSheetIframe.src = `${sheetBaseUrl}?gid=${newGid}${sheetParams}`;
+                        } else {
+                            googleSheetIframe.src = ""; // Limpa o iframe se GID for nulo
+                        }
+                        
+                        sheetTitleSpan.textContent = newTitle;
+                    }
+
+                    // Atualiza o iframe e o título imediatamente ao carregar a página
+                    updateIframeAndTitle();
                     
-                    // Atualiza o título dinâmico
-                    sheetTitleSpan.textContent = newTitle;
-                }
+                    // Adiciona o listener para atualizar quando a seleção mudar
+                    sheetSelector.addEventListener('change', updateIframeAndTitle);
 
-                // Atualiza o iframe e o título imediatamente ao carregar a página
-                updateIframeAndTitle();
-                
-                // Adiciona o listener para atualizar quando a seleção mudar
-                sheetSelector.addEventListener('change', updateIframeAndTitle);
+                } catch (error) {
+                    console.error("Erro ao carregar os GIDs do arquivo gids.json:", error);
+                    sheetTitleSpan.textContent = "Erro ao carregar planilhas.";
+                }
             }
         });
     </script>
