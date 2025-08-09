@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transparência - Condomínio</title>
-    <!-- Inclui o Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -24,31 +23,15 @@
 </head>
 
 <body class="bg-gray-50 flex items-center justify-center min-h-screen">
-    <!-- Ajustado: A largura máxima do container principal foi aumentada para max-w-full -->
     <div class="relative w-full max-w-full p-6 bg-white rounded-xl shadow-lg">
 
-        <!-- Topo da página: Título e Botões de Navegação -->
         <div class="flex justify-between items-center mb-6 border-b pb-4">
             <h1 class="text-2xl font-bold text-gray-800">Portal da Transparência</h1>
-            <div class="flex space-x-2">
-                <!-- Alterado: O link agora usa um caminho absoluto para garantir que sempre volte para a raiz. -->
-                <a href="/area_condominio.html"
-                    class="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-lg shadow-md hover:bg-gray-300 transition duration-300">
-                    Voltar
-                </a>
-                <!-- Botão "Sair" com a função de logout -->
-                <button id="signOutButton"
-                    class="px-4 py-2 bg-red-600 text-white font-medium rounded-lg shadow-md hover:bg-red-700 transition duration-300">
-                    Sair
-                </button>
             </div>
-        </div>
 
-        <!-- Seletor de Planilhas e Título Dinâmico -->
         <div class="mb-4">
             <label for="sheetSelector" class="block text-sm font-medium text-gray-700 mb-2">Selecione a Planilha:</label>
             <select id="sheetSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                <!-- As opções abaixo foram atualizadas com os GIDs e nomes que você forneceu. -->
                 <option value="2002207267" data-title="Detalhamento Fevereiro" selected>Detalhamento Fevereiro</option>
                 <option value="187844436" data-title="Detalhamento Março">Detalhamento Março</option>
                 <option value="219522419" data-title="Detalhamento Abril">Detalhamento Abril</option>
@@ -66,19 +49,15 @@
                 <option value="461117062" data-title="Detalhamento Dezembro">Detalhamento Dezembro</option>
                 <option value="1398152587" data-title="Relatório Anual">Relatório Anual</option>
             </select>
-            <!-- Título dinâmico para mostrar a planilha selecionada -->
             <p class="mt-2 text-sm text-gray-600">Visualizando: <span id="sheetTitle" class="font-medium text-gray-800">Detalhamento Fevereiro</span></p>
         </div>
 
-        <!-- Conteúdo central: Planilha incorporada -->
-        <!-- Ajustado: A altura do iframe foi aumentada para 750px -->
         <div class="w-full h-[600px] rounded-lg overflow-hidden border border-gray-200 shadow-sm">
             <iframe id="googleSheetIframe" src=""></iframe>
         </div>
 
     </div>
 
-    <!-- Firebase e Script para Manipulação do Iframe -->
     <script type="module">
         // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -114,31 +93,12 @@
             }
         }
 
-        // Função para lidar com o logout
-        async function handleSignOut() {
-            if (!auth) {
-                console.error("Firebase Auth não foi inicializado. Redirecionando...");
-                window.location.href = "index.html";
-                return;
-            }
-            try {
-                // Tenta fazer o logout no Firebase
-                await signOut(auth);
-                // Redireciona para a página inicial (index.html)
-                window.location.href = "index.html";
-            } catch (error) {
-                console.error("Erro ao fazer logout:", error);
-                // Se houver erro, apenas redireciona para a página inicial como fallback
-                window.location.href = "index.html";
-            }
-        }
-        
+        // A função handleSignOut e o listener do botão 'signOutButton' foram removidos,
+        // pois o botão 'Sair' foi removido do HTML.
+
         window.addEventListener('load', () => {
-            // Adiciona um listener ao botão de Sair
-            const signOutButton = document.getElementById('signOutButton');
-            if (signOutButton) {
-                signOutButton.addEventListener('click', handleSignOut);
-            }
+            // O listener para o botão de Sair foi removido
+            
             // Autentica o usuário ao carregar a página
             authenticate();
 
