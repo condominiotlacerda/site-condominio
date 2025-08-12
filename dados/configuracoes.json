@@ -8,49 +8,49 @@
   "boletos": {
   "apto_1": {
     "Taxa Condominial": "boleto_tx_condominio_apto_1.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_1.pdf",
-    "Ressarc. síndico": "boleto_tx_2_apto_1.pdf",
+    "": "boleto_tx_1_apto_1.pdf",
+    "": "boleto_tx_2_apto_1.pdf",
     "": "boleto_tx_3_apto_1.pdf"
   },
   "apto_101": {
     "Taxa Condominial": "boleto_tx_condominio_apto_101.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_101.pdf",
+    "": "boleto_tx_1_apto_101.pdf",
     "": "boleto_tx_2_apto_101.pdf",
     "": "boleto_tx_3_apto_101.pdf"
   },
   "apto_102": {
     "Taxa Condominial": "boleto_tx_condominio_apto_102.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_102.pdf",
-    "Ressarc. síndico": "boleto_tx_2_apto_102.pdf",
+    "": "boleto_tx_1_apto_102.pdf",
+    "": "boleto_tx_2_apto_102.pdf",
     "": "boleto_tx_3_apto_102.pdf"
   },
   "apto_201": {
     "Taxa Condominial": "boleto_tx_condominio_apto_201.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_201.pdf",
-    "Ressarc. síndico": "boleto_tx_2_apto_201.pdf",
+    "": "boleto_tx_1_apto_201.pdf",
+    "": "boleto_tx_2_apto_201.pdf",
     "": "boleto_tx_3_apto_201.pdf"
   },
   "apto_202": {
     "Taxa Condominial": "boleto_tx_condominio_apto_202.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_202.pdf",
-    "Ressarc. síndico": "boleto_tx_2_apto_202.pdf",
+    "": "boleto_tx_1_apto_202.pdf",
+    "": "boleto_tx_2_apto_202.pdf",
     "": "boleto_tx_3_apto_202.pdf"
   },
   "apto_301": {
     "Taxa Condominial": "boleto_tx_condominio_apto_301.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_301.pdf",
-    "Ressarc. síndico": "boleto_tx_2_apto_301.pdf",
+    "": "boleto_tx_1_apto_301.pdf",
+    "": "boleto_tx_2_apto_301.pdf",
     "": "boleto_tx_3_apto_301.pdf"
   },
   "apto_302": {
     "Taxa Condominial": "boleto_tx_condominio_apto_302.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_302.pdf",
-    "Ressarc. síndico": "boleto_tx_2_apto_302.pdf",
+    "": "boleto_tx_1_apto_302.pdf",
+    "": "boleto_tx_2_apto_302.pdf",
     "": "boleto_tx_3_apto_302.pdf"
   },
   "apto_401": {
     "Taxa Condominial": "boleto_tx_condominio_apto_401.pdf",
-    "Taxa Mnt Emergenciais": "boleto_tx_1_apto_401.pdf",
+    "": "boleto_tx_1_apto_401.pdf",
     "": "boleto_tx_2_apto_401.pdf",
     "": "boleto_tx_3_apto_401.pdf"
   }
@@ -132,6 +132,7 @@
     "": "seu_dinheiro_5.pdf"
   }
 }
+
 
 
 
