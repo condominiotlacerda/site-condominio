@@ -2,17 +2,22 @@
 <html lang="pt-br">
 <head>
     <script type="module">
+        
         // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+        //import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
         import { app } from './firebase.js';
+        
+        //========================================================================================
+        import { logAccess } from './utils.js'; // Adicione esta linha
+        //========================================================================================
 
         const analytics = getAnalytics(app);
-        const db = getDatabase(app); 
+        //const db = getDatabase(app); 
         const authFirebase = getFirebaseAuth(app); 
         const auth = getAuth(app); 
 
