@@ -43,34 +43,50 @@
     </div>
 
     <script type="module">
-        // Importações do Firebase
-        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Importa as funções de autenticação do Firebase.
+        // O 'getAuth' é importado para poder usar 'signInAnonymously' e 'signInWithCustomToken'
+        import { signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
-        // Importa a instância do app Firebase e a função logAccess
+        // Importa a instância do app Firebase (e a instância de auth já inicializada)
+        // e a função logAccess do SEU arquivo firebase.js e utils.js.
         // Caminhos relativos: './' se na mesma pasta, '../' se na pasta acima.
         // Se transparencia.html estiver em 'transparencia/' e os outros na raiz, '../' está correto.
-        import { app } from '../firebase.js'; 
+        import { app, auth } from '../firebase.js'; 
         import { logAccess } from '../utils.js'; 
 
         // Variáveis globais fornecidas pelo ambiente (se usadas)
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
-        let authInstance; // Variável para armazenar a instância de auth
-
+        // A instância 'auth' já é importada e está pronta para uso, não precisa de 'authInstance' separada.
+        
         // Função de login, caso o usuário não esteja autenticado
         async function authenticate() {
             try {
-                // Inicializa authInstance aqui, garantindo que 'app' e 'getAuth' estejam prontos
-                authInstance = getAuth(app); 
-
+                // Comenta este bloco para forçar a autenticação anônima e depurar
+                /*
                 if (initialAuthToken) {
-                    await signInWithCustomToken(authInstance, initialAuthToken);
+                    await signInWithCustomToken(auth, initialAuthToken); 
                 } else {
-                    await signInAnonymously(authInstance);
+                    await signInAnonymously(auth); 
                 }
+                */
+                
+                // Força a autenticação anônima para depuração
+                await signInAnonymously(auth); 
+                
             } catch (error) {
                 console.error("Erro na autenticação:", error);
+                // Você pode adicionar um log de erro aqui, se desejar
+                logAccess({
+                    accessedDocument: 'Portal da Transparencia HTML',
+                    details: {
+                        error: error.message,
+                        context: 'Firebase Auth Error',
+                        page: 'transparencia.html',
+                        actionType: 'Auth Fail'
+                    }
+                });
             }
         }
         
