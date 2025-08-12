@@ -1,87 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <script type="module">
-        // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
-        // Importações diretas do Firebase CDN para módulos específicos que você usa APENAS AQUI
-        // Ex: getAnalytics e logEvent são específicos desta página para rastreamento.
-        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        // Importações de auth: use o 'auth' exportado do seu firebase.js
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-
-        // Importa a instância do app Firebase e a instância de auth do SEU arquivo firebase.js
-        // Isso garante que o app e o auth são inicializados UMA ÚNICA VEZ.
-        import { app, auth, analytics, db } from './firebase.js'; 
-        
-        // Importa a função logAccess do utils.js
-        import { logAccess } from './utils.js'; 
-
-        // As variáveis 'analytics', 'auth' e 'db' já vêm importadas e inicializadas de './firebase.js'
-        // Portanto, as linhas abaixo são REMOVIDAS (eram redundantes ou causavam conflito)
-        // const analytics = getAnalytics(app); 
-        // const authFirebase = getFirebaseAuth(app); // getFirebaseAuth é o mesmo que getAuth
-        // const auth = getAuth(app); 
-
-        // Registra o evento de visualização da página (usando o 'analytics' importado)
-        logEvent(analytics, 'page_view');
-
-        // Monitora o estado de autenticação (usando o 'auth' importado)
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Usuário está logado, pode continuar na página
-            } else {
-                // Usuário não está logado, redirecione para a página de login
-                console.log("Usuário não autenticado, redirecionando para login...");
-                window.location.href = 'index.html';
-            }
-        });
-
-        // CÓDIGO PARA EXIBIR O NOME DO USUÁRIO
-        document.addEventListener('DOMContentLoaded', () => {
-            const nomeUsuario = localStorage.getItem('userName');
-            const userNameDisplay = document.getElementById('user-name-display');
-
-            if (nomeUsuario && userNameDisplay) {
-                userNameDisplay.textContent = `Bem-vindo(a): ${nomeUsuario}`;
-            }
-        });
-        // =====================================================================
-
-        // Função para sair (logout)
-        function sair() {
-            signOut(auth).then(() => { // Usa o 'auth' importado do firebase.js
-                console.log('Usuário desconectado');
-                localStorage.clear(); // Limpa todo o localStorage
-                window.location.href = 'index.html';
-            }).catch((error) => {
-                console.error('Erro ao fazer logout:', error);
-            });
-        }
-        window.sair = sair; // Torna a função globalmente acessível para o onclick
-
-        // ==================== 🔥 FIM FIREBASE 🔥 ====================
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css?v=1.1">
     <title>Condomínio T Lacerda - Boletos e Contas</title>
-    <script src="script.js" defer type="module"></script>
+    <script type="module" src="script.js" defer></script> 
+    
     <style>
         /* Estilos específicos para o cabeçalho fixo com nome e botão */
         #top-right-header {
-            position: fixed; /* Fixa na tela */
+            position: fixed;
             top: 10px;
             right: 10px;
-            z-index: 1002; /* Garante que fique acima de outros elementos */
-            display: flex; /* Usa flexbox para alinhar horizontalmente */
-            align-items: center; /* Alinha verticalmente no centro */
-            gap: 10px; /* Espaço entre o nome e o botão */
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             padding: 5px 10px;
         }
 
         #user-name-display {
             font-weight: normal;
-            color: #333; /* Ou a cor que você preferir */
+            color: #333;
             font-size: 0.9em;
         }
 
@@ -94,27 +36,29 @@
             cursor: pointer;
             font-size: 1em;
         }
+
         .logout-button:hover {
             background-color: #d32f2f;
         }
     </style>
 </head>
+
 <body>
     <div id="top-right-header">
         <span id="user-name-display"></span>
-        <button class="logout-button" onclick="sair()">Sair</button>
+        <button class="logout-button" id="logout-button">Sair</button>
     </div>
 
     <div id="painel-aviso" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1001; overflow: auto;">
-      <div style="background-color: #f9f9f9; max-width: 600px; margin: 15% auto; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); text-align: center;">
-        <h2>Aviso Importante</h2>
-        <hr>
-        <div id="aviso-texto" style="margin-bottom: 20px; text-align: left;">
-          </div>
-        <button id="entendi-aviso" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">Entendi</button>
-      </div>
+        <div style="background-color: #f9f9f9; max-width: 600px; margin: 15% auto; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); text-align: center;">
+            <h2>Aviso Importante</h2>
+            <hr>
+            <div id="aviso-texto" style="margin-bottom: 20px; text-align: left;">
+            </div>
+            <button id="entendi-aviso" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em;">Entendi</button>
+        </div>
     </div>
-    
+
     <header>
         <img src="images/logo_cond.jpg" alt="Logo do Condomínio" class="logo">
     </header>
@@ -125,16 +69,16 @@
 
         <h1>Condomínio T Lacerda</h1>
         <p id="welcome-message">Boletos para 10/08/2025 já disponíveis.</p>
-        
+
         <div class="apartment-section">
-            <button class="apartment-button" id="apto1" disabled onclick="loadFiles('apto1')">Apartamento 1</button>
-            <button class="apartment-button" id="apto101" disabled onclick="loadFiles('apto101')">Apartamento 101</button>
-            <button class="apartment-button" id="apto102" disabled onclick="loadFiles('apto102')">Apartamento 102</button>
-            <button class="apartment-button" id="apto201" disabled onclick="loadFiles('apto201')">Apartamento 201</button>
-            <button class="apartment-button" id="apto202" disabled onclick="loadFiles('apto202')">Apartamento 202</button>
-            <button class="apartment-button" id="apto301" disabled onclick="loadFiles('apto301')">Apartamento 301</button>
-            <button class="apartment-button" id="apto302" disabled onclick="loadFiles('apto302')">Apartamento 302</button>
-            <button class="apartment-button" id="apto401" disabled onclick="loadFiles('apto401')">Apartamento 401</button>
+            <button class="apartment-button" id="apto1" data-apartment-id="apto1" disabled>Apartamento 1</button>
+            <button class="apartment-button" id="apto101" data-apartment-id="apto101" disabled>Apartamento 101</button>
+            <button class="apartment-button" id="apto102" data-apartment-id="apto102" disabled>Apartamento 102</button>
+            <button class="apartment-button" id="apto201" data-apartment-id="apto201" disabled>Apartamento 201</button>
+            <button class="apartment-button" id="apto202" data-apartment-id="apto202" disabled>Apartamento 202</button>
+            <button class="apartment-button" id="apto301" data-apartment-id="apto301" disabled>Apartamento 301</button>
+            <button class="apartment-button" id="apto302" data-apartment-id="apto302" disabled>Apartamento 302</button>
+            <button class="apartment-button" id="apto401" data-apartment-id="apto401" disabled>Apartamento 401</button>
         </div>
         <hr>
         <div id="file-list-wrapper">
@@ -171,12 +115,12 @@
                 </select>
                 <ul id="contas-list" style="color: black;">
                 </ul>
-                <a href="#" onclick="openFileViewer('transparencia/transparencia.html'); logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: 'Portal da Transparência HTML' });">Portal da Transparência</a>
+                <a href="transparencia.html" id="transparencia-link">Portal da Transparência</a>
             </section>
-            
+
             <section id="notifications-container" class="file-box" style="display: none; transition: opacity 0.5s, transform 0.3s ease, border-color 0.4s ease; height: 300px; width: 300px; overflow: auto;">
                 <h2>Histórico de notificações</h2>
-                <hr>    
+                <hr>
                 <div id="notifications-list" style="color: black; white-space: pre-line;">
                 </div>
             </section>
@@ -187,23 +131,24 @@
                 <div id="documentos-list" style="color: black;">
                 </div>
             </section>
-                
+
         </div>
         <hr>
-            <div class="image-row">
-                <img src="images/tokio_marine.jpg" width="100" height="100" alt="Imagem Tokio Marine">
-                <img src="images/cora.jpg" width="150" height="40" alt="Imagem Cora">    
-            </div>
+        <div class="image-row">
+            <img src="images/tokio_marine.jpg" width="100" height="100" alt="Imagem Tokio Marine">
+            <img src="images/cora.jpg" width="150" height="40" alt="Imagem Cora">
+        </div>
         <hr>
-        
+
         <section id="viewer-container" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; transition: opacity 0.5s;">
             <iframe id="file-viewer" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;"></iframe>
             <a id="download-button" style="position: absolute; top: 20px; right: 20px; color: white; text-decoration: none; padding: 10px; background-color: #007bff; border-radius: 5px;" download>Baixar</a>
-            <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('viewer-container').style.display='none'; setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);">Fechar</button>
+            <button style="position: absolute; top: 20px; left: 20px; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;" id="close-viewer-button">Fechar</button>
         </section>
 
         <div style="text-align: center; margin-top: 20px;">
-            <a href="#" onclick="openFileViewer('politicas/politica_uso.pdf'); logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: 'Visualizada Política de Uso' });">Política de Uso</a> <a href="#" onclick="openFileViewer('politicas/politica_privacidade.pdf'); logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: 'Visualizada Política de Privacidade' });">Política de Privacidade</a>
+            <a href="politicas/politica_uso.pdf" id="politica-uso-link">Política de Uso</a> 
+            <a href="politicas/politica_privacidade.pdf" id="politica-privacidade-link">Política de Privacidade</a>
         </div>
         <section id="login" style="display:none;">
             <h2>Login</h2>
@@ -240,26 +185,127 @@
     </footer>
 
     <script type="module">
-        // Este script precisaria do arquivo "script.js" no mesmo diretório
-        // para funcionar corretamente. Como ele não está disponível, a funcionalidade
-        // de mostrar arquivos pode não operar como o esperado.
-        import { showFiles } from './script.js';
+        // Importa as funções do Firebase que serão usadas diretamente aqui
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAnalytics, logEvent as firebaseLogEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
+        
+        // Importa as instâncias de Firebase (app, auth, analytics, db) e as funções customizadas (logAccess, showFiles, loadBoletos, openFileViewer)
+        import { app, auth, analytics, db } from './firebase.js'; 
+        import { logAccess, showFiles, loadBoletos, openFileViewer } from './script.js'; // Assumindo que essas funções estão em script.js E SÃO EXPORTADAS
+        import { exibirAvisoSeNecessario } from './script.js'; // Assumindo que exibirAvisoSeNecessario também é exportada
+        
+        // Loga o evento de visualização da página (usando o 'analytics' importado)
+        // Use firebaseLogEvent para evitar conflito com seu logAccess, se necessário.
+        firebaseLogEvent(analytics, 'page_view');
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const apartmentId = localStorage.getItem('apartmentId');
-            if (apartmentId) {
-                const aptoNumber = apartmentId.replace('apto', '');
-                const apartmentButton = document.getElementById('apto' + aptoNumber);
-                if (apartmentButton) {
-                    apartmentButton.disabled = false;
+        // Monitora o estado de autenticação (usando o 'auth' importado)
+        onAuthStateChanged(auth, async (user) => { // Marcado como async pois pode chamar funções assíncronas
+            if (user) {
+                // Usuário está logado, pode continuar na página
+                // Obtenha o ID do apartamento do localStorage e habilite o botão
+                const apartmentId = localStorage.getItem('apartmentId');
+                if (apartmentId) {
+                    const aptoNumber = apartmentId.replace('apto', '');
+                    const apartmentButton = document.getElementById('apto' + aptoNumber);
+                    if (apartmentButton) {
+                        apartmentButton.disabled = false;
+                    }
+                    // Chama a função para exibir arquivos e boletos para o apartamento logado
+                    await showFiles(apartmentId);
+                    await loadBoletos(apartmentId);
                 }
+                await exibirAvisoSeNecessario(apartmentId); // Chama a função do aviso
+            } else {
+                // Usuário não está logado, redirecione para a página de login
+                console.log("Usuário não autenticado, redirecionando para login...");
+                window.location.href = 'index.html';
             }
         });
 
-        // Função para ser chamada no onclick dos botões
-        window.loadFiles = function(apartment) {
-            showFiles(apartment);
-        };
+        // CÓDIGO PARA EXIBIR O NOME DO USUÁRIO
+        document.addEventListener('DOMContentLoaded', () => {
+            const nomeUsuario = localStorage.getItem('userName');
+            const userNameDisplay = document.getElementById('user-name-display');
+            if (nomeUsuario && userNameDisplay) {
+                userNameDisplay.textContent = `Bem-vindo(a): ${nomeUsuario}`;
+            }
+
+            // Adiciona listeners para os botões de apartamento
+            document.querySelectorAll('.apartment-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const apartmentId = this.dataset.apartmentId; // Obtém o ID do atributo data-apartment-id
+                    showFiles(apartmentId);
+                    loadBoletos(apartmentId);
+                });
+            });
+
+            // Adiciona listener para o link "Portal da Transparência"
+            const transparenciaLink = document.getElementById('transparencia-link');
+            if (transparenciaLink) {
+                transparenciaLink.addEventListener('click', (event) => {
+                    // event.preventDefault(); // Comentar esta linha se você quer que o link navegue.
+                                            // Se você quer que o log ocorra E o link navegue, não use preventDefault.
+                    logAccess({ 
+                        accessedDocument: 'Portal da Transparência', 
+                        details: { 
+                            page: 'area_condominio.html', 
+                            actionType: 'Click Link' 
+                        } 
+                    });
+                    // Opcional: Para garantir a navegação após o log, se preventDefault foi usado.
+                    // window.location.href = transparenciaLink.href; 
+                });
+            }
+
+            // Adiciona listener para o botão de logout
+            const logoutButton = document.getElementById('logout-button');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', sair);
+            }
+
+            // Adiciona listeners para os links de política
+            const politicaUsoLink = document.getElementById('politica-uso-link');
+            if (politicaUsoLink) {
+                politicaUsoLink.addEventListener('click', (event) => {
+                    event.preventDefault(); // Previne a navegação direta para abrir no viewer
+                    openFileViewer('politicas/politica_uso.pdf'); 
+                    logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: 'Visualizada Política de Uso' });
+                });
+            }
+
+            const politicaPrivacidadeLink = document.getElementById('politica-privacidade-link');
+            if (politicaPrivacidadeLink) {
+                politicaPrivacidadeLink.addEventListener('click', (event) => {
+                    event.preventDefault(); // Previne a navegação direta para abrir no viewer
+                    openFileViewer('politicas/politica_privacidade.pdf'); 
+                    logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: 'Visualizada Política de Privacidade' });
+                });
+            }
+
+            // Adiciona listener para o botão "Fechar" do visualizador de arquivos
+            const closeViewerButton = document.getElementById('close-viewer-button');
+            if (closeViewerButton) {
+                closeViewerButton.addEventListener('click', () => {
+                    document.getElementById('viewer-container').style.display = 'none';
+                    setTimeout(() => document.getElementById('viewer-container').classList.remove('active'), 50);
+                });
+            }
+        });
+
+        // Função para sair (logout) - precisa ser exportada ou definida globalmente se for chamada de fora
+        async function sair() {
+            try {
+                await signOut(auth); // Usa o 'auth' importado do firebase.js
+                console.log('Usuário desconectado');
+                localStorage.clear(); // Limpa todo o localStorage
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Erro ao fazer logout:', error);
+            }
+        }
+        // Se 'sair' precisar ser global para onclicks antigos, mas com event listeners já não é necessário
+        // window.sair = sair; 
     </script>
 </body>
+
 </html>
