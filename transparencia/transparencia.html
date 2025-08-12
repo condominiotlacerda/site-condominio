@@ -27,12 +27,12 @@
 
         <div class="flex justify-between items-center mb-6 border-b pb-4">
             <h1 class="text-2xl font-bold text-gray-800">Portal da Transparência</h1>
-            </div>
+        </div>
 
         <div class="mb-4">
             <label for="sheetSelector" class="block text-sm font-medium text-gray-700 mb-2">Selecione a Planilha:</label>
-            <select id="sheetSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md **shadow-sm bg-white border border-gray-300 appearance-none**">
-                </select>
+            <select id="sheetSelector" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm bg-white border border-gray-300 appearance-none">
+            </select>
             <p class="mt-2 text-sm text-gray-600">Visualizando: <span id="sheetTitle" class="font-medium text-gray-800">Carregando...</span></p>
         </div>
 
@@ -46,19 +46,26 @@
         // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Importa a instância do app Firebase e a função logAccess do arquivo utils.js
+        // ATENÇÃO: Verifique se o caminho '../firebase.js' e '../utils.js' está correto para sua estrutura de pastas.
+        // Se transparencia.html estiver na raiz, use './firebase.js' e './utils.js'.
+        import { app } from '../firebase.js'; 
+        import { logAccess } from '../utils.js'; 
 
         // Variáveis globais fornecidas pelo ambiente
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
-        let app;
-        let auth;
+        let auth; // 'app' já vem do import de firebase.js
 
-        // Inicializa o Firebase somente se a configuração estiver disponível
-        if (firebaseConfig) {
-            app = initializeApp(firebaseConfig);
+        // Inicializa o Firebase Auth usando a instância 'app' importada
+        if (app) { // Verifica se 'app' foi inicializado via firebase.js
             auth = getAuth(app);
+        } else if (firebaseConfig) { // Fallback caso 'app' não seja importado, mas firebaseConfig esteja disponível
+             app = initializeApp(firebaseConfig);
+             auth = getAuth(app);
         }
+
 
         // Função de login, caso o usuário não esteja autenticado
         async function authenticate() {
@@ -79,7 +86,7 @@
         
         window.addEventListener('load', async () => {
             // Autentica o usuário ao carregar a página
-            authenticate();
+            await authenticate();
 
             // Lógica para o seletor de planilhas
             const sheetSelector = document.getElementById('sheetSelector');
@@ -87,6 +94,7 @@
             const sheetTitleSpan = document.getElementById('sheetTitle');
 
             if (sheetSelector && googleSheetIframe && sheetTitleSpan) {
+                // Certifique-se de que esta URL base está correta para sua planilha publicada
                 const sheetBaseUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLf07OSWqU0f_dGSVSK86HpsECXqhpDKCGGtidysYdLZQw6Mm8cZw4PYi9k0Mox-nI9fiwF6eByTfe/pubhtml";
                 const sheetParams = "&single=true&widget=true&headers=false";
 
@@ -115,12 +123,13 @@
                         sheetSelector.appendChild(optgroup);
                     });
 
-                    // Função para atualizar o iframe e o título
-                    function updateIframeAndTitle() {
+                    // Função para atualizar o iframe, o título e REGISTRAR O LOG
+                    function updateIframeAndTitle(isInitialLoad = false) {
                         const newGid = sheetSelector.value;
                         const selectedOption = sheetSelector.options[sheetSelector.selectedIndex];
                         const newTitle = selectedOption.textContent;
-
+                        
+                        // Atualiza o iframe
                         if (newGid) { // Só atualiza o iframe se um GID válido for selecionado
                             googleSheetIframe.src = `${sheetBaseUrl}?gid=${newGid}${sheetParams}`;
                         } else {
@@ -128,17 +137,38 @@
                         }
                         
                         sheetTitleSpan.textContent = newTitle;
+
+                        // REGISTRA O LOG
+                        logAccess({
+                            accessedDocument: 'Portal da Transparencia HTML', // Documento base
+                            details: {
+                                selectedSheet: newTitle,
+                                gid: newGid,
+                                page: 'transparencia.html',
+                                actionType: isInitialLoad ? 'Load Page' : 'Sheet Selector Change' // Diferencia o tipo de ação
+                            }
+                        });
                     }
 
                     // Atualiza o iframe e o título imediatamente ao carregar a página
-                    updateIframeAndTitle();
+                    updateIframeAndTitle(true); // Passa true para indicar que é a carga inicial
                     
                     // Adiciona o listener para atualizar quando a seleção mudar
-                    sheetSelector.addEventListener('change', updateIframeAndTitle);
+                    sheetSelector.addEventListener('change', () => updateIframeAndTitle(false)); // Passa false para indicar mudança manual
 
                 } catch (error) {
                     console.error("Erro ao carregar os GIDs do arquivo gids.json:", error);
                     sheetTitleSpan.textContent = "Erro ao carregar planilhas.";
+                    // Loga o erro também
+                    logAccess({
+                        accessedDocument: 'Portal da Transparencia HTML',
+                        details: {
+                            error: error.message,
+                            context: 'gids.json load error',
+                            page: 'transparencia.html',
+                            actionType: 'Error'
+                        }
+                    });
                 }
             }
         });
