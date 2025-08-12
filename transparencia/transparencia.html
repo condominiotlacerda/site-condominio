@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transparência - Condomínio</title>
+    <title>Portal da Transparência</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -44,40 +44,23 @@
 
     <script type="module">
         // Importa as funções de autenticação do Firebase.
-        // O 'getAuth' é importado para poder usar 'signInAnonymously' e 'signInWithCustomToken'
-        import { signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
-        // Importa a instância do app Firebase (e a instância de auth já inicializada)
-        // e a função logAccess do SEU arquivo firebase.js e utils.js.
-        // Caminhos relativos: './' se na mesma pasta, '../' se na pasta acima.
-        // Se transparencia.html estiver em 'transparencia/' e os outros na raiz, '../' está correto.
+        // Importa a instância do app Firebase e a instância de auth do SEU arquivo firebase.js.
+        // Importa logAccess do script.js, que agora será o responsável pelo logging.
         import { app, auth } from '../firebase.js'; 
-        import { logAccess } from '../utils.js'; 
+        import { logAccess } from '../script.js'; // <-- Importa logAccess do script.js
+        
+        // As variáveis '__firebase_config' e '__initial_auth_token' não são mais necessárias
+        // já que estamos usando signInAnonymously e as instâncias de 'app' e 'auth' do firebase.js.
 
-        // Variáveis globais fornecidas pelo ambiente (se usadas)
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        
-        // A instância 'auth' já é importada e está pronta para uso, não precisa de 'authInstance' separada.
-        
-        // Função de login, caso o usuário não esteja autenticado
+        // Função de autenticação anônima
         async function authenticate() {
             try {
-                // Comenta este bloco para forçar a autenticação anônima e depurar
-                /*
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken); 
-                } else {
-                    await signInAnonymously(auth); 
-                }
-                */
-                
-                // Força a autenticação anônima para depuração
-                await signInAnonymously(auth); 
-                
+                await signInAnonymously(auth); // Autentica anonimamente
             } catch (error) {
                 console.error("Erro na autenticação:", error);
-                // Você pode adicionar um log de erro aqui, se desejar
+                // Loga o erro de autenticação usando a função logAccess importada do script.js
                 logAccess({
                     accessedDocument: 'Portal da Transparencia HTML',
                     details: {
@@ -121,8 +104,6 @@
                             option.disabled = (item.gid === null); // Desabilita se o GID for null
 
                             // Define a primeira opção com GID não nulo como selecionada por padrão
-                            // Isso garante que um link válido seja carregado inicialmente
-                            // Verifica se há optgroups antes de adicionar 'selected' para o primeiro válido
                             if (!sheetSelector.querySelector('optgroup option[selected]') && item.gid !== null) {
                                 option.selected = true;
                             }
@@ -146,7 +127,7 @@
                         
                         sheetTitleSpan.textContent = newTitle;
 
-                        // REGISTRA O LOG
+                        // REGISTRA O LOG usando a função logAccess importada do script.js
                         logAccess({
                             accessedDocument: 'Portal da Transparencia HTML', // Documento base
                             details: {
@@ -167,7 +148,7 @@
                 } catch (error) {
                     console.error("Erro ao carregar os GIDs do arquivo gids.json:", error);
                     sheetTitleSpan.textContent = "Erro ao carregar planilhas.";
-                    // Loga o erro também
+                    // Loga o erro também usando a função logAccess importada do script.js
                     logAccess({
                         accessedDocument: 'Portal da Transparencia HTML',
                         details: {
