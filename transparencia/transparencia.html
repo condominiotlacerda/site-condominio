@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal da Transparência</title>
+    <title>Transparência - Condomínio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -51,9 +51,6 @@
         import { app, auth } from '../firebase.js'; 
         import { logAccess } from '../script.js'; // <-- Importa logAccess do script.js
         
-        // As variáveis '__firebase_config' e '__initial_auth_token' não são mais necessárias
-        // já que estamos usando signInAnonymously e as instâncias de 'app' e 'auth' do firebase.js.
-
         // Função de autenticação anônima
         async function authenticate() {
             try {
@@ -62,7 +59,7 @@
                 console.error("Erro na autenticação:", error);
                 // Loga o erro de autenticação usando a função logAccess importada do script.js
                 logAccess({
-                    accessedDocument: 'Portal da Transparencia HTML',
+                    accessedDocument: 'Erro de Autenticação na Transparência', // Nome mais direto para erro de Auth
                     details: {
                         error: error.message,
                         context: 'Firebase Auth Error',
@@ -129,9 +126,8 @@
 
                         // REGISTRA O LOG usando a função logAccess importada do script.js
                         logAccess({
-                            accessedDocument: 'Portal da Transparencia HTML', // Documento base
+                            accessedDocument: newTitle, // AGORA USA DIRETAMENTE O NOME DA PLANILHA SELECIONADA
                             details: {
-                                selectedSheet: newTitle,
                                 gid: newGid,
                                 page: 'transparencia.html',
                                 actionType: isInitialLoad ? 'Load Page' : 'Sheet Selector Change' // Diferencia o tipo de ação
@@ -150,7 +146,7 @@
                     sheetTitleSpan.textContent = "Erro ao carregar planilhas.";
                     // Loga o erro também usando a função logAccess importada do script.js
                     logAccess({
-                        accessedDocument: 'Portal da Transparencia HTML',
+                        accessedDocument: 'Erro ao carregar Planilhas Transparência', // Nome mais descritivo para o erro
                         details: {
                             error: error.message,
                             context: 'gids.json load error',
