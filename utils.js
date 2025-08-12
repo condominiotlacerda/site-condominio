@@ -1,34 +1,53 @@
 // utils.js
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-import { app } from './firebase.js'; // Importa a instância do app Firebase
+import { ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+import { db } from './firebase.js'; // Importe a instância do database
 
-const db = getDatabase(app);
-
-// Função para registrar acessos no Firebase Realtime Database
-// Aceita um único objeto 'logData'
+// Função para registrar logs de acesso de forma mais flexível
 export function logAccess(logData) {
-    // Extrai os campos do objeto 'logData', fornecendo fallbacks do localStorage
-    const userCode = logData.userCode || localStorage.getItem('userCode') || 'N/A_code';
-    const userName = logData.userName || localStorage.getItem('userName') || 'Não Identificado';
-    const apartment = logData.apartment || localStorage.getItem('apartmentId') || 'N/A_apt';
-    const accessedDocument = logData.accessedDocument || 'N/A_doc';
-    const details = logData.details || {}; // Detalhes adicionais
+    if (!db) {
+        console.error("Firebase Database não foi inicializado.");
+        return;
+    }
 
     const now = new Date();
-    now.setHours(now.getHours() - 3); // Ajusta o horário para UTC-3
-
+    now.setHours(now.getHours() - 3); // Ajuste para fuso horário de Brasília
     const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-    // Cria um nome de arquivo seguro, permitindo pontos para extensões
-    let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-    fileName = fileName.replace(/[^a-zA-Z0-9_.-]/g, '_'); 
 
+    // Recupere as informações do usuário do localStorage
+    const userCode = localStorage.getItem('userCode') || 'N/A';
+    const userName = localStorage.getItem('userName') || 'N/A';
+    const apartmentId = localStorage.getItem('apartmentId') || 'N/A';
+
+    // Construa o nome do arquivo de log baseado nos dados
+    // Adapte este formato para ser consistente com o que você deseja
+    let fileName = `${userCode}_${userName}_${formattedDate}`;
+
+    // Adiciona informações específicas com base no tipo de logData
+    if (logData.accessedDocument) {
+        fileName += `_Visualizado_${logData.accessedDocument.replace(/[^a-zA-Z0-9]/g, '_')}`;
+    }
+    if (logData.details && logData.details.selectedSheet) {
+        fileName += `_Planilha_${logData.details.selectedSheet.replace(/[^a-zA-Z0-9]/g, '_')}`;
+    }
+    if (logData.details && logData.details.actionType) {
+        fileName += `_Acao_${logData.details.actionType.replace(/[^a-zA-Z0-9]/g, '_')}`;
+    }
+    if (logData.apartment) { // Para compatibilidade com chamadas antigas do area_condominio
+        fileName += `_apto_${logData.apartment}`;
+    } else {
+        fileName += `_apto_${apartmentId}`; // Garante que o apartamento esteja sempre no log
+    }
+
+    // Limpa caracteres inválidos para o nome do nó do Firebase
+    fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
+
+    // Cria o objeto de log completo
     const accessLog = {
         userCode: userCode,
         userName: userName,
-        apartment: `Acesso ao apartamento ${apartment}`,
-        accessedDocument: accessedDocument,
+        apartment: apartmentId,
         accessDate: now.toISOString(),
-        ...details // Adiciona quaisquer detalhes extras do objeto 'details'
+        ...logData // Adiciona todos os dados passados para a função
     };
 
     const logRef = ref(db, `logs/${fileName}`);
