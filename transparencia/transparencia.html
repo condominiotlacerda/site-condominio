@@ -44,36 +44,30 @@
 
     <script type="module">
         // Importações do Firebase
-        // A inicialização do app (initializeApp) deve vir de firebase.js
-        // Se initializeApp for chamado diretamente aqui, pode causar conflitos ou duplicação.
         import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         
-        // ATENÇÃO: Verifique se o caminho '../firebase.js' e '../utils.js' está correto para sua estrutura de pastas.
-        // Se transparencia.html estiver na mesma pasta que firebase.js e utils.js, use './firebase.js' e './utils.js'.
-        // Pelos caminhos que você me mostrou no console, 'transparencia.html' parece estar em uma subpasta
-        // e 'firebase.js' e 'utils.js' estão na pasta superior (raiz), então '../' está correto.
+        // Importa a instância do app Firebase e a função logAccess
+        // Caminhos relativos: './' se na mesma pasta, '../' se na pasta acima.
+        // Se transparencia.html estiver em 'transparencia/' e os outros na raiz, '../' está correto.
         import { app } from '../firebase.js'; 
         import { logAccess } from '../utils.js'; 
 
-        // Variáveis globais fornecidas pelo ambiente (se usadas, mantenha-as)
+        // Variáveis globais fornecidas pelo ambiente (se usadas)
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
-        // Obtenha a instância de autenticação APÓS a importação de 'app'.
-        // O `app` importado de firebase.js já deve ser a instância inicializada.
-        const auth = getAuth(app); 
+        let authInstance; // Variável para armazenar a instância de auth
 
         // Função de login, caso o usuário não esteja autenticado
         async function authenticate() {
-            if (!auth) {
-                console.error("Firebase Auth não foi inicializado.");
-                return;
-            }
             try {
+                // Inicializa authInstance aqui, garantindo que 'app' e 'getAuth' estejam prontos
+                authInstance = getAuth(app); 
+
                 if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
+                    await signInWithCustomToken(authInstance, initialAuthToken);
                 } else {
-                    await signInAnonymously(auth);
+                    await signInAnonymously(authInstance);
                 }
             } catch (error) {
                 console.error("Erro na autenticação:", error);
@@ -95,10 +89,8 @@
                 const sheetParams = "&single=true&widget=true&headers=false";
 
                 try {
-                    // MUDANÇA AQUI: Corrigir o caminho para gids.json, se estiver em subpasta
-                    // Se 'transparencia.html' está na mesma pasta que 'gids.json', use './gids.json'
-                    // Se 'transparencia.html' está em uma subpasta e 'gids.json' na raiz, use '../gids.json'
-                    const response = await fetch('./gids.json'); // Mantenha './gids.json' se eles estão na mesma pasta
+                    // Mantenha './gids.json' se transparencia.html e gids.json estão na mesma pasta.
+                    const response = await fetch('./gids.json'); 
                     const gidsData = await response.json();
 
                     // Popula o seletor com as opções do JSON (agora com grupos de anos)
@@ -114,8 +106,8 @@
 
                             // Define a primeira opção com GID não nulo como selecionada por padrão
                             // Isso garante que um link válido seja carregado inicialmente
-                            // Adicionada verificação para garantir que o optgroup exista antes de anexar
-                            if (!sheetSelector.querySelector('optgroup') && item.gid !== null) {
+                            // Verifica se há optgroups antes de adicionar 'selected' para o primeiro válido
+                            if (!sheetSelector.querySelector('optgroup option[selected]') && item.gid !== null) {
                                 option.selected = true;
                             }
                             optgroup.appendChild(option);
