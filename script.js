@@ -586,7 +586,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }});    
 
 // Início da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
-window.logAccess = function (logData) {
+export function logAccess(logData) {
   const userName = localStorage.getItem('userName');
   logData.userName = userName; // Adiciona o userName ao objeto logData
   fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/logger', {
