@@ -5,17 +5,22 @@ import { app } from './firebase.js'; // Importa a instância do app Firebase
 const db = getDatabase(app);
 
 // Função para registrar acessos no Firebase Realtime Database
-export function logAccess(userCode, userName, apartment, accessedDocument, details = {}) {
+// Aceita um único objeto 'logData'
+export function logAccess(logData) {
+    // Extrai os campos do objeto 'logData', fornecendo fallbacks do localStorage
+    const userCode = logData.userCode || localStorage.getItem('userCode') || 'N/A_code';
+    const userName = logData.userName || localStorage.getItem('userName') || 'Não Identificado';
+    const apartment = logData.apartment || localStorage.getItem('apartmentId') || 'N/A_apt';
+    const accessedDocument = logData.accessedDocument || 'N/A_doc';
+    const details = logData.details || {}; // Detalhes adicionais
+
     const now = new Date();
-    // Ajusta o horário para UTC-3 (Fortaleza/Ceará)
-    // Atenção: Data.prototype.setHours() com ajuste de fuso horário pode ser complexo.
-    // Uma abordagem mais robusta para fuso horário seria usar uma biblioteca como moment-timezone ou Luxon.
-    // Por enquanto, mantemos sua lógica, mas esteja ciente das nuances de fuso horário.
-    now.setHours(now.getHours() - 3); 
-    
+    now.setHours(now.getHours() - 3); // Ajusta o horário para UTC-3
+
     const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
+    // Cria um nome de arquivo seguro, permitindo pontos para extensões
     let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-    fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_'); // Limpa o nome do arquivo
+    fileName = fileName.replace(/[^a-zA-Z0-9_.-]/g, '_'); 
 
     const accessLog = {
         userCode: userCode,
@@ -23,7 +28,7 @@ export function logAccess(userCode, userName, apartment, accessedDocument, detai
         apartment: `Acesso ao apartamento ${apartment}`,
         accessedDocument: accessedDocument,
         accessDate: now.toISOString(),
-        ...details // Adiciona detalhes extras passados como argumento
+        ...details // Adiciona quaisquer detalhes extras do objeto 'details'
     };
 
     const logRef = ref(db, `logs/${fileName}`);
