@@ -3,27 +3,29 @@
 <head>
     <script type="module">
         // ==================== 🔥 INÍCIO FIREBASE 🔥 ====================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        // Importações diretas do Firebase CDN para módulos específicos que você usa APENAS AQUI
+        // Ex: getAnalytics e logEvent são específicos desta página para rastreamento.
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-        // REMOVIDO: import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
-        import { getAuth as getFirebaseAuth, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        // Importações de auth: use o 'auth' exportado do seu firebase.js
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-        import { app } from './firebase.js';
+        // Importa a instância do app Firebase e a instância de auth do SEU arquivo firebase.js
+        // Isso garante que o app e o auth são inicializados UMA ÚNICA VEZ.
+        import { app, auth, analytics, db } from './firebase.js'; 
         
-        //========================================================================================
         // Importa a função logAccess do utils.js
         import { logAccess } from './utils.js'; 
-        //========================================================================================
 
-        const analytics = getAnalytics(app);
-        // REMOVIDO: const db = getDatabase(app); 
-        const authFirebase = getFirebaseAuth(app); 
-        const auth = getAuth(app); 
+        // As variáveis 'analytics', 'auth' e 'db' já vêm importadas e inicializadas de './firebase.js'
+        // Portanto, as linhas abaixo são REMOVIDAS (eram redundantes ou causavam conflito)
+        // const analytics = getAnalytics(app); 
+        // const authFirebase = getFirebaseAuth(app); // getFirebaseAuth é o mesmo que getAuth
+        // const auth = getAuth(app); 
 
-        // Registra o evento de visualização da página
+        // Registra o evento de visualização da página (usando o 'analytics' importado)
         logEvent(analytics, 'page_view');
 
+        // Monitora o estado de autenticação (usando o 'auth' importado)
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // Usuário está logado, pode continuar na página
@@ -34,29 +36,6 @@
             }
         });
 
-        // REMOVIDO: A função logAccess foi movida para './utils.js' e agora é importada.
-        /*
-        function logAccess(userCode, userName, apartment, accessedDocument) {
-            const now = new Date();
-            now.setHours(now.getHours() - 3);
-            const formattedDate = now.toISOString().replace('T', '_').split('.')[0];
-            let fileName = `${userName}_Acesso_apartamento_${apartment}_${accessedDocument}_${userCode}_${formattedDate}`;
-            fileName = fileName.replace(/[^a-zA-Z0-9_-]/g, '_');
-            const accessLog = {
-                userCode: userCode,
-                userName: userName,
-                apartment: `Acesso ao apartamento ${apartment}`,
-                accessedDocument: accessedDocument,
-                accessDate: now.toISOString()
-            };
-            const logRef = ref(db, `logs/${fileName}`);
-            set(logRef, accessLog)
-                .then(() => console.log("Log registrado com horário correto:", now.toISOString()))
-                .catch(error => console.error("Erro ao registrar log:", error));
-        }
-        window.logAccess = logAccess; // Esta linha também deve ser removida
-        */
-        
         // CÓDIGO PARA EXIBIR O NOME DO USUÁRIO
         document.addEventListener('DOMContentLoaded', () => {
             const nomeUsuario = localStorage.getItem('userName');
@@ -68,16 +47,18 @@
         });
         // =====================================================================
 
+        // Função para sair (logout)
         function sair() {
-            signOut(authFirebase).then(() => {
+            signOut(auth).then(() => { // Usa o 'auth' importado do firebase.js
                 console.log('Usuário desconectado');
-                localStorage.clear(); // Tentativa final para limpar todo o localStorage
+                localStorage.clear(); // Limpa todo o localStorage
                 window.location.href = 'index.html';
             }).catch((error) => {
                 console.error('Erro ao fazer logout:', error);
             });
         }
-        window.sair = sair;
+        window.sair = sair; // Torna a função globalmente acessível para o onclick
+
         // ==================== 🔥 FIM FIREBASE 🔥 ====================
     </script>
     <meta charset="UTF-8">
