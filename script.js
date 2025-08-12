@@ -351,223 +351,203 @@ export function openFileViewer(filePath) { // EXPORTADO
   viewerContainer.classList.add('active');
 }
 
-// REMOVIDO: `window.openFileViewer = openFileViewer;`
-
-document.addEventListener("DOMContentLoaded", function () {
-    // A chamada para exibirAvisoSeNecessario() e a lógica de autenticação
-    // foram movidas para o script principal em area_condominio.html para melhor fluxo.
-    // Manter apenas listeners específicos de elementos aqui.
-
-  const anoConta = document.getElementById('ano-conta');
-  const mesConta = document.getElementById('mes-conta');
-
-  if (anoConta) {
-    anoConta.addEventListener('change', function() {
-        
-      const listaContas = document.getElementById('contas-list');
-    
-      const anoSelecionado = this.value;
-      const mesSelecionado = mesConta.value;
-
-      // Construindo o caminho do arquivo
-      const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.${obterAbreviacaoMes(parseInt(mesSelecionado))}/prestacao_contas.pdf`;
-
-      // Limpa a lista de contas
-  listaContas.innerHTML = '';
-
-  // Cria um novo item de lista
-  const listItem = document.createElement('li');
-
-  // Cria um link para o arquivo
-  const link = document.createElement('a');
-  link.href = "#"; // Alteramos o href para "#"
-  const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-  link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`;
-
-  // Adiciona um evento de clique para chamar a função openFileViewer
-  link.addEventListener('click', function(event) {
-    event.preventDefault();
-    const anoSelecionado = anoConta.value;
-    const mesSelecionado = mesConta.value;
-    const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-    const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
-    try {
-      logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: documento });
-    } catch (error) {
-      console.error('Erro ao executar logAccess:', error);
-    }
-    openFileViewer(caminhoPrestacaoContas);
-  });
-
-  // Adiciona o link ao item de lista
-  listItem.appendChild(link);
-
-  // Adiciona o item de lista à lista de contas
-  listaContas.appendChild(listItem);
-    });
-  }
-
-  if (mesConta) {
-    mesConta.addEventListener('change', function() {
-      const listaContas = document.getElementById('contas-list');
-      const mesSelecionado = this.value;
-      const anoSelecionado = anoConta.value;
-
-      // Construindo o caminho do arquivo
-      const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.${obterAbreviacaoMes(parseInt(mesSelecionado))}/prestacao_contas.pdf`;
-
-      // Limpa a lista de contas
-      listaContas.innerHTML = '';
-
-      // Cria um novo item de lista
-      const listItem = document.createElement('li');
-
-      // Cria um link para o arquivo
-      const link = document.createElement('a');
-      link.href = "#";
-      const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-      link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`;
-
-      // Adiciona um evento de clique para chamar a função openFileViewer
-      link.addEventListener('click', function(event) {
-        event.preventDefault();
-        const anoSelecionado = anoConta.value;
-        const mesSelecionado = mesConta.value;
-        const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
-        const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
-        try {
-          logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: documento });
-        } catch (error) {
-          console.error('Erro ao executar logAccess:', error);
-        }
-        openFileViewer(caminhoPrestacaoContas);
-      });
-
-      // Adiciona o link ao item de lista
-      listItem.appendChild(link);
-
-      // Adiciona o item de lista à lista de contas
-      listaContas.appendChild(listItem);
-    });
-  }
-
-  function obterAbreviacaoMes(numeroMes) {
+// Funções utilitárias (não precisam ser exportadas se usadas apenas internamente)
+function obterAbreviacaoMes(numeroMes) {
   const meses = ["", "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
   return meses[numeroMes] || "";
 }
   
-  const formularioCadastro = document.getElementById('formularioCadastro');
-  if (formularioCadastro) {
-    formularioCadastro.addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const emailCadastro = document.getElementById('emailCadastro').value;
-      const senhaCadastro = document.getElementById('senhaCadastro').value;
-      const codigoAcessoInput = document.getElementById('codigoAcesso');
-      const codigoAcesso = codigoAcessoInput.value;
-      const mensagemCadastro = document.getElementById('mensagemCadastro');
+// Bloco DOMContentLoaded - REESTRUTURADO PARA EVITAR O ERRO DE SINTAXE
+document.addEventListener("DOMContentLoaded", function () {
+    // Estas são as lógicas que devem rodar ao carregar a página index.html ou onde os formulários estão.
+    // Na area_condominio.html, outras funções serão importadas e chamadas diretamente.
 
-      // `auth` já é importado e configurado no início do script
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
-        const user = userCredential.user;
-        mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
+    // A chamada para exibirAvisoSeNecessario() deve ser feita na area_condominio.html
+    // se você espera que o aviso apareça APÓS o login.
 
-        const response = await fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/register-user', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            uid: user.uid,
-            emailCadastro: emailCadastro,
-            codigoAcesso: codigoAcesso
-          }),
-        });
+    const anoConta = document.getElementById('ano-conta');
+    const mesConta = document.getElementById('mes-conta');
 
-        const data = await response.json();
+    if (anoConta) {
+        anoConta.addEventListener('change', function() {
+            const listaContas = document.getElementById('contas-list');
+            const anoSelecionado = this.value;
+            const mesSelecionado = mesConta.value;
 
-        if (response.ok && data.message === 'Usuário registrado e dados salvos com sucesso!') {
-          mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
-          formularioCadastro.reset();
-        } else {
-          console.error('Erro ao registrar usuário via função:', data.error || 'Erro desconhecido');
-          mensagemCadastro.textContent = 'Erro ao registrar: ' + (data.error || 'Erro desconhecido');
-        }
+            const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.${obterAbreviacaoMes(parseInt(mesSelecionado))}/prestacao_contas.pdf`;
 
-      } catch (error) {
-        console.error("Erro ao criar usuário:", error);
-        mensagemCadastro.textContent = 'Erro ao cadastrar: ' + error.message;
-      }
-    });
+            listaContas.innerHTML = '';
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = "#";
+            const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+            link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`;
 
-  const loginSection = document.getElementById('login');
-  const cadastroSection = document.getElementById('cadastro');
-  const mostrarCadastroLink = document.getElementById('mostrarCadastro');
-  const mostrarLoginLink = document.getElementById('mostrarLogin');
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const anoSelecionado = anoConta.value;
+                const mesSelecionado = mesConta.value;
+                const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+                const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
+                try {
+                    logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: documento });
+                } catch (error) {
+                    console.error('Erro ao executar logAccess:', error);
+                }
+                openFileViewer(caminhoPrestacaoContas);
+            });
 
-  if (mostrarCadastroLink) {
-    mostrarCadastroLink.addEventListener('click', function(event) {
-      event.preventDefault();
-      loginSection.style.display = 'none';
-      cadastroSection.style.display = 'block';
-    });
-  }
+            listItem.appendChild(link);
+            listaContas.appendChild(listItem);
+        });
+    }
 
-  if (mostrarLoginLink) {
-    mostrarLoginLink.addEventListener('click', function(event) {
-      event.preventDefault();
-      cadastroSection.style.display = 'none';
-      loginSection.style.display = 'block';
-    });
-  }
+    if (mesConta) {
+        mesConta.addEventListener('change', function() {
+            const listaContas = document.getElementById('contas-list');
+            const mesSelecionado = this.value;
+            const anoSelecionado = anoConta.value;
 
-  const formularioLogin = document.getElementById('formularioLogin');
-  if (formularioLogin) {
-    formularioLogin.addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const emailLogin = document.getElementById('emailLogin').value;
-      const senhaLogin = document.getElementById('senhaLogin').value;
-      const mensagemLogin = document.getElementById('mensagemLogin');
+            const caminhoPrestacaoContas = `pdfs/contas/${anoSelecionado}/${mesSelecionado}.${obterAbreviacaoMes(parseInt(mesSelecionado))}/prestacao_contas.pdf`;
 
-      // `auth` e `db` já são importados e configurados no início do script
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
-        const user = userCredential.user;
-        const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
-        const snapshot = await get(pendingRef);
+            listaContas.innerHTML = '';
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = "#";
+            const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+            link.textContent = `Prestação de Contas - ${mesAbreviado}/${anoSelecionado}`;
 
-        if (snapshot.exists()) {
-          mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
-        } else {
-          mensagemLogin.textContent = 'Login realizado com sucesso!';
-          const userDetailsRef = ref(db, 'userApartments/' + user.uid);
-          const userSnapshot = await get(userDetailsRef);
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const anoSelecionado = anoConta.value;
+                const mesSelecionado = mesConta.value;
+                const mesAbreviado = obterAbreviacaoMes(parseInt(mesSelecionado));
+                const documento = `Prestacao_de_Contas_${mesAbreviado}_${anoSelecionado}.pdf`;
+                try {
+                    logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: documento });
+                } catch (error) {
+                    console.error('Erro ao executar logAccess:', error);
+                }
+                openFileViewer(caminhoPrestacaoContas);
+            });
 
-          if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
-            const apartmentId = userSnapshot.val().apartmentId;
-            localStorage.setItem('apartmentId', apartmentId);
-            window.location.href = 'area_condominio.html';
-          } else {
-            console.error("apartmentId não encontrado para o usuário:", user.uid);
-            mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
-          }
-        }
-      } catch (error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+            listItem.appendChild(link);
+            listaContas.appendChild(listItem);
+        });
+    }
+    
+    // Lógica para Formulários de Cadastro e Login (provavelmente em index.html)
+    const formularioCadastro = document.getElementById('formularioCadastro');
+    if (formularioCadastro) {
+        formularioCadastro.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const emailCadastro = document.getElementById('emailCadastro').value;
+            const senhaCadastro = document.getElementById('senhaCadastro').value;
+            const codigoAcessoInput = document.getElementById('codigoAcesso');
+            const codigoAcesso = codigoAcessoInput.value;
+            const mensagemCadastro = document.getElementById('mensagemCadastro');
 
-        if (errorCode === 'auth/invalid-email') {
-          mensagemLogin.textContent = 'O email digitado é inválido.';
-        } else if (errorCode === 'auth/invalid-credential') { // alterado de 'auth/wrong-password' para 'auth/invalid-credential'
-          mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
-        } else {
-          mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
-        }
-        console.error("Erro ao fazer login:", errorCode, errorMessage);
-      }
-    });
-}
-});    
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, emailCadastro, senhaCadastro);
+                const user = userCredential.user;
+                mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
+
+                const response = await fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/register-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        uid: user.uid,
+                        emailCadastro: emailCadastro,
+                        codigoAcesso: codigoAcesso
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.message === 'Usuário registrado e dados salvos com sucesso!') {
+                    mensagemCadastro.textContent = 'Cadastro realizado com sucesso! Aguarde a aprovação do seu acesso.';
+                    formularioCadastro.reset();
+                } else {
+                    console.error('Erro ao registrar usuário via função:', data.error || 'Erro desconhecido');
+                    mensagemCadastro.textContent = 'Erro ao registrar: ' + (data.error || 'Erro desconhecido');
+                }
+
+            } catch (error) {
+                console.error("Erro ao criar usuário:", error);
+                mensagemCadastro.textContent = 'Erro ao cadastrar: ' + error.message;
+            }
+        });
+    }
+
+    const loginSection = document.getElementById('login');
+    const cadastroSection = document.getElementById('cadastro');
+    const mostrarCadastroLink = document.getElementById('mostrarCadastro');
+    const mostrarLoginLink = document.getElementById('mostrarLogin');
+
+    if (mostrarCadastroLink) {
+        mostrarCadastroLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginSection.style.display = 'none';
+            cadastroSection.style.display = 'block';
+        });
+    }
+
+    if (mostrarLoginLink) {
+        mostrarLoginLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            cadastroSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+    }
+
+    const formularioLogin = document.getElementById('formularioLogin');
+    if (formularioLogin) {
+        formularioLogin.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const emailLogin = document.getElementById('emailLogin').value;
+            const senhaLogin = document.getElementById('senhaLogin').value;
+            const mensagemLogin = document.getElementById('mensagemLogin');
+
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, emailLogin, senhaLogin);
+                const user = userCredential.user;
+                const pendingRef = ref(db, 'pendingApprovals/' + user.uid);
+                const snapshot = await get(pendingRef);
+
+                if (snapshot.exists()) {
+                    mensagemLogin.textContent = 'Seu acesso ainda está pendente de aprovação. Por favor, aguarde.';
+                } else {
+                    mensagemLogin.textContent = 'Login realizado com sucesso!';
+                    const userDetailsRef = ref(db, 'userApartments/' + user.uid);
+                    const userSnapshot = await get(userDetailsRef);
+
+                    if (userSnapshot.exists() && userSnapshot.val().apartmentId) {
+                        const apartmentId = userSnapshot.val().apartmentId;
+                        localStorage.setItem('apartmentId', apartmentId);
+                        window.location.href = 'area_condominio.html';
+                    } else {
+                        console.error("apartmentId não encontrado para o usuário:", user.uid);
+                        mensagemLogin.textContent = 'Erro ao carregar informações do seu apartamento. Tente novamente mais tarde.';
+                    }
+                }
+            } catch (error) {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                if (errorCode === 'auth/invalid-email') {
+                    mensagemLogin.textContent = 'O email digitado é inválido.';
+                } else if (errorCode === 'auth/invalid-credential') {
+                    mensagemLogin.innerHTML = 'E-mail e/ou senha incorretos.<br>Verifique se você digitou corretamente suas credenciais.<br>Se você esqueceu sua senha, use o link "Esqueci minha senha".';
+                } else {
+                    mensagemLogin.textContent = 'Erro ao fazer login: ' + errorMessage;
+                }
+                console.error("Erro ao fazer login:", errorCode, errorMessage);
+            }
+        });
+    }
+}); // ESTA LINHA DEVE SER A ÚLTIMA DO DOMContentLoaded
 
 // Início da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
 export function logAccess(logData) { // EXPORTADO
@@ -602,4 +582,3 @@ export function logAccess(logData) { // EXPORTADO
   });
 }
 // Final da Função logAccess que envia dados para função Netlify logger.js ===================================================================================================================
-// REMOVIDO: `window.openFileViewer = openFileViewer;`
