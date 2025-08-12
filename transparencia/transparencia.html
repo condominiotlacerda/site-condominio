@@ -44,28 +44,24 @@
 
     <script type="module">
         // Importações do Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        // A inicialização do app (initializeApp) deve vir de firebase.js
+        // Se initializeApp for chamado diretamente aqui, pode causar conflitos ou duplicação.
         import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        // Importa a instância do app Firebase e a função logAccess do arquivo utils.js
+        
         // ATENÇÃO: Verifique se o caminho '../firebase.js' e '../utils.js' está correto para sua estrutura de pastas.
-        // Se transparencia.html estiver na raiz, use './firebase.js' e './utils.js'.
+        // Se transparencia.html estiver na mesma pasta que firebase.js e utils.js, use './firebase.js' e './utils.js'.
+        // Pelos caminhos que você me mostrou no console, 'transparencia.html' parece estar em uma subpasta
+        // e 'firebase.js' e 'utils.js' estão na pasta superior (raiz), então '../' está correto.
         import { app } from '../firebase.js'; 
         import { logAccess } from '../utils.js'; 
 
-        // Variáveis globais fornecidas pelo ambiente
+        // Variáveis globais fornecidas pelo ambiente (se usadas, mantenha-as)
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
-        let auth; // 'app' já vem do import de firebase.js
-
-        // Inicializa o Firebase Auth usando a instância 'app' importada
-        if (app) { // Verifica se 'app' foi inicializado via firebase.js
-            auth = getAuth(app);
-        } else if (firebaseConfig) { // Fallback caso 'app' não seja importado, mas firebaseConfig esteja disponível
-             app = initializeApp(firebaseConfig);
-             auth = getAuth(app);
-        }
-
+        // Obtenha a instância de autenticação APÓS a importação de 'app'.
+        // O `app` importado de firebase.js já deve ser a instância inicializada.
+        const auth = getAuth(app); 
 
         // Função de login, caso o usuário não esteja autenticado
         async function authenticate() {
@@ -99,7 +95,10 @@
                 const sheetParams = "&single=true&widget=true&headers=false";
 
                 try {
-                    const response = await fetch('gids.json');
+                    // MUDANÇA AQUI: Corrigir o caminho para gids.json, se estiver em subpasta
+                    // Se 'transparencia.html' está na mesma pasta que 'gids.json', use './gids.json'
+                    // Se 'transparencia.html' está em uma subpasta e 'gids.json' na raiz, use '../gids.json'
+                    const response = await fetch('./gids.json'); // Mantenha './gids.json' se eles estão na mesma pasta
                     const gidsData = await response.json();
 
                     // Popula o seletor com as opções do JSON (agora com grupos de anos)
@@ -115,7 +114,8 @@
 
                             // Define a primeira opção com GID não nulo como selecionada por padrão
                             // Isso garante que um link válido seja carregado inicialmente
-                            if (!sheetSelector.hasChildNodes() && item.gid !== null) {
+                            // Adicionada verificação para garantir que o optgroup exista antes de anexar
+                            if (!sheetSelector.querySelector('optgroup') && item.gid !== null) {
                                 option.selected = true;
                             }
                             optgroup.appendChild(option);
