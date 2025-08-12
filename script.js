@@ -557,6 +557,21 @@ export function logAccess(logData) { // EXPORTADO
     // Adiciona o timestamp antes de enviar para garantir consistência no log da Netlify Function
     logData.timestamp = new Date().toISOString(); 
 
+    // Adiciona o tipo de log com base na presença de chaves específicas ou um valor padrão
+    // Esta é a CHAVE para resolver o erro 500 na sua Netlify Function!
+    if (logData.downloadedFile && logData.downloadedFile.includes('Boleto')) {
+        logData.type = 'boleto';
+    } else if (logData.downloadedFile && logData.downloadedFile.includes('Notificação')) {
+        logData.type = 'notificacao';
+    } else if (logData.avisoNr) {
+        logData.type = 'aviso';
+    } else if (logData.pageAccess) { // Se você tiver logs para acesso a páginas
+        logData.type = 'acesso_pagina';
+    } else {
+        logData.type = 'outro'; // Um tipo genérico caso não se encaixe nos anteriores
+    }
+
+
   return fetch('https://brilliant-gumption-dac373.netlify.app/.netlify/functions/logger', {
     method: 'POST',
     headers: {
