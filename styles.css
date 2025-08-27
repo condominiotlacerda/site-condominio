@@ -76,7 +76,7 @@ h1 {
 .file-box {
     top: 250px;
     left: 15px;
-    width: 200px;
+    width: 250px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
@@ -156,7 +156,7 @@ h1 {
 
 @media (min-width: 769px) {
     #contas-container {
-        width: 300px;
+        width: 250px;
         margin-left: 20px;
     }
 }
