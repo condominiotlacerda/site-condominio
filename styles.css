@@ -68,7 +68,7 @@ h1 {
     left: 5px;
     max-width: 150px !important;
     max-height: 150px !important;
-    border: 2px solid red;
+    border: 2px solid #C8A2C8;
     z-index: 20; /* Garante que fique acima de tudo */
 }
 
