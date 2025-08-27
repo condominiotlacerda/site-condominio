@@ -150,14 +150,14 @@
         </div>
         <hr>
         <div id="file-list-wrapper">
-            <section id="file-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; overflow: auto;">
+            <section id="file-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 260px; overflow: auto;">
                 <h2>Boletos <span id="apartment-number"></span></h2>
                 <hr>
                 <ul id="file-list" style="color: black;">
                 </ul>
             </section>
 
-            <section id="contas-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 300px; overflow: auto;">
+            <section id="contas-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 260px; overflow: auto;">
                 <h2>Transparência</h2>
                 <hr>
                 <label for="ano-conta">Ano:</label>
@@ -186,14 +186,14 @@
                 <a href="#" onclick="openFileViewer('transparencia/transparencia.html'); logAccess({ apartment: localStorage.getItem('apartmentId'), downloadedFile: 'Portal da Transparência HTML' });"></a>
             </section>
             
-            <section id="notifications-container" class="file-box" style="display: none; transition: opacity 0.5s, transform 0.3s ease, border-color 0.4s ease; overflow: auto;">
+            <section id="notifications-container" class="file-box" style="display: none; transition: opacity 0.5s, transform 0.3s ease, border-color 0.4s ease; height: 300px; width: 260px; overflow: auto;">
                 <h2>Histórico notificações</h2>
                 <hr>    
                 <div id="notifications-list" style="color: black; white-space: pre-line;">
                 </div>
             </section>
 
-            <section id="documentos-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; overflow: auto;">
+            <section id="documentos-container" class="file-box" style="display:none; opacity: 1; transition: opacity 0.5s; height: 300px; width: 260px; overflow: auto;">
                 <h2>Documentos</h2>
                 <hr>
                 <div id="documentos-list" style="color: black;">
