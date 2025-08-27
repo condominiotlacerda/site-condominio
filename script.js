@@ -130,7 +130,7 @@ export async function showFiles(apartment) {
   const documentosList = document.getElementById('documentos-list');
   if (documentosList && apartment) {
     const previsaoLink = document.createElement('a');
-    previsaoLink.textContent = 'Previsão de despesas';
+    previsaoLink.textContent = 'Previsão despesas';
     previsaoLink.style.color = 'blue';
     previsaoLink.href = '#';
     previsaoLink.addEventListener('click', function (event) {
